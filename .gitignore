@@ -1,0 +1,11 @@
+# Résultats de compilation Maven
+target/
+
+# Fichiers locaux et IDE
+.env
+.idea/
+.vscode/
+*.iml
+
+# Système
+.DS_Store

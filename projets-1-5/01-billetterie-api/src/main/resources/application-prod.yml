@@ -1,0 +1,21 @@
+# ==============================================================================
+#  application-prod.yml — PRODUCTION
+#  Règle d'or : aucune valeur sensible par défaut. Si une variable manque,
+#  l'application refuse de démarrer (fail fast).
+# ==============================================================================
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+  flyway:
+    locations: classpath:db/migration
+    # Sur une base existante, poser le baseline explicitement via FLYWAY_BASELINE_ON_MIGRATE=true.
+    baseline-on-migrate: ${FLYWAY_BASELINE_ON_MIGRATE:false}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
