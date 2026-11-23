@@ -3,6 +3,7 @@ package com.billetterie.billetterie_api.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /**
  * Corps de modification d'une réservation (nom, prénom, email seulement).
@@ -20,9 +21,9 @@ public record UpdateReservationRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Nom du client
-        @Schema(description = "Nom du client", example = "Dupont") @NotBlank String nom,
+        @Schema(description = "Nom du client", example = "Dupont") @NotBlank @Size(max = 100) String nom,
         // Prénom du client
-        @Schema(description = "Prénom du client", example = "Jean") @NotBlank String prenom,
+        @Schema(description = "Prénom du client", example = "Jean") @NotBlank @Size(max = 100) String prenom,
         // Email
-        @Schema(description = "Email", example = "jean@example.com") @NotBlank @Email String email) {
+        @Schema(description = "Email", example = "jean@example.com") @NotBlank @Email @Size(max = 255) String email) {
 }

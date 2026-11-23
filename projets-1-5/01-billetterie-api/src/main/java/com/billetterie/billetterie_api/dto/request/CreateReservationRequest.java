@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 /**
  * Corps de création d'une réservation.
@@ -22,15 +23,15 @@ public record CreateReservationRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Nom du client
-        @Schema(description = "Nom du client", example = "Dupont") @NotBlank String nom,
+        @Schema(description = "Nom du client", example = "Dupont") @NotBlank @Size(max = 100) String nom,
         // Prénom du client
-        @Schema(description = "Prénom du client", example = "Jean") @NotBlank String prenom,
+        @Schema(description = "Prénom du client", example = "Jean") @NotBlank @Size(max = 100) String prenom,
         // Email
-        @Schema(description = "Email", example = "jean@example.com") @NotBlank @Email String email,
+        @Schema(description = "Email", example = "jean@example.com") @NotBlank @Email @Size(max = 255) String email,
         // Identifiant de l'événement
-        @Schema(description = "Identifiant de l'événement", example = "1") @NotNull Integer idEvenement,
+        @Schema(description = "Identifiant de l'événement", example = "1") @NotNull @Positive Integer idEvenement,
         // Rang de la place
-        @Schema(description = "Rang de la place", example = "A") @NotBlank String rang,
+        @Schema(description = "Rang de la place", example = "A") @NotBlank @Size(max = 5) String rang,
         // Numéro de la place
         @Schema(description = "Numéro de la place", example = "12") @NotNull @Positive Integer numero) {
 }

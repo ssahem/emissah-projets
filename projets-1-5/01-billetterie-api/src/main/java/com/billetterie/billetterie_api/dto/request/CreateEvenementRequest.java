@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 /**
@@ -23,7 +25,7 @@ public record CreateEvenementRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Titre du spectacle
-        @Schema(description = "Titre du spectacle", example = "Concert Jazz") @NotBlank String titre,
+        @Schema(description = "Titre du spectacle", example = "Concert Jazz") @NotBlank @Size(max = 150) String titre,
         // Type
         @Schema(description = "Type", example = "CONCERT") @NotNull TypeSpectacle type,
         // Places numérotées
@@ -32,5 +34,5 @@ public record CreateEvenementRequest(
         @Schema(description = "Date ISO-8601", example = "2026-12-20T20:00:00")
         @NotNull @Future LocalDateTime dateHeure,
         // Identifiant de la salle
-        @Schema(description = "Identifiant de la salle", example = "1") @NotNull Integer idSalle) {
+        @Schema(description = "Identifiant de la salle", example = "1") @NotNull @Positive Integer idSalle) {
 }

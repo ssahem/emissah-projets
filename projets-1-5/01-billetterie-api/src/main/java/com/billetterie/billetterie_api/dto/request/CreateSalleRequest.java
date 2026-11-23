@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 /**
  * Corps de création d'une salle.
@@ -21,11 +22,11 @@ public record CreateSalleRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Nom de la salle
-        @Schema(description = "Nom de la salle", example = "Grand Hall") @NotBlank String nom,
+        @Schema(description = "Nom de la salle", example = "Grand Hall") @NotBlank @Size(max = 100) String nom,
         // Adresse postale
-        @Schema(description = "Adresse postale", example = "12 rue des Arts") @NotBlank String adresse,
+        @Schema(description = "Adresse postale", example = "12 rue des Arts") @NotBlank @Size(max = 255) String adresse,
         // Ville
-        @Schema(description = "Ville", example = "Abidjan") @NotBlank String ville,
+        @Schema(description = "Ville", example = "Abidjan") @NotBlank @Size(max = 100) String ville,
         // Capacité
         @Schema(description = "Capacité", example = "120") @NotNull @Positive Integer capacite) {
 }
