@@ -7,11 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-/** Réservation d'une ou plusieurs places pour un événement.
- * COUCHE : Entité · IDENTITÉ : (client, événement, dateCreation) · NE FAIT PAS : les règles métier. */
+/**
+ * Réservation d'une ou plusieurs places pour un événement.
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter les données de Reservation sous forme d’objet Java.
+ * IDENTITÉ     : (client, événement, dateCreation).
+ * UTILISÉE PAR : repositories, mappers et services.
+ * NE FAIT PAS  : de logique HTTP ni de JSON (rôle du DTO).
+ */
 @Entity
 @Table(name = "reservation")
 public class Reservation {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_reservation")
     private Integer idReservation;
@@ -41,21 +53,63 @@ public class Reservation {
     @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<HistoriqueStatut> historique = new ArrayList<>();
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── Reservation() ────────────────────────────────────────────────────
+
+    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     protected Reservation() {}
+    // ── Reservation() ────────────────────────────────────────────────────
+
+    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Reservation(LocalDateTime dateCreation, Client client, Evenement evenement) {
         this.dateCreation = Objects.requireNonNull(dateCreation, "dateCreation");
         this.dateExpiration = dateCreation.plusMinutes(15);
         this.client = Objects.requireNonNull(client, "client");
         this.evenement = Objects.requireNonNull(evenement, "evenement");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── getIdReservation() ───────────────────────────────────────────────
+
+    /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }
+    // ── getDateCreation() ────────────────────────────────────────────────
+
+    /** Retourne dateCreation. */
     public LocalDateTime getDateCreation() { return dateCreation; }
+    // ── getDateExpiration() ──────────────────────────────────────────────
+
+    /** Retourne dateExpiration. */
     public LocalDateTime getDateExpiration() { return dateExpiration; }
+    // ── getDatePaiement() ────────────────────────────────────────────────
+
+    /** Retourne datePaiement. */
     public LocalDateTime getDatePaiement() { return datePaiement; }
+    // ── getMontantRembourse() ────────────────────────────────────────────
+
+    /** Retourne montantRembourse. */
     public BigDecimal getMontantRembourse() { return montantRembourse; }
+    // ── getClient() ──────────────────────────────────────────────────────
+
+    /** Retourne client. */
     public Client getClient() { return client; }
+    // ── getEvenement() ───────────────────────────────────────────────────
+
+    /** Retourne evenement. */
     public Evenement getEvenement() { return evenement; }
+    // ── getPlaces() ──────────────────────────────────────────────────────
+
+    /** Retourne places. */
     public List<ReservationPlace> getPlaces() { return places; }
+    // ── getHistorique() ──────────────────────────────────────────────────
+
+    /** Retourne historique. */
     public List<HistoriqueStatut> getHistorique() { return historique; }
     public void ajouterPlace(ReservationPlace place) { places.add(place); }
     public void ajouterHistorique(HistoriqueStatut entree) { historique.add(entree); }

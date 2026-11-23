@@ -7,13 +7,30 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-/** Corps de création d'un événement. COUCHE : DTO (request) · IMMUABLE : record. */
+/**
+ * Corps de création d'un événement.
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * UTILISÉ PAR  : le controller, avec @Valid, pour valider le corps reçu.
+ * NE FAIT PAS  : d’accès base ni de logique métier.
+ */
 @Schema(description = "Création d'un événement")
 public record CreateEvenementRequest(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+        // Titre du spectacle
         @Schema(description = "Titre du spectacle", example = "Concert Jazz") @NotBlank String titre,
+        // Type
         @Schema(description = "Type", example = "CONCERT") @NotNull TypeSpectacle type,
+        // Places numérotées
         @Schema(description = "Places numérotées", example = "true") @NotNull Boolean placementNumerote,
+        // Date ISO-8601
         @Schema(description = "Date ISO-8601", example = "2026-12-20T20:00:00")
         @NotNull @Future LocalDateTime dateHeure,
+        // Identifiant de la salle
         @Schema(description = "Identifiant de la salle", example = "1") @NotNull Integer idSalle) {
 }

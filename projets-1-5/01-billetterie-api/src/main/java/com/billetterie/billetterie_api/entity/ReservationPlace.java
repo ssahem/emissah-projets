@@ -4,11 +4,23 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-/** Lien entre une réservation et la place (rang + numéro) concernée.
- * COUCHE : Entité · IDENTITÉ : (événement, rang, numero) · NE FAIT PAS : la vérification de disponibilité. */
+/**
+ * Lien entre une réservation et la place (rang + numéro) concernée.
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter les données de ReservationPlace sous forme d’objet Java.
+ * IDENTITÉ     : (événement, rang, numero).
+ * UTILISÉE PAR : repositories, mappers et services.
+ * NE FAIT PAS  : de logique HTTP ni de JSON (rôle du DTO).
+ */
 @Entity
 @Table(name = "reservation_place")
 public class ReservationPlace {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_reservation_place")
     private Integer idReservationPlace;
@@ -29,18 +41,51 @@ public class ReservationPlace {
     @Column(name = "prix_applique", nullable = false, precision = 12, scale = 2)
     private BigDecimal prixApplique = BigDecimal.ZERO;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── ReservationPlace() ───────────────────────────────────────────────
+
+    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     protected ReservationPlace() {}
+    // ── ReservationPlace() ───────────────────────────────────────────────
+
+    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public ReservationPlace(Reservation reservation, String rang, Integer numero, Integer idEvenement) {
         this.reservation = Objects.requireNonNull(reservation, "reservation");
         this.rang = rang;
         this.numero = numero;
         this.idEvenement = idEvenement;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── getIdReservationPlace() ──────────────────────────────────────────
+
+    /** Retourne idReservationPlace. */
     public Integer getIdReservationPlace() { return idReservationPlace; }
+    // ── getReservation() ─────────────────────────────────────────────────
+
+    /** Retourne reservation. */
     public Reservation getReservation() { return reservation; }
+    // ── getRang() ────────────────────────────────────────────────────────
+
+    /** Retourne rang. */
     public String getRang() { return rang; }
+    // ── getNumero() ──────────────────────────────────────────────────────
+
+    /** Retourne numero. */
     public Integer getNumero() { return numero; }
+    // ── getIdEvenement() ─────────────────────────────────────────────────
+
+    /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }
+    // ── getPrixApplique() ────────────────────────────────────────────────
+
+    /** Retourne prixApplique. */
     public BigDecimal getPrixApplique() { return prixApplique; }
     public void setPrixApplique(BigDecimal prixApplique) {
         this.prixApplique = Objects.requireNonNull(prixApplique, "prixApplique");

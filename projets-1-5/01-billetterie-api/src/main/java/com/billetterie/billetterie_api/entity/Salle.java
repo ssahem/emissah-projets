@@ -12,10 +12,10 @@ import java.util.Objects;
  * Une salle de spectacle.
  *
  * COUCHE       : Entité (modèle de données)
- * RÔLE         : représenter une ligne de la table {@code salle}.
+ * RÔLE         : représenter les données de Salle sous forme d’objet Java.
  * IDENTITÉ     : (nom, ville) ; l'identifiant technique est généré par la base.
- * UTILISÉE PAR : SalleRepository, SalleMapper, Place.
- * NE FAIT PAS  : de logique HTTP ni de validation métier complexe.
+ * UTILISÉE PAR : repositories, mappers et services.
+ * NE FAIT PAS  : de logique HTTP ni de JSON (rôle du DTO).
  */
 @Entity
 @Table(name = "salle")
@@ -51,9 +51,13 @@ public class Salle {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── Salle() ──────────────────────────────────────────────────────────
+
     /** Constructeur vide exigé par JPA. */
     protected Salle() {
     }
+
+    // ── Salle() ──────────────────────────────────────────────────────────
 
     /** Crée une salle valide ; aucun champ obligatoire ne peut être null. */
     public Salle(String nom, String adresse, String ville, Integer capacite) {
@@ -67,17 +71,27 @@ public class Salle {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── getIdSalle() ─────────────────────────────────────────────────────
+
     /** Retourne l'identifiant technique. */
     public Integer getIdSalle() { return idSalle; }
+
+    // ── getNom() ─────────────────────────────────────────────────────────
 
     /** Retourne le nom. */
     public String getNom() { return nom; }
 
+    // ── getAdresse() ─────────────────────────────────────────────────────
+
     /** Retourne l'adresse. */
     public String getAdresse() { return adresse; }
 
+    // ── getVille() ───────────────────────────────────────────────────────
+
     /** Retourne la ville. */
     public String getVille() { return ville; }
+
+    // ── getCapacite() ────────────────────────────────────────────────────
 
     /** Retourne la capacité. */
     public Integer getCapacite() { return capacite; }
@@ -96,6 +110,9 @@ public class Salle {
 
     /** Égalité sur (nom, ville), la clé métier. */
     @Override
+    // ── equals() ─────────────────────────────────────────────────────────
+
+    /** Égalité sur la clé métier, pas sur l’identifiant technique. */
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (!(o instanceof Salle other)) { return false; }
@@ -104,5 +121,8 @@ public class Salle {
 
     /** Cohérent avec equals(). */
     @Override
+    // ── hashCode() ───────────────────────────────────────────────────────
+
+    /** Cohérent avec equals() : calculé sur la clé métier. */
     public int hashCode() { return Objects.hash(nom, ville); }
 }

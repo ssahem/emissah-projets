@@ -7,16 +7,43 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-/** Accès aux réservations. COUCHE : Repository · NE FAIT PAS : de règle métier ni de HTTP. */
+/**
+ * Accès aux réservations.
+ *
+ * COUCHE       : Repository (persistance)
+ * RÔLE         : lire et écrire des Reservation ; Spring Data génère l’implémentation.
+ * UTILISÉ PAR  : les services uniquement (jamais un controller).
+ * NE FAIT PAS  : de règle métier ni de conversion en DTO.
+ */
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── findAllByOrderByDateCreationDesc() ───────────────────────────────
+
+    /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findAllByOrderByDateCreationDesc();
 
+    // ── findAllByClient_EmailIgnoreCaseOrderByDateCreationDesc() ─────────
+
+    /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findAllByClient_EmailIgnoreCaseOrderByDateCreationDesc(String email);
 
+    // ── findAllByEvenement_IdEvenementOrderByDateCreationDesc() ──────────
+
+    /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findAllByEvenement_IdEvenementOrderByDateCreationDesc(Integer idEvenement);
 
+    // ── existsByEvenement_IdEvenement() ──────────────────────────────────
+
+    /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByEvenement_IdEvenement(Integer idEvenement);
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES @Query
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Réservations PROVISOIRE créées avant la limite, pour la tâche d'expiration (F16). */
     @Query(value = """
@@ -24,6 +51,9 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             JOIN v_reservation_statut v ON v.id_reservation = r.id_reservation
             WHERE v.statut = 'PROVISOIRE' AND r.date_creation < :limite
             """, nativeQuery = true)
+    // ── findProvisoiresExpirees() ────────────────────────────────────────
+
+    /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findProvisoiresExpirees(@Param("limite") LocalDateTime limite);
 
     /** Lignes d'export CSV : rang, numero, categorie, nom, prenom, email, statut, date_creation. */

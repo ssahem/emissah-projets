@@ -4,14 +4,33 @@ import com.billetterie.billetterie_api.enums.TypeSpectacle;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
-/** Événement renvoyé par l'API. COUCHE : DTO (réponse) · PRODUIT PAR : EvenementMapper. */
+/**
+ * Événement renvoyé par l'API.
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : EvenementMapper.
+ * NE FAIT PAS  : d’accès base ni de logique métier.
+ */
 @Schema(description = "Événement et son spectacle")
 public record EvenementResponse(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant
         @Schema(description = "Identifiant", example = "1") Integer idEvenement,
+        // Titre
         @Schema(description = "Titre", example = "Concert Jazz") String titre,
+        // Type
         @Schema(description = "Type", example = "CONCERT") TypeSpectacle type,
+        // Places numérotées
         @Schema(description = "Places numérotées", example = "true") Boolean placementNumerote,
+        // Date ISO-8601
         @Schema(description = "Date ISO-8601", example = "2026-12-20T20:00:00") LocalDateTime dateHeure,
+        // Identifiant de la salle
         @Schema(description = "Identifiant de la salle", example = "1") Integer idSalle,
+        // Identifiant du spectacle
         @Schema(description = "Identifiant du spectacle", example = "1") Integer idSpectacle) {
 }
