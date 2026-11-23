@@ -10,12 +10,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
  * ENDPOINTS    : list · get/{id} · create · update/{id} · delete/{id} · places-libres/{id} · remplissage/{id} · reservations/export/{id}
  * NE FAIT PAS  : de règle métier.
  */
+@Validated
 @RestController
 @RequestMapping(path = "/billetterie/evenement", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Événements", description = "Gestion des événements et restitutions associées")
@@ -45,6 +48,9 @@ public class EvenementController {
     public EvenementController(EvenementService evenementService) {
         this.evenementService = evenementService;
     }
+    // ════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ════════════════════════════════════════════════════════════════════
 
     // ── list() — GET /billetterie/evenement/list ────────────────────────────
 
@@ -68,14 +74,15 @@ public class EvenementController {
 
     /**
      * Consulte un événement.
-     * Réponses : 200 | 404 | 500.
+     * Réponses : 200 | 400 | 404 | 500.
      */
     @Operation(summary = "Consulter un événement")
     @ApiResponse(responseCode = "200", description = "Événement renvoyé")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Événement introuvable")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @GetMapping("/get/{id}")
-    public EvenementResponse getById(@PathVariable Integer id) {
+    public EvenementResponse getById(@PathVariable @Positive Integer id) {
         return evenementService.findById(id);
     }
 
@@ -111,7 +118,7 @@ public class EvenementController {
     @ApiResponse(responseCode = "409", description = "Salle figée ou sans place")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public EvenementResponse update(@PathVariable Integer id,
+    public EvenementResponse update(@PathVariable @Positive Integer id,
                                     @Valid @RequestBody UpdateEvenementRequest request) {
         return evenementService.update(id, request);
     }
@@ -120,15 +127,16 @@ public class EvenementController {
 
     /**
      * Supprime un événement sans réservation.
-     * Réponses : 204 | 404 | 409 | 500.
+     * Réponses : 204 | 400 | 404 | 409 | 500.
      */
     @Operation(summary = "Supprimer un événement")
     @ApiResponse(responseCode = "204", description = "Événement supprimé")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Événement introuvable")
     @ApiResponse(responseCode = "409", description = "Réservations existantes")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable @Positive Integer id) {
         evenementService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -137,14 +145,15 @@ public class EvenementController {
 
     /**
      * Retourne les places libres groupées par catégorie (F17).
-     * Réponses : 200 | 404 | 500.
+     * Réponses : 200 | 400 | 404 | 500.
      */
     @Operation(summary = "Lister les places libres d'un événement")
     @ApiResponse(responseCode = "200", description = "Places libres renvoyées")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Événement introuvable")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @GetMapping("/places-libres/{id}")
-    public PlacesLibresResponse placesLibres(@PathVariable Integer id) {
+    public PlacesLibresResponse placesLibres(@PathVariable @Positive Integer id) {
         return evenementService.findPlacesLibres(id);
     }
 
@@ -152,16 +161,17 @@ public class EvenementController {
 
     /**
      * Calcule le taux de remplissage d'un événement (F18).
-     * Réponses : 200 | 404 | 409 | 500.
+     * Réponses : 200 | 400 | 404 | 409 | 500.
      */
     @Operation(summary = "Calculer le taux de remplissage d'un événement",
             description = "Détail par catégorie ; les réservations annulées sont exclues.")
     @ApiResponse(responseCode = "200", description = "Taux de remplissage renvoyé")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Événement introuvable")
     @ApiResponse(responseCode = "409", description = "Salle sans place")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @GetMapping("/remplissage/{id}")
-    public RemplissageResponse remplissage(@PathVariable Integer id) {
+    public RemplissageResponse remplissage(@PathVariable @Positive Integer id) {
         return evenementService.findRemplissage(id);
     }
 
@@ -169,14 +179,15 @@ public class EvenementController {
 
     /**
      * Exporte les réservations en CSV (F19).
-     * Réponses : 200 | 404 | 500.
+     * Réponses : 200 | 400 | 404 | 500.
      */
     @Operation(summary = "Exporter les réservations d'un événement en CSV")
     @ApiResponse(responseCode = "200", description = "Fichier CSV")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Événement introuvable")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @GetMapping(path = "/reservations/export/{id}", produces = "text/csv")
-    public String exportReservations(@PathVariable Integer id,
+    public String exportReservations(@PathVariable @Positive Integer id,
                                      @RequestParam(defaultValue = "false") boolean inclureAnnulees) {
         return evenementService.exportReservations(id, inclureAnnulees);
     }

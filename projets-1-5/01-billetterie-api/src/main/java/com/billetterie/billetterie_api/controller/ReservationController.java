@@ -2,7 +2,6 @@ package com.billetterie.billetterie_api.controller;
 
 import com.billetterie.billetterie_api.dto.request.CreateReservationRequest;
 import com.billetterie.billetterie_api.dto.response.AnnulationResponse;
-import com.billetterie.billetterie_api.dto.response.PageResponse;
 import com.billetterie.billetterie_api.dto.response.ReservationResponse;
 import com.billetterie.billetterie_api.dto.request.UpdateReservationRequest;
 import com.billetterie.billetterie_api.service.ReservationService;
@@ -11,8 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Positive;
 import java.net.URI;
-import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -49,6 +48,9 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
+    // ════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ════════════════════════════════════════════════════════════════════
 
     // ── list() — GET /billetterie/reservation/list ──────────────────────────
 
@@ -75,14 +77,15 @@ public class ReservationController {
 
     /**
      * Consulte une réservation.
-     * Réponses : 200 | 404 | 500.
+     * Réponses : 200 | 400 | 404 | 500.
      */
     @Operation(summary = "Consulter une réservation")
     @ApiResponse(responseCode = "200", description = "Réservation renvoyée")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Réservation introuvable")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @GetMapping("/get/{id}")
-    public ReservationResponse getById(@PathVariable Integer id) {
+    public ReservationResponse getById(@PathVariable @Positive Integer id) {
         return reservationService.findById(id);
     }
 
@@ -117,7 +120,7 @@ public class ReservationController {
     @ApiResponse(responseCode = "404", description = "Réservation introuvable")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ReservationResponse update(@PathVariable Integer id,
+    public ReservationResponse update(@PathVariable @Positive Integer id,
                                       @Valid @RequestBody UpdateReservationRequest request) {
         return reservationService.update(id, request);
     }
@@ -126,15 +129,16 @@ public class ReservationController {
 
     /**
      * Supprime une réservation provisoire ou annulée.
-     * Réponses : 204 | 404 | 409 | 500.
+     * Réponses : 204 | 400 | 404 | 409 | 500.
      */
     @Operation(summary = "Supprimer une réservation")
     @ApiResponse(responseCode = "204", description = "Réservation supprimée")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Réservation introuvable")
     @ApiResponse(responseCode = "409", description = "Réservation payée")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable @Positive Integer id) {
         reservationService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -143,15 +147,16 @@ public class ReservationController {
 
     /**
      * Confirme le paiement (F14).
-     * Réponses : 200 | 404 | 409 | 500.
+     * Réponses : 200 | 400 | 404 | 409 | 500.
      */
     @Operation(summary = "Confirmer le paiement d'une réservation")
     @ApiResponse(responseCode = "200", description = "Réservation payée")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Réservation introuvable")
     @ApiResponse(responseCode = "409", description = "Statut incompatible ou délai dépassé")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @PostMapping("/paiement/{id}")
-    public ReservationResponse payer(@PathVariable Integer id) {
+    public ReservationResponse payer(@PathVariable @Positive Integer id) {
         return reservationService.payer(id);
     }
 
@@ -159,16 +164,17 @@ public class ReservationController {
 
     /**
      * Annule une réservation et renvoie le montant remboursé (F15).
-     * Réponses : 200 | 404 | 409 | 500.
+     * Réponses : 200 | 400 | 404 | 409 | 500.
      */
     @Operation(summary = "Annuler une réservation et calculer le remboursement",
             description = "Remboursement intégral au-delà de 48 h, moitié entre 48 h et 24 h, nul en deçà.")
     @ApiResponse(responseCode = "200", description = "Réservation annulée et montant remboursé")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Réservation introuvable")
     @ApiResponse(responseCode = "409", description = "Réservation déjà annulée ou statut incompatible")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @PostMapping("/annulation/{id}")
-    public AnnulationResponse annuler(@PathVariable Integer id) {
+    public AnnulationResponse annuler(@PathVariable @Positive Integer id) {
         return reservationService.annuler(id);
     }
 }

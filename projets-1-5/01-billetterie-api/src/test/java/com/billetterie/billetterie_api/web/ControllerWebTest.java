@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
  *
  * TYPE       : Web (@WebMvcTest, sans contexte JPA ni base de données)
  * STRATÉGIE  : les services sont simulés ; le GlobalExceptionHandler réel est chargé.
- * CAS COUVERTS : 400 de validation, 404 métier, 204, 400 de date, 400 métier, corps d'annulation.
+ * CAS COUVERTS : 400 de validation, 400 d'id invalide, 404 métier, 204, 400 de date, 400 métier, corps d'annulation.
  * CONVENTION : Préparation → Action → Vérification.
  */
 @WebMvcTest
@@ -72,6 +72,14 @@ class ControllerWebTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title").value("Salle introuvable"))
                 .andExpect(jsonPath("$.idSalle").value(999));
+    }
+
+    @Test
+    @DisplayName("Un identifiant non positif est refusé avant d'atteindre le service")
+    void getSalle_idInvalide() throws Exception {
+        // ── Action + Vérification ──
+        mockMvc.perform(get("/billetterie/salle/get/{id}", 0))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

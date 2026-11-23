@@ -1,5 +1,6 @@
 package com.billetterie.billetterie_api.exception;
 
+import jakarta.validation.ConstraintViolationException;
 import java.net.URI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         // ── Étape 3/3 : ajouter les données métier utiles au client ──
         ex.getProperties().forEach(problem::setProperty);
+        return problem;
+    }
+
+    // ── handleConstraintViolation() — paramètre invalide → 400 ───────────────
+
+    /** Traduit une contrainte violée sur un paramètre de requête en 400 lisible. */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ProblemDetail handleConstraintViolation(ConstraintViolationException ex) {
+        // ── Étape 1/3 : créer le problème avec le statut et le détail ──
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST, "Paramètre de requête invalide");
+
+        // ── Étape 2/3 : titrer et typer ──
+        problem.setTitle("Paramètre invalide");
+        problem.setType(URI.create("https://api.billetterie.local/problems/parametre-invalide"));
+
+        // ── Étape 3/3 : indiquer le paramètre fautif, sans exposer la pile ──
+        ex.getConstraintViolations().stream()
+                .findFirst()
+                .ifPresent(v -> problem.setProperty("parametre", v.getPropertyPath().toString()));
         return problem;
     }
 

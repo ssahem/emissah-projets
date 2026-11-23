@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * ENDPOINTS    : list · get/{id} · create · update/{id} · delete/{id}
  * NE FAIT PAS  : de règle métier.
  */
+@Validated
 @RestController
 @RequestMapping(path = "/billetterie/place", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Places", description = "CRUD des places physiques d'une salle")
@@ -40,6 +43,9 @@ public class PlaceController {
     public PlaceController(PlaceService placeService) {
         this.placeService = placeService;
     }
+    // ════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ════════════════════════════════════════════════════════════════════
 
     // ── list() — GET /billetterie/place/list ─────────────────────────────────
 
@@ -59,14 +65,15 @@ public class PlaceController {
 
     /**
      * Consulte une place.
-     * Réponses : 200 | 404 | 500.
+     * Réponses : 200 | 400 | 404 | 500.
      */
     @Operation(summary = "Consulter une place")
     @ApiResponse(responseCode = "200", description = "Place renvoyée")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Place introuvable")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @GetMapping("/get/{id}")
-    public PlaceResponse getById(@PathVariable Integer id) {
+    public PlaceResponse getById(@PathVariable @Positive Integer id) {
         return placeService.findById(id);
     }
 
@@ -102,7 +109,7 @@ public class PlaceController {
     @ApiResponse(responseCode = "409", description = "Position figée, doublon ou capacité atteinte")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public PlaceResponse update(@PathVariable Integer id,
+    public PlaceResponse update(@PathVariable @Positive Integer id,
                                 @Valid @RequestBody UpdatePlaceRequest request) {
         return placeService.update(id, request);
     }
@@ -111,15 +118,16 @@ public class PlaceController {
 
     /**
      * Supprime une place non réservée.
-     * Réponses : 204 | 404 | 409 | 500.
+     * Réponses : 204 | 400 | 404 | 409 | 500.
      */
     @Operation(summary = "Supprimer une place")
     @ApiResponse(responseCode = "204", description = "Place supprimée")
+    @ApiResponse(responseCode = "400", description = "Identifiant invalide")
     @ApiResponse(responseCode = "404", description = "Place introuvable")
     @ApiResponse(responseCode = "409", description = "Place réservée")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable @Positive Integer id) {
         placeService.delete(id);
         return ResponseEntity.noContent().build();
     }
