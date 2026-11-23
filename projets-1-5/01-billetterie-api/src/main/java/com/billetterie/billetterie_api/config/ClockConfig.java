@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * COUCHE       : Configuration
  * RÔLE         : fournir une unique source de temps pour F13, F14, F16.
+ * DÉPEND DE    : aucune.
  * NE FAIT PAS  : de logique métier ; les tests peuvent remplacer ce bean.
  */
 @Configuration

@@ -62,7 +62,7 @@ public class ReservationExpirationService {
     //  CAS D'USAGE — F16
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Scheduled(fixedDelay = 60_000)
+    @Scheduled(fixedDelayString = "${billetterie.expiration.delai-ms:60000}")
     @Transactional
     public void libererReservationsExpirees() {
         LocalDateTime limite = LocalDateTime.now(clock).minusMinutes(15);

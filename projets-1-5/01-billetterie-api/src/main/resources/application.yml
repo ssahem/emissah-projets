@@ -31,6 +31,11 @@ spring:
     problemdetails:
       enabled: true
 
+# Expiration des réservations PROVISOIRE (F16), en millisecondes.
+billetterie:
+  expiration:
+    delai-ms: 60000
+
 management:
   endpoints:
     web:

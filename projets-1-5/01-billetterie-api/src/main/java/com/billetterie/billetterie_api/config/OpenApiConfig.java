@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * COUCHE       : Configuration
  * RÔLE         : décrire l'API dans Swagger.
+ * DÉPEND DE    : aucune.
  * NE FAIT PAS  : de logique métier ni de sécurité (l'énoncé ne prévoit aucune authentification).
  */
 @Configuration
