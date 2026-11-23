@@ -32,9 +32,10 @@ public class Categorie {
 
     // ── Categorie() ──────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Categorie() {}
-    // ── Categorie() ──────────────────────────────────────────────────────
+
+    // ── Categorie(String libelle) ────────────────────────────────────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Categorie(String libelle) { this.libelle = Objects.requireNonNull(libelle, "libelle"); }
@@ -47,6 +48,7 @@ public class Categorie {
 
     /** Retourne idCategorie. */
     public Integer getIdCategorie() { return idCategorie; }
+
     // ── getLibelle() ─────────────────────────────────────────────────────
 
     /** Retourne libelle. */

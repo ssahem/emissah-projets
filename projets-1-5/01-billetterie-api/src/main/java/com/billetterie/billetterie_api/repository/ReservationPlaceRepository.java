@@ -49,6 +49,7 @@ public interface ReservationPlaceRepository extends JpaRepository<ReservationPla
             JOIN v_reservation_statut v ON v.id_reservation = rp.id_reservation
             WHERE v.id_evenement = :idEvenement AND v.statut IN ('PROVISOIRE', 'PAYEE')
             """, nativeQuery = true)
+
     // ── findPlacesActivesByEvenement() ───────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

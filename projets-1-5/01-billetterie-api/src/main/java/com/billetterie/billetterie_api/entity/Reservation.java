@@ -59,9 +59,10 @@ public class Reservation {
 
     // ── Reservation() ────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Reservation() {}
-    // ── Reservation() ────────────────────────────────────────────────────
+
+    // ── Reservation(LocalDateTime dateCreation, Client client, Evenement evenement) ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Reservation(LocalDateTime dateCreation, Client client, Evenement evenement) {
@@ -79,34 +80,42 @@ public class Reservation {
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }
+
     // ── getDateCreation() ────────────────────────────────────────────────
 
     /** Retourne dateCreation. */
     public LocalDateTime getDateCreation() { return dateCreation; }
+
     // ── getDateExpiration() ──────────────────────────────────────────────
 
     /** Retourne dateExpiration. */
     public LocalDateTime getDateExpiration() { return dateExpiration; }
+
     // ── getDatePaiement() ────────────────────────────────────────────────
 
     /** Retourne datePaiement. */
     public LocalDateTime getDatePaiement() { return datePaiement; }
+
     // ── getMontantRembourse() ────────────────────────────────────────────
 
     /** Retourne montantRembourse. */
     public BigDecimal getMontantRembourse() { return montantRembourse; }
+
     // ── getClient() ──────────────────────────────────────────────────────
 
     /** Retourne client. */
     public Client getClient() { return client; }
+
     // ── getEvenement() ───────────────────────────────────────────────────
 
     /** Retourne evenement. */
     public Evenement getEvenement() { return evenement; }
+
     // ── getPlaces() ──────────────────────────────────────────────────────
 
     /** Retourne places. */
     public List<ReservationPlace> getPlaces() { return places; }
+
     // ── getHistorique() ──────────────────────────────────────────────────
 
     /** Retourne historique. */

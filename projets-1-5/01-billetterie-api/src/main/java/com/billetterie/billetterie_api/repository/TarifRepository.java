@@ -17,6 +17,7 @@ public interface TarifRepository extends JpaRepository<Tarif, Integer> {
     // ═════════════════════════════════════════════════════════════════════════
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
+
     // ── findByEvenement_IdEvenementAndCategorieIgnoreCase() ──────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

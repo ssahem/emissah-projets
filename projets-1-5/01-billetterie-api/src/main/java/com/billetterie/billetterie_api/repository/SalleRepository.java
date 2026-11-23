@@ -38,12 +38,14 @@ public interface SalleRepository extends JpaRepository<Salle, Integer> {
     // ═════════════════════════════════════════════════════════════════════════
 
     @Query("select count(p) from Place p where p.salle.idSalle = :idSalle")
+
     // ── countPlacesByIdSalle() ───────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     long countPlacesByIdSalle(@Param("idSalle") Integer idSalle);
 
     @Query("select count(e) from Evenement e where e.salle.idSalle = :idSalle")
+
     // ── countEvenementsByIdSalle() ───────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

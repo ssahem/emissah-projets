@@ -18,6 +18,7 @@ public interface HistoriqueStatutRepository extends JpaRepository<HistoriqueStat
     // ═════════════════════════════════════════════════════════════════════════
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
+
     // ── findTopByReservation_IdReservationOrderByDateStatutDesc() ────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

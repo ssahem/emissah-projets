@@ -37,9 +37,10 @@ public class HistoriqueStatut {
 
     // ── HistoriqueStatut() ───────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected HistoriqueStatut() {}
-    // ── HistoriqueStatut() ───────────────────────────────────────────────
+
+    // ── HistoriqueStatut(Reservation reservation, Statut statut, LocalDateTime dateStatut) ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public HistoriqueStatut(Reservation reservation, Statut statut, LocalDateTime dateStatut) {
@@ -57,14 +58,17 @@ public class HistoriqueStatut {
 
     /** Retourne id. */
     public HistoriqueStatutId getId() { return id; }
+
     // ── getReservation() ─────────────────────────────────────────────────
 
     /** Retourne reservation. */
     public Reservation getReservation() { return reservation; }
+
     // ── getStatut() ──────────────────────────────────────────────────────
 
     /** Retourne statut. */
     public Statut getStatut() { return statut; }
+
     // ── getDateStatut() ──────────────────────────────────────────────────
 
     /** Retourne dateStatut. */

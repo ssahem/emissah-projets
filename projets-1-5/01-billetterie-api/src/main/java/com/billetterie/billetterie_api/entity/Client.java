@@ -36,9 +36,10 @@ public class Client {
 
     // ── Client() ─────────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Client() {}
-    // ── Client() ─────────────────────────────────────────────────────────
+
+    // ── Client(String nom, String prenom, String email) ──────────────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Client(String nom, String prenom, String email) {
@@ -55,14 +56,17 @@ public class Client {
 
     /** Retourne idClient. */
     public Integer getIdClient() { return idClient; }
+
     // ── getNom() ─────────────────────────────────────────────────────────
 
     /** Retourne nom. */
     public String getNom() { return nom; }
+
     // ── getPrenom() ──────────────────────────────────────────────────────
 
     /** Retourne prenom. */
     public String getPrenom() { return prenom; }
+
     // ── getEmail() ───────────────────────────────────────────────────────
 
     /** Retourne email. */

@@ -57,7 +57,7 @@ public class Salle {
     protected Salle() {
     }
 
-    // ── Salle() ──────────────────────────────────────────────────────────
+    // ── Salle(String nom, String adresse, String ville, Integer capacite) ─
 
     /** Crée une salle valide ; aucun champ obligatoire ne peut être null. */
     public Salle(String nom, String adresse, String ville, Integer capacite) {
@@ -110,6 +110,7 @@ public class Salle {
 
     /** Égalité sur (nom, ville), la clé métier. */
     @Override
+
     // ── equals() ─────────────────────────────────────────────────────────
 
     /** Égalité sur la clé métier, pas sur l’identifiant technique. */
@@ -121,6 +122,7 @@ public class Salle {
 
     /** Cohérent avec equals(). */
     @Override
+
     // ── hashCode() ───────────────────────────────────────────────────────
 
     /** Cohérent avec equals() : calculé sur la clé métier. */

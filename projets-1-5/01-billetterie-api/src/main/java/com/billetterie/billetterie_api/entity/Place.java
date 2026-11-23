@@ -38,9 +38,10 @@ public class Place {
 
     // ── Place() ──────────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Place() {}
-    // ── Place() ──────────────────────────────────────────────────────────
+
+    // ── Place(String rang, Integer numero, Salle salle, Categorie categorie) ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Place(String rang, Integer numero, Salle salle, Categorie categorie) {
@@ -58,18 +59,22 @@ public class Place {
 
     /** Retourne idPlace. */
     public Integer getIdPlace() { return idPlace; }
+
     // ── getRang() ────────────────────────────────────────────────────────
 
     /** Retourne rang. */
     public String getRang() { return rang; }
+
     // ── getNumero() ──────────────────────────────────────────────────────
 
     /** Retourne numero. */
     public Integer getNumero() { return numero; }
+
     // ── getSalle() ───────────────────────────────────────────────────────
 
     /** Retourne salle. */
     public Salle getSalle() { return salle; }
+
     // ── getCategorie() ───────────────────────────────────────────────────
 
     /** Retourne categorie. */

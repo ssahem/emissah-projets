@@ -47,9 +47,10 @@ public class ReservationPlace {
 
     // ── ReservationPlace() ───────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected ReservationPlace() {}
-    // ── ReservationPlace() ───────────────────────────────────────────────
+
+    // ── ReservationPlace(Reservation reservation, String rang, Integer numero, Integer idEvenement) ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public ReservationPlace(Reservation reservation, String rang, Integer numero, Integer idEvenement) {
@@ -67,22 +68,27 @@ public class ReservationPlace {
 
     /** Retourne idReservationPlace. */
     public Integer getIdReservationPlace() { return idReservationPlace; }
+
     // ── getReservation() ─────────────────────────────────────────────────
 
     /** Retourne reservation. */
     public Reservation getReservation() { return reservation; }
+
     // ── getRang() ────────────────────────────────────────────────────────
 
     /** Retourne rang. */
     public String getRang() { return rang; }
+
     // ── getNumero() ──────────────────────────────────────────────────────
 
     /** Retourne numero. */
     public Integer getNumero() { return numero; }
+
     // ── getIdEvenement() ─────────────────────────────────────────────────
 
     /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }
+
     // ── getPrixApplique() ────────────────────────────────────────────────
 
     /** Retourne prixApplique. */

@@ -32,9 +32,10 @@ public class HistoriqueStatutId implements Serializable {
 
     // ── HistoriqueStatutId() ─────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected HistoriqueStatutId() {}
-    // ── HistoriqueStatutId() ─────────────────────────────────────────────
+
+    // ── HistoriqueStatutId(Integer idReservation, Integer idStatut) ──────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public HistoriqueStatutId(Integer idReservation, Integer idStatut) {
@@ -50,6 +51,7 @@ public class HistoriqueStatutId implements Serializable {
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }
+
     // ── getIdStatut() ────────────────────────────────────────────────────
 
     /** Retourne idStatut. */
@@ -69,6 +71,7 @@ public class HistoriqueStatutId implements Serializable {
         return Objects.equals(idReservation, other.idReservation) && Objects.equals(idStatut, other.idStatut);
     }
     @Override
+
     // ── hashCode() ───────────────────────────────────────────────────────
 
     /** Cohérent avec equals() : calculé sur la clé métier. */

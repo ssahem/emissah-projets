@@ -51,6 +51,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             JOIN v_reservation_statut v ON v.id_reservation = r.id_reservation
             WHERE v.statut = 'PROVISOIRE' AND r.date_creation < :limite
             """, nativeQuery = true)
+
     // ── findProvisoiresExpirees() ────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

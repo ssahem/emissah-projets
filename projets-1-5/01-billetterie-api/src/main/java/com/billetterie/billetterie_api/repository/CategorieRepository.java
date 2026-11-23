@@ -22,6 +22,7 @@ public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
 
     /** Requête Spring Data déduite du nom de la méthode. */
     Optional<Categorie> findByLibelleIgnoreCase(String libelle);
+
     // ── existsByLibelleIgnoreCase() ──────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

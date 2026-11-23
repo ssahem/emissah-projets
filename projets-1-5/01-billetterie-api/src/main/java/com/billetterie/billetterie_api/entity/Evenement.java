@@ -37,9 +37,10 @@ public class Evenement {
 
     // ── Evenement() ──────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Evenement() {}
-    // ── Evenement() ──────────────────────────────────────────────────────
+
+    // ── Evenement(LocalDateTime dateHeure, Spectacle spectacle, Salle salle) ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Evenement(LocalDateTime dateHeure, Spectacle spectacle, Salle salle) {
@@ -56,14 +57,17 @@ public class Evenement {
 
     /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }
+
     // ── getDateHeure() ───────────────────────────────────────────────────
 
     /** Retourne dateHeure. */
     public LocalDateTime getDateHeure() { return dateHeure; }
+
     // ── getSpectacle() ───────────────────────────────────────────────────
 
     /** Retourne spectacle. */
     public Spectacle getSpectacle() { return spectacle; }
+
     // ── getSalle() ───────────────────────────────────────────────────────
 
     /** Retourne salle. */

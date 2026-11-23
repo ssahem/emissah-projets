@@ -37,9 +37,10 @@ public class Spectacle {
 
     // ── Spectacle() ──────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Spectacle() {}
-    // ── Spectacle() ──────────────────────────────────────────────────────
+
+    // ── Spectacle(String titre, TypeSpectacle type, Boolean placementNumerote) ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Spectacle(String titre, TypeSpectacle type, Boolean placementNumerote) {
@@ -56,14 +57,17 @@ public class Spectacle {
 
     /** Retourne idSpectacle. */
     public Integer getIdSpectacle() { return idSpectacle; }
+
     // ── getTitre() ───────────────────────────────────────────────────────
 
     /** Retourne titre. */
     public String getTitre() { return titre; }
+
     // ── getType() ────────────────────────────────────────────────────────
 
     /** Retourne type. */
     public TypeSpectacle getType() { return type; }
+
     // ── getPlacementNumerote() ───────────────────────────────────────────
 
     /** Retourne placementNumerote. */

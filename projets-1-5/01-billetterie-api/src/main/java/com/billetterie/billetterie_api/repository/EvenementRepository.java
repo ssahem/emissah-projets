@@ -56,12 +56,14 @@ public interface EvenementRepository extends JpaRepository<Evenement, Integer> {
     // ═════════════════════════════════════════════════════════════════════════
 
     @Query("select count(r) from Reservation r where r.evenement.idEvenement = :idEvenement")
+
     // ── countReservationsByIdEvenement() ─────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     long countReservationsByIdEvenement(@Param("idEvenement") Integer idEvenement);
 
     @Query("select count(p) from Place p where p.salle.idSalle = :idSalle")
+
     // ── countPlacesByIdSalle() ───────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */

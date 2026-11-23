@@ -32,9 +32,10 @@ public class Statut {
 
     // ── Statut() ─────────────────────────────────────────────────────────
 
-    /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
+    /** Constructeur vide exigé par JPA. */
     protected Statut() {}
-    // ── Statut() ─────────────────────────────────────────────────────────
+
+    // ── Statut(String libelle) ───────────────────────────────────────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Statut(String libelle) { this.libelle = Objects.requireNonNull(libelle, "libelle"); }
@@ -47,6 +48,7 @@ public class Statut {
 
     /** Retourne idStatut. */
     public Integer getIdStatut() { return idStatut; }
+
     // ── getLibelle() ─────────────────────────────────────────────────────
 
     /** Retourne libelle. */
