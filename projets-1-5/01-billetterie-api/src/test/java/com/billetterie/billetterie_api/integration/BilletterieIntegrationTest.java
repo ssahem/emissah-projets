@@ -28,6 +28,7 @@ import com.billetterie.billetterie_api.repository.ReservationRepository;
 import com.billetterie.billetterie_api.repository.SalleRepository;
 import com.billetterie.billetterie_api.repository.StatutRepository;
 import com.billetterie.billetterie_api.repository.TarifRepository;
+import jakarta.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.LocalDateTime;
@@ -109,12 +110,14 @@ class BilletterieIntegrationTest {
     @Autowired private ReservationRepository reservationRepository;
     @Autowired private ReservationPlaceRepository reservationPlaceRepository;
     @Autowired private StatutRepository statutRepository;
+    @Autowired private EntityManager entityManager;
 
     @Test
     @DisplayName("Le flux complet de la salle au paiement respecte les règles métier")
     void fluxComplet_salleEvenementReservationPaiementEtRestitutions() throws Exception {
         // ── Préparation ──
-        categorieRepository.saveAndFlush(new Categorie("ORCHESTRE"));
+        entityManager.persist(new Categorie("ORCHESTRE"));
+        entityManager.flush();
         String salleJson = """
                 {"nom":"Grand Hall","adresse":"12 rue des Arts","ville":"Abidjan","capacite":120}
                 """;
@@ -148,7 +151,8 @@ class BilletterieIntegrationTest {
                 .andReturn();
         int idEvenement = json(evenementResult).get("idEvenement").asInt();
         Evenement evenement = evenementRepository.findById(idEvenement).orElseThrow();
-        tarifRepository.saveAndFlush(new Tarif(evenement, "ORCHESTRE", new BigDecimal("25.00")));
+        entityManager.persist(new Tarif(evenement, "ORCHESTRE", new BigDecimal("25.00")));
+        entityManager.flush();
 
         // ── Action + Vérification — F4 et F11 ──
         String corpsReservation = reservationJson.formatted(idEvenement);
@@ -475,7 +479,8 @@ class BilletterieIntegrationTest {
     /** Crée une catégorie de référence si elle n'existe pas déjà. */
     private void creerCategorie(String libelle) {
         if (!categorieRepository.existsByLibelleIgnoreCase(libelle)) {
-            categorieRepository.saveAndFlush(new Categorie(libelle));
+            entityManager.persist(new Categorie(libelle));
+            entityManager.flush();
         }
     }
 
@@ -518,8 +523,9 @@ class BilletterieIntegrationTest {
 
     /** Crée le tarif d'une catégorie pour un événement. */
     private void creerTarif(int idEvenement, String categorie, String prix) {
-        tarifRepository.saveAndFlush(new Tarif(
+        entityManager.persist(new Tarif(
                 evenementRepository.findById(idEvenement).orElseThrow(), categorie, new BigDecimal(prix)));
+        entityManager.flush();
     }
 
     /** Crée une réservation via l'API F4 et retourne son identifiant. */

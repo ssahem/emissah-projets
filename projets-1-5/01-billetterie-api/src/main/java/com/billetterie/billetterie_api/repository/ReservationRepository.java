@@ -45,17 +45,17 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     //  REQUÊTES @Query
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findProvisoiresExpirees() ────────────────────────────────────────
+
     /** Réservations PROVISOIRE créées avant la limite, pour la tâche d'expiration (F16). */
     @Query(value = """
             SELECT r.* FROM reservation r
             JOIN v_reservation_statut v ON v.id_reservation = r.id_reservation
             WHERE v.statut = 'PROVISOIRE' AND r.date_creation < :limite
             """, nativeQuery = true)
-
-    // ── findProvisoiresExpirees() ────────────────────────────────────────
-
-    /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findProvisoiresExpirees(@Param("limite") LocalDateTime limite);
+
+    // ── findLignesExport() ───────────────────────────────────────────────
 
     /** Lignes d'export CSV : rang, numero, categorie, nom, prenom, email, statut, date_creation. */
     @Query(value = """

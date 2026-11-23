@@ -2,17 +2,17 @@ package com.billetterie.billetterie_api.repository;
 
 import com.billetterie.billetterie_api.entity.Categorie;
 import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.Repository;
 
 /**
  * Accès aux catégories.
  *
  * COUCHE       : Repository (persistance)
- * RÔLE         : lire et écrire des Categorie ; Spring Data génère l’implémentation.
+ * RÔLE         : lire des Categorie (table de référence) ; Spring Data génère l’implémentation.
  * UTILISÉ PAR  : les services uniquement (jamais un controller).
  * NE FAIT PAS  : de règle métier ni de conversion en DTO.
  */
-public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
+public interface CategorieRepository extends Repository<Categorie, Integer> {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  REQUÊTES DÉDUITES
@@ -20,7 +20,10 @@ public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
 
     // ── findByLibelleIgnoreCase() ────────────────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /**
+     * Requête Spring Data déduite du nom de la méthode.
+     * @return l'élément s'il existe, sinon {@link Optional#empty()} (jamais null)
+     */
     Optional<Categorie> findByLibelleIgnoreCase(String libelle);
 
     // ── existsByLibelleIgnoreCase() ──────────────────────────────────────

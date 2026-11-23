@@ -16,12 +16,21 @@ import org.springframework.data.repository.query.Param;
  */
 public interface ReservationPlaceRepository extends JpaRepository<ReservationPlace, Integer> {
 
+    // ── findAllByReservation_Evenement_IdEvenementAndRangAndNumero() ───────
+
+    /** Retrouve l'historique des réservations d'une position pour un événement. */
     List<ReservationPlace> findAllByReservation_Evenement_IdEvenementAndRangAndNumero(
             Integer idEvenement, String rang, Integer numero);
 
+    // ── existsByReservation_Evenement_IdEvenementAndRangAndNumero() ────────
+
+    /** Indique si une position a déjà été réservée pour un événement. */
     boolean existsByReservation_Evenement_IdEvenementAndRangAndNumero(
             Integer idEvenement, String rang, Integer numero);
 
+    // ── existsByRangAndNumeroAndReservation_Evenement_Salle_IdSalle() ───────
+
+    /** Indique si une position est déjà réservée dans une salle, tous événements confondus. */
     boolean existsByRangAndNumeroAndReservation_Evenement_Salle_IdSalle(
             String rang, Integer numero, Integer idSalle);
 
@@ -43,16 +52,14 @@ public interface ReservationPlaceRepository extends JpaRepository<ReservationPla
     //  REQUÊTES @Query
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findPlacesActivesByEvenement() ───────────────────────────────────
+
     /** Places occupées par une réservation encore active, déduites de la vue statut. */
     @Query(value = """
             SELECT rp.* FROM reservation_place rp
             JOIN v_reservation_statut v ON v.id_reservation = rp.id_reservation
             WHERE v.id_evenement = :idEvenement AND v.statut IN ('PROVISOIRE', 'PAYEE')
             """, nativeQuery = true)
-
-    // ── findPlacesActivesByEvenement() ───────────────────────────────────
-
-    /** Requête Spring Data déduite du nom de la méthode. */
     List<ReservationPlace> findPlacesActivesByEvenement(@Param("idEvenement") Integer idEvenement);
 
     /** Places occupées par un statut donné, déduites de la vue statut (F18). */

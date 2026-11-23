@@ -30,6 +30,9 @@ public interface SalleRepository extends JpaRepository<Salle, Integer> {
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByNomIgnoreCaseAndVilleIgnoreCase(String nom, String ville);
 
+    // ── existsByNomIgnoreCaseAndVilleIgnoreCaseAndIdSalleNot() ────────────
+
+    /** Vérifie si un autre salon porte déjà le même nom et la même ville. */
     boolean existsByNomIgnoreCaseAndVilleIgnoreCaseAndIdSalleNot(
             String nom, String ville, Integer idSalle);
 
@@ -37,17 +40,15 @@ public interface SalleRepository extends JpaRepository<Salle, Integer> {
     //  REQUÊTES @Query
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Query("select count(p) from Place p where p.salle.idSalle = :idSalle")
-
     // ── countPlacesByIdSalle() ───────────────────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /** Compte les places d'une salle. */
+    @Query("select count(p) from Place p where p.salle.idSalle = :idSalle")
     long countPlacesByIdSalle(@Param("idSalle") Integer idSalle);
-
-    @Query("select count(e) from Evenement e where e.salle.idSalle = :idSalle")
 
     // ── countEvenementsByIdSalle() ───────────────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /** Compte les événements prévus dans une salle. */
+    @Query("select count(e) from Evenement e where e.salle.idSalle = :idSalle")
     long countEvenementsByIdSalle(@Param("idSalle") Integer idSalle);
 }

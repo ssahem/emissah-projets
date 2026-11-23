@@ -21,7 +21,10 @@ public interface HistoriqueStatutRepository extends JpaRepository<HistoriqueStat
 
     // ── findTopByReservation_IdReservationOrderByDateStatutDesc() ────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /**
+     * Requête Spring Data déduite du nom de la méthode.
+     * @return l'élément s'il existe, sinon {@link Optional#empty()} (jamais null)
+     */
     Optional<HistoriqueStatut> findTopByReservation_IdReservationOrderByDateStatutDesc(
             Integer idReservation);
 

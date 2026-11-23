@@ -21,6 +21,9 @@ public interface SpectacleRepository extends JpaRepository<Spectacle, Integer> {
 
     // ── findFirstByTitreIgnoreCaseAndType() ──────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /**
+     * Requête Spring Data déduite du nom de la méthode.
+     * @return l'élément s'il existe, sinon {@link Optional#empty()} (jamais null)
+     */
     Optional<Spectacle> findFirstByTitreIgnoreCaseAndType(String titre, TypeSpectacle type);
 }

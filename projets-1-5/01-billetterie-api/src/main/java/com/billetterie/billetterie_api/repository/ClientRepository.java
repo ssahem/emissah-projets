@@ -20,7 +20,10 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 
     // ── findByEmailIgnoreCase() ──────────────────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /**
+     * Requête Spring Data déduite du nom de la méthode.
+     * @return l'élément s'il existe, sinon {@link Optional#empty()} (jamais null)
+     */
     Optional<Client> findByEmailIgnoreCase(String email);
 
     // ── existsByEmailIgnoreCase() ────────────────────────────────────────

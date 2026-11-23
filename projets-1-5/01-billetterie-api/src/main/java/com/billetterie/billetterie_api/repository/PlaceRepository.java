@@ -29,17 +29,26 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Place> findAllBySalle_IdSalleOrderByRangAscNumeroAsc(Integer idSalle);
 
+    // ── findAllBySalle_IdSalleAndCategorie_Libelle…() ───────────────────────
+
+    /** Liste les places d'une salle d'une catégorie, dans l'ordre du plan. */
     List<Place> findAllBySalle_IdSalleAndCategorie_LibelleIgnoreCaseOrderByRangAscNumeroAsc(
             Integer idSalle, String libelle);
 
     // ── findBySalle_IdSalleAndRangAndNumero() ────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /**
+     * Requête Spring Data déduite du nom de la méthode.
+     * @return l'élément s'il existe, sinon {@link Optional#empty()} (jamais null)
+     */
     Optional<Place> findBySalle_IdSalleAndRangAndNumero(Integer idSalle, String rang, Integer numero);
 
     // ── findFirstByRangAndNumero() ───────────────────────────────────────
 
-    /** Requête Spring Data déduite du nom de la méthode. */
+    /**
+     * Requête Spring Data déduite du nom de la méthode.
+     * @return l'élément s'il existe, sinon {@link Optional#empty()} (jamais null)
+     */
     Optional<Place> findFirstByRangAndNumero(String rang, Integer numero);
 
     // ── existsBySalle_IdSalleAndRangAndNumero() ──────────────────────────
