@@ -2,13 +2,20 @@ package com.billetterie.billetterie_api.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import java.net.URI;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -36,8 +43,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setTitle(ex.getTitle());
         problem.setType(ex.getType());
 
-        // ── Étape 3/3 : ajouter les données métier utiles au client ──
+        // ── Étape 3/3 : ajouter les données métier utiles et tracer sans pile ──
         ex.getProperties().forEach(problem::setProperty);
+        log.warn("Refus métier {} : {}", ex.getType(), ex.getMessage());
         return problem;
     }
 
@@ -55,10 +63,39 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         problem.setType(URI.create("https://api.billetterie.local/problems/parametre-invalide"));
 
         // ── Étape 3/3 : indiquer le paramètre fautif, sans exposer la pile ──
-        ex.getConstraintViolations().stream()
+        String parametre = ex.getConstraintViolations().stream()
                 .findFirst()
-                .ifPresent(v -> problem.setProperty("parametre", v.getPropertyPath().toString()));
+                .map(v -> v.getPropertyPath().toString())
+                .orElse("inconnu");
+        problem.setProperty("parametre", parametre);
+        log.warn("Paramètre invalide : {}", parametre);
         return problem;
+    }
+
+    // ── handleMethodArgumentNotValid() — corps invalide → 400 avec les champs ─
+
+    /** Traduit un corps invalide en 400 en indiquant les champs en erreur. */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+        // ── Étape 1/3 : créer le problème avec le statut et le détail ──
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST, "Le corps de la requête est invalide");
+
+        // ── Étape 2/3 : titrer et typer ──
+        problem.setTitle("Corps invalide");
+        problem.setType(URI.create("https://api.billetterie.local/problems/corps-invalide"));
+
+        // ── Étape 3/3 : lister les champs fautifs, sans exposer la pile ──
+        List<Map<String, String>> champs = ex.getBindingResult().getFieldErrors().stream()
+                .map(e -> Map.of(
+                        "champ", e.getField(),
+                        "message", String.valueOf(e.getDefaultMessage())))
+                .toList();
+        problem.setProperty("champs", champs);
+        log.warn("Corps invalide : {}", champs);
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
     // ── handleIntegrityViolation() — conflit de contrainte → 409 ─────────────
