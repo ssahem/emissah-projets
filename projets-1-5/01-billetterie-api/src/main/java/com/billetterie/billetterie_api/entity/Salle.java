@@ -96,6 +96,8 @@ public class Salle {
     /** Retourne la capacité. */
     public Integer getCapacite() { return capacite; }
 
+    // ── modifier() ─────────────────────────────────────────────────────────
+
     /** Met à jour les champs modifiables. */
     public void modifier(String nom, String adresse, String ville, Integer capacite) {
         this.nom = Objects.requireNonNull(nom, "nom");
@@ -108,23 +110,19 @@ public class Salle {
     //  IDENTITÉ ET AFFICHAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Égalité sur (nom, ville), la clé métier. */
-    @Override
-
     // ── equals() ─────────────────────────────────────────────────────────
 
-    /** Égalité sur la clé métier, pas sur l’identifiant technique. */
+    /** Égalité sur (nom, ville), la clé métier. */
+    @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (!(o instanceof Salle other)) { return false; }
         return Objects.equals(nom, other.nom) && Objects.equals(ville, other.ville);
     }
 
-    /** Cohérent avec equals(). */
-    @Override
-
     // ── hashCode() ───────────────────────────────────────────────────────
 
     /** Cohérent avec equals() : calculé sur la clé métier. */
+    @Override
     public int hashCode() { return Objects.hash(nom, ville); }
 }

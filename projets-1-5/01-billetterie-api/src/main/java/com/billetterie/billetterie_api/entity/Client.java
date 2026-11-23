@@ -1,6 +1,11 @@
 package com.billetterie.billetterie_api.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Objects;
 
 /**
@@ -71,6 +76,10 @@ public class Client {
 
     /** Retourne email. */
     public String getEmail() { return email; }
+
+    // ── modifier() ─────────────────────────────────────────────────────────
+
+    /** Met à jour les informations modifiables du client. */
     public void modifier(String nom, String prenom, String email) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.prenom = Objects.requireNonNull(prenom, "prenom");

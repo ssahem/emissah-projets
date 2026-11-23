@@ -1,6 +1,13 @@
 package com.billetterie.billetterie_api.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import com.billetterie.billetterie_api.enums.TypeSpectacle;
 import java.util.Objects;
 
@@ -72,6 +79,10 @@ public class Spectacle {
 
     /** Retourne placementNumerote. */
     public Boolean getPlacementNumerote() { return placementNumerote; }
+
+    // ── setPlacementNumerote() ─────────────────────────────────────────────
+
+    /** Modifie le mode de placement du spectacle. */
     public void setPlacementNumerote(Boolean placementNumerote) {
         this.placementNumerote = Objects.requireNonNull(placementNumerote, "placementNumerote");
     }

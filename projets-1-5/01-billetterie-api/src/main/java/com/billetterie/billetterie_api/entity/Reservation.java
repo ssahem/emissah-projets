@@ -1,6 +1,16 @@
 package com.billetterie.billetterie_api.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -120,11 +130,27 @@ public class Reservation {
 
     /** Retourne historique. */
     public List<HistoriqueStatut> getHistorique() { return historique; }
+
+    // ── ajouterPlace() ─────────────────────────────────────────────────────
+
+    /** Ajoute une place réservée en maintenant la relation. */
     public void ajouterPlace(ReservationPlace place) { places.add(place); }
+
+    // ── ajouterHistorique() ────────────────────────────────────────────────
+
+    /** Ajoute une entrée à l'historique des statuts. */
     public void ajouterHistorique(HistoriqueStatut entree) { historique.add(entree); }
+
+    // ── enregistrerPaiement() ──────────────────────────────────────────────
+
+    /** Enregistre la date de paiement de la réservation. */
     public void enregistrerPaiement(LocalDateTime datePaiement) {
         this.datePaiement = Objects.requireNonNull(datePaiement, "datePaiement");
     }
+
+    // ── setMontantRembourse() ──────────────────────────────────────────────
+
+    /** Enregistre le montant remboursé. */
     public void setMontantRembourse(BigDecimal montantRembourse) {
         this.montantRembourse = Objects.requireNonNull(montantRembourse, "montantRembourse");
     }

@@ -10,7 +10,7 @@ import java.util.Objects;
  *
  * COUCHE       : Entité (modèle de données)
  * RÔLE         : représenter les données de HistoriqueStatutId sous forme d’objet Java.
- * IDENTITÉ     : l'identifiant technique.
+ * IDENTITÉ     : clé composite (idReservation, idStatut).
  * UTILISÉE PAR : repositories, mappers et services.
  * NE FAIT PAS  : de logique HTTP ni de JSON (rôle du DTO).
  */
@@ -56,7 +56,6 @@ public class HistoriqueStatutId implements Serializable {
 
     /** Retourne idStatut. */
     public Integer getIdStatut() { return idStatut; }
-    @Override
 
     // ═════════════════════════════════════════════════════════════════════════
     //  IDENTITÉ ET AFFICHAGE
@@ -64,16 +63,17 @@ public class HistoriqueStatutId implements Serializable {
 
     // ── equals() ─────────────────────────────────────────────────────────
 
-    /** Égalité sur la clé métier, pas sur l’identifiant technique. */
+    /** Égalité sur la clé composite (idReservation, idStatut). */
+    @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
         if (!(o instanceof HistoriqueStatutId other)) { return false; }
         return Objects.equals(idReservation, other.idReservation) && Objects.equals(idStatut, other.idStatut);
     }
-    @Override
 
     // ── hashCode() ───────────────────────────────────────────────────────
 
-    /** Cohérent avec equals() : calculé sur la clé métier. */
+    /** Cohérent avec equals() : calculé sur la clé composite. */
+    @Override
     public int hashCode() { return Objects.hash(idReservation, idStatut); }
 }
