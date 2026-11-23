@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
  * RÔLE         : gérer F3, F8 et produire les restitutions F17, F18 et F19.
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories Evenement/Salle/Spectacle/Place/Réservation, Clock, mappers.
+ * UTILISÉ PAR  : EvenementController.
  * NE FAIT PAS  : le HTTP ni la validation de format des dates.
  */
 @Service
@@ -94,7 +95,11 @@ public class EvenementService {
 
     // ── findBetween() ────────────────────────────────────────────────────────
 
-    /** Filtre les événements entre deux bornes inclusives, une borne ou aucune (F8). */
+    /**
+     * Filtre les événements entre deux bornes inclusives, une borne ou aucune (F8).
+     *
+     * @throws PeriodeInvalideException si la borne de début est postérieure à la borne de fin.
+     */
     public List<EvenementResponse> findBetween(LocalDateTime du, LocalDateTime au) {
         // ── Étape 1/2 : valider la période ──
         if (du != null && au != null && du.isAfter(au)) {
@@ -117,14 +122,24 @@ public class EvenementService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne un événement par identifiant. */
+    /**
+     * Retourne un événement par identifiant.
+     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     */
     public EvenementResponse findById(Integer idEvenement) {
         return evenementMapper.toResponse(requireEvenement(idEvenement));
     }
 
     // ── create() ─────────────────────────────────────────────────────────────
 
-    /** Crée un événement futur dans une salle pourvue de places. Modifie la base. */
+    /**
+     * Crée un événement futur dans une salle pourvue de places. Modifie la base.
+     *
+     * @throws DateEvenementPasseeException si la date de l’événement est déjà passée.
+     *
+     * @throws SalleSansPlaceException si la salle ne contient aucune place.
+     */
     @Transactional
     public EvenementResponse create(CreateEvenementRequest request) {
         // ── Étape 1/3 : résoudre les références et contrôler les règles ──
@@ -146,7 +161,13 @@ public class EvenementService {
 
     // ── update() ─────────────────────────────────────────────────────────────
 
-    /** Modifie un événement ; la salle est figée dès la première réservation. Modifie la base. */
+    /**
+     * Modifie un événement ; la salle est figée dès la première réservation. Modifie la base.
+     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     *
+     * @throws SalleEvenementFigeeException si la salle ou la date ne peut plus être modifiée.
+     */
     @Transactional
     public EvenementResponse update(Integer idEvenement, UpdateEvenementRequest request) {
         // ── Étape 1/3 : charger et contrôler ──
@@ -174,7 +195,13 @@ public class EvenementService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime un événement sans réservation. Modifie la base. */
+    /**
+     * Supprime un événement sans réservation. Modifie la base.
+     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     *
+     * @throws EvenementNonSupprimableException si l’événement comporte encore des réservations.
+     */
     @Transactional
     public void delete(Integer idEvenement) {
         Evenement evenement = requireEvenement(idEvenement);
@@ -190,7 +217,13 @@ public class EvenementService {
 
     // ── findPlacesLibres() ───────────────────────────────────────────────────
 
-    /** Calcule les places encore libres, groupées par catégorie (F17). */
+    /**
+     * Calcule les places encore libres, groupées par catégorie (F17).
+     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     *
+     * @throws SalleSansPlaceException si la salle ne contient aucune place.
+     */
     public PlacesLibresResponse findPlacesLibres(Integer idEvenement) {
         // ── Étape 1/3 : charger l'événement et les places de sa salle ──
         Evenement evenement = requireEvenement(idEvenement);
@@ -224,7 +257,13 @@ public class EvenementService {
 
     // ── findRemplissage() ────────────────────────────────────────────────────
 
-    /** Calcule le taux de remplissage d'un événement, détaillé par catégorie (F18). */
+    /**
+     * Calcule le taux de remplissage d'un événement, détaillé par catégorie (F18).
+     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     *
+     * @throws SalleSansPlaceException si la salle ne contient aucune place.
+     */
     public RemplissageResponse findRemplissage(Integer idEvenement) {
         // ── Étape 1/4 : charger l'événement et vérifier les places de la salle ──
         Evenement evenement = requireEvenement(idEvenement);
@@ -255,7 +294,11 @@ public class EvenementService {
 
     // ── exportReservations() ─────────────────────────────────────────────────
 
-    /** Exporte les réservations de l'événement au format CSV (F19). */
+    /**
+     * Exporte les réservations de l'événement au format CSV (F19).
+     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     */
     public String exportReservations(Integer idEvenement, boolean inclureAnnulees) {
         requireEvenement(idEvenement);
         return csvExportMapper.toCsv(

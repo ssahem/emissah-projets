@@ -21,10 +21,15 @@ import org.springframework.transaction.annotation.Transactional;
  * COUCHE       : Service
  * RÔLE         : annuler et journaliser les réservations non payées depuis 15 minutes.
  * TRANSACTION  : chaque exécution est transactionnelle.
+ * UTILISÉ PAR  : planificateur Spring (aucun contrôleur).
  * NE FAIT PAS  : de remboursement (F15) ni de HTTP.
  */
 @Service
 public class ReservationExpirationService {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Logger log = LoggerFactory.getLogger(ReservationExpirationService.class);
 
@@ -32,6 +37,10 @@ public class ReservationExpirationService {
     private final HistoriqueStatutRepository historiqueStatutRepository;
     private final StatutRepository statutRepository;
     private final Clock clock;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR  (injection de dépendances)
+    // ═════════════════════════════════════════════════════════════════════════
 
     public ReservationExpirationService(ReservationRepository reservationRepository,
                                         HistoriqueStatutRepository historiqueStatutRepository,
@@ -44,7 +53,15 @@ public class ReservationExpirationService {
 
     // ── libererReservationsExpirees() ────────────────────────────────────────
 
-    /** Expire les réservations créées il y a plus de 15 minutes ; modifie la base. */
+    /**
+     * Expire les réservations créées il y a plus de 15 minutes ; modifie la base.
+     *
+     * @throws IllegalStateException si le statut ANNULEE est absent de la base.
+     */
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE — F16
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Scheduled(fixedDelay = 60_000)
     @Transactional
     public void libererReservationsExpirees() {

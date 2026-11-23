@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * RÔLE         : gérer F1 et produire les restitutions F5, F6 et F7.
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories Salle/Place/Evenement/Categorie et mappers.
+ * UTILISÉ PAR  : SalleController.
  * NE FAIT PAS  : de HTTP ni de SQL.
  */
 @Service
@@ -72,14 +73,22 @@ public class SalleService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne une salle par identifiant. */
+    /**
+     * Retourne une salle par identifiant.
+     *
+     * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
+     */
     public SalleResponse findById(Integer idSalle) {
         return salleMapper.toResponse(requireSalle(idSalle));
     }
 
     // ── create() ─────────────────────────────────────────────────────────────
 
-    /** Crée une salle ; le couple (nom, ville) doit être unique. Modifie la base. */
+    /**
+     * Crée une salle ; le couple (nom, ville) doit être unique. Modifie la base.
+     *
+     * @throws SalleDejaExistanteException si le couple nom/ville existe déjà.
+     */
     @Transactional
     public SalleResponse create(CreateSalleRequest request) {
         // ── Étape 1/3 : vérifier la clé métier ──
@@ -98,7 +107,13 @@ public class SalleService {
 
     // ── update() ─────────────────────────────────────────────────────────────
 
-    /** Modifie une salle en vérifiant l'unicité et la capacité minimale. Modifie la base. */
+    /**
+     * Modifie une salle en vérifiant l'unicité et la capacité minimale. Modifie la base.
+     *
+     * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
+     *
+     * @throws CapaciteInsuffisanteException si la nouvelle capacité est inférieure aux places existantes.
+     */
     @Transactional
     public SalleResponse update(Integer idSalle, UpdateSalleRequest request) {
         // ── Étape 1/3 : charger et contrôler les contraintes ──
@@ -122,7 +137,13 @@ public class SalleService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime une salle vide. Modifie la base. */
+    /**
+     * Supprime une salle vide. Modifie la base.
+     *
+     * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
+     *
+     * @throws SalleNonSupprimableException si la salle comporte encore des places ou des événements.
+     */
     @Transactional
     public void delete(Integer idSalle) {
         Salle salle = requireSalle(idSalle);
@@ -139,7 +160,13 @@ public class SalleService {
 
     // ── findPlaces() ─────────────────────────────────────────────────────────
 
-    /** Retourne les places d'une salle, filtrées ou non par catégorie. */
+    /**
+     * Retourne les places d'une salle, filtrées ou non par catégorie.
+     *
+     * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
+     *
+     * @throws CategorieInconnueException si la catégorie demandée n’existe pas.
+     */
     public List<PlaceSalleResponse> findPlaces(Integer idSalle, String categorie) {
         requireSalle(idSalle);
         if (categorie == null || categorie.isBlank()) {
@@ -158,7 +185,11 @@ public class SalleService {
 
     // ── findProgrammation() ──────────────────────────────────────────────────
 
-    /** Retourne les événements d'une salle triés par date croissante (F7). */
+    /**
+     * Retourne les événements d'une salle triés par date croissante (F7).
+     *
+     * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
+     */
     public List<ProgrammationResponse> findProgrammation(Integer idSalle) {
         requireSalle(idSalle);
         return evenementRepository.findAllBySalle_IdSalleOrderByDateHeureAsc(idSalle).stream()

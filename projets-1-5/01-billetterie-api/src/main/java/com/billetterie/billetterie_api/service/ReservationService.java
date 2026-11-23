@@ -54,6 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
  * RÔLE         : gérer F4, F9 à F16 et exposer la vérification utilisée par F16.
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories Réservation/Client/Place/Statut/Tarif, Clock, mapper.
+ * UTILISÉ PAR  : ReservationController.
  * NE FAIT PAS  : le HTTP.
  */
 @Service
@@ -119,14 +120,24 @@ public class ReservationService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne une réservation par identifiant. */
+    /**
+     * Retourne une réservation par identifiant.
+     *
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
+     */
     public ReservationResponse findById(Integer idReservation) {
         return toResponse(requireReservation(idReservation));
     }
 
     // ── create() ─────────────────────────────────────────────────────────────
 
-    /** Crée une réservation PROVISOIRE en appliquant F11, F12 et F13. Modifie la base. */
+    /**
+     * Crée une réservation PROVISOIRE en appliquant F11, F12 et F13. Modifie la base.
+     *
+     * @throws PlaceDejaReserveeException si la place est déjà réservée pour cet événement.
+     *
+     * @throws EvenementPasseException si l’événement est déjà passé.
+     */
     @Transactional
     public ReservationResponse create(CreateReservationRequest request) {
         // ── Étape 1/5 : résoudre l'événement et la place ──
@@ -168,7 +179,11 @@ public class ReservationService {
 
     // ── update() ─────────────────────────────────────────────────────────────
 
-    /** Modifie uniquement les informations client. Modifie la base. */
+    /**
+     * Modifie uniquement les informations client. Modifie la base.
+     *
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
+     */
     @Transactional
     public ReservationResponse update(Integer idReservation, UpdateReservationRequest request) {
         Reservation reservation = requireReservation(idReservation);
@@ -179,7 +194,13 @@ public class ReservationService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime une réservation provisoire ou annulée. Modifie la base. */
+    /**
+     * Supprime une réservation provisoire ou annulée. Modifie la base.
+     *
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
+     *
+     * @throws ReservationNonSupprimableException si la réservation est payée.
+     */
     @Transactional
     public void delete(Integer idReservation) {
         Reservation reservation = requireReservation(idReservation);
@@ -196,7 +217,13 @@ public class ReservationService {
 
     // ── payer() ──────────────────────────────────────────────────────────────
 
-    /** Confirme le paiement d'une réservation provisoire dans les 15 minutes. Modifie la base. */
+    /**
+     * Confirme le paiement d'une réservation provisoire dans les 15 minutes. Modifie la base.
+     *
+     * @throws StatutReservationIncompatibleException si la réservation n’est pas PROVISOIRE.
+     *
+     * @throws ReservationExpireeException si le délai de quinze minutes est dépassé.
+     */
     @Transactional
     public ReservationResponse payer(Integer idReservation) {
         // ── Étape 1/4 : charger la réservation et son statut ──
@@ -234,7 +261,13 @@ public class ReservationService {
 
     // ── annuler() ────────────────────────────────────────────────────────────
 
-    /** Annule une réservation et calcule le remboursement selon la distance à l'événement (F15). */
+    /**
+     * Annule une réservation et calcule le remboursement selon la distance à l'événement (F15).
+     *
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
+     *
+     * @throws ReservationAnnulationImpossibleException si la réservation est déjà annulée.
+     */
     @Transactional
     public AnnulationResponse annuler(Integer idReservation) {
         // ── Étape 1/4 : charger et contrôler le statut ──

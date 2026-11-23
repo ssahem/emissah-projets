@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
  * RÔLE         : créer, lire, modifier et supprimer les places d'une salle.
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories Place/Salle/Catégorie/RéservationPlace, mapper.
+ * UTILISÉ PAR  : PlaceController.
  * NE FAIT PAS  : le HTTP ni la validation de format des champs.
  */
 @Service
@@ -67,14 +68,24 @@ public class PlaceService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne une place par identifiant. */
+    /**
+     * Retourne une place par identifiant.
+     *
+     * @throws PlaceNotFoundException si aucune place ne porte cet identifiant.
+     */
     public PlaceResponse findById(Integer idPlace) {
         return placeMapper.toPlaceResponse(requirePlace(idPlace));
     }
 
     // ── create() ─────────────────────────────────────────────────────────────
 
-    /** Crée une place dans le respect de la capacité et de l'unicité. Modifie la base. */
+    /**
+     * Crée une place dans le respect de la capacité et de l'unicité. Modifie la base.
+     *
+     * @throws PlaceDejaExistanteException si la position existe déjà dans la salle.
+     *
+     * @throws CapaciteInsuffisanteException si la capacité de la salle est dépassée.
+     */
     @Transactional
     public PlaceResponse create(CreatePlaceRequest request) {
         // ── Étape 1/3 : résoudre la salle et la catégorie ──
@@ -96,7 +107,13 @@ public class PlaceService {
 
     // ── update() ─────────────────────────────────────────────────────────────
 
-    /** Modifie une place ; sa position est figée dès la première réservation. Modifie la base. */
+    /**
+     * Modifie une place ; sa position est figée dès la première réservation. Modifie la base.
+     *
+     * @throws PlaceNotFoundException si aucune place ne porte cet identifiant.
+     *
+     * @throws PlacePositionFigeeException si la position d’une place réservée est modifiée.
+     */
     @Transactional
     public PlaceResponse update(Integer idPlace, UpdatePlaceRequest request) {
         // ── Étape 1/3 : charger et résoudre ──
@@ -127,7 +144,13 @@ public class PlaceService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime une place non réservée. Modifie la base. */
+    /**
+     * Supprime une place non réservée. Modifie la base.
+     *
+     * @throws PlaceNotFoundException si aucune place ne porte cet identifiant.
+     *
+     * @throws PlaceNonSupprimableException si la place est encore réservée.
+     */
     @Transactional
     public void delete(Integer idPlace) {
         Place place = requirePlace(idPlace);
