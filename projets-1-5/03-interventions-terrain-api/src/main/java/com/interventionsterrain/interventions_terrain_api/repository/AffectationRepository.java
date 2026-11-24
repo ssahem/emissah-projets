@@ -8,8 +8,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-/** Accès aux affectations (A-02, A-03). */
+/**
+ * Accès aux affectations (A-02, A-03).
+ *
+ * COUCHE       : Repository (persistance)
+ * RÔLE         : exposer les requêtes JPA sur la table associée à Affectation.
+ * DÉPEND DE    : Spring Data JPA et l'entité Affectation.
+ * UTILISÉ PAR  : AffectationService.
+ * NE FAIT PAS  : de logique métier ni de HTTP.
+ */
 public interface AffectationRepository extends JpaRepository<Affectation, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
 
     Optional<Affectation> findByIdInterventionAndEstResponsableTrue(Integer idIntervention);
 
@@ -23,5 +35,9 @@ public interface AffectationRepository extends JpaRepository<Affectation, Intege
 
     @Modifying
     @Query("delete from Affectation a where a.idIntervention = :idIntervention")
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES @QUERY
+    // ═════════════════════════════════════════════════════════════════════════
+
     void deleteByIdIntervention(@Param("idIntervention") Integer idIntervention);
 }

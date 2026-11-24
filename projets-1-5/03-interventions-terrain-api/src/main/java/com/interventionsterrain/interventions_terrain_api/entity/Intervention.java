@@ -9,10 +9,24 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/** Intervention planifiée (F5). Le statut est porté par l'affectation responsable (A-03). */
+/**
+ * Intervention planifiée (F5). Le statut est porté par l'affectation responsable (A-03).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idIntervention.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "intervention")
 public class Intervention {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +60,10 @@ public class Intervention {
     @Column(name = "code_type_intervention", nullable = false)
     private String codeTypeIntervention;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Intervention() {
     }
 
@@ -58,6 +76,10 @@ public class Intervention {
         this.idAdresse = Objects.requireNonNull(idAdresse, "idAdresse");
         this.codeTypeIntervention = Objects.requireNonNull(codeTypeIntervention, "codeTypeIntervention");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdIntervention() { return idIntervention; }
     public LocalDateTime getDateDemande() { return dateDemande; }

@@ -21,15 +21,15 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8083:8083"
     environment:
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: dev
+      SERVER_PORT: 8083
       DB_URL: jdbc:postgresql://db:5432/interventions_terrain
       DB_USER: ${DB_USER:-root}
       DB_PASSWORD: ${DB_PASSWORD:?Définir DB_PASSWORD dans le fichier .env}
-      FLYWAY_BASELINE_ON_MIGRATE: "false"
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://localhost:8080/actuator/health/readiness || exit 1"]
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:8083/actuator/health/readiness || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 12

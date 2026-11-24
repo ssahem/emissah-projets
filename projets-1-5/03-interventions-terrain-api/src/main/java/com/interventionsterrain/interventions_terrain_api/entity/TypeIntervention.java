@@ -7,10 +7,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-/** Type d'intervention : le code texte est résolu en service (A-04, E-13). */
+/**
+ * Type d'intervention : le code texte est résolu en service (A-04, E-13).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idType.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "type_intervention")
 public class TypeIntervention {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +40,16 @@ public class TypeIntervention {
     @Column(name = "code", nullable = false)
     private String code;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected TypeIntervention() {
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdType() { return idType; }
     public String getLibelle() { return libelle; }

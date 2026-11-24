@@ -8,10 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
-/** Agence d'affectation des équipes (F1). */
+/**
+ * Agence d'affectation des équipes (F1).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idAgence.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "agence")
 public class Agence {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +44,10 @@ public class Agence {
     @Column(name = "responsable", length = 100)
     private String responsable;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Agence() {
     }
 
@@ -39,6 +57,10 @@ public class Agence {
         this.ville = Objects.requireNonNull(ville, "ville");
         this.responsable = responsable;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdAgence() { return idAgence; }
     public String getNom() { return nom; }

@@ -1,0 +1,806 @@
+{
+  "info": {
+    "_postman_id": "gestion-locative-api-collection",
+    "name": "Gestion locative — API REST",
+    "description": "Projet 2 de la formation. Aucune authentification : ni utilisateur ni rôle dans l’énoncé. Le profil dev fournit 2 propriétaires, 3 immeubles, 8 appartements, 5 locataires, 5 baux (dont 2 clôturés), 8 révisions de loyer, 4 quittances et un état des lieux de sortie. Exécuter les POST de création dans l’ordre pour renseigner les variables d’identifiants.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:8082"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8082/gestion-locative"
+    },
+    {
+      "key": "idProprietaire",
+      "value": "1"
+    },
+    {
+      "key": "idImmeuble",
+      "value": "1"
+    },
+    {
+      "key": "idAppartement",
+      "value": "1"
+    },
+    {
+      "key": "idLocataire",
+      "value": "1"
+    },
+    {
+      "key": "idBail",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 — Socle",
+      "item": [
+        {
+          "name": "GET — Santé",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/actuator/health/readiness"
+          }
+        },
+        {
+          "name": "GET — Document OpenAPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/v3/api-docs"
+          }
+        }
+      ],
+      "description": "Aucune authentification. F16 (clôture nocturne) est une tâche planifiée sans route HTTP."
+    },
+    {
+      "name": "Propriétaire (F1, F7)",
+      "item": [
+        {
+          "name": "POST — Créer un propriétaire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/proprietaire/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Collection\",\n  \"prenom\": \"Test\",\n  \"email\": \"collection.test@example.test\",\n  \"telephone\": \"0102030499\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l’identifiant est mémorisé dans idProprietaire."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idProprietaire !== undefined) { pm.collectionVariables.set(\"idProprietaire\", corps.idProprietaire); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les propriétaires",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/proprietaire/list"
+          }
+        },
+        {
+          "name": "GET — Lire un propriétaire",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/proprietaire/get/{{idProprietaire}}"
+          }
+        },
+        {
+          "name": "F7 — Immeubles d’un propriétaire",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/proprietaire/immeubles/{{idProprietaire}}",
+            "body": {
+              "mode": "raw",
+              "raw": "Avec le propriétaire 1 de la démo : 2 immeubles, chacun avec son nombre d’appartements et de baux en cours.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PUT — Modifier un propriétaire",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/proprietaire/update/{{idProprietaire}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Collection\",\n  \"prenom\": \"Test\",\n  \"email\": \"collection.test@example.test\",\n  \"telephone\": \"0102030498\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un propriétaire",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/proprietaire/delete/{{idProprietaire}}",
+            "body": {
+              "mode": "raw",
+              "raw": "204 ; refuse si des immeubles sont encore rattachés.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Immeuble (F2, F6, F19)",
+      "item": [
+        {
+          "name": "POST — Créer un immeuble",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/immeuble/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adresse\": \"9 rue de la Paix\",\n  \"codePostal\": \"75009\",\n  \"ville\": \"Paris\",\n  \"idProprietaire\": {{idProprietaire}},\n  \"nbEtages\": 4\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l’identifiant est mémorisé dans idImmeuble."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idImmeuble !== undefined) { pm.collectionVariables.set(\"idImmeuble\", corps.idImmeuble); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les immeubles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/immeuble/list"
+          }
+        },
+        {
+          "name": "GET — Lire un immeuble",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/immeuble/get/{{idImmeuble}}"
+          }
+        },
+        {
+          "name": "F6 — Appartements d’un immeuble",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/immeuble/appartements/{{idImmeuble}}",
+            "body": {
+              "mode": "raw",
+              "raw": "Avec l’immeuble 1 de la démo : 4 appartements triés par étage.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "F19 — Revenu locatif",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/immeuble/revenu/{{idImmeuble}}?mois=2026-11",
+            "body": {
+              "mode": "raw",
+              "raw": "200 ; avec l’immeuble 1 : total, détail par appartement et taux d’occupation.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PUT — Modifier un immeuble",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/immeuble/update/{{idImmeuble}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adresse\": \"9 rue de la Paix\",\n  \"codePostal\": \"75009\",\n  \"ville\": \"Paris\",\n  \"idProprietaire\": {{idProprietaire}},\n  \"nbEtages\": 5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un immeuble",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/immeuble/delete/{{idImmeuble}}",
+            "body": {
+              "mode": "raw",
+              "raw": "204 ; refuse si des appartements sont encore rattachés.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Appartement (F3, F8, F9, F17, F18)",
+      "item": [
+        {
+          "name": "POST — Créer un appartement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/appartement/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numero\": \"4A\",\n  \"surface\": 48.00,\n  \"nbPieces\": 2,\n  \"etage\": 4,\n  \"idImmeuble\": {{idImmeuble}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l’identifiant est mémorisé dans idAppartement."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idAppartement !== undefined) { pm.collectionVariables.set(\"idAppartement\", corps.idAppartement); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les appartements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/appartement/list"
+          }
+        },
+        {
+          "name": "F9 — Rechercher par critères",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/appartement/list?surfaceMin=50&surfaceMax=90&pieces=3",
+            "body": {
+              "mode": "raw",
+              "raw": "200 ; critères optionnels et combinables. surfaceMin > surfaceMax renvoie 400.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET — Lire un appartement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/appartement/get/{{idAppartement}}"
+          }
+        },
+        {
+          "name": "F8 — Historique des baux",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/appartement/baux/{{idAppartement}}"
+          }
+        },
+        {
+          "name": "F17 — Appartements libres à une date",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/appartement/libres?date=2026-12-01",
+            "body": {
+              "mode": "raw",
+              "raw": "200 ; sans paramètre, la date du jour est utilisée.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "F18 — Occupation d’un appartement",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/appartement/occupation/{{idAppartement}}",
+            "body": {
+              "mode": "raw",
+              "raw": "Avec l’appartement 7 de la démo : trois périodes de loyer (1100, 1200, 1300).",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "PUT — Modifier un appartement",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/appartement/update/{{idAppartement}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"surface\": 50.00,\n  \"nbPieces\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un appartement",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/appartement/delete/{{idAppartement}}",
+            "body": {
+              "mode": "raw",
+              "raw": "204 ; refuse si des baux sont encore rattachés.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Locataire (F4)",
+      "item": [
+        {
+          "name": "POST — Créer un locataire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/locataire/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Collection\",\n  \"prenom\": \"Locataire\",\n  \"email\": \"locataire.collection@example.test\",\n  \"telephone\": \"0102030497\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l’identifiant est mémorisé dans idLocataire."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idLocataire !== undefined) { pm.collectionVariables.set(\"idLocataire\", corps.idLocataire); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les locataires",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/locataire/list"
+          }
+        },
+        {
+          "name": "GET — Lire un locataire",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/locataire/get/{{idLocataire}}"
+          }
+        },
+        {
+          "name": "PUT — Modifier un locataire",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/locataire/update/{{idLocataire}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Collection\",\n  \"prenom\": \"Locataire\",\n  \"email\": \"locataire.collection@example.test\",\n  \"telephone\": \"0102030496\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un locataire",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/locataire/delete/{{idLocataire}}",
+            "body": {
+              "mode": "raw",
+              "raw": "204 ; refuse si le locataire figure sur un bail.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bail (F5, F10 à F16)",
+      "item": [
+        {
+          "name": "POST — Créer un bail",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idAppartement\": {{idAppartement}},\n  \"idLocataire\": {{idLocataire}},\n  \"dateDebut\": \"2026-12-01\",\n  \"dateFin\": \"2027-11-30\",\n  \"loyerMensuel\": 760.00,\n  \"provisionCharges\": 55.00,\n  \"depotGarantie\": 900.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; 409 en cas de chevauchement (F11), 400 si les dates sont incohérentes (F12)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idBail !== undefined) { pm.collectionVariables.set(\"idBail\", corps.idBail); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les baux",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/bail/list"
+          }
+        },
+        {
+          "name": "F10 — Paginer",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/list?page=0&size=2&sort=dateDebut,desc",
+            "body": {
+              "mode": "raw",
+              "raw": "200 ; taille maximale 100.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET — Lire un bail",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/bail/get/{{idBail}}"
+          }
+        },
+        {
+          "name": "PUT — Modifier un bail",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/update/{{idBail}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateFin\": \"2027-12-31\",\n  \"loyerMensuel\": 780.00\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "F13 — Résilier par anticipation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/resiliation/{{idBail}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateEffet\": \"2027-01-31\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "200 ; 409 si le bail est déjà résilié ou n’a pas commencé."
+          }
+        },
+        {
+          "name": "F14 — Renouveler",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/renouvellement/{{idBail}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateFin\": \"2027-06-30\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "200 ; à utiliser sur le bail 3 de la démo (échéance 2026-11-30)."
+          }
+        },
+        {
+          "name": "F15 — Réviser le loyer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/revision/{{idBail}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"montant\": 820.00,\n  \"dateEffet\": \"2027-02-01\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "200 ; l’ancien montant reste consultable via F18."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un bail",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/bail/delete/{{idBail}}",
+            "body": {
+              "mode": "raw",
+              "raw": "204 ; refuse si des enfants (quittances, historique) sont rattachés.",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

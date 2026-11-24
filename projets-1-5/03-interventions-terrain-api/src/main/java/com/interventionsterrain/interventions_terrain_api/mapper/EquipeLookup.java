@@ -7,7 +7,15 @@ import com.interventionsterrain.interventions_terrain_api.repository.AgenceRepos
 import com.interventionsterrain.interventions_terrain_api.repository.EquipeRepository;
 import org.springframework.stereotype.Component;
 
-/** Implémentation en lecture seule de {@link EquipeSupport}, sans dépendance vers un service. */
+/**
+ * Implémentation en lecture seule de {@link EquipeSupport}, sans dépendance vers un service.
+ *
+ * COUCHE       : Mapper
+ * RÔLE         : convertir EquipeLookup entre couches, sans accès base ni logique métier.
+ * DÉPEND DE    : les entités et les DTO EquipeLookup.
+ * UTILISÉ PAR  : les services.
+ * NE FAIT PAS  : de logique métier ni de persistance.
+ */
 @Component
 public class EquipeLookup implements EquipeSupport {
 

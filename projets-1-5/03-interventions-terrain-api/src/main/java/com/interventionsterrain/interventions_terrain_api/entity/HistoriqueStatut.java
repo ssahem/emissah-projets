@@ -9,10 +9,24 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-/** Historique du statut d'une affectation (A-03) : le dernier ligne fait foi. */
+/**
+ * Historique du statut d'une affectation (A-03) : le dernier ligne fait foi.
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idHistorique.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "historique_statut")
 public class HistoriqueStatut {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +42,10 @@ public class HistoriqueStatut {
     @Column(name = "id_affectation", nullable = false)
     private Integer idAffectation;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected HistoriqueStatut() {
     }
 
@@ -36,6 +54,10 @@ public class HistoriqueStatut {
         this.idStatut = Objects.requireNonNull(idStatut, "idStatut");
         this.idAffectation = Objects.requireNonNull(idAffectation, "idAffectation");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdHistorique() { return idHistorique; }
     public LocalDateTime getDateHeure() { return dateHeure; }

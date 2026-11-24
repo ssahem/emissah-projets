@@ -29,11 +29,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Endpoints CRUD des techniciens (F2). */
+/**
+ * Endpoints CRUD des techniciens (F2).
+ *
+ * COUCHE       : Contrôleur (point d'entrée HTTP)
+ * RÔLE         : recevoir les requêtes HTTP de Technicien, valider les paramètres et déléguer
+ *                au service.
+ * URL DE BASE  : /interventions-terrain/technicien
+ * ENDPOINTS    : list · get/{id} · competences/{id} · planning/{id} · disponibles
+ *                competence/{id} · create · update/{id} · delete/{id}
+ * SÉCURITÉ     : aucune authentification — API publique (énoncé).
+ * DÉPEND DE    : RestitutionService, TechnicienService
+ * UTILISÉ PAR  : les clients HTTP de l'API.
+ * NE FAIT PAS  : de logique métier, d'accès base ni de try/catch.
+ */
 @RestController
 @RequestMapping("/interventions-terrain/technicien")
 @Tag(name = "Techniciens", description = "Gestion des techniciens (F2)")
 public class TechnicienController {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final TechnicienService service;
     private final RestitutionService restitutionService;
@@ -42,6 +59,10 @@ public class TechnicienController {
         this.service = service;
         this.restitutionService = restitutionService;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Operation(summary = "Lister les techniciens", description = "Triés par nom")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)

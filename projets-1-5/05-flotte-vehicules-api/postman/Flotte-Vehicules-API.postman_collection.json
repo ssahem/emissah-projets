@@ -1,0 +1,622 @@
+{
+  "info": {
+    "_postman_id": "flotte-vehicules-api-collection",
+    "name": "Flotte de véhicules — API REST",
+    "description": "Projet 5 de la formation. Aucune authentification : l'énoncé ne définit ni utilisateur ni rôle, donc ni jeton ni code 401/403. Importer la collection, exécuter les POST de création dans l'ordre pour renseigner les variables d'identifiants, puis utiliser les routes de consultation. Le profil dev charge les données de démo (V9). F16 reste une tâche planifiée ; /alerte/generer permet de la déclencher manuellement.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    { "key": "host", "value": "http://localhost:8085" },
+    { "key": "baseUrl", "value": "http://localhost:8085/flotte-vehicules" },
+    { "key": "idSite", "value": "1" },
+    { "key": "idSite2", "value": "2" },
+    { "key": "idSalarie", "value": "1" },
+    { "key": "idVehicule", "value": "1" },
+    { "key": "idVehicule2", "value": "2" },
+    { "key": "idAffectation", "value": "1" },
+    { "key": "idEntretien", "value": "1" },
+    { "key": "idAlerte", "value": "1" },
+    { "key": "idTypeEntretien", "value": "1" },
+    { "key": "idPrestataire", "value": "1" },
+    { "key": "mois", "value": "2026-11" },
+    { "key": "du", "value": "2026-11-23" },
+    { "key": "au", "value": "2026-11-29" }
+  ],
+  "item": [
+    {
+      "name": "00 — Socle",
+      "description": "Contrôles sans authentification.",
+      "item": [
+        {
+          "name": "GET — Santé (readiness)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/actuator/health/readiness",
+            "description": "200 quand l'application et la base sont prêtes ; 503 sinon."
+          }
+        },
+        {
+          "name": "GET — Santé (liveness)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/actuator/health/liveness",
+            "description": "200 quand le processus est vivant."
+          }
+        },
+        {
+          "name": "GET — Document OpenAPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/v3/api-docs",
+            "description": "200 : liste de toutes les routes. Interface Swagger : /swagger-ui.html."
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 — Sites (F1, F6, F19)",
+      "item": [
+        {
+          "name": "POST — Créer un site",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const corps = pm.response.json();",
+                  "  pm.collectionVariables.set(\"idSite\", corps.idSite);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Paris Centre\",\n  \"ville\": \"Paris\",\n  \"adresse\": \"12 rue de la Paix\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/site/create",
+            "description": "201 + Location ; 400 si un champ manque ; 409 si le nom existe déjà. Capture idSite."
+          }
+        },
+        {
+          "name": "GET — Lister les sites",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/site/list",
+            "description": "200 : sites triés par ville puis par nom."
+          }
+        },
+        {
+          "name": "GET — Consulter un site",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/site/{{idSite}}",
+            "description": "200 : site trouvé ; 404 si inconnu."
+          }
+        },
+        {
+          "name": "PUT — Modifier un site",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"adresse\": \"14 rue de la Paix\",\n  \"ville\": \"Paris\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/site/{{idSite}}/update",
+            "description": "200 : adresse et ville modifiées ; 404 si inconnu. Le nom est figé."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un site",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/site/{{idSite}}/delete",
+            "description": "204 si supprimé ; 409 si le site possède encore des véhicules."
+          }
+        },
+        {
+          "name": "GET — Véhicules d'un site (F6)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/site/{{idSite}}/vehicules",
+            "description": "200 : parc du site avec état LIBRE, AFFECTE ou IMMOBILISE ; 404 si site inconnu."
+          }
+        },
+        {
+          "name": "GET — Kilométrage mensuel d'un site (F19)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/site/{{idSite}}/kilometrage?mois={{mois}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["site", "{{idSite}}", "kilometrage"],
+              "query": [{ "key": "mois", "value": "{{mois}}" }]
+            },
+            "description": "200 : total et détail par véhicule ; 400 si mois invalide ; 404 si site inconnu. Limite A-01 : site courant."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 — Véhicules (F2, F9, F15, F17, F18)",
+      "item": [
+        {
+          "name": "POST — Créer un véhicule",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const corps = pm.response.json();",
+                  "  pm.collectionVariables.set(\"idVehicule\", corps.idVehicule);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"immatriculation\": \"AB-123-CD\",\n  \"marque\": \"Peugeot\",\n  \"modele\": \"308\",\n  \"dateMiseEnService\": \"2024-01-15\",\n  \"idSite\": {{idSite}},\n  \"modeAcquisition\": \"PROPRIETE\",\n  \"partage\": false,\n  \"prixAchat\": 25000.00\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/vehicule/create",
+            "description": "201 + Location ; 400 si date future ou prix interdit ; 409 si immatriculation prise. Capture idVehicule."
+          }
+        },
+        {
+          "name": "GET — Lister les véhicules",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vehicule/list",
+            "description": "200 : véhicules triés par immatriculation."
+          }
+        },
+        {
+          "name": "GET — Rechercher un véhicule (F9)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicule/list?immatriculation=AB-123&marque=Peugeot",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicule", "list"],
+              "query": [
+                { "key": "immatriculation", "value": "AB-123" },
+                { "key": "marque", "value": "Peugeot" }
+              ]
+            },
+            "description": "200 : recherche partielle par immatriculation et marque exacte, critères combinables."
+          }
+        },
+        {
+          "name": "GET — Consulter un véhicule",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vehicule/{{idVehicule}}",
+            "description": "200 : véhicule trouvé ; 404 si inconnu."
+          }
+        },
+        {
+          "name": "PUT — Modifier un véhicule",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idSite\": {{idSite2}},\n  \"marque\": \"Peugeot\",\n  \"modele\": \"308 SW\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/vehicule/{{idVehicule}}/update",
+            "description": "200 : transfert de site autorisé ; 404 si véhicule ou site inconnu."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un véhicule",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/vehicule/{{idVehicule}}/delete",
+            "description": "204 si supprimé ; 409 s'il existe des affectations ou des entretiens."
+          }
+        },
+        {
+          "name": "GET — Véhicules disponibles (F17)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/vehicule/disponibles?du={{du}}&au={{au}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["vehicule", "disponibles"],
+              "query": [
+                { "key": "du", "value": "{{du}}" },
+                { "key": "au", "value": "{{au}}" }
+              ]
+            },
+            "description": "200 : véhicules libres groupés par site ; 400 si période inversée. Sans paramètres : semaine courante."
+          }
+        },
+        {
+          "name": "GET — Prochain entretien (F15)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vehicule/{{idVehicule}}/prochain-entretien",
+            "description": "200 : première échéance atteinte ; 404 si véhicule ou échéance inconnue."
+          }
+        },
+        {
+          "name": "GET — Coût d'un véhicule (F18)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vehicule/{{idVehicule}}/cout",
+            "description": "200 : coût des entretiens et répartition par type (D-03) ; 404 si véhicule inconnu."
+          }
+        },
+        {
+          "name": "GET — Historique d'entretien d'un véhicule (F8)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vehicule/{{idVehicule}}/entretiens",
+            "description": "200 : entretiens du plus récent au plus ancien avec cumul ; 404 si véhicule inconnu."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 — Salariés (F3, F7)",
+      "item": [
+        {
+          "name": "POST — Créer un salarié",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const corps = pm.response.json();",
+                  "  pm.collectionVariables.set(\"idSalarie\", corps.idSalarie);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Alice\",\n  \"email\": \"alice@example.test\",\n  \"matricule\": \"MAT001\",\n  \"service\": \"Direction\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/salarie/create",
+            "description": "201 + Location ; 400 si champ manquant ; 409 si matricule ou email pris. Capture idSalarie."
+          }
+        },
+        {
+          "name": "GET — Lister les salariés",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salarie/list",
+            "description": "200 : salariés triés par nom."
+          }
+        },
+        {
+          "name": "GET — Consulter un salarié",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salarie/{{idSalarie}}",
+            "description": "200 : salarié trouvé ; 404 si inconnu."
+          }
+        },
+        {
+          "name": "PUT — Modifier un salarié",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Alice\",\n  \"email\": \"alice.martin@example.test\",\n  \"service\": \"Technique\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/salarie/{{idSalarie}}/update",
+            "description": "200 : salarié modifié ; 404 si inconnu. Le matricule est figé."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un salarié",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/salarie/{{idSalarie}}/delete",
+            "description": "204 si supprimé ; 409 si une affectation est en cours."
+          }
+        },
+        {
+          "name": "GET — Affectations d'un salarié (F7)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salarie/{{idSalarie}}/affectations",
+            "description": "200 : historique du plus récent au plus ancien, avec indicateur en cours ; 404 si salarié inconnu."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 — Affectations (F4, F11 à F14)",
+      "item": [
+        {
+          "name": "POST — Créer une affectation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const corps = pm.response.json();",
+                  "  pm.collectionVariables.set(\"idAffectation\", corps.idAffectation);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idVehicule\": {{idVehicule}},\n  \"idSalarie\": {{idSalarie}},\n  \"dateDebut\": \"2026-11-01\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/affectation/create",
+            "description": "201 + Location ; 400 si dates invalides ; 409 si chevauchement (F11) ou immobilisation (F12). Capture idAffectation."
+          }
+        },
+        {
+          "name": "GET — Lister les affectations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/affectation/list",
+            "description": "200 : affectations triées par date de début décroissante."
+          }
+        },
+        {
+          "name": "GET — Consulter une affectation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/affectation/{{idAffectation}}",
+            "description": "200 : affectation trouvée ; 404 si inconnue."
+          }
+        },
+        {
+          "name": "PUT — Modifier une affectation",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dateFin\": \"2026-11-30\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/affectation/{{idAffectation}}/update",
+            "description": "200 : date de fin modifiable ; 409 si véhicule ou salarié figé après le début."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une affectation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/affectation/{{idAffectation}}/delete",
+            "description": "204 avant le début ; 409 si l'affectation a commencé (utiliser la restitution)."
+          }
+        },
+        {
+          "name": "POST — Restituer un véhicule (F13, F14)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-11-24\",\n  \"km\": 19000\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/affectation/{{idAffectation}}/restitution",
+            "description": "200 : date de fin et relevé enregistrés ; 400 si date ou km invalide (D-01) ; 409 si déjà clôturée."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 — Entretiens (F5, F8, F10, F12, F14)",
+      "item": [
+        {
+          "name": "POST — Créer un entretien",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "  const corps = pm.response.json();",
+                  "  pm.collectionVariables.set(\"idEntretien\", corps.idEntretien);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"date\": \"2026-11-10\",\n  \"dateFin\": \"2026-11-12\",\n  \"idVehicule\": {{idVehicule}},\n  \"idTypeEntretien\": {{idTypeEntretien}},\n  \"idPrestataire\": {{idPrestataire}},\n  \"cout\": 320.00,\n  \"km\": 19000\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/entretien/create",
+            "description": "201 + Location et alerteCreee ; 400 si coût, date ou km invalide. Sans dateFin, immobilisation d'un seul jour (D-02). Capture idEntretien."
+          }
+        },
+        {
+          "name": "GET — Lister les entretiens (F10)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/entretien/list?page=0&size=20&sort=date,desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["entretien", "list"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "size", "value": "20" },
+                { "key": "sort", "value": "date,desc" }
+              ]
+            },
+            "description": "200 : page triée ; 400 si page, taille ou tri invalide. Tri autorisé : date ou cout."
+          }
+        },
+        {
+          "name": "GET — Consulter un entretien",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/entretien/{{idEntretien}}",
+            "description": "200 : entretien trouvé ; 404 si inconnu."
+          }
+        },
+        {
+          "name": "PUT — Modifier un entretien",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cout\": 350.00,\n  \"idPrestataire\": {{idPrestataire}},\n  \"date\": \"2026-11-10\",\n  \"km\": 19000\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/entretien/{{idEntretien}}/update",
+            "description": "200 : coût et prestataire modifiés ; 409 si date ou kilométrage modifié."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un entretien",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/entretien/{{idEntretien}}/delete",
+            "description": "204 avant le début de l'immobilisation ; 409 si elle a commencé."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 — Alertes (F12, F16)",
+      "item": [
+        {
+          "name": "GET — Lister les alertes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/alerte/list?idVehicule={{idVehicule}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["alerte", "list"],
+              "query": [{ "key": "idVehicule", "value": "{{idVehicule}}" }]
+            },
+            "description": "200 : alertes F12 et F16, filtrables par véhicule (retirer le paramètre pour tout voir)."
+          }
+        },
+        {
+          "name": "GET — Consulter une alerte",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  pm.collectionVariables.set(\"idAlerte\", pm.response.json().idAlerte);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/alerte/{{idAlerte}}",
+            "description": "200 : alerte trouvée et idAlerte mémorisé ; 404 si inconnue."
+          }
+        },
+        {
+          "name": "POST — Générer les alertes dues (F16)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/alerte/generer",
+            "description": "200 : alertes regroupées par site. Déclenchement manuel de la tâche nocturne : seuils 1 000 km ou 30 jours, sans doublon."
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 — Vues SQL (lecture seule)",
+      "item": [
+        {
+          "name": "GET — Bilan d'un véhicule",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vue/v_bilan_vehicule",
+            "description": "200 : lignes de la vue ; 400 si le nom n'est pas dans la liste fermée."
+          }
+        },
+        {
+          "name": "GET — Échéances d'entretien",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/vue/v_echeance_entretien",
+            "description": "200 : lignes de la vue utilisée par F15, F16 et F17."
+          }
+        }
+      ]
+    }
+  ]
+}

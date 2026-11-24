@@ -5,9 +5,20 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.time.LocalDate;
 
-/** Certification d'une compétence pour un technicien (F11). */
+/**
+ * Certification d'une compétence pour un technicien (F11).
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * UTILISÉ PAR  : ObtentionCompetenceController, avec @Valid, pour valider le corps reçu.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
+ */
 @Schema(description = "Association d'une compétence à un technicien")
 public record CreateObtentionCompetenceRequest(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Schema(description = "Identifiant de la compétence", example = "5")
     @NotNull @Positive Integer idCompetence,

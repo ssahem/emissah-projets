@@ -5,9 +5,20 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/** Corps de modification d'un client (F4). */
+/**
+ * Corps de modification d'un client (F4).
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * UTILISÉ PAR  : ClientController, avec @Valid, pour valider le corps reçu.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
+ */
 @Schema(description = "Modification d'un client")
 public record UpdateClientRequest(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Schema(description = "Nom", example = "Dupont")
     @NotBlank @Size(max = 100) String nom,

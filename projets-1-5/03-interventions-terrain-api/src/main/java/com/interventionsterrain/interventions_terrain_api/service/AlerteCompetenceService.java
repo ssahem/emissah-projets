@@ -37,15 +37,29 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AlerteCompetenceService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final Logger log = LoggerFactory.getLogger(AlerteCompetenceService.class);
     private static final int JOURS_ALERTE = 30;
 
+    /** Accès en base à la table associée à obtention. */
     private final ObtentionCompetenceRepository obtentionRepository;
+    /** Accès en base à la table associée à technicien. */
     private final TechnicienRepository technicienRepository;
+    /** Accès en base à la table associée à equipe. */
     private final EquipeRepository equipeRepository;
+    /** Accès en base à la table associée à agence. */
     private final AgenceRepository agenceRepository;
+    /** Accès en base à la table associée à competence. */
     private final CompetenceRepository competenceRepository;
+    /** Horloge applicative injectée : toute date produite par le service passe par elle. */
     private final Clock clock;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public AlerteCompetenceService(ObtentionCompetenceRepository obtentionRepository,
                                    TechnicienRepository technicienRepository,
@@ -62,6 +76,10 @@ public class AlerteCompetenceService {
     /** Tâche nocturne : génère puis journalise les alertes, une ligne par agence. */
     @Scheduled(cron = "${interventions-terrain.alertes-competences.cron:0 0 1 * * *}", zone = "UTC")
     @Transactional
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
+
     public void genererAlertesPlanifiees() {
         List<AlerteAgenceResponse> alertes = genererAlertes();
         if (alertes.isEmpty()) {

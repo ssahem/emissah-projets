@@ -8,10 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
-/** Client d'une intervention (F4). Adresse et commune sont des textes simples (S-10, S-11). */
+/**
+ * Client d'une intervention (F4). Adresse et commune sont des textes simples (S-10, S-11).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idClient.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "client")
 public class Client {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +50,10 @@ public class Client {
     @Column(name = "commune", nullable = false, length = 100)
     private String commune;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Client() {
     }
 
@@ -48,6 +66,10 @@ public class Client {
         this.adresse = Objects.requireNonNull(adresse, "adresse");
         this.commune = Objects.requireNonNull(commune, "commune");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdClient() { return idClient; }
     public String getNom() { return nom; }

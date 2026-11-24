@@ -25,7 +25,7 @@ COPY --from=build /workspace/extracted/snapshot-dependencies/ ./
 COPY --from=build /workspace/extracted/application/ ./
 
 USER app
-EXPOSE 8080
+EXPOSE 8082
 
 # La JVM dimensionne le heap selon la mémoire allouée au conteneur.
 ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=75" \

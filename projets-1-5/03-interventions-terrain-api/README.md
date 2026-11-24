@@ -18,8 +18,11 @@ cp .env.example .env          # adapter DB_PASSWORD
 docker compose up --build
 ```
 
-L'API écoute sur `http://localhost:8080`. Swagger UI : `http://localhost:8080/swagger-ui.html`.
+L'API écoute sur `http://localhost:8083`. Swagger UI : `http://localhost:8083/swagger-ui.html`.
 La base n'expose aucun port hors du réseau Compose.
+
+Le service `app` démarre avec le profil `dev` : au premier `up`, Flyway reconstruit le schéma
+(`db/migration`, V1 à V7) puis charge les données de démonstration (`db/dev/V8__demo.sql`).
 
 En local sans Docker, la base `interventions_terrain` est attendue sur `localhost:5432`
 (`root` / `root` par défaut, surchargeable via `DB_URL`, `DB_USER`, `DB_PASSWORD`) :
@@ -113,7 +116,7 @@ créneau doit être futur et sa fin strictement postérieure à son début ; le 
 
 `postman/Interventions-Terrain-API.postman_collection.json` regroupe 45 requêtes par jalon : socle,
 CRUD, consultations, règles métier et restitution. Importez le fichier dans Postman, ajustez les
-variables `host` et `baseUrl` si l'API ne tourne pas sur `localhost:8080`, puis exécutez les
+variables `host` et `baseUrl` si l'API ne tourne pas sur `localhost:8083`, puis exécutez les
 requêtes `POST` de création dans l'ordre : leurs scripts mémorisent les identifiants dans les
 variables de collection (`idAgence`, `idTechnicien`, `idCompetence`, `idClient`, `idIntervention`).
 Les valeurs par défaut correspondent aux données de démo (`MAT001`, `MAT002`, `RACCORDEMENT_FIBRE`).

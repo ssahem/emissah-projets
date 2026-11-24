@@ -7,9 +7,20 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-/** Corps de création d'un technicien (F2). L'agence est obligatoire, l'équipe est déduite. */
+/**
+ * Corps de création d'un technicien (F2). L'agence est obligatoire, l'équipe est déduite.
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * UTILISÉ PAR  : TechnicienController, avec @Valid, pour valider le corps reçu.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
+ */
 @Schema(description = "Création d'un technicien")
 public record CreateTechnicienRequest(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Schema(description = "Nom", example = "Martin")
     @NotBlank @Size(max = 100) String nom,

@@ -23,18 +23,45 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** CRUD des clients (F4) et historique de leurs interventions (F8). */
+/**
+ * CRUD des clients (F4) et historique de leurs interventions (F8).
+ *
+ * COUCHE       : Service
+ * RÔLE         : appliquer les règles métier décrites dans l'en-tête, piloter les transactions
+ *                et orchestrer repositories et mappers.
+ * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
+ * DÉPEND DE    : ClientMapper, AffectationRepository, ClientRepository,
+ *                HistoriqueStatutRepository, InterventionRepository, StatutRepository,
+ *                TechnicienRepository
+ * UTILISÉ PAR  : ClientController.
+ * NE FAIT PAS  : de HTTP ni de SQL direct.
+ */
 @Service
 @Transactional(readOnly = true)
 public class ClientService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /** Accès en base à la table associée à client. */
     private final ClientRepository clientRepository;
+    /** Accès en base à la table associée à intervention. */
     private final InterventionRepository interventionRepository;
+    /** Accès en base à la table associée à affectation. */
     private final AffectationRepository affectationRepository;
+    /** Accès en base à la table associée à technicien. */
     private final TechnicienRepository technicienRepository;
+    /** Accès en base à la table associée à historique. */
     private final HistoriqueStatutRepository historiqueRepository;
+    /** Accès en base à la table associée à statut. */
     private final StatutRepository statutRepository;
+    /** Conversion entité ↔ DTO, sans logique métier. */
     private final ClientMapper mapper;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public ClientService(ClientRepository clientRepository, InterventionRepository interventionRepository,
                          AffectationRepository affectationRepository,
@@ -49,6 +76,10 @@ public class ClientService {
         this.statutRepository = statutRepository;
         this.mapper = mapper;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
 
     public List<ClientResponse> findAll() {
         return clientRepository.findAllByOrderByNomAsc().stream().map(mapper::toResponse).toList();
@@ -100,6 +131,10 @@ public class ClientService {
         }
         clientRepository.delete(client);
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  OUTILS INTERNES
+    // ═════════════════════════════════════════════════════════════════════════
 
     private HistoriqueClientResponse toHistorique(Intervention intervention) {
         Affectation responsable = affectationRepository

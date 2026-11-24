@@ -8,8 +8,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-/** Accès aux interventions (F5, F8, F9, F10). */
+/**
+ * Accès aux interventions (F5, F8, F9, F10).
+ *
+ * COUCHE       : Repository (persistance)
+ * RÔLE         : exposer les requêtes JPA sur la table associée à Intervention.
+ * DÉPEND DE    : Spring Data JPA et l'entité Intervention.
+ * UTILISÉ PAR  : InterventionService.
+ * NE FAIT PAS  : de logique métier ni de HTTP.
+ */
 public interface InterventionRepository extends JpaRepository<Intervention, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
 
     List<Intervention> findAllByOrderByDebutPrevuAsc();
 

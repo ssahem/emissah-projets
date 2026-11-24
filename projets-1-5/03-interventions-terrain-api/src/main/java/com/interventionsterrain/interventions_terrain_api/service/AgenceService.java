@@ -20,17 +20,42 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** CRUD des agences (F1) et effectif d'une agence (F6). */
+/**
+ * CRUD des agences (F1) et effectif d'une agence (F6).
+ *
+ * COUCHE       : Service
+ * RÔLE         : appliquer les règles métier décrites dans l'en-tête, piloter les transactions
+ *                et orchestrer repositories et mappers.
+ * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
+ * DÉPEND DE    : AgenceMapper, AgenceRepository, EquipeRepository,
+ *                ObtentionCompetenceRepository, TechnicienRepository
+ * UTILISÉ PAR  : AgenceController.
+ * NE FAIT PAS  : de HTTP ni de SQL direct.
+ */
 @Service
 @Transactional(readOnly = true)
 public class AgenceService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /** Accès en base à la table associée à agence. */
     private final AgenceRepository agenceRepository;
+    /** Accès en base à la table associée à equipe. */
     private final EquipeRepository equipeRepository;
+    /** Accès en base à la table associée à technicien. */
     private final TechnicienRepository technicienRepository;
+    /** Accès en base à la table associée à obtention. */
     private final ObtentionCompetenceRepository obtentionRepository;
+    /** Conversion entité ↔ DTO, sans logique métier. */
     private final AgenceMapper mapper;
+    /** Horloge applicative injectée : toute date produite par le service passe par elle. */
     private final Clock clock;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public AgenceService(AgenceRepository agenceRepository, EquipeRepository equipeRepository,
                          TechnicienRepository technicienRepository,
@@ -43,6 +68,10 @@ public class AgenceService {
         this.mapper = mapper;
         this.clock = clock;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
 
     public List<AgenceResponse> findAll() {
         return agenceRepository.findAllByOrderByVilleAscNomAsc().stream().map(mapper::toResponse).toList();
@@ -108,6 +137,10 @@ public class AgenceService {
         }
         agenceRepository.delete(agence);
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  OUTILS INTERNES
+    // ═════════════════════════════════════════════════════════════════════════
 
     private Agence required(Integer id) {
         return agenceRepository.findById(id)

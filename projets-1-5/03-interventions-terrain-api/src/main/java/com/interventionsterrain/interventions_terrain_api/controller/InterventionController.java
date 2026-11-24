@@ -27,17 +27,39 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Endpoints CRUD des interventions et de l'affectation (F5, A-02). */
+/**
+ * Endpoints CRUD des interventions et de l'affectation (F5, A-02).
+ *
+ * COUCHE       : Contrôleur (point d'entrée HTTP)
+ * RÔLE         : recevoir les requêtes HTTP de Intervention, valider les paramètres et
+ *                déléguer au service.
+ * URL DE BASE  : /interventions-terrain/intervention
+ * ENDPOINTS    : list · get/{id} · create · update/{id} · delete/{id} · affectation/{id}
+ *                affectation/{id} · affectation/{id}/{idTechnicien} · statut/{id}
+ *                reprise/{id}
+ * SÉCURITÉ     : aucune authentification — API publique (énoncé).
+ * DÉPEND DE    : InterventionService
+ * UTILISÉ PAR  : les clients HTTP de l'API.
+ * NE FAIT PAS  : de logique métier, d'accès base ni de try/catch.
+ */
 @RestController
 @RequestMapping("/interventions-terrain/intervention")
 @Tag(name = "Interventions", description = "Gestion des interventions (F5)")
 public class InterventionController {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final InterventionService service;
 
     public InterventionController(InterventionService service) {
         this.service = service;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Operation(summary = "Filtrer les interventions",
             description = "Statut et période optionnels et combinables (F9), triées par début prévu")

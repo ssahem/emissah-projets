@@ -5,7 +5,15 @@ import com.interventionsterrain.interventions_terrain_api.entity.Equipe;
 import com.interventionsterrain.interventions_terrain_api.entity.Technicien;
 import org.springframework.stereotype.Component;
 
-/** Conversion Technicien → TechnicienResponse ; l'agence est déduite de l'équipe. */
+/**
+ * Conversion Technicien → TechnicienResponse ; l'agence est déduite de l'équipe.
+ *
+ * COUCHE       : Mapper
+ * RÔLE         : convertir Technicien entre couches, sans accès base ni logique métier.
+ * DÉPEND DE    : les entités et les DTO Technicien.
+ * UTILISÉ PAR  : les services.
+ * NE FAIT PAS  : de logique métier ni de persistance.
+ */
 @Component
 public class TechnicienMapper {
 

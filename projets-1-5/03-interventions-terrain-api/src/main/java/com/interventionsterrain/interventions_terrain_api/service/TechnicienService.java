@@ -42,24 +42,58 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** CRUD des techniciens (F2), compétences (F7) et planning (F10). */
+/**
+ * CRUD des techniciens (F2), compétences (F7) et planning (F10).
+ *
+ * COUCHE       : Service
+ * RÔLE         : appliquer les règles métier décrites dans l'en-tête, piloter les transactions
+ *                et orchestrer repositories et mappers.
+ * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
+ * DÉPEND DE    : TechnicienMapper, AdresseRepository, AffectationRepository, AgenceRepository,
+ *                ClientRepository, CompetenceRepository, EquipeRepository,
+ *                HistoriqueStatutRepository, InterventionRepository,
+ *                ObtentionCompetenceRepository, StatutRepository, TechnicienRepository
+ * UTILISÉ PAR  : TechnicienController.
+ * NE FAIT PAS  : de HTTP ni de SQL direct.
+ */
 @Service
 @Transactional(readOnly = true)
 public class TechnicienService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /** Accès en base à la table associée à technicien. */
     private final TechnicienRepository technicienRepository;
+    /** Accès en base à la table associée à equipe. */
     private final EquipeRepository equipeRepository;
+    /** Accès en base à la table associée à agence. */
     private final AgenceRepository agenceRepository;
+    /** Accès en base à la table associée à affectation. */
     private final AffectationRepository affectationRepository;
+    /** Accès en base à la table associée à obtention. */
     private final ObtentionCompetenceRepository obtentionRepository;
+    /** Accès en base à la table associée à competence. */
     private final CompetenceRepository competenceRepository;
+    /** Accès en base à la table associée à intervention. */
     private final InterventionRepository interventionRepository;
+    /** Accès en base à la table associée à adresse. */
     private final AdresseRepository adresseRepository;
+    /** Accès en base à la table associée à client. */
     private final ClientRepository clientRepository;
+    /** Accès en base à la table associée à historique. */
     private final HistoriqueStatutRepository historiqueRepository;
+    /** Accès en base à la table associée à statut. */
     private final StatutRepository statutRepository;
+    /** Conversion entité ↔ DTO, sans logique métier. */
     private final TechnicienMapper mapper;
+    /** Horloge applicative injectée : toute date produite par le service passe par elle. */
     private final Clock clock;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public TechnicienService(TechnicienRepository technicienRepository,
                              EquipeRepository equipeRepository, AgenceRepository agenceRepository,
@@ -84,6 +118,10 @@ public class TechnicienService {
         this.mapper = mapper;
         this.clock = clock;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
 
     public List<TechnicienResponse> findAll() {
         return technicienRepository.findAllByOrderByNomAsc().stream().map(mapper::toResponse).toList();
@@ -212,6 +250,10 @@ public class TechnicienService {
         }
         technicienRepository.delete(technicien);
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  OUTILS INTERNES
+    // ═════════════════════════════════════════════════════════════════════════
 
     private Client client(Intervention intervention) {
         return clientRepository.findById(intervention.getIdClient())

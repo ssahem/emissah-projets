@@ -8,10 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
-/** Technicien d'une équipe (F2). L'agence est déduite de l'équipe (A-01). */
+/**
+ * Technicien d'une équipe (F2). L'agence est déduite de l'équipe (A-01).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idTechnicien.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "technicien")
 public class Technicien {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +50,10 @@ public class Technicien {
     @Column(name = "matricule", length = 50)
     private String matricule;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Technicien() {
     }
 
@@ -48,6 +66,10 @@ public class Technicien {
         this.idEquipe = Objects.requireNonNull(idEquipe, "idEquipe");
         this.matricule = Objects.requireNonNull(matricule, "matricule");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdTechnicien() { return idTechnicien; }
     public String getNom() { return nom; }

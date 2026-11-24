@@ -21,17 +21,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Endpoints CRUD des clients (F4). */
+/**
+ * Endpoints CRUD des clients (F4).
+ *
+ * COUCHE       : Contrôleur (point d'entrée HTTP)
+ * RÔLE         : recevoir les requêtes HTTP de Client, valider les paramètres et déléguer au
+ *                service.
+ * URL DE BASE  : /interventions-terrain/client
+ * ENDPOINTS    : list · get/{id} · interventions/{id} · create · update/{id} · delete/{id}
+ * SÉCURITÉ     : aucune authentification — API publique (énoncé).
+ * DÉPEND DE    : ClientService
+ * UTILISÉ PAR  : les clients HTTP de l'API.
+ * NE FAIT PAS  : de logique métier, d'accès base ni de try/catch.
+ */
 @RestController
 @RequestMapping("/interventions-terrain/client")
 @Tag(name = "Clients", description = "Gestion des clients (F4)")
 public class ClientController {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final ClientService service;
 
     public ClientController(ClientService service) {
         this.service = service;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Operation(summary = "Lister les clients", description = "Triés par nom")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)

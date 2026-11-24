@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Point d'entrée de l'API des interventions terrain.
  *
  * COUCHE       : Application
- * RÔLE         : démarrer le contexte Spring. L'activation des tâches planifiées est portée par
+ * RÔLE         : démarrer le contexte Spring. L'activation des tâches planifiées est portée
+ *                par
  *                {@code SchedulingConfig} (F16).
  * NE FAIT PAS  : de logique métier ni de sécurité (l'énoncé ne prévoit aucun utilisateur).
  */

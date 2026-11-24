@@ -27,11 +27,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Endpoints CRUD des agences (F1). */
+/**
+ * Endpoints CRUD des agences (F1).
+ *
+ * COUCHE       : Contrôleur (point d'entrée HTTP)
+ * RÔLE         : recevoir les requêtes HTTP de Agence, valider les paramètres et déléguer au
+ *                service.
+ * URL DE BASE  : /interventions-terrain/agence
+ * ENDPOINTS    : list · get/{id} · techniciens/{id} · charge/{id} · taux-reussite/{id}
+ *                create · update/{id} · delete/{id}
+ * SÉCURITÉ     : aucune authentification — API publique (énoncé).
+ * DÉPEND DE    : AgenceService, RestitutionService
+ * UTILISÉ PAR  : les clients HTTP de l'API.
+ * NE FAIT PAS  : de logique métier, d'accès base ni de try/catch.
+ */
 @RestController
 @RequestMapping("/interventions-terrain/agence")
 @Tag(name = "Agences", description = "Gestion des agences (F1)")
 public class AgenceController {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final AgenceService service;
     private final RestitutionService restitutionService;
@@ -40,6 +57,10 @@ public class AgenceController {
         this.service = service;
         this.restitutionService = restitutionService;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Operation(summary = "Lister les agences", description = "Triées par ville puis par nom")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)

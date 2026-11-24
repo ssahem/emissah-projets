@@ -18,16 +18,26 @@ La base PostgreSQL locale `billetterie` doit être accessible avec `root` / `roo
 ./mvnw spring-boot:run
 ```
 
-Swagger UI : <http://localhost:8080/swagger-ui.html>
+Le profil `dev` ajoute les données de démonstration `db/dev/V7__demo.sql` (2 salles, 18 places,
+3 événements dont un passé, 3 clients, 4 réservations `PROVISOIRE`/`PAYEE`/`ANNULEE`) :
 
 ```bash
-curl -i http://localhost:8080/billetterie/salle/list
+SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
+```
+
+Swagger UI : <http://localhost:8081/swagger-ui.html>
+
+```bash
+curl -i http://localhost:8081/billetterie/salle/list
 ```
 
 Une collection Postman prête à importer est fournie dans
-`../docs/01-billetterie/collection/billetterie.postman_collection.json` : 29 requêtes couvrant les
-27 endpoints implémentés (dont les variantes de recherche par email et par période), avec les corps
-JSON, les paramètres et les identifiants d’entités en variables.
+`postman/Billetterie-API.postman_collection.json` : 33 requêtes couvrant les 27 endpoints
+implémentés (dont les variantes de recherche par email et par période), avec des corps JSON et des
+paramètres d’exemple. Elle est déclarée en `auth: noauth` : aucun jeton ni identifiant n’est
+nécessaire. Les scripts des `POST` de création renseignent les variables `idSalle`, `idPlace`,
+`idEvenement` et `idReservation`. Une copie historique existe aussi dans
+`../../docs/01-billetterie/collection/`, hors dépôt.
 
 ## Lancer avec Docker
 
@@ -36,7 +46,9 @@ cp .env.example .env   # puis adapter les valeurs
 docker compose up --build
 ```
 
-La base n'expose aucun port : seule l'API est joignable depuis l'hôte.
+La base n'expose aucun port : seule l'API est joignable depuis l'hôte. Le service `app` démarre avec
+le profil `dev` : au premier `up`, Flyway reconstruit le schéma (`db/migration`, V1 à V6) puis charge
+les données de démonstration (`db/dev/V7__demo.sql`). Swagger UI reste actif.
 
 ## Tester
 
@@ -77,6 +89,6 @@ couche plus en détail.
 
 ## Fonctionnalités
 
-Le plan d'implémentation et le registre des écarts sont dans `../docs/01-billetterie/`.
+Le plan d'implémentation et le registre des écarts sont dans `../../docs/01-billetterie/` (hors dépôt).
 Les 19 fonctionnalités de l'énoncé sont implémentées, y compris F2 (CRUD des places), F8
 (recherche par période), F15 (annulation avec remboursement) et F18 (taux de remplissage).

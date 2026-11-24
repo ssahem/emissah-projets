@@ -8,10 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
-/** Affectation d'un technicien à une intervention ; un seul responsable par intervention (A-02). */
+/**
+ * Affectation d'un technicien à une intervention ; un seul responsable par intervention (A-02).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idAffectation.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "affectation")
 public class Affectation {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +41,10 @@ public class Affectation {
     @Column(name = "id_technicien", nullable = false)
     private Integer idTechnicien;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Affectation() {
     }
 
@@ -35,6 +53,10 @@ public class Affectation {
         this.idTechnicien = Objects.requireNonNull(idTechnicien, "idTechnicien");
         this.estResponsable = estResponsable;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdAffectation() { return idAffectation; }
     public boolean isEstResponsable() { return estResponsable; }

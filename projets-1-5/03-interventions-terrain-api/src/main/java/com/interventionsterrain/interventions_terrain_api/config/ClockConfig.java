@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
  * Horloge applicative.
  *
  * COUCHE       : Configuration
- * RÔLE         : fournir une unique source de temps pour F5, F7, F10, F11, F12, F13, F16 et F17.
+ * RÔLE         : fournir une unique source de temps pour F5, F7, F10, F11, F12, F13, F16 et
+ *                F17.
  * NE FAIT PAS  : de logique métier ; les tests fournissent un bean fixe {@code @Primary}.
  */
 @Configuration

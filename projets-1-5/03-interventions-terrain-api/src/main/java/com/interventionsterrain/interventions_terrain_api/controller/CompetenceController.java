@@ -20,17 +20,37 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/** Endpoints CRUD des compétences (F3). */
+/**
+ * Endpoints CRUD des compétences (F3).
+ *
+ * COUCHE       : Contrôleur (point d'entrée HTTP)
+ * RÔLE         : recevoir les requêtes HTTP de Competence, valider les paramètres et déléguer
+ *                au service.
+ * URL DE BASE  : /interventions-terrain/competence
+ * ENDPOINTS    : list · get/{id} · create · update/{id} · delete/{id}
+ * SÉCURITÉ     : aucune authentification — API publique (énoncé).
+ * DÉPEND DE    : CompetenceService
+ * UTILISÉ PAR  : les clients HTTP de l'API.
+ * NE FAIT PAS  : de logique métier, d'accès base ni de try/catch.
+ */
 @RestController
 @RequestMapping("/interventions-terrain/competence")
 @Tag(name = "Compétences", description = "Gestion des compétences (F3)")
 public class CompetenceController {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final CompetenceService service;
 
     public CompetenceController(CompetenceService service) {
         this.service = service;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ENDPOINTS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Operation(summary = "Lister les compétences", description = "Triées par libellé")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)

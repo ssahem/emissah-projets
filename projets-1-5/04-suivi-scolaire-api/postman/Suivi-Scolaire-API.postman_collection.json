@@ -1,0 +1,768 @@
+{
+  "info": {
+    "_postman_id": "suivi-scolaire-api-collection",
+    "name": "Suivi scolaire — API REST",
+    "description": "Projet 4 de la formation. Aucune authentification : l'énoncé ne définit ni utilisateur ni rôle, donc ni jeton, ni identifiants, ni code 401/403. Importer cette collection, adapter les variables host/baseUrl si besoin, puis exécuter les POST de création dans l'ordre pour renseigner les identifiants. Le profil dev fournit les données de démo (classes 1 à 3, élèves 1 à 6, matières 1 à 4). Toutes les URL commencent par /suivi-scolaire/ et utilisent des ressources au singulier. F16 est détectée automatiquement chaque lundi ; la route /alerte/list permet de consulter le résultat.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "item": [
+    {
+      "name": "00 — Socle",
+      "description": "Contrôles sans authentification et documentation OpenAPI.",
+      "item": [
+        {
+          "name": "GET — Santé (readiness)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}{{host}}/actuator/health/readiness",
+            "description": "200 : l'API et PostgreSQL sont prêts. Aucune authentification requise : l'API est publique."
+          }
+        },
+        {
+          "name": "GET — Document OpenAPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}{{host}}/v3/api-docs",
+            "description": "200 : liste toutes les routes ; Swagger UI sur /swagger-ui.html."
+          }
+        }
+      ]
+    },
+    {
+      "name": "01 — Classes (F1, F6, F8, F19)",
+      "description": "CRUD des classes, effectif détaillé, notes par matière et classement. Le nom de classe est unique pour un niveau (V2).",
+      "item": [
+        {
+          "name": "POST — Créer une classe (F1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/classe/create",
+            "description": "201 + en-tête Location ; l'identifiant est mémorisé dans idClasse. 409 si le nom existe déjà pour ce niveau.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"4B\",\n  \"idAnnee\": 2,\n  \"idNiveau\": 1,\n  \"effectifMax\": 30\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idClasse !== undefined) {",
+                  "    pm.collectionVariables.set(\"idClasse\", corps.idClasse);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Liste des classes (F1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/classe/list",
+            "description": "200 : tableau de classes avec effectifActuel."
+          }
+        },
+        {
+          "name": "GET — Détail d'une classe (F1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/classe/get/{{idClasse}}",
+            "description": "200 ; 404 si la classe est introuvable."
+          }
+        },
+        {
+          "name": "PUT — Modifier l'effectif maximal (F1)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/classe/update/{{idClasse}}",
+            "description": "200 ; l'effectif maximal ne peut pas être inférieur à l'effectif courant (409).",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"effectifMax\": 32\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET — Élèves d'une classe (F6)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/classe/eleves/{{idClasse}}",
+            "description": "200 : effectifActuel, capacity et liste triée par nom ; 404 si la classe est absente."
+          }
+        },
+        {
+          "name": "GET — Notes d'une matière dans une classe (F8)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/classe/notes/{{idClasse}}?matiere={{idMatiere}}&trimestre={{trimestre}}",
+            "description": "200 : moyenneClasse et notes groupées par élève. 400 si la matière n'est pas enseignée dans la classe ; 409 si le trimestre est clôturé."
+          }
+        },
+        {
+          "name": "GET — Classement d'une classe (F19)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/classe/classement/{{idClasse}}?trimestre={{trimestre}}",
+            "description": "200 : rangs densifiés, moyenne de classe, meilleure et plus faible moyenne. Les élèves sans note sont en fin de liste sans rang."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une classe (F1)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/classe/delete/{{idClasse}}",
+            "description": "204 ; 409 si la classe contient encore des élèves."
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 — Élèves (F2, F7, F9, F11, F17, F18)",
+      "description": "CRUD, recherche partielle, notes, changement de classe et restitutions.",
+      "item": [
+        {
+          "name": "POST — Créer un élève (F2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/eleve/create",
+            "description": "201 + en-tête Location ; l'identifiant est mémorisé dans idEleve. Une inscription courante est créée automatiquement dans la classe indiquée.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Koffi\",\n  \"prenom\": \"Yao\",\n  \"dateNaissance\": \"2011-03-02\",\n  \"idClasse\": {{idClasse}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idEleve !== undefined) {",
+                  "    pm.collectionVariables.set(\"idEleve\", corps.idEleve);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Liste des élèves (F2)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/list",
+            "description": "200 : liste complète triée par nom puis prénom."
+          }
+        },
+        {
+          "name": "GET — Rechercher un élève (F9)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/list?nom={{nomEleve}}",
+            "description": "200 : recherche partielle insensible à la casse sur le nom. Sans paramètre nom, renvoie la liste complète. 400 si la recherche est vide."
+          }
+        },
+        {
+          "name": "GET — Détail d'un élève (F2)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/get/{{idEleve}}",
+            "description": "200 ; 404 si l'élève est introuvable."
+          }
+        },
+        {
+          "name": "PUT — Modifier un élève (F2)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/eleve/update/{{idEleve}}",
+            "description": "200 ; change nom, prénom et classe courante via une nouvelle inscription.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Koffi\",\n  \"prenom\": \"Yao\",\n  \"idClasse\": {{idClasse}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET — Notes d'un élève (F7)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/notes/{{idEleve}}?trimestre={{trimestre}}",
+            "description": "200 : notes groupées par matière. Sans trimestre, toutes les notes sont renvoyées."
+          }
+        },
+        {
+          "name": "POST — Changer de classe (F11)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/eleve/affectation/{{idEleve}}",
+            "description": "201 : clôture l'ancienne inscription et en ouvre une nouvelle. 409 si la classe destination est pleine ou de niveau différent.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idClasseDestination\": {{idClasse}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET — Moyennes par matière (F17)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/moyennes/{{idEleve}}?trimestre={{trimestre}}",
+            "description": "200 : une ligne par matière enseignée dans la classe, avec nombreNotes et evaluee. Les matières sans note ont une moyenne absente et evaluee=false."
+          }
+        },
+        {
+          "name": "GET — Moyenne générale (F18)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/moyenne-generale/{{idEleve}}?trimestre={{trimestre}}",
+            "description": "200 : moyenne pondérée par les coefficients et détail contribution par contribution. Sans aucune note, moyenneGenerale est absente, jamais zéro."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un élève (F2)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/eleve/delete/{{idEleve}}",
+            "description": "204 ; 409 si l'élève possède encore des notes."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 — Matières (F3)",
+      "description": "Référentiel des matières et de leur coefficient.",
+      "item": [
+        {
+          "name": "POST — Créer une matière (F3)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/matiere/create",
+            "description": "201 + en-tête Location ; l'identifiant est mémorisé dans idMatiere.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"libelle\": \"Sciences\",\n  \"code\": \"SCIE\",\n  \"coefficient\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idMatiere !== undefined) {",
+                  "    pm.collectionVariables.set(\"idMatiere\", corps.idMatiere);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Liste des matières (F3)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/matiere/list",
+            "description": "200 : toutes les matières."
+          }
+        },
+        {
+          "name": "GET — Détail d'une matière (F3)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/matiere/get/{{idMatiere}}",
+            "description": "200 ; 404 si la matière est introuvable."
+          }
+        },
+        {
+          "name": "PUT — Modifier une matière (F3)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/matiere/update/{{idMatiere}}",
+            "description": "200 : met à jour libellé et coefficient.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"libelle\": \"Sciences de la vie\",\n  \"coefficient\": 3\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une matière (F3)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/matiere/delete/{{idMatiere}}",
+            "description": "204 ; 409 si la matière est encore enseignée ou notée."
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 — Professeurs (F4)",
+      "description": "CRUD des professeurs et affectation d'une matière à une classe (A-02).",
+      "item": [
+        {
+          "name": "POST — Créer un professeur (F4)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/professeur/create",
+            "description": "201 + en-tête Location ; l'identifiant est mémorisé dans idProfesseur. 409 si l'email existe déjà.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Sophie\",\n  \"email\": \"sophie.martin@example.test\",\n  \"telephone\": \"0102030499\",\n  \"idMatierePrincipale\": {{idMatiere}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idProfesseur !== undefined) {",
+                  "    pm.collectionVariables.set(\"idProfesseur\", corps.idProfesseur);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Liste des professeurs (F4)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/professeur/list",
+            "description": "200 : chaque professeur expose la liste des identifiants de matières déduite de enseignement (A-02)."
+          }
+        },
+        {
+          "name": "GET — Détail d'un professeur (F4)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/professeur/get/{{idProfesseur}}",
+            "description": "200 ; 404 si le professeur est introuvable."
+          }
+        },
+        {
+          "name": "PUT — Modifier un professeur (F4)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/professeur/update/{{idProfesseur}}",
+            "description": "200 : email, téléphone et matière principale.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sophie.martin@example.test\",\n  \"telephone\": \"0102030498\",\n  \"idMatierePrincipale\": {{idMatiere}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST — Affecter une matière à une classe (F4)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/professeur/affectations/{{idProfesseur}}",
+            "description": "201 : crée un enseignement ; l'identifiant est mémorisé dans idEnseignement. 409 si le couple matière/classe existe déjà.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idMatiere\": {{idMatiere}},\n  \"idClasse\": {{idClasse}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idEnseignement !== undefined) {",
+                  "    pm.collectionVariables.set(\"idEnseignement\", corps.idEnseignement);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "DELETE — Supprimer un professeur (F4)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/professeur/delete/{{idProfesseur}}",
+            "description": "204 ; 409 si le professeur a encore des enseignements."
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 — Notes (F5, F10)",
+      "description": "Saisie, consultation groupée et pagination. L'élève est résolu par numero_inscription (A-01) et le trimestre par son numéro, sans clé étrangère (A-03).",
+      "item": [
+        {
+          "name": "POST — Créer une note (F5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/note/create",
+            "description": "201 + en-tête Location ; l'identifiant est mémorisé dans idNote. 409 si le trimestre est clôturé.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idEleve\": {{idEleve}},\n  \"idMatiere\": {{idMatiere}},\n  \"valeur\": 14.5,\n  \"trimestre\": {{trimestre}},\n  \"idTypeEval\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idNote !== undefined) {",
+                  "    pm.collectionVariables.set(\"idNote\", corps.idNote);",
+                  "  }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Notes groupées par matière (F5)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/note/list",
+            "description": "200 : tableau de NotesMatiereResponse, sans paramètre de pagination."
+          }
+        },
+        {
+          "name": "GET — Notes paginées et triées (F10)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/note/list?page=0&size=10&sort=valeur,desc",
+            "description": "200 : PageResponse (content, page, size, totalElements, totalPages) dès que page ou size est fourni."
+          }
+        },
+        {
+          "name": "GET — Détail d'une note (F5)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/note/get/{{idNote}}",
+            "description": "200 ; 404 si la note est introuvable."
+          }
+        },
+        {
+          "name": "PUT — Modifier la valeur d'une note (F5)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/note/update/{{idNote}}",
+            "description": "200 : seule la valeur change ; 409 si le trimestre est clôturé.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"valeur\": 16\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une note (F5)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/note/delete/{{idNote}}",
+            "description": "204 ; 409 si le trimestre est clôturé."
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 — Règles métier (F13, F14, F15)",
+      "description": "Poids des types d'évaluation, clôture et réouverture tracée des trimestres.",
+      "item": [
+        {
+          "name": "PUT — Modifier le poids d'un type d'évaluation (F13)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/type-evaluation/poids/{{codeTypeEval}}",
+            "description": "200 : nouveau libellé et poids. Le code accepte DEV, INTERRO, ORAL, le libellé insensible à la casse ou l'identifiant numérique (l'énoncé ne prévoit pas de colonne code). 409 dès qu'un trimestre est clôturé.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"poids\": 2.5\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "POST — Clôturer un trimestre (F14)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/trimestre/{{trimestre}}/cloture",
+            "description": "200 : date de clôture et nombre d'enseignements vérifiés. 409 + manquants si une classe n'a aucune note dans une matière."
+          }
+        },
+        {
+          "name": "POST — Rouvrir un trimestre (F15)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/trimestre/{{trimestre}}/reouverture",
+            "description": "200 : motif d'au moins 20 caractères et auteur en texte libre journalisés (A-04). 400 si le motif est trop court ; 409 si le trimestre n'est pas le dernier clôturé.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"motif\": \"Correction d'une erreur de saisie avérée sur une note\",\n  \"auteur\": \"Responsable scolarite\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 — Alertes de difficulté (F16, F18)",
+      "description": "Consultation des alertes produites par la tâche planifiée hebdomadaire. La détection automatique n'a pas de route HTTP obligatoire (F16).",
+      "item": [
+        {
+          "name": "GET — Alertes d'un trimestre (F16)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/alerte/list?trimestre={{trimestre}}",
+            "description": "200 : alertes persistées avec nom de l'élève, nom de la classe, moyenne et écart. 400 si le trimestre n'est pas compris entre 1 et 3."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:8084"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8084/suivi-scolaire"
+    },
+    {
+      "key": "idClasse",
+      "value": "1"
+    },
+    {
+      "key": "idEleve",
+      "value": "1"
+    },
+    {
+      "key": "idMatiere",
+      "value": "1"
+    },
+    {
+      "key": "idProfesseur",
+      "value": "1"
+    },
+    {
+      "key": "idEnseignement",
+      "value": "1"
+    },
+    {
+      "key": "idNote",
+      "value": "1"
+    },
+    {
+      "key": "codeTypeEval",
+      "value": "DEV"
+    },
+    {
+      "key": "trimestre",
+      "value": "2"
+    },
+    {
+      "key": "nomEleve",
+      "value": "Kou"
+    }
+  ]
+}

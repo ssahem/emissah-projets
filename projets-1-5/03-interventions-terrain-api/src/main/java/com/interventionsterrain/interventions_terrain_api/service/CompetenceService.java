@@ -14,15 +14,38 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** CRUD des compétences (F3). */
+/**
+ * CRUD des compétences (F3).
+ *
+ * COUCHE       : Service
+ * RÔLE         : appliquer les règles métier décrites dans l'en-tête, piloter les transactions
+ *                et orchestrer repositories et mappers.
+ * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
+ * DÉPEND DE    : CompetenceMapper, CompetenceRepository, ExigenceCompetenceRepository,
+ *                ObtentionCompetenceRepository
+ * UTILISÉ PAR  : CompetenceController.
+ * NE FAIT PAS  : de HTTP ni de SQL direct.
+ */
 @Service
 @Transactional(readOnly = true)
 public class CompetenceService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /** Accès en base à la table associée à competence. */
     private final CompetenceRepository competenceRepository;
+    /** Accès en base à la table associée à obtention. */
     private final ObtentionCompetenceRepository obtentionRepository;
+    /** Accès en base à la table associée à exigence. */
     private final ExigenceCompetenceRepository exigenceRepository;
+    /** Conversion entité ↔ DTO, sans logique métier. */
     private final CompetenceMapper mapper;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public CompetenceService(CompetenceRepository competenceRepository,
                              ObtentionCompetenceRepository obtentionRepository,
@@ -33,6 +56,10 @@ public class CompetenceService {
         this.exigenceRepository = exigenceRepository;
         this.mapper = mapper;
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
 
     public List<CompetenceResponse> findAll() {
         return competenceRepository.findAllByOrderByLibelleAsc().stream().map(mapper::toResponse).toList();
@@ -66,6 +93,10 @@ public class CompetenceService {
         }
         competenceRepository.delete(competence);
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  OUTILS INTERNES
+    // ═════════════════════════════════════════════════════════════════════════
 
     private void checkLibelle(String libelle, Integer idCourant) {
         competenceRepository.findByLibelle(libelle).filter(other -> {

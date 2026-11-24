@@ -4,7 +4,15 @@ import com.interventionsterrain.interventions_terrain_api.dto.response.AgenceRes
 import com.interventionsterrain.interventions_terrain_api.entity.Agence;
 import org.springframework.stereotype.Component;
 
-/** Conversion Agence → AgenceResponse. */
+/**
+ * Conversion Agence → AgenceResponse.
+ *
+ * COUCHE       : Mapper
+ * RÔLE         : convertir Agence entre couches, sans accès base ni logique métier.
+ * DÉPEND DE    : les entités et les DTO Agence.
+ * UTILISÉ PAR  : les services.
+ * NE FAIT PAS  : de logique métier ni de persistance.
+ */
 @Component
 public class AgenceMapper {
 

@@ -11,11 +11,11 @@
   "variable": [
     {
       "key": "host",
-      "value": "http://localhost:8080"
+      "value": "http://localhost:8083"
     },
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080/interventions-terrain"
+      "value": "http://localhost:8083/interventions-terrain"
     },
     {
       "key": "idAgence",

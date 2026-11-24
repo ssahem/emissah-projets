@@ -5,8 +5,20 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-/** Accès aux équipes : seul chemin entre technicien et agence (A-01). */
+/**
+ * Accès aux équipes : seul chemin entre technicien et agence (A-01).
+ *
+ * COUCHE       : Repository (persistance)
+ * RÔLE         : exposer les requêtes JPA sur la table associée à Equipe.
+ * DÉPEND DE    : Spring Data JPA et l'entité Equipe.
+ * UTILISÉ PAR  : EquipeService.
+ * NE FAIT PAS  : de logique métier ni de HTTP.
+ */
 public interface EquipeRepository extends JpaRepository<Equipe, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
 
     List<Equipe> findAllByIdAgence(Integer idAgence);
 

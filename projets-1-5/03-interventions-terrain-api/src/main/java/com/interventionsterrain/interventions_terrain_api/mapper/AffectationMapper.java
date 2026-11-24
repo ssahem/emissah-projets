@@ -4,7 +4,15 @@ import com.interventionsterrain.interventions_terrain_api.dto.response.Affectati
 import com.interventionsterrain.interventions_terrain_api.entity.Affectation;
 import org.springframework.stereotype.Component;
 
-/** Conversion Affectation → AffectationResponse. */
+/**
+ * Conversion Affectation → AffectationResponse.
+ *
+ * COUCHE       : Mapper
+ * RÔLE         : convertir Affectation entre couches, sans accès base ni logique métier.
+ * DÉPEND DE    : les entités et les DTO Affectation.
+ * UTILISÉ PAR  : les services.
+ * NE FAIT PAS  : de logique métier ni de persistance.
+ */
 @Component
 public class AffectationMapper {
 

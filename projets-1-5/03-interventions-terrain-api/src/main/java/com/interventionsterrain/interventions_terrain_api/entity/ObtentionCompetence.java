@@ -8,10 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 
-/** Compétence obtenue par un technicien (F3, F7, F16). */
+/**
+ * Compétence obtenue par un technicien (F3, F7, F16).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idObtention.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "obtention_competence")
 public class ObtentionCompetence {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +47,10 @@ public class ObtentionCompetence {
     @Column(name = "date_alerte")
     private LocalDate dateAlerte;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected ObtentionCompetence() {
     }
 
@@ -43,6 +61,10 @@ public class ObtentionCompetence {
         this.idTechnicien = java.util.Objects.requireNonNull(idTechnicien, "idTechnicien");
         this.idCompetence = java.util.Objects.requireNonNull(idCompetence, "idCompetence");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdObtention() { return idObtention; }
     public LocalDate getDateObtention() { return dateObtention; }

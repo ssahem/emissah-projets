@@ -6,7 +6,15 @@ import com.interventionsterrain.interventions_terrain_api.entity.Affectation;
 import com.interventionsterrain.interventions_terrain_api.entity.Intervention;
 import org.springframework.stereotype.Component;
 
-/** Conversion Intervention → InterventionResponse ; adresse et responsable résolus en service. */
+/**
+ * Conversion Intervention → InterventionResponse ; adresse et responsable résolus en service.
+ *
+ * COUCHE       : Mapper
+ * RÔLE         : convertir Intervention entre couches, sans accès base ni logique métier.
+ * DÉPEND DE    : les entités et les DTO Intervention.
+ * UTILISÉ PAR  : les services.
+ * NE FAIT PAS  : de logique métier ni de persistance.
+ */
 @Component
 public class InterventionMapper {
 

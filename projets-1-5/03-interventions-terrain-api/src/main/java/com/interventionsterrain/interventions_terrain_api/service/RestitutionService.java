@@ -45,24 +45,55 @@ import java.util.TreeMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Restitution F17 à F19 : disponibilité, charge d'agence et taux de réussite. */
+/**
+ * Restitution F17 à F19 : disponibilité, charge d'agence et taux de réussite.
+ *
+ * COUCHE       : Service
+ * RÔLE         : appliquer les règles métier décrites dans l'en-tête, piloter les transactions
+ *                et orchestrer repositories et mappers.
+ * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
+ * DÉPEND DE    : AffectationRepository, AgenceRepository, EquipeRepository,
+ *                ExigenceCompetenceRepository, HistoriqueStatutRepository,
+ *                InterventionRepository, ObtentionCompetenceRepository, StatutRepository,
+ *                TechnicienRepository, TypeInterventionRepository
+ * UTILISÉ PAR  : RestitutionController.
+ * NE FAIT PAS  : de HTTP ni de SQL direct.
+ */
 @Service
 @Transactional(readOnly = true)
 public class RestitutionService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final String RAISON_AUCUN = "Aucun technicien n'est à la fois disponible sur le "
             + "créneau et titulaire des compétences exigées par ce type d'intervention";
 
+    /** Accès en base à la table associée à agence. */
     private final AgenceRepository agenceRepository;
+    /** Accès en base à la table associée à equipe. */
     private final EquipeRepository equipeRepository;
+    /** Accès en base à la table associée à technicien. */
     private final TechnicienRepository technicienRepository;
+    /** Accès en base à la table associée à intervention. */
     private final InterventionRepository interventionRepository;
+    /** Accès en base à la table associée à affectation. */
     private final AffectationRepository affectationRepository;
+    /** Accès en base à la table associée à exigence. */
     private final ExigenceCompetenceRepository exigenceRepository;
+    /** Accès en base à la table associée à obtention. */
     private final ObtentionCompetenceRepository obtentionRepository;
+    /** Accès en base à la table associée à historique. */
     private final HistoriqueStatutRepository historiqueRepository;
+    /** Accès en base à la table associée à statut. */
     private final StatutRepository statutRepository;
+    /** Accès en base à la table associée à type. */
     private final TypeInterventionRepository typeRepository;
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public RestitutionService(AgenceRepository agenceRepository, EquipeRepository equipeRepository,
                               TechnicienRepository technicienRepository,
@@ -86,6 +117,10 @@ public class RestitutionService {
     }
 
     /** F17 : techniciens libres et compétents, regroupés par agence avec leur charge du jour. */
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
+
     public DisponiblesResponse findDisponibles(LocalDateTime debut, LocalDateTime fin, String codeType) {
         if (debut == null || fin == null || !fin.isAfter(debut)) {
             throw new DonneeInvalideException("creneau-invalide",
@@ -208,6 +243,10 @@ public class RestitutionService {
         return new TauxReussiteResponse(idAgence, periode.toString(), terminees, echeouees,
                 taux(terminees, echeouees), details);
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  OUTILS INTERNES
+    // ═════════════════════════════════════════════════════════════════════════
 
     private List<Technicien> techniciensDe(Integer idAgence) {
         List<Integer> idsEquipe = equipeRepository.findAllByIdAgence(idAgence).stream()

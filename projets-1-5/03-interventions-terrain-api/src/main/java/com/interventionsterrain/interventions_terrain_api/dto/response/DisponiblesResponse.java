@@ -4,9 +4,18 @@ import java.util.List;
 
 /**
  * Résultat F17 : techniciens groupés par agence, ou liste vide et raison du filtrage.
- * Le champ {@code raisonFiltrage} est renseigné uniquement lorsqu'aucun technicien ne convient.
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR   : DisponiblesService puis renvoyé par DisponiblesController.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record DisponiblesResponse(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
         List<AgenceDisponibleResponse> agences,
         String raisonFiltrage) {
 }

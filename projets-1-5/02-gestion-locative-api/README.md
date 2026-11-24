@@ -19,8 +19,11 @@ cp .env.example .env          # adapter DB_PASSWORD
 docker compose up --build
 ```
 
-L'API écoute sur `http://localhost:8080`. Swagger UI : `http://localhost:8080/swagger-ui.html`.
+L'API écoute sur `http://localhost:8082`. Swagger UI : `http://localhost:8082/swagger-ui.html`.
 La base n'expose aucun port hors du réseau Compose.
+
+Le service `app` démarre avec le profil `dev` : au premier `up`, Flyway reconstruit le schéma
+(`db/migration`, V1 à V8) puis charge les données de démonstration (`db/dev/V9__demo.sql`).
 
 En local sans Docker, la base `gestion_locative` est attendue sur `localhost:5432` (`root` / `root`
 par défaut, surchargeable via `DB_URL`, `DB_USER`, `DB_PASSWORD`) :
@@ -28,6 +31,21 @@ par défaut, surchargeable via `DB_URL`, `DB_USER`, `DB_PASSWORD`) :
 ```bash
 ./mvnw spring-boot:run
 ```
+
+Le profil `dev` ajoute les données de démonstration `db/dev/V9__demo.sql` (2 propriétaires,
+3 immeubles, 8 appartements, 5 locataires, 5 baux, 8 révisions de loyer, 4 quittances et un état
+des lieux de sortie) :
+
+```bash
+SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
+```
+
+Une collection Postman prête à importer est fournie dans
+`postman/Gestion-Locative-API.postman_collection.json` : 38 requêtes couvrant les 35 endpoints
+implémentés, avec des corps JSON et des paramètres d’exemple. Elle est déclarée en
+`auth: noauth` : aucun jeton ni identifiant n’est nécessaire. Les scripts des `POST` de création
+renseignent les variables `idProprietaire`, `idImmeuble`, `idAppartement`, `idLocataire` et
+`idBail`.
 
 ## Préfixe et convention d'URL
 
@@ -43,8 +61,8 @@ l'action figure dans le chemin, comme demandé par l'énoncé :
 Exemples sans identifiants :
 
 ```bash
-curl -i http://localhost:8080/gestion-locative/proprietaire/list
-curl -i -X POST http://localhost:8080/gestion-locative/proprietaire/create \
+curl -i http://localhost:8082/gestion-locative/proprietaire/list
+curl -i -X POST http://localhost:8082/gestion-locative/proprietaire/create \
   -H 'Content-Type: application/json' \
   -d '{"nom":"Diallo","prenom":"Awa","email":"awa@example.test","telephone":"0102030405"}'
 ```
@@ -147,6 +165,10 @@ Flyway gère huit migrations :
 - `V6` — `revision_loyer` (E-06) ;
 - `V7` — `SET NOT NULL` sur les deux téléphones (E-07) ;
 - `V8` — `appartement.date_creation`, borne initiale de la vacance F18.
+
+La démonstration porte la version `V9` et n'est chargée que par le profil `dev` (location
+`classpath:db/dev`). Elle ne doit pas être numérotée `V8` : Flyway refuserait deux migrations
+de même version, l'une dans `db/migration` et l'autre dans `db/dev`.
 
 Sur une base déjà existante, `baseline-on-migrate: true` et `baseline-version: 1` marquent `V1`
 comme appliquée : `V1` ne s'exécute que sur une base vierge. `V1` n'est jamais modifiée.

@@ -8,10 +8,24 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Objects;
 
-/** Équipe rattachée à une agence : seul lien entre technicien et agence (A-01). */
+/**
+ * Équipe rattachée à une agence : seul lien entre technicien et agence (A-01).
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idEquipe.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "equipe")
 public class Equipe {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +38,10 @@ public class Equipe {
     @Column(name = "id_agence", nullable = false)
     private Integer idAgence;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Equipe() {
     }
 
@@ -31,6 +49,10 @@ public class Equipe {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.idAgence = Objects.requireNonNull(idAgence, "idAgence");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdEquipe() { return idEquipe; }
     public String getNom() { return nom; }

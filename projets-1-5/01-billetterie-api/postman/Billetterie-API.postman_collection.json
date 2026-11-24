@@ -1,0 +1,505 @@
+{
+  "info": {
+    "_postman_id": "billetterie-api-collection",
+    "name": "Billetterie — API REST",
+    "description": "Projet 1 de la formation. Aucune authentification : ni utilisateur ni rôle dans l’énoncé. Le profil dev fournit 2 salles, 18 places, 3 événements (dont un passé), 3 clients et 4 réservations PROVISOIRE/PAYEE/ANNULEE. Exécuter les POST de création dans l’ordre pour renseigner les variables d’identifiants. F16 est une tâche planifiée sans route HTTP.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081/billetterie"
+    },
+    {
+      "key": "idSalle",
+      "value": "1"
+    },
+    {
+      "key": "idPlace",
+      "value": "1"
+    },
+    {
+      "key": "idEvenement",
+      "value": "1"
+    },
+    {
+      "key": "idReservation",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 — Socle",
+      "item": [
+        {
+          "name": "GET — Santé",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/actuator/health/readiness"
+          }
+        },
+        {
+          "name": "GET — Document OpenAPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/v3/api-docs"
+          }
+        }
+      ],
+      "description": "Aucune authentification."
+    },
+    {
+      "name": "Salle (F1, F5, F6, F7)",
+      "item": [
+        {
+          "name": "POST — Créer une salle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/salle/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Salle Collection\",\n  \"adresse\": \"3 place du Marché\",\n  \"ville\": \"Abidjan\",\n  \"capacite\": 100\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l’identifiant est mémorisé dans idSalle."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idSalle !== undefined) { pm.collectionVariables.set(\"idSalle\", corps.idSalle); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les salles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salle/list"
+          }
+        },
+        {
+          "name": "GET — Lire une salle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salle/get/{{idSalle}}"
+          }
+        },
+        {
+          "name": "PUT — Modifier une salle",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/salle/update/{{idSalle}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Salle Collection\",\n  \"adresse\": \"3 place du Marché\",\n  \"ville\": \"Abidjan\",\n  \"capacite\": 120\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une salle",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/salle/delete/{{idSalle}}",
+            "description": "204 si aucune réservation ne référence la salle."
+          }
+        },
+        {
+          "name": "F5 — Places d’une salle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salle/places/{{idSalle}}"
+          }
+        },
+        {
+          "name": "F6 — Places par catégorie",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salle/places/{{idSalle}}?categorie=BALCON"
+          }
+        },
+        {
+          "name": "F7 — Événements d’une salle",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/salle/evenements/{{idSalle}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Place (F2)",
+      "item": [
+        {
+          "name": "POST — Créer une place",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/place/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idSalle\": {{idSalle}},\n  \"rang\": \"C\",\n  \"numero\": 1,\n  \"categorie\": \"ORCHESTRE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; 409 si la position existe déjà."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idPlace !== undefined) { pm.collectionVariables.set(\"idPlace\", corps.idPlace); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les places",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/place/list"
+          }
+        },
+        {
+          "name": "GET — Lire une place",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/place/get/{{idPlace}}"
+          }
+        },
+        {
+          "name": "PUT — Modifier une place",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/place/update/{{idPlace}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idSalle\": {{idSalle}},\n  \"rang\": \"C\",\n  \"numero\": 1,\n  \"categorie\": \"BALCON\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une place",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/place/delete/{{idPlace}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Événement (F3, F8, F17, F18, F19)",
+      "item": [
+        {
+          "name": "POST — Créer un événement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/evenement/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titre\": \"Concert Collection\",\n  \"type\": \"CONCERT\",\n  \"placementNumerote\": true,\n  \"dateHeure\": \"2026-12-24T20:00:00\",\n  \"idSalle\": {{idSalle}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l’identifiant est mémorisé dans idEvenement."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idEvenement !== undefined) { pm.collectionVariables.set(\"idEvenement\", corps.idEvenement); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les événements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/list"
+          }
+        },
+        {
+          "name": "F8 — Événements sur une période",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/list?du=2026-12-01T00:00:00&au=2026-12-31T23:59:59"
+          }
+        },
+        {
+          "name": "GET — Lire un événement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/get/{{idEvenement}}"
+          }
+        },
+        {
+          "name": "PUT — Modifier un événement",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/evenement/update/{{idEvenement}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"titre\": \"Concert Collection\",\n  \"type\": \"CONCERT\",\n  \"placementNumerote\": true,\n  \"dateHeure\": \"2026-12-24T20:00:00\",\n  \"idSalle\": {{idSalle}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DELETE — Supprimer un événement",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/delete/{{idEvenement}}"
+          }
+        },
+        {
+          "name": "F17 — Places libres",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/places-libres/{{idEvenement}}"
+          }
+        },
+        {
+          "name": "F18 — Taux de remplissage",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/remplissage/{{idEvenement}}"
+          }
+        },
+        {
+          "name": "F19 — Export CSV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/evenement/reservations/export/{{idEvenement}}",
+            "description": "Réponse text/csv ; aucun corps JSON."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Réservation (F4, F9, F10, F11 à F16)",
+      "item": [
+        {
+          "name": "POST — Créer une réservation",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/reservation/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"email\": \"jean.dupont@example.test\",\n  \"idEvenement\": {{idEvenement}},\n  \"rang\": \"A\",\n  \"numero\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; 409 si la place est déjà réservée (F11)."
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201 || pm.response.code === 200) {",
+                  "  const corps = pm.response.json();",
+                  "  if (corps && corps.idReservation !== undefined) { pm.collectionVariables.set(\"idReservation\", corps.idReservation); }",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET — Lister les réservations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/list"
+          }
+        },
+        {
+          "name": "F9 — Paginer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/list?page=0&size=20&sort=dateCreation,desc"
+          }
+        },
+        {
+          "name": "F10 — Réservations d’un client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/list?email=jean.dupont@example.test"
+          }
+        },
+        {
+          "name": "GET — Lire une réservation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/get/{{idReservation}}"
+          }
+        },
+        {
+          "name": "PUT — Modifier une réservation",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/reservation/update/{{idReservation}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Jean\",\n  \"email\": \"jean.dupont@example.test\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "F14 — Confirmer le paiement",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/paiement/{{idReservation}}",
+            "description": "200 ; la date de paiement est enregistrée."
+          }
+        },
+        {
+          "name": "F15 — Annuler et rembourser",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/annulation/{{idReservation}}",
+            "description": "200 ; montant remboursé calculé selon la catégorie."
+          }
+        },
+        {
+          "name": "DELETE — Supprimer une réservation",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/reservation/delete/{{idReservation}}"
+          }
+        }
+      ]
+    }
+  ]
+}

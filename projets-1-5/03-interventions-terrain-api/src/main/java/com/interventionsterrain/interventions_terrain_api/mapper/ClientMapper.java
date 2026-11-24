@@ -4,7 +4,15 @@ import com.interventionsterrain.interventions_terrain_api.dto.response.ClientRes
 import com.interventionsterrain.interventions_terrain_api.entity.Client;
 import org.springframework.stereotype.Component;
 
-/** Conversion Client → ClientResponse. */
+/**
+ * Conversion Client → ClientResponse.
+ *
+ * COUCHE       : Mapper
+ * RÔLE         : convertir Client entre couches, sans accès base ni logique métier.
+ * DÉPEND DE    : les entités et les DTO Client.
+ * UTILISÉ PAR  : les services.
+ * NE FAIT PAS  : de logique métier ni de persistance.
+ */
 @Component
 public class ClientMapper {
 

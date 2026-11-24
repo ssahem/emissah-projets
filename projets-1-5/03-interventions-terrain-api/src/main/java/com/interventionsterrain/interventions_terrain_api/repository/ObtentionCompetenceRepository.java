@@ -7,8 +7,20 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-/** Compétences obtenues (F3, F6, F7, F16). */
+/**
+ * Compétences obtenues (F3, F6, F7, F16).
+ *
+ * COUCHE       : Repository (persistance)
+ * RÔLE         : exposer les requêtes JPA sur la table associée à ObtentionCompetence.
+ * DÉPEND DE    : Spring Data JPA et l'entité ObtentionCompetence.
+ * UTILISÉ PAR  : ObtentionCompetenceService.
+ * NE FAIT PAS  : de logique métier ni de HTTP.
+ */
 public interface ObtentionCompetenceRepository extends JpaRepository<ObtentionCompetence, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
 
     boolean existsByIdCompetence(Integer idCompetence);
 

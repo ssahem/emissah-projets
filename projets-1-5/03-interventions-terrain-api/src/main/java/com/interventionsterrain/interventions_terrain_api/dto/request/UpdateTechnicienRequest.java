@@ -7,9 +7,20 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
-/** Corps de modification d'un technicien (F2). Le matricule est figé. */
+/**
+ * Corps de modification d'un technicien (F2). Le matricule est figé.
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * UTILISÉ PAR  : TechnicienController, avec @Valid, pour valider le corps reçu.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
+ */
 @Schema(description = "Modification d'un technicien")
 public record UpdateTechnicienRequest(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Schema(description = "Nom", example = "Martin")
     @NotBlank @Size(max = 100) String nom,

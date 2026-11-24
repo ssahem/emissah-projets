@@ -44,30 +44,65 @@ import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** CRUD des interventions (F5), avec responsable unique et statut initial (A-02, A-03). */
+/**
+ * CRUD des interventions (F5), avec responsable unique et statut initial (A-02, A-03).
+ *
+ * COUCHE       : Service
+ * RÔLE         : appliquer les règles métier décrites dans l'en-tête, piloter les transactions
+ *                et orchestrer repositories et mappers.
+ * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
+ * DÉPEND DE    : AffectationMapper, InterventionMapper, AdresseRepository,
+ *                AffectationRepository, ClientRepository, CompetenceRepository,
+ *                ExigenceCompetenceRepository, HistoriqueStatutRepository,
+ *                InterventionRepository, ObtentionCompetenceRepository, StatutRepository,
+ *                TechnicienRepository, TypeInterventionRepository
+ * UTILISÉ PAR  : InterventionController.
+ * NE FAIT PAS  : de HTTP ni de SQL direct.
+ */
 @Service
 @Transactional(readOnly = true)
 public class InterventionService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    /** Accès en base à la table associée à intervention. */
     private final InterventionRepository interventionRepository;
+    /** Accès en base à la table associée à adresse. */
     private final AdresseRepository adresseRepository;
+    /** Accès en base à la table associée à client. */
     private final ClientRepository clientRepository;
+    /** Accès en base à la table associée à technicien. */
     private final TechnicienRepository technicienRepository;
+    /** Accès en base à la table associée à type. */
     private final TypeInterventionRepository typeRepository;
+    /** Accès en base à la table associée à statut. */
     private final StatutRepository statutRepository;
+    /** Accès en base à la table associée à affectation. */
     private final AffectationRepository affectationRepository;
+    /** Accès en base à la table associée à historique. */
     private final HistoriqueStatutRepository historiqueRepository;
+    /** Accès en base à la table associée à exigence. */
     private final ExigenceCompetenceRepository exigenceRepository;
+    /** Accès en base à la table associée à obtention. */
     private final ObtentionCompetenceRepository obtentionRepository;
+    /** Accès en base à la table associée à competence. */
     private final CompetenceRepository competenceRepository;
+    /** Conversion entité ↔ DTO, sans logique métier. */
     private final InterventionMapper mapper;
     private final AffectationMapper affectationMapper;
+    /** Horloge applicative injectée : toute date produite par le service passe par elle. */
     private final Clock clock;
 
     /** Transitions autorisées du cycle de vie (F14) ; EN_ROUTE et REPORTEE restent hors écriture. */
     private static final Map<StatutIntervention, Set<StatutIntervention>> TRANSITIONS = Map.of(
             StatutIntervention.PLANIFIEE, Set.of(StatutIntervention.EN_COURS, StatutIntervention.ANNULEE),
             StatutIntervention.EN_COURS, Set.of(StatutIntervention.TERMINEE, StatutIntervention.ECHOUEE));
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
 
     public InterventionService(InterventionRepository interventionRepository,
                                AdresseRepository adresseRepository, ClientRepository clientRepository,
@@ -97,6 +132,10 @@ public class InterventionService {
     }
 
     /** F9 : filtres optionnels et combinables sur le statut du responsable et le début prévu. */
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CAS D'USAGE
+    // ═════════════════════════════════════════════════════════════════════════
+
     public List<InterventionResponse> findAll(String statut, LocalDate du, LocalDate au) {
         String libelle = null;
         if (statut != null && !statut.isBlank()) {
@@ -281,6 +320,10 @@ public class InterventionService {
         addHistorique(responsable, StatutIntervention.PLANIFIEE);
         return toResponse(reprise);
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  OUTILS INTERNES
+    // ═════════════════════════════════════════════════════════════════════════
 
     private InterventionResponse toResponse(Intervention intervention) {
         Adresse adresse = adresseRepository.findById(intervention.getIdAdresse()).orElse(null);

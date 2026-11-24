@@ -9,10 +9,24 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-/** Adresse du lieu d'une intervention (E-21), distincte de l'adresse texte du client. */
+/**
+ * Adresse du lieu d'une intervention (E-21), distincte de l'adresse texte du client.
+ *
+ * COUCHE       : Entité (modèle de données)
+ * RÔLE         : représenter la ligne de table, ses colonnes et ses relations JPA, sans
+ *                logique métier.
+ * IDENTITÉ     : idAdresse.
+ * DÉPEND DE    : aucune classe applicative.
+ * UTILISÉ PAR  : repositories, mappers et services.
+ * NE FAIT PAS  : de logique métier ni de sérialisation HTTP directe.
+ */
 @Entity
 @Table(name = "adresse")
 public class Adresse {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +45,10 @@ public class Adresse {
     @Column(name = "commune", nullable = false)
     private String commune;
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTRUCTEURS
+    // ═════════════════════════════════════════════════════════════════════════
+
     protected Adresse() {
     }
 
@@ -38,6 +56,10 @@ public class Adresse {
         this.voie = Objects.requireNonNull(voie, "voie");
         this.commune = Objects.requireNonNull(commune, "commune");
     }
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  ACCESSEURS
+    // ═════════════════════════════════════════════════════════════════════════
 
     public Integer getIdAdresse() { return idAdresse; }
     public String getVoie() { return voie; }

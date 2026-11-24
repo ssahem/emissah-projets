@@ -4,9 +4,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
-/** Corps d'ajout d'un technicien à une intervention (A-02). */
+/**
+ * Corps d'ajout d'un technicien à une intervention (A-02).
+ *
+ * COUCHE       : DTO (contrat public)
+ * IMMUABLE     : record Java.
+ * UTILISÉ PAR  : AddAffectationController, avec @Valid, pour valider le corps reçu.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
+ */
 @Schema(description = "Affectation d'un technicien")
 public record AddAffectationRequest(
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Schema(description = "Identifiant du technicien", example = "2")
     @NotNull @Positive Integer idTechnicien,
