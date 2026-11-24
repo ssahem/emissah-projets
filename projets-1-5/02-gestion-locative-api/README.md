@@ -32,13 +32,10 @@ par défaut, surchargeable via `DB_URL`, `DB_USER`, `DB_PASSWORD`) :
 ./mvnw spring-boot:run
 ```
 
-Le profil `dev` ajoute les données de démonstration `db/dev/V9__demo.sql` (2 propriétaires,
-3 immeubles, 8 appartements, 5 locataires, 5 baux, 8 révisions de loyer, 4 quittances et un état
-des lieux de sortie) :
-
-```bash
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
-```
+Flyway reconstruit le schéma puis charge les données de démonstration `db/dev/V9__demo.sql`
+(2 propriétaires, 3 immeubles, 8 appartements, 5 locataires, 5 baux, 8 révisions de loyer,
+4 quittances et un état des lieux de sortie). Pour un schéma seul, sans démo, utiliser le profil
+`prod` (`SPRING_PROFILES_ACTIVE=prod`).
 
 Une collection Postman prête à importer est fournie dans
 `postman/Gestion-Locative-API.postman_collection.json` : 38 requêtes couvrant les 35 endpoints

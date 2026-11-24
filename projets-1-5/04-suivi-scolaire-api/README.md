@@ -42,11 +42,8 @@ surchargeable via `DB_URL`, `DB_USER`, `DB_PASSWORD`) :
 ./mvnw spring-boot:run
 ```
 
-Pour charger les données de démonstration (profil `dev`, jamais en production) :
-
-```bash
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
-```
+Flyway reconstruit le schéma puis charge les données de démonstration `db/dev/V9__demo.sql`.
+Pour un schéma seul, sans démo, utiliser le profil `prod` (`SPRING_PROFILES_ACTIVE=prod`).
 
 Le profil `dev` ajoute le script `db/dev/V9__demo.sql` aux emplacements Flyway. Il fournit deux
 années scolaires, deux niveaux, trois classes, six élèves, quatre matières, trois professeurs,

@@ -18,12 +18,10 @@ La base PostgreSQL locale `billetterie` doit être accessible avec `root` / `roo
 ./mvnw spring-boot:run
 ```
 
-Le profil `dev` ajoute les données de démonstration `db/dev/V7__demo.sql` (2 salles, 18 places,
-3 événements dont un passé, 3 clients, 4 réservations `PROVISOIRE`/`PAYEE`/`ANNULEE`) :
-
-```bash
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
-```
+Flyway reconstruit le schéma puis charge les données de démonstration `db/dev/V7__demo.sql`
+(2 salles, 18 places, 3 événements dont un passé, 3 clients,
+4 réservations `PROVISOIRE`/`PAYEE`/`ANNULEE`). Pour un schéma seul, sans démo, utiliser le profil
+`prod` (`SPRING_PROFILES_ACTIVE=prod`).
 
 Swagger UI : <http://localhost:8081/swagger-ui.html>
 

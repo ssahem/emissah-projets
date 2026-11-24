@@ -26,8 +26,7 @@ docker compose up --build
 ```
 
 Au premier `up`, **Flyway reconstruit automatiquement le schéma** (migrations `db/migration/`)
-puis **charge les données de démonstration** (`db/dev/`), car le service démarre avec le profil
-`dev`. L'API est alors prête à tester :
+puis **charge les données de démonstration** (`db/dev/`). L'API est alors prête à tester :
 
 - Swagger UI : `http://localhost:<port>/swagger-ui.html`
 - Santé : `http://localhost:<port>/actuator/health/readiness`
@@ -42,8 +41,8 @@ sont déclarées en `auth: noauth` (aucun jeton) et leurs variables `host` / `ba
 sur le bon port. Les scripts des `POST` de création mémorisent les identifiants dans les variables
 de collection : exécuter les créations dans l'ordre avant les consultations.
 
-Les valeurs par défaut des collections correspondent aux données de démonstration chargées par le
-profil `dev`.
+Les valeurs par défaut des collections correspondent aux données de démonstration chargées
+automatiquement.
 
 ## Lancer sans Docker (développement local)
 
@@ -52,10 +51,11 @@ surchargeable via `DB_URL`, `DB_USER`, `DB_PASSWORD`) :
 
 ```bash
 cd 01-billetterie-api
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
+./mvnw spring-boot:run
 ```
 
-Sans le profil `dev`, seul le schéma est reconstruit (aucune donnée de démonstration).
+Le schéma et les données de démonstration sont chargés automatiquement. Pour un schéma seul, sans
+démo, utiliser `SPRING_PROFILES_ACTIVE=prod`.
 
 ## Exécuter les tests
 

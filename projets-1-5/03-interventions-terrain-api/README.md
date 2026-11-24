@@ -31,11 +31,8 @@ En local sans Docker, la base `interventions_terrain` est attendue sur `localhos
 ./mvnw spring-boot:run
 ```
 
-Pour charger les données de démonstration (profil `dev`, jamais en production) :
-
-```bash
-SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
-```
+Flyway reconstruit le schéma puis charge les données de démonstration `db/dev/V8__demo.sql`.
+Pour un schéma seul, sans démo, utiliser le profil `prod` (`SPRING_PROFILES_ACTIVE=prod`).
 
 Le profil `dev` fournit une agence « Agence Paris Centre », deux techniciens (`MAT001`, `MAT002`),
 deux compétences, le type `RACCORDEMENT_FIBRE` avec ses exigences et un client de démonstration.

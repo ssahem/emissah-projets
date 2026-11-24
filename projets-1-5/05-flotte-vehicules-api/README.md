@@ -30,10 +30,14 @@ Prérequis : JDK 21 et PostgreSQL avec une base `flotte_vehicules`. La configura
 
 ```bash
 cd projets-1-5/05-flotte-vehicules-api
-./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+./mvnw spring-boot:run
 ```
 
-Le profil `dev` charge les migrations de `db/migration` puis le jeu de démonstration `db/dev/V9__demo.sql` : 3 sites, 5 véhicules, 4 salariés, 5 affectations, 3 types d'entretien, 4 prestataires, 6 entretiens, des trajets, contrats et dépenses. Il contient aussi une alerte déjà émise pour le véhicule 2 afin de vérifier la non-duplication F16. Le profil `prod` ne charge que `db/migration`.
+Flyway reconstruit le schéma puis charge le jeu de démonstration `db/dev/V9__demo.sql` : 3 sites,
+5 véhicules, 4 salariés, 5 affectations, 3 types d'entretien, 4 prestataires, 6 entretiens, des
+trajets, contrats et dépenses. Il contient aussi une alerte déjà émise pour le véhicule 2 afin de
+vérifier la non-duplication F16. Le profil `prod` (`SPRING_PROFILES_ACTIVE=prod`) ne charge que
+`db/migration`, sans démo.
 
 Vérifications rapides :
 
