@@ -1,0 +1,36 @@
+# Les tests d'intégration utilisent un PostgreSQL Testcontainers : l'URL,
+# l'utilisateur et le mot de passe sont fournis par @DynamicPropertySource.
+spring:
+  application:
+    name: gestion-locative-api
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
+  mvc:
+    problemdetails:
+      enabled: true
+
+gestion-locative:
+  cloture-baux:
+    cron: "0 0 1 * * *"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false

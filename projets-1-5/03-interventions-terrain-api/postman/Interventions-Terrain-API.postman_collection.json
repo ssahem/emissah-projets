@@ -1,0 +1,829 @@
+{
+  "info": {
+    "_postman_id": "interventions-terrain-api-collection",
+    "name": "Interventions terrain — API REST",
+    "description": "Projet 3 de la formation. Aucune authentification : l'énoncé ne définit ni utilisateur ni rôle, donc ni jeton, ni identifiants, ni code 401/403. Importer cette collection, adapter les variables host/baseUrl si besoin, puis exécuter les POST de création dans l'ordre pour renseigner les identifiants. Le profil dev fournit les données de démo (RACCORDEMENT_FIBRE, MAT001, MAT002). F16 est planifiée sans route HTTP.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "noauth"
+  },
+  "variable": [
+    {
+      "key": "host",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/interventions-terrain"
+    },
+    {
+      "key": "idAgence",
+      "value": "1"
+    },
+    {
+      "key": "idTechnicien",
+      "value": "1"
+    },
+    {
+      "key": "idTechnicien2",
+      "value": "2"
+    },
+    {
+      "key": "idCompetence",
+      "value": "1"
+    },
+    {
+      "key": "idClient",
+      "value": "1"
+    },
+    {
+      "key": "idIntervention",
+      "value": "1"
+    },
+    {
+      "key": "codeType",
+      "value": "RACCORDEMENT_FIBRE"
+    },
+    {
+      "key": "mois",
+      "value": "2026-11"
+    }
+  ],
+  "item": [
+    {
+      "name": "00 — Socle",
+      "item": [
+        {
+          "name": "GET — Santé (readiness)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/actuator/health/readiness",
+            "description": "Vérifie que l'API et la base sont prêtes."
+          }
+        },
+        {
+          "name": "GET — Document OpenAPI",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{host}}/v3/api-docs",
+            "description": "Liste toutes les routes ; Swagger UI : /swagger-ui.html."
+          }
+        }
+      ],
+      "description": "Contrôles sans authentification."
+    },
+    {
+      "name": "01 — CRUD (F1 à F5)",
+      "item": [
+        {
+          "name": "Agence (F1)",
+          "item": [
+            {
+              "name": "POST — Créer une agence",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/agence/create",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nom\": \"Agence Lyon Part-Dieu\",\n  \"ville\": \"Lyon\",\n  \"adresse\": \"8 rue de la République\",\n  \"responsable\": \"Alexandre Dupont\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201 + en-tête Location ; l'identifiant est mémorisé dans idAgence."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201 || pm.response.code === 200) {",
+                      "  const corps = pm.response.json();",
+                      "  if (corps && corps.idAgence !== undefined) {",
+                      "    pm.collectionVariables.set(\"idAgence\", corps.idAgence);",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET — Lister les agences",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/agence/list"
+              }
+            },
+            {
+              "name": "GET — Lire une agence",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/agence/get/{{idAgence}}"
+              }
+            },
+            {
+              "name": "PUT — Modifier une agence",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/agence/update/{{idAgence}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nom\": \"Agence Lyon Part-Dieu\",\n  \"ville\": \"Lyon\",\n  \"responsable\": \"Alexandre Dupont\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE — Supprimer une agence",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/agence/delete/{{idAgence}}",
+                "description": "204 ; une agence encore référencée peut renvoyer 409."
+              }
+            }
+          ]
+        },
+        {
+          "name": "Technicien (F2)",
+          "item": [
+            {
+              "name": "POST — Créer un technicien",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/technicien/create",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Camille\",\n  \"email\": \"camille.martin.collection@example.test\",\n  \"telephone\": \"0102030405\",\n  \"idAgence\": {{idAgence}},\n  \"matricule\": \"MAT010\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201 ; l'agence est résolue via equipe (A-01)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201 || pm.response.code === 200) {",
+                      "  const corps = pm.response.json();",
+                      "  if (corps && corps.idTechnicien !== undefined) {",
+                      "    pm.collectionVariables.set(\"idTechnicien\", corps.idTechnicien);",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET — Lister les techniciens",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/technicien/list"
+              }
+            },
+            {
+              "name": "GET — Lire un technicien",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/technicien/get/{{idTechnicien}}"
+              }
+            },
+            {
+              "name": "PUT — Modifier un technicien",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/technicien/update/{{idTechnicien}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nom\": \"Martin\",\n  \"prenom\": \"Camille\",\n  \"email\": \"camille.martin.collection@example.test\",\n  \"telephone\": \"0102030405\",\n  \"idAgence\": {{idAgence}},\n  \"matricule\": \"MAT010\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE — Supprimer un technicien",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/technicien/delete/{{idTechnicien}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Compétence (F3)",
+          "item": [
+            {
+              "name": "POST — Créer une compétence",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/competence/create",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"libelle\": \"Raccordement fibre (collection)\",\n  \"description\": \"Compétence utilisée par la collection\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201 ; l'identifiant est mémorisé dans idCompetence."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201 || pm.response.code === 200) {",
+                      "  const corps = pm.response.json();",
+                      "  if (corps && corps.idCompetence !== undefined) {",
+                      "    pm.collectionVariables.set(\"idCompetence\", corps.idCompetence);",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET — Lister les compétences",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/competence/list"
+              }
+            },
+            {
+              "name": "GET — Lire une compétence",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/competence/get/{{idCompetence}}"
+              }
+            },
+            {
+              "name": "PUT — Modifier une compétence",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/competence/update/{{idCompetence}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"libelle\": \"Raccordement fibre (collection)\",\n  \"description\": \"Compétence mise à jour\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE — Supprimer une compétence",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/competence/delete/{{idCompetence}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Client (F4)",
+          "item": [
+            {
+              "name": "POST — Créer un client",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/client/create",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Marie\",\n  \"email\": \"marie.dupont.collection@example.test\",\n  \"telephone\": \"0102030407\",\n  \"adresse\": \"5 avenue du parc\",\n  \"commune\": \"Paris\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201 ; adresse et commune sont des textes, sans clé étrangère (A-05)."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201 || pm.response.code === 200) {",
+                      "  const corps = pm.response.json();",
+                      "  if (corps && corps.idClient !== undefined) {",
+                      "    pm.collectionVariables.set(\"idClient\", corps.idClient);",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET — Lister les clients",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/client/list"
+              }
+            },
+            {
+              "name": "GET — Lire un client",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/client/get/{{idClient}}"
+              }
+            },
+            {
+              "name": "PUT — Modifier un client",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/client/update/{{idClient}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"nom\": \"Dupont\",\n  \"prenom\": \"Marie\",\n  \"email\": \"marie.dupont.collection@example.test\",\n  \"telephone\": \"0102030407\",\n  \"adresse\": \"5 avenue du parc\",\n  \"commune\": \"Paris\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "name": "DELETE — Supprimer un client",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/client/delete/{{idClient}}"
+              }
+            }
+          ]
+        },
+        {
+          "name": "Intervention (F5)",
+          "item": [
+            {
+              "name": "POST — Créer une intervention",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/intervention/create",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"idClient\": {{idClient}},\n  \"codeType\": \"{{codeType}}\",\n  \"idTechnicienResponsable\": {{idTechnicien}},\n  \"dateDemande\": \"2026-11-24T09:00:00\",\n  \"debutPrevu\": \"2026-12-10T09:00:00\",\n  \"finPrevue\": \"2026-12-10T12:00:00\",\n  \"voie\": \"12 rue de la Paix\",\n  \"commune\": \"Paris\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201 ; crée adresse, affectation responsable et statut PLANIFIEE."
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "if (pm.response.code === 201 || pm.response.code === 200) {",
+                      "  const corps = pm.response.json();",
+                      "  if (corps && corps.idIntervention !== undefined) {",
+                      "    pm.collectionVariables.set(\"idIntervention\", corps.idIntervention);",
+                      "  }",
+                      "}"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "GET — Lister et filtrer les interventions",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/intervention/list?statut=PLANIFIEE&du=2026-12-01&au=2026-12-31",
+                "description": "F9 : filtres optionnels, statut lu sur le dernier historique du responsable."
+              }
+            },
+            {
+              "name": "GET — Lire une intervention",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/intervention/get/{{idIntervention}}"
+              }
+            },
+            {
+              "name": "PUT — Modifier une intervention",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/intervention/update/{{idIntervention}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"debutPrevu\": \"2026-12-11T09:00:00\",\n  \"finPrevue\": \"2026-12-11T12:00:00\",\n  \"idTechnicienResponsable\": {{idTechnicien2}}\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "409 si le statut n'est plus PLANIFIEE (F5)."
+              }
+            },
+            {
+              "name": "DELETE — Supprimer une intervention",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/intervention/delete/{{idIntervention}}",
+                "description": "204 uniquement tant que l'intervention est PLANIFIEE."
+              }
+            }
+          ]
+        },
+        {
+          "name": "Affectations (A-02)",
+          "item": [
+            {
+              "name": "POST — Ajouter un technicien",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "url": "{{baseUrl}}/intervention/affectation/{{idIntervention}}",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"idTechnicien\": {{idTechnicien2}},\n  \"estResponsable\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "description": "201 ; un second estResponsable=true renvoie 409."
+              }
+            },
+            {
+              "name": "GET — Lister les affectations",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": "{{baseUrl}}/intervention/affectation/{{idIntervention}}"
+              }
+            },
+            {
+              "name": "DELETE — Retirer un affecté",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": "{{baseUrl}}/intervention/affectation/{{idIntervention}}/{{idTechnicien2}}",
+                "description": "Le responsable se remplace via PUT /intervention/update/{id}."
+              }
+            }
+          ],
+          "description": "Un seul responsable par intervention."
+        }
+      ],
+      "description": "Exécuter les POST dans l'ordre pour renseigner automatiquement les variables d'identifiants."
+    },
+    {
+      "name": "02 — Consultations (F6 à F10)",
+      "item": [
+        {
+          "name": "F6 — Effectif d'une agence",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/agence/techniciens/{{idAgence}}"
+          }
+        },
+        {
+          "name": "F7 — Compétences d'un technicien",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/technicien/competences/{{idTechnicien}}"
+          }
+        },
+        {
+          "name": "F8 — Historique d'un client",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/client/interventions/{{idClient}}"
+          }
+        },
+        {
+          "name": "F9 — Interventions filtrées",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/intervention/list?statut=EN_COURS&du=2026-12-01&au=2026-12-31"
+          }
+        },
+        {
+          "name": "F10 — Planning d'un technicien",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/technicien/planning/{{idTechnicien}}?du=2026-12-01&au=2026-12-31",
+            "description": "Période par défaut : semaine courante ; trois mois maximum."
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 — Règles métier (F11 à F16)",
+      "item": [
+        {
+          "name": "F11 — Certifier une compétence",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/technicien/competence/{{idTechnicien2}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idCompetence\": {{idCompetence}},\n  \"dateObtention\": \"2026-01-10\",\n  \"dateExpiration\": \"2027-01-10\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; 400 si les dates sont incohérentes, 409 si un doublon actif existe déjà."
+          }
+        },
+        {
+          "name": "F12 — Chevauchement refusé (409 attendu)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/intervention/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idClient\": {{idClient}},\n  \"codeType\": \"{{codeType}}\",\n  \"idTechnicienResponsable\": {{idTechnicien}},\n  \"dateDemande\": \"2026-11-24T09:00:00\",\n  \"debutPrevu\": \"2026-12-10T10:00:00\",\n  \"finPrevue\": \"2026-12-10T13:00:00\",\n  \"voie\": \"12 rue de la Paix\",\n  \"commune\": \"Paris\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "409 avec idInterventionBloquant, debut et fin si le créneau est pris."
+          }
+        },
+        {
+          "name": "F13 — Compétence manquante (400 attendu)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/intervention/create",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idClient\": {{idClient}},\n  \"codeType\": \"{{codeType}}\",\n  \"idTechnicienResponsable\": {{idTechnicien2}},\n  \"dateDemande\": \"2026-11-24T09:00:00\",\n  \"debutPrevu\": \"2026-12-12T09:00:00\",\n  \"finPrevue\": \"2026-12-12T12:00:00\",\n  \"voie\": \"12 rue de la Paix\",\n  \"commune\": \"Paris\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Le technicien sans compétence valide est refusé avec la liste des compétences manquantes."
+          }
+        },
+        {
+          "name": "F14 — PLANIFIEE vers EN_COURS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/intervention/statut/{{idIntervention}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"EN_COURS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "F14 — EN_COURS vers TERMINEE",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/intervention/statut/{{idIntervention}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"TERMINEE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Une transition interdite renvoie 409 avec les statuts atteignables."
+          }
+        },
+        {
+          "name": "F14 — EN_COURS vers ECHOUEE (prépare F15)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/intervention/statut/{{idIntervention}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"statut\": \"ECHOUEE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "À utiliser depuis une intervention en EN_COURS pour préparer la reprise F15."
+          }
+        },
+        {
+          "name": "F15 — Créer une reprise",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/intervention/reprise/{{idIntervention}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"debutPrevu\": \"2026-12-17T09:00:00\",\n  \"finPrevue\": \"2026-12-17T12:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "201 ; l'origine doit être ECHOUEE et non déjà reprise."
+          }
+        }
+      ],
+      "description": "F16 est une tâche planifiée (cron 01:00 UTC) : elle n'a aucune route HTTP."
+    },
+    {
+      "name": "04 — Restitution (F17 à F19)",
+      "item": [
+        {
+          "name": "F17 — Techniciens disponibles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/technicien/disponibles?debut=2026-12-10T09:00:00&fin=2026-12-10T12:00:00&type={{codeType}}",
+            "description": "Groupés par agence, avec la charge du jour ; liste vide + raisonFiltrage sinon."
+          }
+        },
+        {
+          "name": "F18 — Charge d'une agence",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/agence/charge/{{idAgence}}?du=2026-12-01T00:00:00&au=2026-12-31T00:00:00",
+            "description": "Annulations exclues, détails par technicien et totaux."
+          }
+        },
+        {
+          "name": "F19 — Taux de réussite mensuel",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/agence/taux-reussite/{{idAgence}}?mois={{mois}}",
+            "description": "TERMINEE / (TERMINEE + ECHOUEE), global et par type."
+          }
+        }
+      ]
+    }
+  ]
+}

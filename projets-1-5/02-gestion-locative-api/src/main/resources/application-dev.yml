@@ -1,0 +1,10 @@
+# ==============================================================================
+#  application-dev.yml — DEVELOPPEMENT
+#  Active les données de démo en plus du schéma. Jamais chargées en production :
+#  le profil "prod" ne reprend pas ce fichier (locations par défaut = db/migration).
+#  Activer avec SPRING_PROFILES_ACTIVE=dev.
+# ==============================================================================
+
+spring:
+  flyway:
+    locations: classpath:db/migration,classpath:db/dev
