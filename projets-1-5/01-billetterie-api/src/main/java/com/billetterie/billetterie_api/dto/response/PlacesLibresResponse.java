@@ -19,10 +19,14 @@ public record PlacesLibresResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant de l'événement
-        @Schema(description = "Identifiant de l'événement", example = "1") Integer idEvenement,
-        // Nombre total de places
-        @Schema(description = "Nombre total de places", example = "120") long placesTotales,
-        // Détail par catégorie
-        @Schema(description = "Détail par catégorie") List<PlacesLibresParCategorieResponse> parCategorie) {
+        // Identifiant de l’evenement
+        @Schema(description = "Identifiant de l'événement", example = "1")
+        Integer idEvenement,
+        // Places totales
+        @Schema(description = "Nombre total de places", example = "120")
+        long placesTotales,
+        // Par Catégorie
+        @Schema(description = "Détail par catégorie")
+        List<PlacesLibresParCategorieResponse> parCategorie
+) {
 }

@@ -63,40 +63,61 @@ public class Evenement {
 
     // ── getIdEvenement() ─────────────────────────────────────────────────────
 
-    /** Retourne idEvenement. */
+    /**
+     * Retourne idEvenement.
+     */
+
     public Integer getIdEvenement() { return idEvenement; }
 
     // ── getDateHeure() ───────────────────────────────────────────────────────
 
-    /** Retourne dateHeure. */
+    /**
+     * Retourne dateHeure.
+     */
+
     public LocalDateTime getDateHeure() { return dateHeure; }
 
     // ── getSpectacle() ───────────────────────────────────────────────────────
 
-    /** Retourne spectacle. */
+    /**
+     * Retourne spectacle.
+     */
+
     public Spectacle getSpectacle() { return spectacle; }
 
     // ── getSalle() ───────────────────────────────────────────────────────────
 
-    /** Retourne salle. */
+    /**
+     * Retourne salle.
+     */
+
     public Salle getSalle() { return salle; }
 
     // ── setDateHeure() ───────────────────────────────────────────────────────
 
-    /** Modifie la date et l'heure de l'événement. */
+    /**
+     * Modifie la date et l'heure de l'événement.
+     */
+
     public void setDateHeure(LocalDateTime dateHeure) {
         this.dateHeure = Objects.requireNonNull(dateHeure, "dateHeure");
     }
 
     // ── setSpectacle() ───────────────────────────────────────────────────────
 
-    /** Remplace le spectacle de l'événement. */
+    /**
+     * Remplace le spectacle de l'événement.
+     */
+
     public void setSpectacle(Spectacle spectacle) {
         this.spectacle = Objects.requireNonNull(spectacle, "spectacle");
     }
 
     // ── setSalle() ───────────────────────────────────────────────────────────
 
-    /** Remplace la salle de l'événement. */
+    /**
+     * Remplace la salle de l'événement.
+     */
+
     public void setSalle(Salle salle) { this.salle = Objects.requireNonNull(salle, "salle"); }
 }

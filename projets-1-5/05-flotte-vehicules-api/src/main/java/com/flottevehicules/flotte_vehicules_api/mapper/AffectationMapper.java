@@ -39,12 +39,11 @@ public class AffectationMapper {
         this.clock = clock;
     }
 
-    /** Convertit une affectation en réponse complète (F4, F11). */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une affectation en réponse complète (F4, F11).
      */
 
     public AffectationResponse toResponse(Affectation affectation) {
@@ -58,12 +57,12 @@ public class AffectationMapper {
                 affectation.getKmRestitution(), affectation.estEnCours(LocalDate.now(clock)));
     }
 
-    /** Convertit une affectation en réponse condensée pour une fiche salarié (F7). */
 
     // ── toSalarieResponse() ──────────────────────────────────────────────────
 
     /**
-     * Exécute toSalarieResponse().
+     * Convertit une affectation en réponse condensée pour une fiche salarié
+     * (F7).
      */
 
     public AffectationSalarieResponse toSalarieResponse(Affectation affectation) {

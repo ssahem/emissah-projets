@@ -29,6 +29,9 @@ public class PlaceDejaExistanteException extends ApiException {
 
     // ── getRang() ────────────────────────────────────────────────────────────
 
-    /** Retourne rang. */
+    /**
+     * Retourne rang.
+     */
+
     public String getRang() { return rang; }
 }

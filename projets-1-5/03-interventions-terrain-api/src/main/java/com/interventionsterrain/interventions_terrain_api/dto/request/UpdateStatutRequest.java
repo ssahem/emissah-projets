@@ -19,6 +19,9 @@ public record UpdateStatutRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Statut cible", example = "EN_COURS")
-    @NotBlank String statut) {
+        // Statut
+        @Schema(description = "Statut cible", example = "EN_COURS")
+        @NotBlank
+        String statut
+) {
 }

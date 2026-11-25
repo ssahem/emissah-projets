@@ -20,9 +20,13 @@ public record UpdateCompetenceRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Libellé", example = "Raccordement fibre")
-    @NotBlank @Size(max = 100) String libelle,
-
-    @Schema(description = "Description (facultative)")
-    String description) {
+        // Libellé
+        @Schema(description = "Libellé", example = "Raccordement fibre")
+        @NotBlank
+        @Size(max = 100)
+        String libelle,
+        // Description
+        @Schema(description = "Description", example = "Exemple")
+        String description
+) {
 }

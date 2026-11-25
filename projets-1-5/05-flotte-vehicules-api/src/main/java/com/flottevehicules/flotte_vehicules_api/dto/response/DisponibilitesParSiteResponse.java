@@ -14,23 +14,25 @@ import java.util.List;
 @Schema(description = "Disponibilités d'un site sur une période")
 public record DisponibilitesParSiteResponse(
 
-        @Schema(description = "Site", example = "1")
-        Integer idSite,
-
-        @Schema(description = "Nom du site", example = "Paris Centre")
-        String nomSite,
-
-        @Schema(description = "Début de la période", example = "2026-11-23")
-        LocalDate du,
-
-        @Schema(description = "Fin de la période", example = "2026-11-29")
-        LocalDate au,
-
-        @Schema(description = "Véhicules disponibles")
-        List<DisponibleVehiculeResponse> vehicules) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du site
+        @Schema(description = "Site", example = "1")
+        Integer idSite,
+        // Nom du site courant
+        @Schema(description = "Nom du site", example = "Paris Centre")
+        String nomSite,
+        // Du
+        @Schema(description = "Début de la période", example = "2026-11-23")
+        LocalDate du,
+        // Au
+        @Schema(description = "Fin de la période", example = "2026-11-29")
+        LocalDate au,
+        // Véhicules
+        @Schema(description = "Véhicules disponibles")
+        List<DisponibleVehiculeResponse> vehicules
+) {
 
 }

@@ -30,7 +30,7 @@ public class TechnicienMapper {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit un technicien en reprenant ses champs.
      */
 
     public TechnicienResponse toResponse(Technicien technicien) {

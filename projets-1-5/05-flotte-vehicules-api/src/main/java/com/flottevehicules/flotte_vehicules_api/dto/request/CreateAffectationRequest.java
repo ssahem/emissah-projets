@@ -15,23 +15,25 @@ import java.time.LocalDate;
 @Schema(description = "Création d'une affectation : véhicule, salarié et date de début requis")
 public record CreateAffectationRequest(
 
-        @Schema(description = "Véhicule concerné", example = "1")
-        @NotNull(message = "Le véhicule est obligatoire")
-        Integer idVehicule,
-
-        @Schema(description = "Salarié concerné", example = "1")
-        @NotNull(message = "Le salarié est obligatoire")
-        Integer idSalarie,
-
-        @Schema(description = "Date de début", example = "2026-11-01")
-        @NotNull(message = "La date de début est obligatoire")
-        LocalDate dateDebut,
-
-        @Schema(description = "Date de fin prévue, facultative", example = "2026-11-30")
-        LocalDate dateFin) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du véhicule
+        @Schema(description = "Véhicule concerné", example = "1")
+        @NotNull(message = "Le véhicule est obligatoire")
+        Integer idVehicule,
+        // Identifiant du salarié
+        @Schema(description = "Salarié concerné", example = "1")
+        @NotNull(message = "Le salarié est obligatoire")
+        Integer idSalarie,
+        // Date de début
+        @Schema(description = "Date de début", example = "2026-11-01")
+        @NotNull(message = "La date de début est obligatoire")
+        LocalDate dateDebut,
+        // Date de fin
+        @Schema(description = "Date de fin prévue, facultative", example = "2026-11-30")
+        LocalDate dateFin
+) {
 
 }

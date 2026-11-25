@@ -88,69 +88,108 @@ public class Reservation {
 
     // ── getIdReservation() ───────────────────────────────────────────────────
 
-    /** Retourne idReservation. */
+    /**
+     * Retourne idReservation.
+     */
+
     public Integer getIdReservation() { return idReservation; }
 
     // ── getDateCreation() ────────────────────────────────────────────────────
 
-    /** Retourne dateCreation. */
+    /**
+     * Retourne dateCreation.
+     */
+
     public LocalDateTime getDateCreation() { return dateCreation; }
 
     // ── getDateExpiration() ──────────────────────────────────────────────────
 
-    /** Retourne dateExpiration. */
+    /**
+     * Retourne dateExpiration.
+     */
+
     public LocalDateTime getDateExpiration() { return dateExpiration; }
 
     // ── getDatePaiement() ────────────────────────────────────────────────────
 
-    /** Retourne datePaiement. */
+    /**
+     * Retourne datePaiement.
+     */
+
     public LocalDateTime getDatePaiement() { return datePaiement; }
 
     // ── getMontantRembourse() ────────────────────────────────────────────────
 
-    /** Retourne montantRembourse. */
+    /**
+     * Retourne montantRembourse.
+     */
+
     public BigDecimal getMontantRembourse() { return montantRembourse; }
 
     // ── getClient() ──────────────────────────────────────────────────────────
 
-    /** Retourne client. */
+    /**
+     * Retourne client.
+     */
+
     public Client getClient() { return client; }
 
     // ── getEvenement() ───────────────────────────────────────────────────────
 
-    /** Retourne evenement. */
+    /**
+     * Retourne evenement.
+     */
+
     public Evenement getEvenement() { return evenement; }
 
     // ── getPlaces() ──────────────────────────────────────────────────────────
 
-    /** Retourne places. */
+    /**
+     * Retourne places.
+     */
+
     public List<ReservationPlace> getPlaces() { return places; }
 
     // ── getHistorique() ──────────────────────────────────────────────────────
 
-    /** Retourne historique. */
+    /**
+     * Retourne historique.
+     */
+
     public List<HistoriqueStatut> getHistorique() { return historique; }
 
     // ── ajouterPlace() ───────────────────────────────────────────────────────
 
-    /** Ajoute une place réservée en maintenant la relation. */
+    /**
+     * Ajoute une place réservée en maintenant la relation.
+     */
+
     public void ajouterPlace(ReservationPlace place) { places.add(place); }
 
     // ── ajouterHistorique() ──────────────────────────────────────────────────
 
-    /** Ajoute une entrée à l'historique des statuts. */
+    /**
+     * Ajoute une entrée à l'historique des statuts.
+     */
+
     public void ajouterHistorique(HistoriqueStatut entree) { historique.add(entree); }
 
     // ── enregistrerPaiement() ────────────────────────────────────────────────
 
-    /** Enregistre la date de paiement de la réservation. */
+    /**
+     * Enregistre la date de paiement de la réservation.
+     */
+
     public void enregistrerPaiement(LocalDateTime datePaiement) {
         this.datePaiement = Objects.requireNonNull(datePaiement, "datePaiement");
     }
 
     // ── setMontantRembourse() ────────────────────────────────────────────────
 
-    /** Enregistre le montant remboursé. */
+    /**
+     * Enregistre le montant remboursé.
+     */
+
     public void setMontantRembourse(BigDecimal montantRembourse) {
         this.montantRembourse = Objects.requireNonNull(montantRembourse, "montantRembourse");
     }

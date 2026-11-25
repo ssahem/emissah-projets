@@ -22,17 +22,26 @@ public record PeriodeOccupationResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Première date de la période
-        @Schema(description = "Début de période", example = "2026-01-01") LocalDate debut,
-        // Dernière date de la période, null si elle est ouverte
-        @Schema(description = "Fin de période", example = "2026-12-31") LocalDate fin,
-        // LOUE ou VACANT
-        @Schema(description = "Type de période", example = "LOUE") String type,
-        // Bail à l'origine de la période, null pour une vacance
-        @Schema(description = "Identifiant du bail", example = "3") Integer idBail,
-        // Locataire principal, null pour une vacance
-        @Schema(description = "Nom du locataire", example = "Traore") String nomLocataire,
-        @Schema(description = "Prénom du locataire", example = "Kofi") String prenomLocataire,
-        // Loyer applicable pendant la période, null pour une vacance
-        @Schema(description = "Loyer applicable", example = "850.00") BigDecimal loyerMensuel) {
+        // Début
+        @Schema(description = "Début de période", example = "2026-01-01")
+        LocalDate debut,
+        // Fin
+        @Schema(description = "Fin de période", example = "2026-12-31")
+        LocalDate fin,
+        // Type
+        @Schema(description = "Type de période", example = "LOUE")
+        String type,
+        // Identifiant du bail
+        @Schema(description = "Identifiant du bail", example = "3")
+        Integer idBail,
+        // Nom du locataire
+        @Schema(description = "Nom du locataire", example = "Traore")
+        String nomLocataire,
+        // Prénom du locataire
+        @Schema(description = "Prénom du locataire", example = "Kofi")
+        String prenomLocataire,
+        // Loyer mensuel
+        @Schema(description = "Loyer applicable", example = "850.00")
+        BigDecimal loyerMensuel
+) {
 }

@@ -47,12 +47,11 @@ class SocleIntegrationTest {
             .withUsername("root")
             .withPassword("root");
 
-    /** Fournit une base PostgreSQL vierge à Spring. */
 
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Fournit une base PostgreSQL vierge à Spring.
      */
 
     @DynamicPropertySource
@@ -189,12 +188,11 @@ class SocleIntegrationTest {
                 .andExpect(jsonPath("$.status").value("UP"));
     }
 
-    /** Liste les colonnes d'une table du schéma public. */
 
     // ── colonnes() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour colonnes().
+     * Liste les colonnes d'une table du schéma public.
      */
 
     private List<String> colonnes(String table) {

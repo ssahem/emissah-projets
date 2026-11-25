@@ -22,13 +22,24 @@ public record UpdateProprietaireRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Nom
-        @Schema(description = "Nom", example = "Diallo") @NotBlank @Size(max = 100) String nom,
+        @Schema(description = "Nom", example = "Diallo")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
         // Prénom
-        @Schema(description = "Prénom", example = "Awa") @Size(max = 100) String prenom,
+        @Schema(description = "Prénom", example = "Awa")
+        @Size(max = 100)
+        String prenom,
         // Email
         @Schema(description = "Email", example = "awa.diallo@example.test")
-        @NotBlank @Email @Size(max = 255) String email,
+        @NotBlank
+        @Email
+        @Size(max = 255)
+        String email,
         // Téléphone
         @Schema(description = "Téléphone", example = "0102030405")
-        @NotBlank @Size(max = 20) String telephone) {
+        @NotBlank
+        @Size(max = 20)
+        String telephone
+) {
 }

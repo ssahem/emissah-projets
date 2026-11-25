@@ -21,7 +21,10 @@ public class ClockConfig {
 
     // ── clock() ──────────────────────────────────────────────────────────────
 
-    /** Fournit l'horloge système UTC utilisée par les services temporels. */
+    /**
+     * Fournit l'horloge système UTC utilisée par les services temporels.
+     */
+
     @Bean
     public Clock clock() {
         return Clock.systemUTC();

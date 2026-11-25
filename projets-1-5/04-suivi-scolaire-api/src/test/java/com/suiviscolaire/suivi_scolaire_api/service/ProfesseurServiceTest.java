@@ -53,7 +53,8 @@ class ProfesseurServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -162,12 +163,11 @@ class ProfesseurServiceTest {
                 .isEqualTo(10);
     }
 
-    /** Construit un professeur avec son identifiant. */
 
     // ── professeur() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour professeur().
+     * Construit un professeur avec son identifiant.
      */
 
     private Professeur professeur(Integer id) {

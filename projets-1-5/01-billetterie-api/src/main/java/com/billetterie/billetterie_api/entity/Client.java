@@ -59,27 +59,42 @@ public class Client {
 
     // ── getIdClient() ────────────────────────────────────────────────────────
 
-    /** Retourne idClient. */
+    /**
+     * Retourne idClient.
+     */
+
     public Integer getIdClient() { return idClient; }
 
     // ── getNom() ─────────────────────────────────────────────────────────────
 
-    /** Retourne nom. */
+    /**
+     * Retourne nom.
+     */
+
     public String getNom() { return nom; }
 
     // ── getPrenom() ──────────────────────────────────────────────────────────
 
-    /** Retourne prenom. */
+    /**
+     * Retourne prenom.
+     */
+
     public String getPrenom() { return prenom; }
 
     // ── getEmail() ───────────────────────────────────────────────────────────
 
-    /** Retourne email. */
+    /**
+     * Retourne email.
+     */
+
     public String getEmail() { return email; }
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
-    /** Met à jour les informations modifiables du client. */
+    /**
+     * Met à jour les informations modifiables du client.
+     */
+
     public void modifier(String nom, String prenom, String email) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.prenom = Objects.requireNonNull(prenom, "prenom");

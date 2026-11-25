@@ -65,7 +65,8 @@ class AffectationServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -79,7 +80,7 @@ class AffectationServiceTest {
     // ── vehicule() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour vehicule().
+     * Prépare une affectation de test avec des valeurs nominales.
      */
 
     private Vehicule vehicule(Integer id, LocalDate miseEnService) {
@@ -92,7 +93,7 @@ class AffectationServiceTest {
     // ── salarie() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour salarie().
+     * Prépare une affectation de test avec des valeurs nominales.
      */
 
     private Salarie salarie(Integer id) {
@@ -104,7 +105,7 @@ class AffectationServiceTest {
     // ── affectation() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour affectation().
+     * Prépare une affectation de test avec des valeurs nominales.
      */
 
     private Affectation affectation(Integer id, LocalDate debut, LocalDate fin, Integer km) {

@@ -25,7 +25,7 @@ public class InterventionMapper {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une intervention en reprenant ses champs.
      */
 
     public InterventionResponse toResponse(Intervention intervention, Adresse adresse,

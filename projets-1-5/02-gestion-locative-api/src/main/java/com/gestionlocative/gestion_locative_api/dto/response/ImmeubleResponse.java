@@ -18,18 +18,26 @@ public record ImmeubleResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idImmeuble,
+        // Identifiant de l’immeuble
+        @Schema(description = "Identifiant", example = "1")
+        Integer idImmeuble,
         // Adresse
-        @Schema(description = "Adresse", example = "12 rue des Acacias") String adresse,
+        @Schema(description = "Adresse", example = "12 rue des Acacias")
+        String adresse,
         // Code postal
-        @Schema(description = "Code postal", example = "75001") String codePostal,
+        @Schema(description = "Code postal", example = "75001")
+        String codePostal,
         // Ville
-        @Schema(description = "Ville", example = "Paris") String ville,
-        // Propriétaire
-        @Schema(description = "Identifiant du propriétaire", example = "1") Integer idProprietaire,
-        // Nombre d'étages
-        @Schema(description = "Nombre d'étages", example = "3") Integer nbEtages,
-        // Nombre d'appartements, exigé par la consultation (F2)
-        @Schema(description = "Nombre d'appartements", example = "6") long nbAppartements) {
+        @Schema(description = "Ville", example = "Paris")
+        String ville,
+        // Identifiant du proprietaire
+        @Schema(description = "Identifiant du propriétaire", example = "1")
+        Integer idProprietaire,
+        // Nombre d’étages
+        @Schema(description = "Nombre d'étages", example = "3")
+        Integer nbEtages,
+        // Nombre d’appartements
+        @Schema(description = "Nombre d'appartements", example = "6")
+        long nbAppartements
+) {
 }

@@ -65,12 +65,11 @@ public class Eleve {
     public String getPrenom() { return prenom; }
     public LocalDate getDateNaissance() { return dateNaissance; }
 
-    /** Modifie le nom et le prénom ; la date de naissance reste figée (F2). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie le nom et le prénom ; la date de naissance reste figée (F2).
      */
 
     public void modifier(String nom, String prenom) {

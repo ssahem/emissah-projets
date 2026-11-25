@@ -39,12 +39,11 @@ public class VueRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    /** Ligne de la vue v_echeance_entretien. */
 
     // ── EcheanceRow() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute EcheanceRow().
+     * Ligne de la vue v_echeance_entretien.
      */
 
     public record EcheanceRow(Integer idVehicule, Integer idTypeEntretien, String libelle,
@@ -52,24 +51,22 @@ public class VueRepository {
                               LocalDate dateProchaine, Integer kmActuel, boolean enRetard) {
     }
 
-    /** Ligne de la vue v_bilan_vehicule. */
 
     // ── BilanRow() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute BilanRow().
+     * Ligne de la vue v_bilan_vehicule.
      */
 
     public record BilanRow(Integer idVehicule, String immatriculation, BigDecimal coutTotal,
                            Integer ageAnnees, Integer kmCompteurActuel, BigDecimal coutAuKm) {
     }
 
-    /** Ligne de la vue v_cout_total_vehicule. */
 
     // ── CoutRow() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute CoutRow().
+     * Ligne de la vue v_cout_total_vehicule.
      */
 
     public record CoutRow(Integer idVehicule, String immatriculation, BigDecimal coutAchat,
@@ -77,23 +74,21 @@ public class VueRepository {
                           BigDecimal coutDepenses, BigDecimal coutTotal) {
     }
 
-    /** Dernier kilométrage connu d'un véhicule et date de sa relevée (F14). */
 
     // ── DernierKm() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute DernierKm().
+     * Dernier kilométrage connu d'un véhicule et date de sa relevée (F14).
      */
 
     public record DernierKm(Integer km, LocalDate date) {
     }
 
-    /** Relevé de restitution agrégé par véhicule sur un mois (F19). */
 
     // ── KilometrageRow() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute KilometrageRow().
+     * Relevé de restitution agrégé par véhicule sur un mois (F19).
      */
 
     public record KilometrageRow(Integer idVehicule, String immatriculation, Integer km) {
@@ -115,11 +110,13 @@ public class VueRepository {
     // ── echeancesVehicule() ──────────────────────────────────────────────────
 
     /**
-     * Retourne les échéances périodiques d'un véhicule, triées par date croissante.
+     * Retourne les échéances périodiques d'un véhicule, triées par date
+     * croissante.
      *
      * @param idVehicule identifiant du véhicule
      * @return une liste vide si aucune catégorie n'est PERIODIQUE
      */
+
     public List<EcheanceRow> echeancesVehicule(Integer idVehicule) {
         return jdbcTemplate.query(
                 "SELECT * FROM v_echeance_entretien WHERE id_vehicule = ? "
@@ -129,7 +126,10 @@ public class VueRepository {
 
     // ── toutesEcheances() ────────────────────────────────────────────────────
 
-    /** Retourne toutes les échéances périodiques, utilisées par la tâche F16. */
+    /**
+     * Retourne toutes les échéances périodiques, utilisées par la tâche F16.
+     */
+
     public List<EcheanceRow> toutesEcheances() {
         return jdbcTemplate.query(
                 "SELECT * FROM v_echeance_entretien ORDER BY id_vehicule, id_type_entretien",
@@ -143,6 +143,7 @@ public class VueRepository {
      *
      * @return le bilan, ou {@link Optional#empty()} si le véhicule est inconnu
      */
+
     public Optional<BilanRow> bilanVehicule(Integer idVehicule) {
         return jdbcTemplate.query(
                 "SELECT * FROM v_bilan_vehicule WHERE id_vehicule = ?",
@@ -156,6 +157,7 @@ public class VueRepository {
      *
      * @return zéro si le véhicule n'a aucun entretien
      */
+
     public BigDecimal coutEntretiens(Integer idVehicule) {
         BigDecimal cout = jdbcTemplate.queryForObject(
                 "SELECT cout_entretiens FROM v_cout_total_vehicule WHERE id_vehicule = ?",
@@ -165,7 +167,10 @@ public class VueRepository {
 
     // ── coutsVehicule() ──────────────────────────────────────────────────────
 
-    /** Retourne la ventilation complète des coûts d'un véhicule. */
+    /**
+     * Retourne la ventilation complète des coûts d'un véhicule.
+     */
+
     public Optional<CoutRow> coutsVehicule(Integer idVehicule) {
         return jdbcTemplate.query(
                 "SELECT * FROM v_cout_total_vehicule WHERE id_vehicule = ?",
@@ -174,7 +179,11 @@ public class VueRepository {
 
     // ── compteConflits() ─────────────────────────────────────────────────────
 
-    /** Compte les immobilisations recouvrant une affectation dans la vue dédiée (F12). */
+    /**
+     * Compte les immobilisations recouvrant une affectation dans la vue dédiée
+     * (F12).
+     */
+
     public int compteConflits(Integer idAffectation) {
         Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM v_conflit_affectation_entretien WHERE id_affectation = ?",
@@ -185,14 +194,14 @@ public class VueRepository {
     // ── dernierKm() ──────────────────────────────────────────────────────────
 
     /**
-     * Retourne le plus grand kilométrage connu d'un véhicule et la date de la relevée (F14).
-     *
- * Les trois sources sont les restitutions, les entretiens et les trajets. Le compteur
- *   courant
-     * est toujours la valeur maximale, conformément à la décision D-01.
+     * Retourne le plus grand kilométrage connu d'un véhicule et la date de la
+     * relevée (F14). Les trois sources sont les restitutions, les entretiens et
+     * les trajets. Le compteur courant est toujours la valeur maximale,
+     * conformément à la décision D-01.
      *
      * @return un optional vide si aucune relevée n'existe
      */
+
     public Optional<DernierKm> dernierKm(Integer idVehicule) {
         String sql = "SELECT km, date FROM ("
                 + " SELECT a.km_restitution AS km, a.date_fin AS date FROM affectation a"
@@ -215,13 +224,12 @@ public class VueRepository {
     // ── kilometragesParSite() ────────────────────────────────────────────────
 
     /**
- * Retourne les relevés de restitution d'un site sur un intervalle, agrégés par véhicule
- *   (F19).
-     *
-     * Limite A-01 : le site est le site courant de vehicule.id_site, pas le site d'origine
- * au moment de l'affectation ; un transfert en cours de mois est donc compté sur le site
- *   courant.
+     * Retourne les relevés de restitution d'un site sur un intervalle, agrégés
+     * par véhicule (F19). Limite A-01 : le site est le site courant de
+     * vehicule.id_site, pas le site d'origine au moment de l'affectation ; un
+     * transfert en cours de mois est donc compté sur le site courant.
      */
+
     public List<KilometrageRow> kilometragesParSite(Integer idSite, LocalDate debut, LocalDate fin) {
         return jdbcTemplate.query(
                 "SELECT a.id_vehicule, v.immatriculation, SUM(a.km_restitution) AS km"
@@ -257,7 +265,7 @@ public class VueRepository {
     // ── mapEcheance() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute mapEcheance().
+     * Réalise l’opération mapEcheance sur un vue.
      */
 
     private static EcheanceRow mapEcheance(ResultSet rs, int rowNum) throws SQLException {
@@ -276,7 +284,7 @@ public class VueRepository {
     // ── mapBilan() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute mapBilan().
+     * Réalise l’opération mapBilan sur un vue.
      */
 
     private static BilanRow mapBilan(ResultSet rs) throws SQLException {
@@ -292,7 +300,7 @@ public class VueRepository {
     // ── mapCout() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute mapCout().
+     * Réalise l’opération mapCout sur un vue.
      */
 
     private static CoutRow mapCout(ResultSet rs) throws SQLException {
@@ -309,7 +317,7 @@ public class VueRepository {
     // ── toLocalDate() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute toLocalDate().
+     * Convertit un vue en local date.
      */
 
     private static LocalDate toLocalDate(ResultSet rs, String colonne) throws SQLException {

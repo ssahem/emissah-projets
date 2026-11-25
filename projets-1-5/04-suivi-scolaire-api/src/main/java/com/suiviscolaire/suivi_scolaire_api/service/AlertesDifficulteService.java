@@ -93,10 +93,11 @@ public class AlertesDifficulteService {
     // ── detecter() ───────────────────────────────────────────────────────────
 
     /**
-     * F16 — Tâche planifiée hebdomadaire. Détermine le trimestre en cours à partir de l'horloge
- * applicative, puis crée une alerte pour chaque élève concerné qui n'a pas encore été
- *   signalé.
+     * F16 — Tâche planifiée hebdomadaire. Détermine le trimestre en cours à
+     * partir de l'horloge applicative, puis crée une alerte pour chaque élève
+     * concerné qui n'a pas encore été signalé.
      */
+
     @Scheduled(cron = "${suivi-scolaire.alertes-difficulte.cron}")
     @Transactional
     public RapportAlertesResponse detecter() {
@@ -141,12 +142,12 @@ public class AlertesDifficulteService {
         return new RapportAlertesResponse(aujourdHui, numero, creees.size(), dejaPresentes, creees);
     }
 
-    /** Consultation des alertes déjà produites pour un trimestre (endpoint facultatif F16). */
 
     // ── consulter() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute consulter().
+     * Consultation des alertes déjà produites pour un trimestre (endpoint
+     * facultatif F16).
      */
 
     public List<AlerteDifficulteResponse> consulter(Integer numero) {
@@ -165,12 +166,11 @@ public class AlertesDifficulteService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Construit le motif lisible d'une alerte. */
 
     // ── motif() ──────────────────────────────────────────────────────────────
 
     /**
-     * Exécute motif().
+     * Construit le motif lisible d'une alerte.
      */
 
     private String motif(boolean moyenneFaible, boolean chuteForte,
@@ -184,12 +184,11 @@ public class AlertesDifficulteService {
         return "Chute de " + ecart + " points depuis le trimestre précédent";
     }
 
-    /** Enrichit une alerte avec son motif, son élève et sa classe. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Enrichit une alerte avec son motif, son élève et sa classe.
      */
 
     private AlerteDifficulteResponse toResponse(AlerteDifficulte alerte, String motif) {
@@ -199,12 +198,11 @@ public class AlertesDifficulteService {
                 base.moyenne(), base.ecart(), motif, base.dateAlerte());
     }
 
-    /** Enrichit une alerte avec les données de référence, sans motif calculé. */
 
     // ── toResponseSansMotif() ────────────────────────────────────────────────
 
     /**
-     * Exécute toResponseSansMotif().
+     * Enrichit une alerte avec les données de référence, sans motif calculé.
      */
 
     private AlerteDifficulteResponse toResponseSansMotif(AlerteDifficulte alerte) {

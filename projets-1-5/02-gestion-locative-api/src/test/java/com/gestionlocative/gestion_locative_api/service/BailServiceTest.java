@@ -85,7 +85,8 @@ class BailServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -99,7 +100,7 @@ class BailServiceTest {
     // ── locataire() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour locataire().
+     * Prépare un bail de test avec des valeurs nominales.
      */
 
     private Locataire locataire() {
@@ -111,7 +112,7 @@ class BailServiceTest {
     // ── bailCommence() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour bailCommence().
+     * Prépare le contexte nécessaire à l’opération bailCommence().
      */
 
     private Bail bailCommence() {
@@ -124,7 +125,7 @@ class BailServiceTest {
     // ── creation() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creation().
+     * Prépare un bail de test avec des valeurs nominales.
      */
 
     private CreateBailRequest creation(LocalDate debut, LocalDate fin) {

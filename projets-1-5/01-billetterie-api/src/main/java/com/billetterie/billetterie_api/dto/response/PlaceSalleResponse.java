@@ -18,12 +18,17 @@ public record PlaceSalleResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idPlace,
+        // Identifiant de la place
+        @Schema(description = "Identifiant", example = "1")
+        Integer idPlace,
         // Rang
-        @Schema(description = "Rang", example = "A") String rang,
+        @Schema(description = "Rang", example = "A")
+        String rang,
         // Numéro
-        @Schema(description = "Numéro", example = "12") Integer numero,
+        @Schema(description = "Numéro", example = "12")
+        Integer numero,
         // Catégorie
-        @Schema(description = "Catégorie", example = "ORCHESTRE") String categorie) {
+        @Schema(description = "Catégorie", example = "ORCHESTRE")
+        String categorie
+) {
 }

@@ -125,12 +125,12 @@ public class Vehicule {
     //  COMPORTEMENT
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Modifie le site lors d'un transfert ; immatriculation et date sont figées (F2). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie le site lors d'un transfert ; immatriculation et date sont figées
+     * (F2).
      */
 
     public void modifier(Integer idSite, String marque, String modele) {

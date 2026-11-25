@@ -74,37 +74,58 @@ public class ReservationPlace {
 
     // ── getIdReservationPlace() ──────────────────────────────────────────────
 
-    /** Retourne idReservationPlace. */
+    /**
+     * Retourne idReservationPlace.
+     */
+
     public Integer getIdReservationPlace() { return idReservationPlace; }
 
     // ── getReservation() ─────────────────────────────────────────────────────
 
-    /** Retourne reservation. */
+    /**
+     * Retourne reservation.
+     */
+
     public Reservation getReservation() { return reservation; }
 
     // ── getRang() ────────────────────────────────────────────────────────────
 
-    /** Retourne rang. */
+    /**
+     * Retourne rang.
+     */
+
     public String getRang() { return rang; }
 
     // ── getNumero() ──────────────────────────────────────────────────────────
 
-    /** Retourne numero. */
+    /**
+     * Retourne numero.
+     */
+
     public Integer getNumero() { return numero; }
 
     // ── getIdEvenement() ─────────────────────────────────────────────────────
 
-    /** Retourne idEvenement. */
+    /**
+     * Retourne idEvenement.
+     */
+
     public Integer getIdEvenement() { return idEvenement; }
 
     // ── getPrixApplique() ────────────────────────────────────────────────────
 
-    /** Retourne prixApplique. */
+    /**
+     * Retourne prixApplique.
+     */
+
     public BigDecimal getPrixApplique() { return prixApplique; }
 
     // ── setPrixApplique() ────────────────────────────────────────────────────
 
-    /** Enregistre le prix appliqué à la place. */
+    /**
+     * Enregistre le prix appliqué à la place.
+     */
+
     public void setPrixApplique(BigDecimal prixApplique) {
         this.prixApplique = Objects.requireNonNull(prixApplique, "prixApplique");
     }

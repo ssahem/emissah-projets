@@ -45,7 +45,6 @@ public class EntretienController {
         this.service = service;
     }
 
-    /** F5 : crée un entretien ; une alerte F12 est créée si une affectation existe. */
 
     // ── create() — POST /flotte-vehicules/entretien/create ───────────────────
 
@@ -63,7 +62,6 @@ public class EntretienController {
                 .body(entretien);
     }
 
-    /** F10 : page d'entretiens. */
 
     // ── list() — GET /flotte-vehicules/entretien/list ────────────────────────
 
@@ -82,7 +80,6 @@ public class EntretienController {
         return service.findAll(page, size, sort);
     }
 
-    /** F5 : détail d'un entretien. */
 
     // ── get() — GET /flotte-vehicules/entretien/{id} ─────────────────────────
 
@@ -98,7 +95,6 @@ public class EntretienController {
         return service.findById(id);
     }
 
-    /** F5 : modifie coût et prestataire. */
 
     // ── update() — PUT /flotte-vehicules/entretien/{id}/update ───────────────
 
@@ -115,7 +111,6 @@ public class EntretienController {
         return service.update(id, request);
     }
 
-    /** F5 : suppression avant le début de l'immobilisation. */
 
     // ── delete() — DELETE /flotte-vehicules/entretien/{id}/delete ────────────
 

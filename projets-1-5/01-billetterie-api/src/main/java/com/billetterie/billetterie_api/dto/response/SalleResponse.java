@@ -18,14 +18,20 @@ public record SalleResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idSalle,
+        // Identifiant de la salle
+        @Schema(description = "Identifiant", example = "1")
+        Integer idSalle,
         // Nom
-        @Schema(description = "Nom", example = "Grand Hall") String nom,
+        @Schema(description = "Nom", example = "Grand Hall")
+        String nom,
         // Adresse
-        @Schema(description = "Adresse", example = "12 rue des Arts") String adresse,
+        @Schema(description = "Adresse", example = "12 rue des Arts")
+        String adresse,
         // Ville
-        @Schema(description = "Ville", example = "Abidjan") String ville,
+        @Schema(description = "Ville", example = "Abidjan")
+        String ville,
         // Capacité
-        @Schema(description = "Capacité", example = "120") Integer capacite) {
+        @Schema(description = "Capacité", example = "120")
+        Integer capacite
+) {
 }

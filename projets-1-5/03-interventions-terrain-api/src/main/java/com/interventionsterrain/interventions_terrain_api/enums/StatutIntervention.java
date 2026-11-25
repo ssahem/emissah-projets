@@ -35,12 +35,12 @@ public enum StatutIntervention {
         return legacy;
     }
 
-    /** Convertit un libellé de la base en enum, ou renvoie null si le libellé est inconnu. */
 
     // ── fromLibelle() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute fromLibelle().
+     * Convertit un libellé de la base en enum, ou renvoie null si le libellé
+     * est inconnu.
      */
 
     public static StatutIntervention fromLibelle(String libelle) {

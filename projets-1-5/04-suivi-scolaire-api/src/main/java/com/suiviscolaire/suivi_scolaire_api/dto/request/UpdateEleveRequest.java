@@ -15,13 +15,23 @@ import jakarta.validation.constraints.NotNull;
  */
 @Schema(description = "Modification d'un élève (date de naissance figée)")
 public record UpdateEleveRequest(
-        @Schema(description = "Nom", example = "Kouassi") @NotBlank String nom,
-        @Schema(description = "Prénom", example = "Aya") @NotBlank String prenom,
-        @Schema(description = "Identifiant de la classe de destination", example = "1")
-        @NotNull Integer idClasse) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Nom
+        @Schema(description = "Nom", example = "Kouassi")
+        @NotBlank
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Aya")
+        @NotBlank
+        String prenom,
+        // Identifiant de la classe
+        @Schema(description = "Identifiant de la classe de destination", example = "1")
+        @NotNull
+        Integer idClasse
+) {
 
 }

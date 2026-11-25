@@ -65,7 +65,8 @@ class NoteServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -200,12 +201,11 @@ class NoteServiceTest {
                         .RessourceIntrouvableException.class);
     }
 
-    /** Construit une note rattachée au trimestre 2. */
 
     // ── note() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour note().
+     * Construit une note rattachée au trimestre 2.
      */
 
     private Note note() {
@@ -214,12 +214,11 @@ class NoteServiceTest {
         return n;
     }
 
-    /** Construit un élève. */
 
     // ── eleve() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour eleve().
+     * Construit un élève.
      */
 
     private Eleve eleve() {
@@ -228,12 +227,11 @@ class NoteServiceTest {
         return e;
     }
 
-    /** Construit une inscription courante. */
 
     // ── inscription() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour inscription().
+     * Construit une inscription courante.
      */
 
     private Inscription inscription() {
@@ -242,12 +240,11 @@ class NoteServiceTest {
         return i;
     }
 
-    /** Construit un enseignement avec son identifiant. */
 
     // ── enseignement() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour enseignement().
+     * Construit un enseignement avec son identifiant.
      */
 
     private Enseignement enseignement() {
@@ -256,12 +253,11 @@ class NoteServiceTest {
         return e;
     }
 
-    /** Construit un trimestre ouvert. */
 
     // ── trimestreOuvert() ────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour trimestreOuvert().
+     * Construit un trimestre ouvert.
      */
 
     private Trimestre trimestreOuvert() {
@@ -271,12 +267,11 @@ class NoteServiceTest {
         return t;
     }
 
-    /** Construit un trimestre clôturé. */
 
     // ── trimestreCloture() ───────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour trimestreCloture().
+     * Construit un trimestre clôturé.
      */
 
     private Trimestre trimestreCloture() {

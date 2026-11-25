@@ -105,12 +105,12 @@ public class Entretien {
     //  COMPORTEMENT
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Modifie le coût et le prestataire ; la date et le kilométrage sont figés (F5). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie le coût et le prestataire ; la date et le kilométrage sont figés
+     * (F5).
      */
 
     public void modifier(BigDecimal cout, Integer idPrestataire) {
@@ -118,12 +118,12 @@ public class Entretien {
         this.idPrestataire = Objects.requireNonNull(idPrestataire, "idPrestataire");
     }
 
-    /** Retourne la fin effective de l'immobilisation (date_debut si date_fin absente). */
 
     // ── finEffective() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute finEffective().
+     * Retourne la fin effective de l'immobilisation (date_debut si date_fin
+     * absente).
      */
 
     public LocalDate finEffective() {

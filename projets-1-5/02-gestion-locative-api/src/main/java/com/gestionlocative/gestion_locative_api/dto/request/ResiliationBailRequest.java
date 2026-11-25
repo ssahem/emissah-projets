@@ -18,10 +18,13 @@ import java.time.LocalDate;
 @Schema(description = "Résiliation anticipée d'un bail")
 public record ResiliationBailRequest(
 
-        // ═════════════════════════════════════════════════════════════════════
-        //  CHAMPS
-        // ═════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
+        // Date effet
         @Schema(description = "Date de prise d'effet de la résiliation", example = "2026-09-30")
-        @NotNull LocalDate dateEffet) {
+        @NotNull
+        LocalDate dateEffet
+) {
 }

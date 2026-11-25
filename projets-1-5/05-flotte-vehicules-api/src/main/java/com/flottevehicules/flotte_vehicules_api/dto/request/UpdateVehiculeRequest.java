@@ -16,20 +16,22 @@ import jakarta.validation.constraints.NotNull;
 @Schema(description = "Modification du site, de la marque et du modèle ; immatriculation et date figées")
 public record UpdateVehiculeRequest(
 
-        @Schema(description = "Nouveau site courant", example = "2")
-        @NotNull(message = "Le site est obligatoire")
-        Integer idSite,
-
-        @Schema(description = "Marque", example = "Peugeot")
-        @NotBlank(message = "La marque est obligatoire")
-        String marque,
-
-        @Schema(description = "Modèle", example = "308")
-        @NotBlank(message = "Le modèle est obligatoire")
-        String modele) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du site
+        @Schema(description = "Nouveau site courant", example = "2")
+        @NotNull(message = "Le site est obligatoire")
+        Integer idSite,
+        // Marque
+        @Schema(description = "Marque", example = "Peugeot")
+        @NotBlank(message = "La marque est obligatoire")
+        String marque,
+        // Modèle
+        @Schema(description = "Modèle", example = "308")
+        @NotBlank(message = "Le modèle est obligatoire")
+        String modele
+) {
 
 }

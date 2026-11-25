@@ -69,12 +69,12 @@ public class Classe {
     public Integer getIdNiveau() { return idNiveau; }
     public Integer getEffectifMax() { return effectifMax; }
 
-    /** Modifie la capacité d'accueil (contrôle de non-réduction fait par le service). */
 
     // ── modifierEffectifMax() ────────────────────────────────────────────────
 
     /**
-     * Exécute modifierEffectifMax().
+     * Modifie la capacité d'accueil (contrôle de non-réduction fait par le
+     * service).
      */
 
     public void modifierEffectifMax(Integer effectifMax) {

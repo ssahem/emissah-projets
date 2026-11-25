@@ -48,7 +48,8 @@ class CompetenceServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -114,12 +115,11 @@ class CompetenceServiceTest {
         verify(competenceRepository, never()).delete(any());
     }
 
-    /** Construit une compétence avec son identifiant. */
 
     // ── competence() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour competence().
+     * Construit une compétence avec son identifiant.
      */
 
     private Competence competence(Integer id, String libelle) {

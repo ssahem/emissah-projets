@@ -84,7 +84,7 @@ public class AlerteCompetenceService {
     // ── genererAlertesPlanifiees() ───────────────────────────────────────────
 
     /**
-     * Exécute genererAlertesPlanifiees().
+     * Génère un alertecompetence à partir des données de référence.
      */
 
     public void genererAlertesPlanifiees() {
@@ -98,12 +98,12 @@ public class AlerteCompetenceService {
                 alerte.nomAgence(), alerte.lignes()));
     }
 
-    /** Construit les alertes et marque les compétences traitées pour ne jamais les signaler deux fois. */
 
     // ── genererAlertes() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute genererAlertes().
+     * Construit les alertes et marque les compétences traitées pour ne jamais
+     * les signaler deux fois.
      */
 
     @Transactional

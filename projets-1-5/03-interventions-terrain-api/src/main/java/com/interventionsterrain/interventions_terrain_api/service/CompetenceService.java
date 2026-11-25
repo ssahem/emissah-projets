@@ -64,7 +64,7 @@ public class CompetenceService {
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Retourne compétences par libellé.
      */
 
     public List<CompetenceResponse> findAll() {
@@ -74,7 +74,7 @@ public class CompetenceService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Retourne une compétence par identifiant.
      */
 
     public CompetenceResponse findById(Integer id) {
@@ -84,7 +84,7 @@ public class CompetenceService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée une compétence.
      */
 
     @Transactional
@@ -97,7 +97,7 @@ public class CompetenceService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie une compétence identifié, après contrôle des règles métier.
      */
 
     @Transactional
@@ -111,7 +111,7 @@ public class CompetenceService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime une compétence après contrôle de ses dépendances.
      */
 
     @Transactional
@@ -131,7 +131,7 @@ public class CompetenceService {
     // ── checkLibelle() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute checkLibelle().
+     * Vérifie libellé avant d’autoriser l’opération.
      */
 
     private void checkLibelle(String libelle, Integer idCourant) {
@@ -147,7 +147,7 @@ public class CompetenceService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère une compétence par identifiant ou lève une exception si absent.
      */
 
     private Competence required(Integer id) {

@@ -22,12 +22,11 @@ public class DonneeInvalideException extends ApiException {
         super(HttpStatus.BAD_REQUEST, "Donnée invalide", type, detail);
     }
 
-    /** Ajoute une donnée complémentaire au corps de l'erreur. */
 
     // ── avec() ───────────────────────────────────────────────────────────────
 
     /**
-     * Exécute avec().
+     * Ajoute une donnée complémentaire au corps de l'erreur.
      */
 
     public DonneeInvalideException avec(String cle, Object valeur) {

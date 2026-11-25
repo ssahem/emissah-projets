@@ -24,17 +24,28 @@ public record CreateImmeubleRequest(
 
         // Adresse
         @Schema(description = "Adresse", example = "12 rue des Acacias")
-        @NotBlank @Size(max = 255) String adresse,
+        @NotBlank
+        @Size(max = 255)
+        String adresse,
         // Code postal
         @Schema(description = "Code postal", example = "75001")
-        @NotBlank @Size(max = 10) String codePostal,
+        @NotBlank
+        @Size(max = 10)
+        String codePostal,
         // Ville
         @Schema(description = "Ville", example = "Paris")
-        @NotBlank @Size(max = 100) String ville,
-        // Propriétaire
+        @NotBlank
+        @Size(max = 100)
+        String ville,
+        // Identifiant du proprietaire
         @Schema(description = "Identifiant du propriétaire", example = "1")
-        @NotNull @Positive Integer idProprietaire,
-        // Nombre d'étages
+        @NotNull
+        @Positive
+        Integer idProprietaire,
+        // Nombre d’étages
         @Schema(description = "Nombre d'étages", example = "3")
-        @NotNull @Positive Integer nbEtages) {
+        @NotNull
+        @Positive
+        Integer nbEtages
+) {
 }

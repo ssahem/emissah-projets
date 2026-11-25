@@ -19,14 +19,20 @@ public record RevenuAppartementResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant de l'appartement
-        @Schema(description = "Identifiant", example = "1") Integer idAppartement,
+        // Identifiant de l’appartement
+        @Schema(description = "Identifiant", example = "1")
+        Integer idAppartement,
         // Numéro
-        @Schema(description = "Numéro", example = "1A") String numero,
-        // Loyer rapporté au mois, prorata inclus
-        @Schema(description = "Revenu de l'appartement", example = "425.00") BigDecimal revenu,
-        // Nombre de jours couverts par un bail dans le mois
-        @Schema(description = "Jours occupés", example = "15") long joursOccupes,
-        // Part du mois occupée, en pourcentage
-        @Schema(description = "Taux d'occupation en %", example = "50.00") BigDecimal tauxOccupation) {
+        @Schema(description = "Numéro", example = "1A")
+        String numero,
+        // Revenu
+        @Schema(description = "Revenu de l'appartement", example = "425.00")
+        BigDecimal revenu,
+        // Jours occupes
+        @Schema(description = "Jours occupés", example = "15")
+        long joursOccupes,
+        // Taux d’occupation
+        @Schema(description = "Taux d'occupation en %", example = "50.00")
+        BigDecimal tauxOccupation
+) {
 }

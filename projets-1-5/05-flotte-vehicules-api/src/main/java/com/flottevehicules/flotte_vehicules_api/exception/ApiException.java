@@ -46,12 +46,11 @@ public abstract class ApiException extends RuntimeException {
     /** Retourne les données complémentaires exposées au client. */
     public Map<String, Object> getProperties() { return Map.copyOf(properties); }
 
-    /** Ajoute une donnée complémentaire au problème. */
 
     // ── addProperty() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute addProperty().
+     * Ajoute une donnée complémentaire au problème.
      */
 
     protected void addProperty(String key, Object value) { properties.put(key, value); }

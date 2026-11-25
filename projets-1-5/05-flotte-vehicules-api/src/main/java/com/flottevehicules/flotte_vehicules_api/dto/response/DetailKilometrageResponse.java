@@ -12,17 +12,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Kilométrage relevé pour un véhicule")
 public record DetailKilometrageResponse(
 
-        @Schema(description = "Véhicule", example = "1")
-        Integer idVehicule,
-
-        @Schema(description = "Immatriculation", example = "AB-123-CD")
-        String immatriculation,
-
-        @Schema(description = "Kilomètres comptés sur le mois", example = "18500")
-        Integer km) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du véhicule
+        @Schema(description = "Véhicule", example = "1")
+        Integer idVehicule,
+        // Immatriculation
+        @Schema(description = "Immatriculation", example = "AB-123-CD")
+        String immatriculation,
+        // Kilométrage
+        @Schema(description = "Kilomètres comptés sur le mois", example = "18500")
+        Integer km
+) {
 
 }

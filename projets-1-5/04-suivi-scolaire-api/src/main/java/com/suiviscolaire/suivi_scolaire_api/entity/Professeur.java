@@ -68,12 +68,11 @@ public class Professeur {
     public String getEmail() { return email; }
     public String getTelephone() { return telephone; }
 
-    /** Modifie les coordonnées d'un professeur (F4). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie les coordonnées d'un professeur (F4).
      */
 
     public void modifier(String email, String telephone) {

@@ -36,6 +36,9 @@ public interface RevisionLoyerRepository extends JpaRepository<RevisionLoyer, In
 
     // ── deleteByIdBail() ─────────────────────────────────────────────────────
 
-    /** Supprime les révisions d'un bail avant sa suppression (F5). */
+    /**
+     * Supprime les révisions d'un bail avant sa suppression (F5).
+     */
+
     void deleteByIdBail(Integer idBail);
 }

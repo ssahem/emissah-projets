@@ -37,12 +37,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final String BASE = "https://api.flotte-vehicules.local/problems/";
 
-    /** Traduit une erreur métier typée en Problem Detail. */
 
     // ── handleApiException() ─────────────────────────────────────────────────
 
     /**
-     * Exécute handleApiException().
+     * Traduit une erreur métier typée en Problem Detail.
      */
 
     @ExceptionHandler(ApiException.class)
@@ -55,12 +54,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem;
     }
 
-    /** Traduit une contrainte violée sur un paramètre de requête en 400 lisible. */
 
     // ── handleConstraintViolation() ──────────────────────────────────────────
 
     /**
-     * Exécute handleConstraintViolation().
+     * Traduit une contrainte violée sur un paramètre de requête en 400 lisible.
      */
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -77,12 +75,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem;
     }
 
-    /** Traduit un corps invalide en 400 en indiquant les champs en erreur. */
 
     // ── handleMethodArgumentNotValid() ───────────────────────────────────────
 
     /**
-     * Exécute handleMethodArgumentNotValid().
+     * Traduit un corps invalide en 400 en indiquant les champs en erreur.
      */
 
     @Override
@@ -103,12 +100,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, problem, headers, status, request);
     }
 
-    /** Traduit une violation de contrainte sans jamais exposer le message SQL. */
 
     // ── handleIntegrityViolation() ───────────────────────────────────────────
 
     /**
-     * Exécute handleIntegrityViolation().
+     * Traduit une violation de contrainte sans jamais exposer le message SQL.
      */
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -126,12 +122,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem;
     }
 
-    /** Cache les détails techniques au client et les conserve dans les logs serveur. */
 
     // ── handleUnexpected() ───────────────────────────────────────────────────
 
     /**
-     * Exécute handleUnexpected().
+     * Cache les détails techniques au client et les conserve dans les logs
+     * serveur.
      */
 
     @ExceptionHandler(Exception.class)

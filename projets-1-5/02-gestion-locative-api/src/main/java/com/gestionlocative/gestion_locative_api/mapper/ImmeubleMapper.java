@@ -26,7 +26,10 @@ public class ImmeubleMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit un immeuble en réponse HTTP avec son nombre d'appartements. */
+    /**
+     * Convertit un immeuble en réponse HTTP avec son nombre d'appartements.
+     */
+
     public ImmeubleResponse toResponse(Immeuble immeuble, long nbAppartements) {
         return new ImmeubleResponse(
                 immeuble.getIdImmeuble(), immeuble.getAdresse(), immeuble.getCodePostal(),
@@ -36,7 +39,10 @@ public class ImmeubleMapper {
 
     // ── toProprietaireResponse() ─────────────────────────────────────────────
 
-    /** Convertit un immeuble avec les compteurs demandés par F7. */
+    /**
+     * Convertit un immeuble avec les compteurs demandés par F7.
+     */
+
     public ImmeubleProprietaireResponse toProprietaireResponse(
             Immeuble immeuble, long nbAppartements, long nbBauxEnCours) {
         return new ImmeubleProprietaireResponse(
@@ -46,7 +52,10 @@ public class ImmeubleMapper {
 
     // ── toLibresResponse() ───────────────────────────────────────────────────
 
-    /** Regroupe les appartements libres sous leur immeuble (F17). */
+    /**
+     * Regroupe les appartements libres sous leur immeuble (F17).
+     */
+
     public ImmeubleAppartementsLibresResponse toLibresResponse(
             Immeuble immeuble, List<AppartementLibreResponse> appartements) {
         return new ImmeubleAppartementsLibresResponse(

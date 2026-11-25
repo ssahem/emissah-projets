@@ -139,7 +139,7 @@ public class InterventionService {
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Retourne interventions.
      */
 
     public List<InterventionResponse> findAll(String statut, LocalDate du, LocalDate au) {
@@ -164,7 +164,7 @@ public class InterventionService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Retourne une intervention par identifiant.
      */
 
     public InterventionResponse findById(Integer id) {
@@ -174,7 +174,7 @@ public class InterventionService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée une intervention en refusant un doublon sur la clé métier.
      */
 
     @Transactional
@@ -204,7 +204,7 @@ public class InterventionService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie une intervention identifié, après contrôle des règles métier.
      */
 
     @Transactional
@@ -240,7 +240,7 @@ public class InterventionService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime une intervention après contrôle de ses dépendances.
      */
 
     @Transactional
@@ -258,7 +258,7 @@ public class InterventionService {
     // ── addAffectation() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute addAffectation().
+     * Ajoute affectation.
      */
 
     @Transactional
@@ -290,7 +290,7 @@ public class InterventionService {
     // ── removeAffectation() ──────────────────────────────────────────────────
 
     /**
-     * Exécute removeAffectation().
+     * Retire affectation.
      */
 
     @Transactional
@@ -309,7 +309,7 @@ public class InterventionService {
     // ── findAffectations() ───────────────────────────────────────────────────
 
     /**
-     * Exécute findAffectations().
+     * Recherche affectations.
      */
 
     public List<AffectationResponse> findAffectations(Integer id) {
@@ -318,12 +318,12 @@ public class InterventionService {
                 .map(affectationMapper::toResponse).toList();
     }
 
-    /** F14 : transition du statut courant, horodatée sur l'affectation responsable. */
 
     // ── changerStatut() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute changerStatut().
+     * F14 : transition du statut courant, horodatée sur l'affectation
+     * responsable.
      */
 
     @Transactional
@@ -347,12 +347,11 @@ public class InterventionService {
         return toResponse(intervention);
     }
 
-    /** F15 : reprogramme une intervention ECHOUEE non encore reprise. */
 
     // ── creerReprise() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute creerReprise().
+     * F15 : reprogramme une intervention ECHOUEE non encore reprise.
      */
 
     @Transactional
@@ -390,7 +389,7 @@ public class InterventionService {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une intervention en DTO de réponse.
      */
 
     private InterventionResponse toResponse(Intervention intervention) {
@@ -404,7 +403,7 @@ public class InterventionService {
     // ── addHistorique() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute addHistorique().
+     * Ajoute historique.
      */
 
     private void addHistorique(Affectation affectation, StatutIntervention statut) {
@@ -417,7 +416,7 @@ public class InterventionService {
     // ── statutCourant() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute statutCourant().
+     * Détermine le statut courant à partir de l’affectation responsable.
      */
 
     private StatutIntervention statutCourant(Affectation affectation) {
@@ -431,12 +430,11 @@ public class InterventionService {
                 .orElse(StatutIntervention.PLANIFIEE);
     }
 
-    /** Vérifie l'antériorité du créneau et son caractère futur (F5). */
 
     // ── verifierCreneau() ────────────────────────────────────────────────────
 
     /**
-     * Exécute verifierCreneau().
+     * Vérifie l'antériorité du créneau et son caractère futur (F5).
      */
 
     private void verifierCreneau(LocalDateTime debut, LocalDateTime fin) {
@@ -450,12 +448,12 @@ public class InterventionService {
         }
     }
 
-    /** Une intervention n'est modifiable ou supprimable que tant qu'elle est PLANIFIEE (F5). */
 
     // ── verifierModifiable() ─────────────────────────────────────────────────
 
     /**
-     * Exécute verifierModifiable().
+     * Une intervention n'est modifiable ou supprimable que tant qu'elle est
+     * PLANIFIEE (F5).
      */
 
     private void verifierModifiable(Affectation responsable) {
@@ -465,12 +463,12 @@ public class InterventionService {
         }
     }
 
-    /** F12 : verrou pessimiste sur le technicien, puis recherche des chevauchements actifs. */
 
     // ── verifierDisponibilite() ──────────────────────────────────────────────
 
     /**
-     * Exécute verifierDisponibilite().
+     * F12 : verrou pessimiste sur le technicien, puis recherche des
+     * chevauchements actifs.
      */
 
     private void verifierDisponibilite(Integer idTechnicien, LocalDateTime debut, LocalDateTime fin,
@@ -494,12 +492,12 @@ public class InterventionService {
         }
     }
 
-    /** F13 : toutes les compétences exigées doivent être détenues et valides à la date prévue. */
 
     // ── verifierCompetences() ────────────────────────────────────────────────
 
     /**
-     * Exécute verifierCompetences().
+     * F13 : toutes les compétences exigées doivent être détenues et valides à
+     * la date prévue.
      */
 
     private void verifierCompetences(Integer idTechnicien, Integer idType, LocalDateTime debutPrevu) {
@@ -532,7 +530,7 @@ public class InterventionService {
     // ── typeDe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute typeDe().
+     * Résout de.
      */
 
     private TypeIntervention typeDe(Intervention intervention) {
@@ -545,7 +543,8 @@ public class InterventionService {
     // ── requiredResponsable() ────────────────────────────────────────────────
 
     /**
-     * Exécute requiredResponsable().
+     * Récupère une intervention par identifiant ou lève une exception si
+     * absent.
      */
 
     private Affectation requiredResponsable(Integer idIntervention) {
@@ -557,7 +556,8 @@ public class InterventionService {
     // ── requiredTechnicien() ─────────────────────────────────────────────────
 
     /**
-     * Exécute requiredTechnicien().
+     * Récupère une intervention par identifiant ou lève une exception si
+     * absent.
      */
 
     private void requiredTechnicien(Integer id) {
@@ -569,7 +569,8 @@ public class InterventionService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère une intervention par identifiant ou lève une exception si
+     * absent.
      */
 
     private Intervention required(Integer id) {

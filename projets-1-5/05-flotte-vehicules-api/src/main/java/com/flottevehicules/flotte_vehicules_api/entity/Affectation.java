@@ -89,36 +89,34 @@ public class Affectation {
     //  COMPORTEMENT
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Indique si l'affectation a commencé à la date donnée. */
 
     // ── estCommencee() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute estCommencee().
+     * Indique si l'affectation a commencé à la date donnée.
      */
 
     public boolean estCommencee(LocalDate date) {
         return !date.isBefore(dateDebut);
     }
 
-    /** Indique si l'affectation est en cours à la date donnée. */
 
     // ── estEnCours() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute estEnCours().
+     * Indique si l'affectation est en cours à la date donnée.
      */
 
     public boolean estEnCours(LocalDate date) {
         return estCommencee(date) && (dateFin == null || !date.isAfter(dateFin));
     }
 
-    /** Clôture l'affectation avec une date de fin et un relevé kilométrique (F13). */
 
     // ── clore() ──────────────────────────────────────────────────────────────
 
     /**
-     * Exécute clore().
+     * Clôture l'affectation avec une date de fin et un relevé kilométrique
+     * (F13).
      */
 
     public void clore(LocalDate fin, Integer km) {
@@ -126,24 +124,22 @@ public class Affectation {
         this.kmRestitution = Objects.requireNonNull(km, "kmRestitution");
     }
 
-    /** Modifie uniquement la date de fin (F4). */
 
     // ── modifierDateFin() ────────────────────────────────────────────────────
 
     /**
-     * Exécute modifierDateFin().
+     * Modifie uniquement la date de fin (F4).
      */
 
     public void modifierDateFin(LocalDate fin) {
         this.dateFin = fin;
     }
 
-    /** Modifie véhicule et salarié tant que l'affectation n'a pas commencé (F4). */
 
     // ── modifierParties() ────────────────────────────────────────────────────
 
     /**
-     * Exécute modifierParties().
+     * Modifie véhicule et salarié tant que l'affectation n'a pas commencé (F4).
      */
 
     public void modifierParties(Integer vehicule, Integer salarie) {

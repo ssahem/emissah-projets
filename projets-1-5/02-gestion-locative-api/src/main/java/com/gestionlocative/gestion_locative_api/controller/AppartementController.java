@@ -65,6 +65,7 @@ public class AppartementController {
      * Liste les appartements, avec recherche optionnelle par critères (F3, F9).
      * Réponses : 200 | 400 | 500.
      */
+
     @Operation(summary = "Lister ou rechercher les appartements")
     @ApiResponse(responseCode = "200", description = "Appartements renvoyés")
     @ApiResponse(responseCode = "400", description = "Bornes de surface invalides")
@@ -82,7 +83,10 @@ public class AppartementController {
 
     // ── getById() — GET /gestion-locative/appartement/get/{id} ───────────────
 
-    /** Consulte un appartement. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Consulte un appartement. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Consulter un appartement")
     @ApiResponse(responseCode = "200", description = "Appartement renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -95,7 +99,10 @@ public class AppartementController {
 
     // ── baux() — GET /gestion-locative/appartement/baux/{id} ─────────────────
 
-    /** Consulte l'historique des baux. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Consulte l'historique des baux. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Consulter l'historique des baux d'un appartement")
     @ApiResponse(responseCode = "200", description = "Historique renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -108,7 +115,10 @@ public class AppartementController {
 
     // ── libres() — GET /gestion-locative/appartement/libres ──────────────────
 
-    /** Liste les appartements disponibles. Réponses : 200 | 400 | 500. */
+    /**
+     * Liste les appartements disponibles. Réponses : 200 | 400 | 500.
+     */
+
     @Operation(summary = "Lister les appartements libres à une date")
     @ApiResponse(responseCode = "200", description = "Appartements groupés par immeuble")
     @ApiResponse(responseCode = "400", description = "Format de date invalide")
@@ -122,7 +132,10 @@ public class AppartementController {
 
     // ── occupation() — GET /gestion-locative/appartement/occupation/{id} ─────
 
-    /** Reconstitue l'occupation. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Reconstitue l'occupation. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Reconstituer l'occupation d'un appartement")
     @ApiResponse(responseCode = "200", description = "Périodes d'occupation et de vacance")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -135,7 +148,10 @@ public class AppartementController {
 
     // ── create() — POST /gestion-locative/appartement/create ─────────────────
 
-    /** Crée un appartement. Réponses : 201 | 400 | 404 | 409 | 500. */
+    /**
+     * Crée un appartement. Réponses : 201 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Créer un appartement")
     @ApiResponse(responseCode = "201", description = "Appartement créé")
     @ApiResponse(responseCode = "400", description = "Étage ou surface invalide")
@@ -153,7 +169,10 @@ public class AppartementController {
 
     // ── update() — PUT /gestion-locative/appartement/update/{id} ─────────────
 
-    /** Modifie un appartement. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Modifie un appartement. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Modifier un appartement")
     @ApiResponse(responseCode = "200", description = "Appartement modifié")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -167,7 +186,11 @@ public class AppartementController {
 
     // ── delete() — DELETE /gestion-locative/appartement/delete/{id} ──────────
 
-    /** Supprime un appartement jamais loué. Réponses : 204 | 400 | 404 | 409 | 500. */
+    /**
+     * Supprime un appartement jamais loué. Réponses : 204 | 400 | 404 | 409 |
+     * 500.
+     */
+
     @Operation(summary = "Supprimer un appartement")
     @ApiResponse(responseCode = "204", description = "Appartement supprimé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

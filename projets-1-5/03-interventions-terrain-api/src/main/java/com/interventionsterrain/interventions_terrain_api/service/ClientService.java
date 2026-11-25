@@ -84,7 +84,7 @@ public class ClientService {
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Retourne clients par nom.
      */
 
     public List<ClientResponse> findAll() {
@@ -94,19 +94,19 @@ public class ClientService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Retourne un client par identifiant.
      */
 
     public ClientResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F8 : interventions du plus récent au plus ancien, avec responsable, type et statut. */
 
     // ── findHistorique() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute findHistorique().
+     * F8 : interventions du plus récent au plus ancien, avec responsable, type
+     * et statut.
      */
 
     public List<HistoriqueClientResponse> findHistorique(Integer id) {
@@ -119,7 +119,7 @@ public class ClientService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée un client.
      */
 
     @Transactional
@@ -140,7 +140,7 @@ public class ClientService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie un client identifié, après contrôle des règles métier.
      */
 
     @Transactional
@@ -156,7 +156,7 @@ public class ClientService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime un client après contrôle de ses dépendances.
      */
 
     @Transactional
@@ -176,7 +176,7 @@ public class ClientService {
     // ── toHistorique() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute toHistorique().
+     * Convertit un client en historique.
      */
 
     private HistoriqueClientResponse toHistorique(Intervention intervention) {
@@ -198,7 +198,7 @@ public class ClientService {
     // ── statutCourant() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute statutCourant().
+     * Détermine le statut courant à partir de l’affectation responsable.
      */
 
     private StatutIntervention statutCourant(Affectation responsable) {
@@ -216,7 +216,7 @@ public class ClientService {
     // ── checkEmail() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute checkEmail().
+     * Vérifie email avant d’autoriser l’opération.
      */
 
     private void checkEmail(String email, Integer idCourant) {
@@ -235,7 +235,7 @@ public class ClientService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère un client par identifiant ou lève une exception si absent.
      */
 
     private Client required(Integer id) {

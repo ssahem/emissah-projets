@@ -57,7 +57,8 @@ class AlerteServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -70,7 +71,7 @@ class AlerteServiceTest {
     // ── vehicule() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour vehicule().
+     * Prépare une alerte de test avec des valeurs nominales.
      */
 
     private Vehicule vehicule(Integer id, String immatriculation, Integer idSite) {
@@ -83,7 +84,7 @@ class AlerteServiceTest {
     // ── alerte() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour alerte().
+     * Prépare une alerte de test avec des valeurs nominales.
      */
 
     private AlerteVehicule alerte(Integer id, Integer idVehicule, Integer idSite) {
@@ -97,7 +98,7 @@ class AlerteServiceTest {
     // ── echeance() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour echeance().
+     * Prépare une alerte de test avec des valeurs nominales.
      */
 
     private VueRepository.EcheanceRow echeance(Integer idVehicule, int kmActuel,

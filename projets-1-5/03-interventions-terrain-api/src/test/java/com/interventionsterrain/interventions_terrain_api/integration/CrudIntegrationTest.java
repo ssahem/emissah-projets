@@ -59,7 +59,7 @@ class CrudIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource
@@ -92,7 +92,8 @@ class CrudIntegrationTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -243,12 +244,11 @@ class CrudIntegrationTest {
                         "https://api.interventions-terrain.local/problems/intervention-non-modifiable"));
     }
 
-    /** Crée une ressource via l'API et renvoie son identifiant. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour create().
+     * Crée une ressource via l'API et renvoie son identifiant.
      */
 
     private Integer create(String ressource, Map<String, Object> body) throws Exception {
@@ -260,12 +260,11 @@ class CrudIntegrationTest {
         return objectMapper.readTree(json).get("id" + capitalize(ressource)).asInt();
     }
 
-    /** Crée l'intervention de référence. */
 
     // ── createIntervention() ─────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour createIntervention().
+     * Crée l'intervention de référence.
      */
 
     private Integer createIntervention() throws Exception {
@@ -280,12 +279,12 @@ class CrudIntegrationTest {
                 "commune", "Paris"));
     }
 
-    /** Première lettre en majuscule pour reconstruire le nom du champ d'identifiant. */
 
     // ── capitalize() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour capitalize().
+     * Première lettre en majuscule pour reconstruire le nom du champ
+     * d'identifiant.
      */
 
     private String capitalize(String value) {

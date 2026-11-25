@@ -16,17 +16,19 @@ import java.time.LocalDate;
 @Schema(description = "Restitution : date postérieure au début et non future, kilométrage croissant (D-01)")
 public record CreateRestitutionRequest(
 
-        @Schema(description = "Date de restitution", example = "2026-11-24")
-        @NotNull(message = "La date est obligatoire")
-        LocalDate date,
-
-        @Schema(description = "Kilométrage relevé à la restitution", example = "19000")
-        @NotNull(message = "Le kilométrage est obligatoire")
-        @PositiveOrZero(message = "Le kilométrage ne peut pas être négatif")
-        Integer km) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Date
+        @Schema(description = "Date de restitution", example = "2026-11-24")
+        @NotNull(message = "La date est obligatoire")
+        LocalDate date,
+        // Kilométrage
+        @Schema(description = "Kilométrage relevé à la restitution", example = "19000")
+        @NotNull(message = "Le kilométrage est obligatoire")
+        @PositiveOrZero(message = "Le kilométrage ne peut pas être négatif")
+        Integer km
+) {
 
 }

@@ -20,9 +20,13 @@ public record CreateRepriseRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Nouveau début prévu", example = "2026-12-10T09:00:00")
-    @NotNull LocalDateTime debutPrevu,
-
-    @Schema(description = "Nouvelle fin prévue", example = "2026-12-10T12:00:00")
-    @NotNull LocalDateTime finPrevue) {
+        // Début prévu
+        @Schema(description = "Nouveau début prévu", example = "2026-12-10T09:00:00")
+        @NotNull
+        LocalDateTime debutPrevu,
+        // Fin prévue
+        @Schema(description = "Nouvelle fin prévue", example = "2026-12-10T12:00:00")
+        @NotNull
+        LocalDateTime finPrevue
+) {
 }

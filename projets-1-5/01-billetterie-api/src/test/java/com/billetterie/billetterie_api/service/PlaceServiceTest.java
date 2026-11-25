@@ -58,7 +58,8 @@ class PlaceServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -70,7 +71,7 @@ class PlaceServiceTest {
     // ── salle() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour salle().
+     * Prépare une place de test avec des valeurs nominales.
      */
 
     private Salle salle(int capacite) {
@@ -82,7 +83,7 @@ class PlaceServiceTest {
     // ── createRequest() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour createRequest().
+     * Prépare le contexte nécessaire à l’opération createRequest().
      */
 
     private CreatePlaceRequest createRequest() {
@@ -92,7 +93,7 @@ class PlaceServiceTest {
     // ── updateRequest() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour updateRequest().
+     * Prépare le contexte nécessaire à l’opération updateRequest().
      */
 
     private UpdatePlaceRequest updateRequest() {

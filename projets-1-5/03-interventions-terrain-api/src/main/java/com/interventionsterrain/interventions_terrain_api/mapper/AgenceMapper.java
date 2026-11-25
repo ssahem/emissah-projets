@@ -23,7 +23,7 @@ public class AgenceMapper {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une agence en reprenant ses champs.
      */
 
     public AgenceResponse toResponse(Agence agence) {

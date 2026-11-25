@@ -76,12 +76,11 @@ public class EntretienService {
         this.clock = clock;
     }
 
-    /** F10 : page d'entretiens, triée par date décroissante par défaut. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * F10 : page d'entretiens, triée par date décroissante par défaut.
      */
 
     public PageResponse<EntretienResponse> findAll(int page, int size, String sort) {
@@ -100,24 +99,23 @@ public class EntretienService {
                 resultat.getTotalElements(), resultat.getTotalPages());
     }
 
-    /** F5 : un entretien par identifiant ; 404 si inconnu. */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * F5 : un entretien par identifiant ; 404 si inconnu.
      */
 
     public EntretienResponse findById(Integer id) {
         return mapper.toResponse(required(id), false);
     }
 
-    /** F5, F14 et F12 : crée un entretien et alerte si une affectation existe déjà. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * F5, F14 et F12 : crée un entretien et alerte si une affectation existe
+     * déjà.
      */
 
     @Transactional
@@ -146,12 +144,11 @@ public class EntretienService {
         return mapper.toResponse(entretien, alerteCreee);
     }
 
-    /** F5 : coût et prestataire modifiables ; date et kilométrage figés. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * F5 : coût et prestataire modifiables ; date et kilométrage figés.
      */
 
     @Transactional
@@ -171,12 +168,12 @@ public class EntretienService {
         return mapper.toResponse(entretienRepository.save(entretien), false);
     }
 
-    /** F5 : suppression possible tant que la période d'immobilisation n'a pas commencé. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * F5 : suppression possible tant que la période d'immobilisation n'a pas
+     * commencé.
      */
 
     @Transactional
@@ -189,12 +186,12 @@ public class EntretienService {
         entretienRepository.delete(entretien);
     }
 
-    /** F8 : historique d'un véhicule, trié du plus récent au plus ancien, avec cumul D-03. */
 
     // ── historique() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute historique().
+     * F8 : historique d'un véhicule, trié du plus récent au plus ancien, avec
+     * cumul D-03.
      */
 
     public HistoriqueEntretienResponse historique(Integer idVehicule) {
@@ -218,7 +215,7 @@ public class EntretienService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère un entretien par identifiant ou lève une exception si absent.
      */
 
     private Entretien required(Integer id) {
@@ -226,12 +223,11 @@ public class EntretienService {
                 .orElseThrow(() -> new RessourceIntrouvableException("Entretien", id));
     }
 
-    /** Convertit `date,desc` en tri JPA ; seuls date et cout sont autorisés. */
 
     // ── tri() ────────────────────────────────────────────────────────────────
 
     /**
-     * Exécute tri().
+     * Convertit `date,desc` en tri JPA ; seuls date et cout sont autorisés.
      */
 
     private Sort tri(String sort) {
@@ -251,12 +247,12 @@ public class EntretienService {
         return Sort.by(direction, champ);
     }
 
-    /** F14 (D-01) : le compteur ne recule pas ; le refus indique la dernière valeur et sa date. */
 
     // ── verifierKmCroissant() ────────────────────────────────────────────────
 
     /**
-     * Exécute verifierKmCroissant().
+     * F14 (D-01) : le compteur ne recule pas ; le refus indique la dernière
+     * valeur et sa date.
      */
 
     private void verifierKmCroissant(Integer idVehicule, Integer km) {
@@ -269,12 +265,12 @@ public class EntretienService {
         });
     }
 
-    /** F12 : un entretien saisi après une affectation ne l'invalide pas, il déclenche une alerte. */
 
     // ── alerterSiConflit() ───────────────────────────────────────────────────
 
     /**
-     * Exécute alerterSiConflit().
+     * F12 : un entretien saisi après une affectation ne l'invalide pas, il
+     * déclenche une alerte.
      */
 
     private boolean alerterSiConflit(Entretien entretien) {

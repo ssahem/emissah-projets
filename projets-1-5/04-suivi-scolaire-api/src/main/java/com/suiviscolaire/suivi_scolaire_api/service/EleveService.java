@@ -65,36 +65,34 @@ public class EleveService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Liste les élèves triés par nom puis prénom, avec leur classe courante. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Liste les élèves triés par nom puis prénom, avec leur classe courante.
      */
 
     public List<EleveResponse> findAll() {
         return eleveRepository.findAllByOrderByNomAscPrenomAsc().stream().map(mapper::toResponse).toList();
     }
 
-    /** Consulte une fiche élève par identifiant (404 si inconnue). */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Consulte une fiche élève par identifiant (404 si inconnue).
      */
 
     public EleveResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** Crée un élève dans une classe non pleine, avec une date de naissance passée. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée un élève dans une classe non pleine, avec une date de naissance
+     * passée.
      */
 
     @Transactional
@@ -118,12 +116,12 @@ public class EleveService {
         return mapper.toResponse(eleve);
     }
 
-    /** Modifie nom/prénom et, si besoin, la classe courante ; la date de naissance est figée. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie nom/prénom et, si besoin, la classe courante ; la date de
+     * naissance est figée.
      */
 
     @Transactional
@@ -143,12 +141,11 @@ public class EleveService {
         return mapper.toResponse(eleve);
     }
 
-    /** Refuse la suppression d'un élève ayant des notes (F2, A-01). */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Refuse la suppression d'un élève ayant des notes (F2, A-01).
      */
 
     @Transactional
@@ -165,12 +162,11 @@ public class EleveService {
         eleveRepository.delete(eleve);
     }
 
-    /** Réaffecte un élève dans une classe du même niveau non pleine (F11). */
 
     // ── changerClasse() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute changerClasse().
+     * Réaffecte un élève dans une classe du même niveau non pleine (F11).
      */
 
     @Transactional
@@ -202,12 +198,11 @@ public class EleveService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Retourne l'élève ou lève une erreur métier 404. */
 
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Retourne l'élève ou lève une erreur métier 404.
      */
 
     public Eleve required(Integer id) {
@@ -215,12 +210,12 @@ public class EleveService {
                 .orElseThrow(() -> new RessourceIntrouvableException("Eleve", id));
     }
 
-    /** Vérifie qu'une inscription courante existe encore dans la classe (capacité). */
 
     // ── verifierPlace() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute verifierPlace().
+     * Vérifie qu'une inscription courante existe encore dans la classe
+     * (capacité).
      */
 
     private void verifierPlace(Classe classe) {

@@ -37,7 +37,6 @@ public class AlerteController {
         this.service = service;
     }
 
-    /** F16 : liste des alertes persistées, avec filtre optionnel par véhicule. */
 
     // ── list() — GET /flotte-vehicules/alerte/list ───────────────────────────
 
@@ -52,7 +51,6 @@ public class AlerteController {
         return service.lister(idVehicule);
     }
 
-    /** Consultation d'une alerte. */
 
     // ── get() — GET /flotte-vehicules/alerte/{id} ────────────────────────────
 
@@ -68,7 +66,6 @@ public class AlerteController {
         return service.findById(id);
     }
 
-    /** F16 : exécute la génération d'alertes et retourne le regroupement par site. */
 
     // ── generer() — POST /flotte-vehicules/alerte/generer ────────────────────
 

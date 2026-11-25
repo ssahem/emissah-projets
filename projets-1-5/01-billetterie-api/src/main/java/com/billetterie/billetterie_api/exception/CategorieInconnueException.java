@@ -29,6 +29,9 @@ public class CategorieInconnueException extends ApiException {
 
     // ── getCategorie() ───────────────────────────────────────────────────────
 
-    /** Retourne categorie. */
+    /**
+     * Retourne categorie.
+     */
+
     public String getCategorie() { return categorie; }
 }

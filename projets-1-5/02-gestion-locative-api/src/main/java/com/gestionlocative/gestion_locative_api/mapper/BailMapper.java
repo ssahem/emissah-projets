@@ -26,7 +26,10 @@ public class BailMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit un bail en réponse HTTP avec son locataire principal. */
+    /**
+     * Convertit un bail en réponse HTTP avec son locataire principal.
+     */
+
     public BailResponse toResponse(Bail bail, Locataire principal) {
         return new BailResponse(
                 bail.getIdBail(), bail.getIdAppartement(),
@@ -40,7 +43,10 @@ public class BailMapper {
 
     // ── toHistoriqueResponse() ───────────────────────────────────────────────
 
-    /** Convertit un bail pour l'historique d'un appartement (F8). */
+    /**
+     * Convertit un bail pour l'historique d'un appartement (F8).
+     */
+
     public HistoriqueBailResponse toHistoriqueResponse(
             Bail bail, Locataire principal, List<LoyerHistoriqueResponse> loyersPasses,
             boolean enCours) {

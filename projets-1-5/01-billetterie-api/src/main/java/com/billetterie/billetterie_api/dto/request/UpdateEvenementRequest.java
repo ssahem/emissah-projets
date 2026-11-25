@@ -25,15 +25,28 @@ public record UpdateEvenementRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Titre du spectacle
-        @Schema(description = "Titre du spectacle", example = "Concert Jazz") @NotBlank @Size(max = 150) String titre,
+        // Titre
+        @Schema(description = "Titre du spectacle", example = "Concert Jazz")
+        @NotBlank
+        @Size(max = 150)
+        String titre,
         // Type
-        @Schema(description = "Type", example = "CONCERT") @NotNull TypeSpectacle type,
-        // Places numérotées
-        @Schema(description = "Places numérotées", example = "true") @NotNull Boolean placementNumerote,
-        // Date ISO-8601
+        @Schema(description = "Type", example = "CONCERT")
+        @NotNull
+        TypeSpectacle type,
+        // Placement numéroté
+        @Schema(description = "Places numérotées", example = "true")
+        @NotNull
+        Boolean placementNumerote,
+        // Date heure
         @Schema(description = "Date ISO-8601", example = "2026-12-20T20:00:00")
-        @NotNull @Future LocalDateTime dateHeure,
+        @NotNull
+        @Future
+        LocalDateTime dateHeure,
         // Identifiant de la salle
-        @Schema(description = "Identifiant de la salle", example = "1") @NotNull @Positive Integer idSalle) {
+        @Schema(description = "Identifiant de la salle", example = "1")
+        @NotNull
+        @Positive
+        Integer idSalle
+) {
 }

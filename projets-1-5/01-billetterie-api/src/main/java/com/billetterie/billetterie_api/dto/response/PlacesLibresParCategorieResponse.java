@@ -19,9 +19,13 @@ public record PlacesLibresParCategorieResponse(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Catégorie
-        @Schema(description = "Catégorie", example = "ORCHESTRE") String categorie,
-        // Nombre de places libres
-        @Schema(description = "Nombre de places libres", example = "18") long placesLibres,
-        // Nombre de places occupées
-        @Schema(description = "Nombre de places occupées", example = "2") long placesOccupees) {
+        @Schema(description = "Catégorie", example = "ORCHESTRE")
+        String categorie,
+        // Places libres
+        @Schema(description = "Nombre de places libres", example = "18")
+        long placesLibres,
+        // Places occupées
+        @Schema(description = "Nombre de places occupées", example = "2")
+        long placesOccupees
+) {
 }

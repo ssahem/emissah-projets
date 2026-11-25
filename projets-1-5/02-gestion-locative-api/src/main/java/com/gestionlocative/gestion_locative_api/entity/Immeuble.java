@@ -97,7 +97,10 @@ public class Immeuble {
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
-    /** Met à jour l'adresse, le nombre d'étages et le propriétaire (F2). */
+    /**
+     * Met à jour l'adresse, le nombre d'étages et le propriétaire (F2).
+     */
+
     public void modifier(String adresse, String codePostal, String ville,
                          Integer idProprietaire, Integer nbEtages) {
         this.adresse = Objects.requireNonNull(adresse, "adresse");

@@ -74,7 +74,8 @@ class EntretienServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -89,7 +90,7 @@ class EntretienServiceTest {
     // ── vehicule() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour vehicule().
+     * Prépare un entretien de test avec des valeurs nominales.
      */
 
     private Vehicule vehicule(Integer id) {
@@ -102,7 +103,7 @@ class EntretienServiceTest {
     // ── entretien() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour entretien().
+     * Prépare un entretien de test avec des valeurs nominales.
      */
 
     private Entretien entretien(Integer id, LocalDate date, BigDecimal cout, Integer km) {
@@ -114,7 +115,7 @@ class EntretienServiceTest {
     // ── references() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour references().
+     * Prépare un entretien de test avec des valeurs nominales.
      */
 
     private void references() {
@@ -132,7 +133,7 @@ class EntretienServiceTest {
     // ── request() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour request().
+     * Prépare un entretien de test avec des valeurs nominales.
      */
 
     private CreateEntretienRequest request(LocalDate date, Integer km) {

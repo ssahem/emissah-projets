@@ -55,9 +55,10 @@ public class EvenementController {
     // ── list() — GET /billetterie/evenement/list ─────────────────────────────
 
     /**
-     * Liste les événements triés par date, avec un filtre de période optionnel (F8).
-     * Réponses : 200 | 400 | 500.
+     * Liste les événements triés par date, avec un filtre de période optionnel
+     * (F8). Réponses : 200 | 400 | 500.
      */
+
     @Operation(summary = "Lister les événements, éventuellement entre deux dates",
             description = "Les bornes du et au sont incluses, au format ISO-8601 DATE_TIME. Une seule borne est acceptée.")
     @ApiResponse(responseCode = "200", description = "Événements renvoyés")
@@ -73,9 +74,9 @@ public class EvenementController {
     // ── getById() — GET /billetterie/evenement/get/{id} ──────────────────────
 
     /**
-     * Consulte un événement.
-     * Réponses : 200 | 400 | 404 | 500.
+     * Consulte un événement. Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Consulter un événement")
     @ApiResponse(responseCode = "200", description = "Événement renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -89,9 +90,9 @@ public class EvenementController {
     // ── create() — POST /billetterie/evenement/create ────────────────────────
 
     /**
-     * Crée un événement.
-     * Réponses : 201 | 400 | 404 | 409 | 500.
+     * Crée un événement. Réponses : 201 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Créer un événement")
     @ApiResponse(responseCode = "201", description = "Événement créé")
     @ApiResponse(responseCode = "400", description = "Date passée ou données invalides")
@@ -108,9 +109,9 @@ public class EvenementController {
     // ── update() — PUT /billetterie/evenement/update/{id} ────────────────────
 
     /**
-     * Modifie un événement.
-     * Réponses : 200 | 400 | 404 | 409 | 500.
+     * Modifie un événement. Réponses : 200 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Modifier un événement")
     @ApiResponse(responseCode = "200", description = "Événement modifié")
     @ApiResponse(responseCode = "400", description = "Date passée ou données invalides")
@@ -126,9 +127,10 @@ public class EvenementController {
     // ── delete() — DELETE /billetterie/evenement/delete/{id} ─────────────────
 
     /**
-     * Supprime un événement sans réservation.
-     * Réponses : 204 | 400 | 404 | 409 | 500.
+     * Supprime un événement sans réservation. Réponses : 204 | 400 | 404 | 409
+     * | 500.
      */
+
     @Operation(summary = "Supprimer un événement")
     @ApiResponse(responseCode = "204", description = "Événement supprimé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -144,9 +146,10 @@ public class EvenementController {
     // ── placesLibres() — GET /billetterie/evenement/places-libres/{id} ───────
 
     /**
-     * Retourne les places libres groupées par catégorie (F17).
-     * Réponses : 200 | 400 | 404 | 500.
+     * Retourne les places libres groupées par catégorie (F17). Réponses : 200 |
+     * 400 | 404 | 500.
      */
+
     @Operation(summary = "Lister les places libres d'un événement")
     @ApiResponse(responseCode = "200", description = "Places libres renvoyées")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -160,9 +163,10 @@ public class EvenementController {
     // ── remplissage() — GET /billetterie/evenement/remplissage/{id} ──────────
 
     /**
-     * Calcule le taux de remplissage d'un événement (F18).
-     * Réponses : 200 | 400 | 404 | 409 | 500.
+     * Calcule le taux de remplissage d'un événement (F18). Réponses : 200 | 400
+     * | 404 | 409 | 500.
      */
+
     @Operation(summary = "Calculer le taux de remplissage d'un événement",
             description = "Détail par catégorie ; les réservations annulées sont exclues.")
     @ApiResponse(responseCode = "200", description = "Taux de remplissage renvoyé")
@@ -178,9 +182,9 @@ public class EvenementController {
     // ── exportReservations() — GET …terie/evenement/reservations/export/{id} ─
 
     /**
-     * Exporte les réservations en CSV (F19).
-     * Réponses : 200 | 400 | 404 | 500.
+     * Exporte les réservations en CSV (F19). Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Exporter les réservations d'un événement en CSV")
     @ApiResponse(responseCode = "200", description = "Fichier CSV")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

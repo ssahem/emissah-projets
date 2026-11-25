@@ -30,7 +30,10 @@ public class EvenementMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit un événement en réponse HTTP en aplatissant son spectacle. */
+    /**
+     * Convertit un événement en réponse HTTP en aplatissant son spectacle.
+     */
+
     public EvenementResponse toResponse(Evenement evenement) {
         return new EvenementResponse(
                 evenement.getIdEvenement(),
@@ -44,7 +47,11 @@ public class EvenementMapper {
 
     // ── toProgrammation() ────────────────────────────────────────────────────
 
-    /** Convertit un événement en entrée de programmation, avec l'indicateur « avenir ». */
+    /**
+     * Convertit un événement en entrée de programmation, avec l'indicateur «
+     * avenir ».
+     */
+
     public ProgrammationResponse toProgrammation(Evenement evenement) {
         boolean avenir = evenement.getDateHeure().isAfter(LocalDateTime.now(clock));
         return new ProgrammationResponse(

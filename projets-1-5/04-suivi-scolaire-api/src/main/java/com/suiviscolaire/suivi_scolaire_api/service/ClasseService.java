@@ -52,36 +52,34 @@ public class ClasseService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Liste les classes triées par niveau puis par nom, avec leur effectif courant. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Liste les classes triées par niveau puis par nom, avec leur effectif
+     * courant.
      */
 
     public List<ClasseResponse> findAll() {
         return classeRepository.findAllByOrderByIdNiveauAscNomAsc().stream().map(mapper::toResponse).toList();
     }
 
-    /** Consulte une classe par identifiant (404 si inconnue). */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Consulte une classe par identifiant (404 si inconnue).
      */
 
     public ClasseResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** Crée une classe ; le nom doit être unique dans le niveau (409). */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée une classe ; le nom doit être unique dans le niveau (409).
      */
 
     @Transactional
@@ -96,12 +94,12 @@ public class ClasseService {
                 request.nom(), request.idAnnee(), request.idNiveau(), request.effectifMax())));
     }
 
-    /** Modifie l'effectif maximal sans jamais descendre sous l'effectif actuel (F1). */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie l'effectif maximal sans jamais descendre sous l'effectif actuel
+     * (F1).
      */
 
     @Transactional
@@ -117,12 +115,11 @@ public class ClasseService {
         return mapper.toResponse(classe);
     }
 
-    /** Supprime une classe vide ; une classe avec élèves est refusée (409). */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime une classe vide ; une classe avec élèves est refusée (409).
      */
 
     @Transactional
@@ -139,12 +136,11 @@ public class ClasseService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Retourne la classe ou lève une erreur métier 404. */
 
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Retourne la classe ou lève une erreur métier 404.
      */
 
     public Classe required(Integer id) {

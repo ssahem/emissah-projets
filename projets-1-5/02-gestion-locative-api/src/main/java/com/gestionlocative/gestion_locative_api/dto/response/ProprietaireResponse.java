@@ -18,14 +18,20 @@ public record ProprietaireResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idProprietaire,
+        // Identifiant du proprietaire
+        @Schema(description = "Identifiant", example = "1")
+        Integer idProprietaire,
         // Nom
-        @Schema(description = "Nom", example = "Diallo") String nom,
+        @Schema(description = "Nom", example = "Diallo")
+        String nom,
         // Prénom
-        @Schema(description = "Prénom", example = "Awa") String prenom,
+        @Schema(description = "Prénom", example = "Awa")
+        String prenom,
         // Email
-        @Schema(description = "Email", example = "awa.diallo@example.test") String email,
+        @Schema(description = "Email", example = "awa.diallo@example.test")
+        String email,
         // Téléphone
-        @Schema(description = "Téléphone", example = "0102030405") String telephone) {
+        @Schema(description = "Téléphone", example = "0102030405")
+        String telephone
+) {
 }

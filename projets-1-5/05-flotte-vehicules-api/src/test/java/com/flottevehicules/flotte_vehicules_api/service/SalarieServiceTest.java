@@ -55,7 +55,8 @@ class SalarieServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -69,7 +70,7 @@ class SalarieServiceTest {
     // ── salarie() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour salarie().
+     * Prépare un salarié de test avec des valeurs nominales.
      */
 
     private Salarie salarie(Integer id, String nom) {

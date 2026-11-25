@@ -14,11 +14,19 @@ import jakarta.validation.constraints.NotNull;
  */
 @Schema(description = "Affectation d'une matière à un professeur dans une classe")
 public record AffectationMatiereRequest(
-        @Schema(description = "Identifiant de la matière", example = "1") @NotNull Integer idMatiere,
-        @Schema(description = "Identifiant de la classe", example = "1") @NotNull Integer idClasse) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant de la matière
+        @Schema(description = "Identifiant de la matière", example = "1")
+        @NotNull
+        Integer idMatiere,
+        // Identifiant de la classe
+        @Schema(description = "Identifiant de la classe", example = "1")
+        @NotNull
+        Integer idClasse
+) {
 
 }

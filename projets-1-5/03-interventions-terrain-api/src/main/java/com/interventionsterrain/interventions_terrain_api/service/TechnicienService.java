@@ -126,7 +126,7 @@ public class TechnicienService {
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Retourne techniciens par nom.
      */
 
     public List<TechnicienResponse> findAll() {
@@ -136,19 +136,19 @@ public class TechnicienService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Retourne un technicien par identifiant.
      */
 
     public TechnicienResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F7 : toutes les compétences obtenues, expirées comprises mais signalées comme telles. */
 
     // ── findCompetences() ────────────────────────────────────────────────────
 
     /**
-     * Exécute findCompetences().
+     * F7 : toutes les compétences obtenues, expirées comprises mais signalées
+     * comme telles.
      */
 
     public List<CompetenceTechnicienResponse> findCompetences(Integer id) {
@@ -167,12 +167,12 @@ public class TechnicienService {
                 .toList();
     }
 
-    /** F10 : planning sur une période, semaine courante par défaut, 3 mois maximum. */
 
     // ── findPlanning() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute findPlanning().
+     * F10 : planning sur une période, semaine courante par défaut, 3 mois
+     * maximum.
      */
 
     public List<PlanningInterventionResponse> findPlanning(Integer id, LocalDate du, LocalDate au) {
@@ -210,12 +210,12 @@ public class TechnicienService {
                 .toList();
     }
 
-    /** F11 : certifier une compétence, en refusant les dates incohérentes et les doublons actifs. */
 
     // ── associerCompetence() ─────────────────────────────────────────────────
 
     /**
-     * Exécute associerCompetence().
+     * F11 : certifier une compétence, en refusant les dates incohérentes et les
+     * doublons actifs.
      */
 
     @Transactional
@@ -244,7 +244,7 @@ public class TechnicienService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée un technicien en refusant un doublon sur la clé métier.
      */
 
     @Transactional
@@ -269,7 +269,7 @@ public class TechnicienService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie un technicien identifié, après contrôle des règles métier.
      */
 
     @Transactional
@@ -289,7 +289,7 @@ public class TechnicienService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime un technicien après contrôle de ses dépendances.
      */
 
     @Transactional
@@ -309,7 +309,7 @@ public class TechnicienService {
     // ── client() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute client().
+     * Réalise l’opération client sur un technicien.
      */
 
     private Client client(Intervention intervention) {
@@ -320,7 +320,7 @@ public class TechnicienService {
     // ── adresse() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute adresse().
+     * Réalise l’opération adresse sur un technicien.
      */
 
     private Adresse adresse(Intervention intervention) {
@@ -331,7 +331,7 @@ public class TechnicienService {
     // ── statutCourant() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute statutCourant().
+     * Détermine le statut courant à partir de l’affectation responsable.
      */
 
     private StatutIntervention statutCourant(Intervention intervention) {
@@ -347,7 +347,7 @@ public class TechnicienService {
     // ── resolveEquipe() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute resolveEquipe().
+     * Réalise l’opération resolveEquipe sur un technicien.
      */
 
     private Integer resolveEquipe(Integer idAgence, Integer idEquipe) {
@@ -368,7 +368,7 @@ public class TechnicienService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère un technicien par identifiant ou lève une exception si absent.
      */
 
     private Technicien required(Integer id) {

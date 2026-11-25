@@ -62,27 +62,42 @@ public class Spectacle {
 
     // ── getIdSpectacle() ─────────────────────────────────────────────────────
 
-    /** Retourne idSpectacle. */
+    /**
+     * Retourne idSpectacle.
+     */
+
     public Integer getIdSpectacle() { return idSpectacle; }
 
     // ── getTitre() ───────────────────────────────────────────────────────────
 
-    /** Retourne titre. */
+    /**
+     * Retourne titre.
+     */
+
     public String getTitre() { return titre; }
 
     // ── getType() ────────────────────────────────────────────────────────────
 
-    /** Retourne type. */
+    /**
+     * Retourne type.
+     */
+
     public TypeSpectacle getType() { return type; }
 
     // ── getPlacementNumerote() ───────────────────────────────────────────────
 
-    /** Retourne placementNumerote. */
+    /**
+     * Retourne placementNumerote.
+     */
+
     public Boolean getPlacementNumerote() { return placementNumerote; }
 
     // ── setPlacementNumerote() ───────────────────────────────────────────────
 
-    /** Modifie le mode de placement du spectacle. */
+    /**
+     * Modifie le mode de placement du spectacle.
+     */
+
     public void setPlacementNumerote(Boolean placementNumerote) {
         this.placementNumerote = Objects.requireNonNull(placementNumerote, "placementNumerote");
     }

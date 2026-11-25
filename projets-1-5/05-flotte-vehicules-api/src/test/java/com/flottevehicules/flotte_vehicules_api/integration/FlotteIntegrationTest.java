@@ -54,7 +54,7 @@ class FlotteIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource
@@ -87,7 +87,8 @@ class FlotteIntegrationTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -314,12 +315,11 @@ class FlotteIntegrationTest {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Crée une ressource via l'API et retourne son identifiant. */
 
     // ── creer() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creer().
+     * Crée une ressource via l'API et retourne son identifiant.
      */
 
     private Integer creer(String ressource, Map<String, Object> corps) throws Exception {
@@ -339,12 +339,11 @@ class FlotteIntegrationTest {
         return jsonMapper.readTree(contenu).get(champ).asInt();
     }
 
-    /** Crée un véhicule de référence, en propriété, sur le site de Paris. */
 
     // ── creerVehicule() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerVehicule().
+     * Crée un véhicule de référence, en propriété, sur le site de Paris.
      */
 
     private Integer creerVehicule(String immatriculation) throws Exception {
@@ -354,12 +353,11 @@ class FlotteIntegrationTest {
                 "modeAcquisition", "PROPRIETE", "partage", false, "prixAchat", 25000));
     }
 
-    /** Sérialise un corps de requête en JSON. */
 
     // ── json() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour json().
+     * Sérialise un corps de requête en JSON.
      */
 
     private String json(Object valeur) throws Exception {

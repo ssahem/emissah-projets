@@ -76,7 +76,7 @@ public class AgenceService {
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Retourne agences par ville puis par nom.
      */
 
     public List<AgenceResponse> findAll() {
@@ -86,19 +86,19 @@ public class AgenceService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Retourne une agence par identifiant.
      */
 
     public AgenceResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F6 : les techniciens de l'agence via equipe.id_agence, triés par nom, avec leurs compétences valides. */
 
     // ── findTechniciens() ────────────────────────────────────────────────────
 
     /**
-     * Exécute findTechniciens().
+     * F6 : les techniciens de l'agence via equipe.id_agence, triés par nom,
+     * avec leurs compétences valides.
      */
 
     public List<TechnicienEffectifResponse> findTechniciens(Integer id) {
@@ -119,7 +119,7 @@ public class AgenceService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée une agence en refusant un doublon sur la clé métier.
      */
 
     @Transactional
@@ -138,7 +138,7 @@ public class AgenceService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie une agence identifié, après contrôle des règles métier.
      */
 
     @Transactional
@@ -162,7 +162,7 @@ public class AgenceService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime une agence après contrôle de ses dépendances.
      */
 
     @Transactional
@@ -182,7 +182,7 @@ public class AgenceService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère une agence par identifiant ou lève une exception si absent.
      */
 
     private Agence required(Integer id) {

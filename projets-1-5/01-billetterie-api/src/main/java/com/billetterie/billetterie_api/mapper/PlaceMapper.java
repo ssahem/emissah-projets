@@ -21,7 +21,10 @@ public class PlaceMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit une place en réponse HTTP. */
+    /**
+     * Convertit une place en réponse HTTP.
+     */
+
     public PlaceSalleResponse toResponse(Place place) {
         return new PlaceSalleResponse(
                 place.getIdPlace(), place.getRang(), place.getNumero(),
@@ -30,7 +33,10 @@ public class PlaceMapper {
 
     // ── toPlaceResponse() ────────────────────────────────────────────────────
 
-    /** Convertit une place en réponse complète pour le CRUD (F2). */
+    /**
+     * Convertit une place en réponse complète pour le CRUD (F2).
+     */
+
     public PlaceResponse toPlaceResponse(Place place) {
         return new PlaceResponse(
                 place.getIdPlace(), place.getSalle().getIdSalle(), place.getRang(),

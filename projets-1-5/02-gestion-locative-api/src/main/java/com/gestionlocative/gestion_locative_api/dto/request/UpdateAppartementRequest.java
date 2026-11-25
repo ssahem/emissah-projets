@@ -23,9 +23,15 @@ public record UpdateAppartementRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Surface en m²
+        // Surface
         @Schema(description = "Surface en m²", example = "48.00")
-        @NotNull @DecimalMin(value = "0.01", message = "La surface doit être positive") BigDecimal surface,
+        @NotNull
+        @DecimalMin(value = "0.01", message = "La surface doit être positive")
+        BigDecimal surface,
         // Nombre de pièces
-        @Schema(description = "Nombre de pièces", example = "3") @NotNull @Positive Integer nbPieces) {
+        @Schema(description = "Nombre de pièces", example = "3")
+        @NotNull
+        @Positive
+        Integer nbPieces
+) {
 }

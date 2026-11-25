@@ -17,16 +17,32 @@ import jakarta.validation.constraints.Positive;
  */
 @Schema(description = "Création d'un professeur")
 public record CreateProfesseurRequest(
-        @Schema(description = "Nom", example = "Durand") @NotBlank String nom,
-        @Schema(description = "Prénom", example = "Claire") @NotBlank String prenom,
-        @Schema(description = "Email unique", example = "claire.durand@example.test")
-        @NotBlank @Email String email,
-        @Schema(description = "Téléphone", example = "0102030401") String telephone,
-        @Schema(description = "Identifiant de la matière principale", example = "1")
-        @NotNull @Positive Integer idMatierePrincipale) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Nom
+        @Schema(description = "Nom", example = "Durand")
+        @NotBlank
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Claire")
+        @NotBlank
+        String prenom,
+        // Email
+        @Schema(description = "Email unique", example = "claire.durand@example.test")
+        @NotBlank
+        @Email
+        String email,
+        // Téléphone
+        @Schema(description = "Téléphone", example = "0102030401")
+        String telephone,
+        // Identifiant de la matièreprincipale
+        @Schema(description = "Identifiant de la matière principale", example = "1")
+        @NotNull
+        @Positive
+        Integer idMatierePrincipale
+) {
 
 }

@@ -39,7 +39,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // ── handleApiException() — ApiException → statut porté par l'exception ───
 
-    /** Traduit une erreur métier typée en Problem Detail. */
+    /**
+     * Traduit une erreur métier typée en Problem Detail.
+     */
+
     @ExceptionHandler(ApiException.class)
     public ProblemDetail handleApiException(ApiException ex) {
         // ── Étape 1/3 : créer le problème avec le statut et le détail ────────
@@ -57,7 +60,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // ── handleConstraintViolation() — paramètre invalide → 400 ───────────────
 
-    /** Traduit une contrainte violée sur un paramètre de requête en 400 lisible. */
+    /**
+     * Traduit une contrainte violée sur un paramètre de requête en 400 lisible.
+     */
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ProblemDetail handleConstraintViolation(ConstraintViolationException ex) {
         // ── Étape 1/3 : créer le problème avec le statut et le détail ────────
@@ -80,7 +86,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // ── handleMethodArgumentNotValid() — corps invalide → 400 avec les cham… ─
 
-    /** Traduit un corps invalide en 400 en indiquant les champs en erreur. */
+    /**
+     * Traduit un corps invalide en 400 en indiquant les champs en erreur.
+     */
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers,
@@ -106,7 +115,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // ── handleIntegrityViolation() — contrainte SQL → 400 ou 409 ─────────────
 
-    /** Traduit une violation de contrainte sans jamais exposer le message SQL. */
+    /**
+     * Traduit une violation de contrainte sans jamais exposer le message SQL.
+     */
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleIntegrityViolation(DataIntegrityViolationException ex) {
         // ── Étape 1/3 : distinguer une contrainte de forme d'un conflit de… ──
@@ -131,7 +143,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // ── handleUnexpected() — erreur inattendue → 500 générique ───────────────
 
-    /** Cache les détails techniques au client et les conserve dans les logs serveur. */
+    /**
+     * Cache les détails techniques au client et les conserve dans les logs
+     * serveur.
+     */
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUnexpected(Exception ex) {
         // ── Étape 1/3 : créer un problème générique ──────────────────────────

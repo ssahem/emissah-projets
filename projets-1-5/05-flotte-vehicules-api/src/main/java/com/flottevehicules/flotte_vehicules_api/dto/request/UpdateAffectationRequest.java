@@ -15,17 +15,19 @@ import java.time.LocalDate;
 @Schema(description = "Modification de la date de fin et, avant le début, des parties de l'affectation")
 public record UpdateAffectationRequest(
 
-        @Schema(description = "Nouvelle date de fin", example = "2026-12-10")
-        LocalDate dateFin,
-
-        @Schema(description = "Véhicule, modifiable seulement avant le début", example = "2")
-        Integer idVehicule,
-
-        @Schema(description = "Salarié, modifiable seulement avant le début", example = "3")
-        Integer idSalarie) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Date de fin
+        @Schema(description = "Nouvelle date de fin", example = "2026-12-10")
+        LocalDate dateFin,
+        // Identifiant du véhicule
+        @Schema(description = "Véhicule, modifiable seulement avant le début", example = "2")
+        Integer idVehicule,
+        // Identifiant du salarié
+        @Schema(description = "Salarié, modifiable seulement avant le début", example = "3")
+        Integer idSalarie
+) {
 
 }

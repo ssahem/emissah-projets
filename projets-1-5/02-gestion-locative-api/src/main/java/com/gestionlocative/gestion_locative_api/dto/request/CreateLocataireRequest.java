@@ -22,13 +22,24 @@ public record CreateLocataireRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Nom
-        @Schema(description = "Nom", example = "Traore") @NotBlank @Size(max = 100) String nom,
+        @Schema(description = "Nom", example = "Traore")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
         // Prénom
-        @Schema(description = "Prénom", example = "Kofi") @Size(max = 100) String prenom,
-        // Email unique
+        @Schema(description = "Prénom", example = "Kofi")
+        @Size(max = 100)
+        String prenom,
+        // Email
         @Schema(description = "Email", example = "kofi.traore@example.test")
-        @NotBlank @Email @Size(max = 255) String email,
+        @NotBlank
+        @Email
+        @Size(max = 255)
+        String email,
         // Téléphone
         @Schema(description = "Téléphone", example = "0102030406")
-        @NotBlank @Size(max = 20) String telephone) {
+        @NotBlank
+        @Size(max = 20)
+        String telephone
+) {
 }

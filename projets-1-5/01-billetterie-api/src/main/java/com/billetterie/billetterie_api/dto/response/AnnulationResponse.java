@@ -21,11 +21,16 @@ public record AnnulationResponse(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Identifiant de la réservation
-        @Schema(description = "Identifiant de la réservation", example = "1") Integer idReservation,
-        // Nouveau statut
-        @Schema(description = "Nouveau statut", example = "ANNULEE") String statut,
+        @Schema(description = "Identifiant de la réservation", example = "1")
+        Integer idReservation,
+        // Statut
+        @Schema(description = "Nouveau statut", example = "ANNULEE")
+        String statut,
         // Montant remboursé
-        @Schema(description = "Montant remboursé", example = "12.50") BigDecimal montantRembourse,
-        // Date de prise d'effet de l'annulation
-        @Schema(description = "Date de prise d'effet de l'annulation") LocalDateTime dateAnnulation) {
+        @Schema(description = "Montant remboursé", example = "12.50")
+        BigDecimal montantRembourse,
+        // Date annulation
+        @Schema(description = "Date de prise d'effet de l'annulation")
+        LocalDateTime dateAnnulation
+) {
 }

@@ -14,26 +14,28 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Salarié et son service")
 public record SalarieResponse(
 
-        @Schema(description = "Identifiant", example = "1")
-        Integer idSalarie,
-
-        @Schema(description = "Nom", example = "Martin")
-        String nom,
-
-        @Schema(description = "Prénom", example = "Alice")
-        String prenom,
-
-        @Schema(description = "Adresse électronique", example = "alice.martin@example.test")
-        String email,
-
-        @Schema(description = "Matricule unique", example = "MAT001")
-        String matricule,
-
-        @Schema(description = "Service", example = "Direction")
-        String service) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du salarié
+        @Schema(description = "Identifiant", example = "1")
+        Integer idSalarie,
+        // Nom
+        @Schema(description = "Nom", example = "Martin")
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Alice")
+        String prenom,
+        // Email
+        @Schema(description = "Adresse électronique", example = "alice.martin@example.test")
+        String email,
+        // Matricule
+        @Schema(description = "Matricule unique", example = "MAT001")
+        String matricule,
+        // Service
+        @Schema(description = "Service", example = "Direction")
+        String service
+) {
 
 }

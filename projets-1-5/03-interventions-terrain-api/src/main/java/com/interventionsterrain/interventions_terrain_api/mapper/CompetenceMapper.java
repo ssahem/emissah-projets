@@ -23,7 +23,7 @@ public class CompetenceMapper {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une compétence en reprenant ses champs.
      */
 
     public CompetenceResponse toResponse(Competence competence) {

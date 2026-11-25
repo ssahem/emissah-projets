@@ -57,7 +57,7 @@ class ReservationExpirationServiceTest {
     // ── service() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour service().
+     * Prépare un reservationexpiration de test avec des valeurs nominales.
      */
 
     @Mock private StatutRepository statutRepository;

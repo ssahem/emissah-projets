@@ -107,7 +107,10 @@ public class AppartementService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne les appartements triés par étage puis surface (F3). */
+    /**
+     * Retourne les appartements triés par étage puis surface (F3).
+     */
+
     public List<AppartementResponse> findAll() {
         return appartementRepository.findAllByOrderByEtageAscSurfaceAsc().stream()
                 .map(appartementMapper::toResponse)
@@ -116,7 +119,10 @@ public class AppartementService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne un appartement par identifiant. */
+    /**
+     * Retourne un appartement par identifiant.
+     */
+
     public AppartementResponse findById(Integer idAppartement) {
         return appartementMapper.toResponse(requireAppartement(idAppartement));
     }
@@ -124,12 +130,13 @@ public class AppartementService {
     // ── findBaux() ───────────────────────────────────────────────────────────
 
     /**
-     * Retourne l'historique des baux d'un appartement (F8), du plus récent au plus ancien.
-     * Le locataire principal est résolu via la table de liaison (E-08) et les montants
-     * antérieurs proviennent de revision_loyer (V6).
+     * Retourne l'historique des baux d'un appartement (F8), du plus récent au
+     * plus ancien. Le locataire principal est résolu via la table de liaison
+     * (E-08) et les montants antérieurs proviennent de revision_loyer (V6).
      *
      * @throws AppartementNotFoundException si l'appartement n'existe pas
      */
+
     public List<HistoriqueBailResponse> findBaux(Integer idAppartement) {
         // ── Étape 1/3 : vérifier l'existence de l'appartement ────────────────
         requireAppartement(idAppartement);
@@ -144,11 +151,12 @@ public class AppartementService {
     // ── search() ─────────────────────────────────────────────────────────────
 
     /**
-     * Recherche les appartements selon les critères fournis (F9).
-     * Sans critère, le tri reste identique à celui de la liste complète.
+     * Recherche les appartements selon les critères fournis (F9). Sans critère,
+     * le tri reste identique à celui de la liste complète. surfaceMax
      *
-     * @throws SurfaceRechercheInvalideException si surfaceMin dépasse surfaceMax
+     * @throws SurfaceRechercheInvalideException si surfaceMin dépasse
      */
+
     public List<AppartementResponse> search(BigDecimal surfaceMin, BigDecimal surfaceMax,
                                             Integer nbPieces) {
         // ── Étape 1/2 : refuser des bornes qui ne peuvent rien matcher ───────
@@ -169,11 +177,12 @@ public class AppartementService {
     // ── findLibres() ─────────────────────────────────────────────────────────
 
     /**
-     * Liste les appartements libres à une date, groupés par immeuble (F17).
-     * Une date nulle signifie « aujourd'hui » ; un bail résilié ou clôturé ne
-     * rend pas l'appartement occupé. Le dernier loyer connu vient de
-     * revision_loyer (V6), avec repli sur le loyer courant du bail.
+     * Liste les appartements libres à une date, groupés par immeuble (F17). Une
+     * date nulle signifie « aujourd'hui » ; un bail résilié ou clôturé ne rend
+     * pas l'appartement occupé. Le dernier loyer connu vient de revision_loyer
+     * (V6), avec repli sur le loyer courant du bail.
      */
+
     public List<ImmeubleAppartementsLibresResponse> findLibres(LocalDate date) {
         // ── Étape 1/3 : résoudre la date et les appartements occupés ─────────
         LocalDate dateRecherche = date != null ? date : LocalDate.now(clock);
@@ -208,6 +217,7 @@ public class AppartementService {
      *
      * @throws AppartementNotFoundException si l'appartement n'existe pas
      */
+
     public List<PeriodeOccupationResponse> findOccupation(Integer idAppartement) {
         // ── Étape 1/4 : vérifier l'appartement et la période à couvrir ───────
         Appartement appartement = requireAppartement(idAppartement);
@@ -252,14 +262,14 @@ public class AppartementService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Crée un appartement après vérification de l'immeuble, de l'étage et du numéro.
+     * Crée un appartement après vérification de l'immeuble, de l'étage et du
+     * numéro. nombre d'étages dans l'immeuble
      *
      * @throws ImmeubleNotFoundException si l'immeuble n'existe pas
-     *
-     * @throws AppartementEtageHorsImmeubleException si l'étage dépasse le nombre d'étages
-     *
-     * @throws AppartementNumeroDejaUtiliseException si le numéro existe déjà dans l'immeuble
+     * @throws AppartementEtageHorsImmeubleException si l'étage dépasse le
+     * @throws AppartementNumeroDejaUtiliseException si le numéro existe déjà
      */
+
     @Transactional
     public AppartementResponse create(CreateAppartementRequest request) {
         // ── Étape 1/3 : charger l'immeuble et contrôler l'étage ──────────────
@@ -285,7 +295,10 @@ public class AppartementService {
 
     // ── update() ─────────────────────────────────────────────────────────────
 
-    /** Modifie surface et nombre de pièces ; l'immeuble reste figé (F3). */
+    /**
+     * Modifie surface et nombre de pièces ; l'immeuble reste figé (F3).
+     */
+
     @Transactional
     public AppartementResponse update(Integer idAppartement, UpdateAppartementRequest request) {
         // ── Étape 1/3 : charger l'appartement ────────────────────────────────
@@ -300,7 +313,10 @@ public class AppartementService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime un appartement jamais loué. Modifie la base. */
+    /**
+     * Supprime un appartement jamais loué. Modifie la base.
+     */
+
     @Transactional
     public void delete(Integer idAppartement) {
         requireAppartement(idAppartement);
@@ -316,7 +332,10 @@ public class AppartementService {
 
     // ── requireAppartement() ─────────────────────────────────────────────────
 
-    /** Charge un appartement ou lève l'erreur métier 404. */
+    /**
+     * Charge un appartement ou lève l'erreur métier 404.
+     */
+
     private Appartement requireAppartement(Integer idAppartement) {
         return appartementRepository.findById(idAppartement)
                 .orElseThrow(() -> new AppartementNotFoundException(idAppartement));
@@ -324,7 +343,10 @@ public class AppartementService {
 
     // ── toHistoriqueResponse() ───────────────────────────────────────────────
 
-    /** Enrichit un bail avec son locataire principal et ses loyers passés (F8). */
+    /**
+     * Enrichit un bail avec son locataire principal et ses loyers passés (F8).
+     */
+
     private HistoriqueBailResponse toHistoriqueResponse(Bail bail, LocalDate date) {
         List<LoyerHistoriqueResponse> loyersPasses = revisionLoyerRepository
                 .findByIdBailOrderByDateEffetDesc(bail.getIdBail()).stream()
@@ -338,7 +360,10 @@ public class AppartementService {
 
     // ── principal() ──────────────────────────────────────────────────────────
 
-    /** Résout le locataire principal d'un bail via la table de liaison (E-08). */
+    /**
+     * Résout le locataire principal d'un bail via la table de liaison (E-08).
+     */
+
     private Locataire principal(Integer idBail) {
         return bailLocataireRepository.findByIdIdBail(idBail).stream()
                 .findFirst()
@@ -349,7 +374,10 @@ public class AppartementService {
 
     // ── dernierLoyerConnu() ──────────────────────────────────────────────────
 
-    /** Retourne le dernier montant historisé du bail le plus récent (F17). */
+    /**
+     * Retourne le dernier montant historisé du bail le plus récent (F17).
+     */
+
     private BigDecimal dernierLoyerConnu(Integer idAppartement) {
         return bailRepository.findAllByIdAppartementOrderByDateDebutDesc(idAppartement).stream()
                 .findFirst()
@@ -363,14 +391,20 @@ public class AppartementService {
 
     // ── periodeVacante() ─────────────────────────────────────────────────────
 
-    /** Construit une période de vacance, sans bail ni locataire (F18). */
+    /**
+     * Construit une période de vacance, sans bail ni locataire (F18).
+     */
+
     private PeriodeOccupationResponse periodeVacante(LocalDate debut, LocalDate fin) {
         return new PeriodeOccupationResponse(debut, fin, "VACANT", null, null, null, null);
     }
 
     // ── periodesLouees() ─────────────────────────────────────────────────────
 
-    /** Découpe un bail en paliers de loyer selon revision_loyer (F18). */
+    /**
+     * Découpe un bail en paliers de loyer selon revision_loyer (F18).
+     */
+
     private List<PeriodeOccupationResponse> periodesLouees(Bail bail, LocalDate debut, LocalDate fin) {
         Locataire locataire = principal(bail.getIdBail());
         List<RevisionLoyer> revisions = revisionLoyerRepository
@@ -411,7 +445,10 @@ public class AppartementService {
 
     // ── periodeLouee() ───────────────────────────────────────────────────────
 
-    /** Construit une période louée avec son locataire et son loyer applicable. */
+    /**
+     * Construit une période louée avec son locataire et son loyer applicable.
+     */
+
     private PeriodeOccupationResponse periodeLouee(
             Bail bail, Locataire locataire, LocalDate debut, LocalDate fin, BigDecimal loyer) {
         return new PeriodeOccupationResponse(

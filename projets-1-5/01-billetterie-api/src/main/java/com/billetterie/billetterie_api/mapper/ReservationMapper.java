@@ -21,7 +21,10 @@ public class ReservationMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit une réservation en réponse HTTP. */
+    /**
+     * Convertit une réservation en réponse HTTP.
+     */
+
     public ReservationResponse toResponse(Reservation reservation, String statut, String categorie) {
         ReservationPlace place = reservation.getPlaces().stream().findFirst().orElse(null);
         return new ReservationResponse(

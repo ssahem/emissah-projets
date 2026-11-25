@@ -29,6 +29,9 @@ public class PeriodeInvalideException extends ApiException {
 
     // ── getDu() ──────────────────────────────────────────────────────────────
 
-    /** Retourne du. */
+    /**
+     * Retourne du.
+     */
+
     public String getDu() { return du; }
 }

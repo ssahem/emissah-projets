@@ -13,14 +13,16 @@ import java.math.BigDecimal;
 @Schema(description = "Répartition du coût des entretiens par type")
 public record RepartitionTypeResponse(
 
-        @Schema(description = "Libellé du type d'entretien", example = "Vidange périodique")
-        String libelle,
-
-        @Schema(description = "Coût cumulé du type", example = "920.00")
-        BigDecimal cout) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Libellé
+        @Schema(description = "Libellé du type d'entretien", example = "Vidange périodique")
+        String libelle,
+        // Coût
+        @Schema(description = "Coût cumulé du type", example = "920.00")
+        BigDecimal cout
+) {
 
 }

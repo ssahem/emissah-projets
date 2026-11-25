@@ -83,7 +83,8 @@ class RestitutionServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -314,7 +315,7 @@ class RestitutionServiceTest {
     // ── preparerAgence() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparerAgence().
+     * Prépare agence pour le scénario de test.
      */
 
     private void preparerAgence(Technicien technicien, Integer idAgence, String nom) {
@@ -328,7 +329,7 @@ class RestitutionServiceTest {
     // ── preparerAgenceUnTechnicien() ─────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparerAgenceUnTechnicien().
+     * Prépare agence un technicien pour le scénario de test.
      */
 
     private void preparerAgenceUnTechnicien() {
@@ -342,7 +343,7 @@ class RestitutionServiceTest {
     // ── statut() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour statut().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private void statut(Integer idIntervention, Integer idTechnicien, String libelle) {
@@ -356,7 +357,7 @@ class RestitutionServiceTest {
     // ── agence() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour agence().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Agence agence(Integer id, String nom) {
@@ -368,7 +369,7 @@ class RestitutionServiceTest {
     // ── equipe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour equipe().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Equipe equipe(Integer id, Integer idAgence) {
@@ -380,7 +381,7 @@ class RestitutionServiceTest {
     // ── technicien() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour technicien().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Technicien technicien(Integer id, String nom, Integer idEquipe) {
@@ -393,7 +394,7 @@ class RestitutionServiceTest {
     // ── type() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour type().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private TypeIntervention type(Integer id) {
@@ -406,7 +407,7 @@ class RestitutionServiceTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Intervention intervention(Integer id, LocalDateTime debut) {
@@ -416,7 +417,7 @@ class RestitutionServiceTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Intervention intervention(Integer id, String code, LocalDateTime debut) {
@@ -426,7 +427,7 @@ class RestitutionServiceTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Intervention intervention(Integer id, LocalDateTime debut, LocalDateTime fin) {
@@ -436,7 +437,7 @@ class RestitutionServiceTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Intervention intervention(Integer id, String code, LocalDateTime debut, LocalDateTime fin) {
@@ -449,7 +450,7 @@ class RestitutionServiceTest {
     // ── affectation() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour affectation().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Affectation affectation(Integer id, Integer idIntervention, Integer idTechnicien) {
@@ -461,7 +462,7 @@ class RestitutionServiceTest {
     // ── statut() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour statut().
+     * Prépare un restitution de test avec des valeurs nominales.
      */
 
     private Statut statut(String libelle) {

@@ -51,11 +51,12 @@ public class BailClotureService {
     // ── cloturerBauxEchus() ──────────────────────────────────────────────────
 
     /**
-     * Clôture les baux échus et retourne leur nombre.
-     * Exécutée chaque nuit à 01:00 UTC, avec la même horloge que les autres règles temporelles.
+     * Clôture les baux échus et retourne leur nombre. Exécutée chaque nuit à
+     * 01:00 UTC, avec la même horloge que les autres règles temporelles.
      *
      * @return le nombre de baux clôturés lors de cette exécution
      */
+
     @Scheduled(cron = "0 0 1 * * *", zone = "UTC")
     @Transactional
     public int cloturerBauxEchus() {

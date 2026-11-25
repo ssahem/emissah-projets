@@ -14,20 +14,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Site de l'entreprise")
 public record SiteResponse(
 
-        @Schema(description = "Identifiant", example = "1")
-        Integer idSite,
-
-        @Schema(description = "Nom unique", example = "Paris Centre")
-        String nom,
-
-        @Schema(description = "Ville", example = "Paris")
-        String ville,
-
-        @Schema(description = "Adresse", example = "12 rue de la Paix")
-        String adresse) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du site
+        @Schema(description = "Identifiant", example = "1")
+        Integer idSite,
+        // Nom
+        @Schema(description = "Nom unique", example = "Paris Centre")
+        String nom,
+        // Ville
+        @Schema(description = "Ville", example = "Paris")
+        String ville,
+        // Adresse
+        @Schema(description = "Adresse", example = "12 rue de la Paix")
+        String adresse
+) {
 
 }

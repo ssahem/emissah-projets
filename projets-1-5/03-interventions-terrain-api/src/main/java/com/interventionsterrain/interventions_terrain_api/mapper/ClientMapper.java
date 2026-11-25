@@ -23,7 +23,7 @@ public class ClientMapper {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit un client en reprenant ses champs.
      */
 
     public ClientResponse toResponse(Client client) {

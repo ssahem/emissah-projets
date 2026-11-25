@@ -21,12 +21,18 @@ public record UpdateInterventionRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Début du créneau prévu", example = "2026-12-02T09:00:00")
-    @NotNull LocalDateTime debutPrevu,
-
-    @Schema(description = "Fin du créneau prévu", example = "2026-12-02T12:00:00")
-    @NotNull LocalDateTime finPrevue,
-
-    @Schema(description = "Nouveau technicien responsable", example = "2")
-    @NotNull @Positive Integer idTechnicienResponsable) {
+        // Début prévu
+        @Schema(description = "Début du créneau prévu", example = "2026-12-02T09:00:00")
+        @NotNull
+        LocalDateTime debutPrevu,
+        // Fin prévue
+        @Schema(description = "Fin du créneau prévu", example = "2026-12-02T12:00:00")
+        @NotNull
+        LocalDateTime finPrevue,
+        // Identifiant du technicien responsable
+        @Schema(description = "Nouveau technicien responsable", example = "2")
+        @NotNull
+        @Positive
+        Integer idTechnicienResponsable
+) {
 }

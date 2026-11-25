@@ -19,16 +19,23 @@ public record AppartementOccupationResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idAppartement,
+        // Identifiant de l’appartement
+        @Schema(description = "Identifiant", example = "1")
+        Integer idAppartement,
         // Numéro
-        @Schema(description = "Numéro", example = "1A") String numero,
+        @Schema(description = "Numéro", example = "1A")
+        String numero,
         // Surface
-        @Schema(description = "Surface en m²", example = "45.50") BigDecimal surface,
+        @Schema(description = "Surface en m²", example = "45.50")
+        BigDecimal surface,
         // Étage
-        @Schema(description = "Étage", example = "1") Integer etage,
-        // Occupation à la date courante
-        @Schema(description = "Occupé à la date courante", example = "true") boolean occupe,
-        // LIBRE, A_VENIR ou LOUE
-        @Schema(description = "État d'occupation", example = "LOUE") String statutOccupation) {
+        @Schema(description = "Étage", example = "1")
+        Integer etage,
+        // Occupe
+        @Schema(description = "Occupé à la date courante", example = "true")
+        boolean occupe,
+        // Statut occupation
+        @Schema(description = "État d'occupation", example = "LOUE")
+        String statutOccupation
+) {
 }

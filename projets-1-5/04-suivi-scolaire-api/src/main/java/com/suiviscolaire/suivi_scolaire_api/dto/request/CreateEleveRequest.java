@@ -16,13 +16,27 @@ import java.time.LocalDate;
  */
 @Schema(description = "Création d'un élève")
 public record CreateEleveRequest(
-        @Schema(description = "Nom", example = "Kouassi") @NotBlank String nom,
-        @Schema(description = "Prénom", example = "Aya") @NotBlank String prenom,
-        @Schema(description = "Date de naissance", example = "2011-02-14") @NotNull LocalDate dateNaissance,
-        @Schema(description = "Identifiant de la classe", example = "1") @NotNull Integer idClasse) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Nom
+        @Schema(description = "Nom", example = "Kouassi")
+        @NotBlank
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Aya")
+        @NotBlank
+        String prenom,
+        // Date de naissance
+        @Schema(description = "Date de naissance", example = "2011-02-14")
+        @NotNull
+        LocalDate dateNaissance,
+        // Identifiant de la classe
+        @Schema(description = "Identifiant de la classe", example = "1")
+        @NotNull
+        Integer idClasse
+) {
 
 }

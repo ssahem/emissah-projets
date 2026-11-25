@@ -82,7 +82,8 @@ class InterventionServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -256,12 +257,11 @@ class InterventionServiceTest {
         verify(interventionRepository).delete(intervention);
     }
 
-    /** Prépare les mocks nécessaires à une création nominale. */
 
     // ── prepareCreate() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour prepareCreate().
+     * Prépare les mocks nécessaires à une création nominale.
      */
 
     private void prepareCreate() {
@@ -289,12 +289,11 @@ class InterventionServiceTest {
         when(statutRepository.findByLibelle("PLANIFIEE")).thenReturn(Optional.of(planifiee));
     }
 
-    /** Corps de création nominal. */
 
     // ── requeteCreate() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour requeteCreate().
+     * Corps de création nominal.
      */
 
     private CreateInterventionRequest requeteCreate() {
@@ -302,12 +301,11 @@ class InterventionServiceTest {
                 DEMANDE, DEBUT, FIN, "12 rue de la Paix", "Paris");
     }
 
-    /** Intervention avec son identifiant. */
 
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Intervention avec son identifiant.
      */
 
     private Intervention intervention() {
@@ -316,12 +314,11 @@ class InterventionServiceTest {
         return intervention;
     }
 
-    /** Affectation avec son identifiant. */
 
     // ── affectation() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour affectation().
+     * Affectation avec son identifiant.
      */
 
     private Affectation affectation(Integer id, Integer idTechnicien, boolean responsable) {
@@ -330,12 +327,11 @@ class InterventionServiceTest {
         return affectation;
     }
 
-    /** Statut simulé. */
 
     // ── statut() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour statut().
+     * Statut simulé.
      */
 
     private Statut statut(String libelle) {

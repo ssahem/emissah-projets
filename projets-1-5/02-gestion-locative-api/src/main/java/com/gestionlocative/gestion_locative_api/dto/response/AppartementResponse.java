@@ -19,16 +19,23 @@ public record AppartementResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idAppartement,
+        // Identifiant de l’appartement
+        @Schema(description = "Identifiant", example = "1")
+        Integer idAppartement,
         // Numéro
-        @Schema(description = "Numéro", example = "1A") String numero,
+        @Schema(description = "Numéro", example = "1A")
+        String numero,
         // Surface
-        @Schema(description = "Surface en m²", example = "45.50") BigDecimal surface,
+        @Schema(description = "Surface en m²", example = "45.50")
+        BigDecimal surface,
         // Nombre de pièces
-        @Schema(description = "Nombre de pièces", example = "2") Integer nbPieces,
+        @Schema(description = "Nombre de pièces", example = "2")
+        Integer nbPieces,
         // Étage
-        @Schema(description = "Étage", example = "1") Integer etage,
-        // Immeuble
-        @Schema(description = "Identifiant de l'immeuble", example = "1") Integer idImmeuble) {
+        @Schema(description = "Étage", example = "1")
+        Integer etage,
+        // Identifiant de l’immeuble
+        @Schema(description = "Identifiant de l'immeuble", example = "1")
+        Integer idImmeuble
+) {
 }

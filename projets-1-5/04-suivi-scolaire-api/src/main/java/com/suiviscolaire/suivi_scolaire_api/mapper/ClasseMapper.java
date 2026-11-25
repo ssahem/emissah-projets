@@ -27,12 +27,11 @@ public class ClasseMapper {
         this.inscriptionRepository = inscriptionRepository;
     }
 
-    /** Convertit une classe en DTO avec son effectif actuel (F1, F6). */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une classe en DTO avec son effectif actuel (F1, F6).
      */
 
     public ClasseResponse toResponse(Classe classe) {

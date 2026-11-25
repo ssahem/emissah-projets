@@ -74,12 +74,11 @@ public class Site {
     //  COMPORTEMENT
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Modifie l'adresse et la ville ; le nom est figé (F1). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie l'adresse et la ville ; le nom est figé (F1).
      */
 
     public void modifier(String adresse, String ville) {
@@ -87,12 +86,12 @@ public class Site {
         this.ville = Objects.requireNonNull(ville, "ville");
     }
 
-    /** Égalité sur la clé métier (le nom), jamais sur l'id null avant enregistrement. */
 
     // ── equals() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute equals().
+     * Égalité sur la clé métier (le nom), jamais sur l'id null avant
+     * enregistrement.
      */
 
     @Override
@@ -106,12 +105,11 @@ public class Site {
         return idSite.equals(site.idSite);
     }
 
-    /** Cohérent avec equals(). */
 
     // ── hashCode() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute hashCode().
+     * Cohérent avec equals().
      */
 
     @Override

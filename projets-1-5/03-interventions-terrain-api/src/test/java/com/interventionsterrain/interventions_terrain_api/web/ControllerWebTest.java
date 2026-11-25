@@ -187,12 +187,11 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.estResponsable").value(false));
     }
 
-    /** Réponse d'intervention nominative. */
 
     // ── interventionResponse() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour interventionResponse().
+     * Réponse d'intervention nominative.
      */
 
     private InterventionResponse interventionResponse() {

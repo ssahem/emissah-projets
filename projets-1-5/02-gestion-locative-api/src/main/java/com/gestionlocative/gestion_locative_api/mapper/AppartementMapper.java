@@ -24,7 +24,10 @@ public class AppartementMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit un appartement en réponse HTTP. */
+    /**
+     * Convertit un appartement en réponse HTTP.
+     */
+
     public AppartementResponse toResponse(Appartement appartement) {
         return new AppartementResponse(
                 appartement.getIdAppartement(), appartement.getNumero(), appartement.getSurface(),
@@ -33,7 +36,11 @@ public class AppartementMapper {
 
     // ── toOccupationResponse() ───────────────────────────────────────────────
 
-    /** Convertit un appartement avec l'état d'occupation calculé par le service (F6). */
+    /**
+     * Convertit un appartement avec l'état d'occupation calculé par le service
+     * (F6).
+     */
+
     public AppartementOccupationResponse toOccupationResponse(
             Appartement appartement, boolean occupe, String statutOccupation) {
         return new AppartementOccupationResponse(
@@ -43,7 +50,11 @@ public class AppartementMapper {
 
     // ── toLibreResponse() ────────────────────────────────────────────────────
 
-    /** Convertit un appartement libre avec le dernier loyer fourni par le service (F17). */
+    /**
+     * Convertit un appartement libre avec le dernier loyer fourni par le
+     * service (F17).
+     */
+
     public AppartementLibreResponse toLibreResponse(Appartement appartement,
                                                    BigDecimal dernierLoyer) {
         return new AppartementLibreResponse(

@@ -58,7 +58,8 @@ class EleveServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -185,12 +186,11 @@ class EleveServiceTest {
         assertThat(ancienne.getDateFin()).isEqualTo(LocalDate.of(2026, 11, 24));
     }
 
-    /** Construit un élève avec son identifiant. */
 
     // ── eleve() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour eleve().
+     * Construit un élève avec son identifiant.
      */
 
     private Eleve eleve(Integer id) {
@@ -199,12 +199,11 @@ class EleveServiceTest {
         return e;
     }
 
-    /** Construit une classe avec son identifiant et son niveau. */
 
     // ── classe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour classe().
+     * Construit une classe avec son identifiant et son niveau.
      */
 
     private Classe classe(Integer id, String nom, Integer niveau) {
@@ -213,12 +212,11 @@ class EleveServiceTest {
         return c;
     }
 
-    /** Construit une inscription courante. */
 
     // ── inscription() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour inscription().
+     * Construit une inscription courante.
      */
 
     private Inscription inscription(Integer id, Integer idClasse) {

@@ -86,7 +86,7 @@ class ControllerWebTest {
     // ── json() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour json().
+     * Sérialise le corps de requête en JSON.
      */
 
     @MockitoBean private VueRepository vueRepository;

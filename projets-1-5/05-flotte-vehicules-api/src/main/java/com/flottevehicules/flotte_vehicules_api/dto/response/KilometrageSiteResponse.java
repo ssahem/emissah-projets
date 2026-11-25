@@ -13,23 +13,25 @@ import java.util.List;
 @Schema(description = "Total mensuel et détail par véhicule")
 public record KilometrageSiteResponse(
 
-        @Schema(description = "Site", example = "1")
-        Integer idSite,
-
-        @Schema(description = "Nom du site", example = "Paris Centre")
-        String nomSite,
-
-        @Schema(description = "Mois au format yyyy-MM", example = "2026-11")
-        String mois,
-
-        @Schema(description = "Total des kilomètres relevés", example = "19000")
-        Integer kmTotal,
-
-        @Schema(description = "Détail par véhicule")
-        List<DetailKilometrageResponse> vehicules) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du site
+        @Schema(description = "Site", example = "1")
+        Integer idSite,
+        // Nom du site courant
+        @Schema(description = "Nom du site", example = "Paris Centre")
+        String nomSite,
+        // Mois
+        @Schema(description = "Mois au format yyyy-MM", example = "2026-11")
+        String mois,
+        // Kilométrage total
+        @Schema(description = "Total des kilomètres relevés", example = "19000")
+        Integer kmTotal,
+        // Véhicules
+        @Schema(description = "Détail par véhicule")
+        List<DetailKilometrageResponse> vehicules
+) {
 
 }

@@ -71,7 +71,8 @@ class ReservationServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -84,7 +85,7 @@ class ReservationServiceTest {
     // ── request() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour request().
+     * Prépare une réservation de test avec des valeurs nominales.
      */
 
     private CreateReservationRequest request() {
@@ -94,7 +95,7 @@ class ReservationServiceTest {
     // ── evenement() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour evenement().
+     * Prépare une réservation de test avec des valeurs nominales.
      */
 
     private Evenement evenement(LocalDateTime date) {
@@ -109,7 +110,7 @@ class ReservationServiceTest {
     // ── place() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour place().
+     * Prépare une réservation de test avec des valeurs nominales.
      */
 
     private Place place(Salle salle) {

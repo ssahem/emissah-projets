@@ -62,12 +62,11 @@ public class ProfesseurService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Liste les professeurs triés par nom, avec leurs matières (A-02). */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Liste les professeurs triés par nom, avec leurs matières (A-02).
      */
 
     public List<ProfesseurResponse> findAll() {
@@ -75,24 +74,23 @@ public class ProfesseurService {
                 .map(this::toResponse).toList();
     }
 
-    /** Consulte un professeur par identifiant (404 si inconnu). */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Consulte un professeur par identifiant (404 si inconnu).
      */
 
     public ProfesseurResponse findById(Integer id) {
         return toResponse(required(id));
     }
 
-    /** Crée un professeur ; l'email est unique et la matière principale doit exister. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée un professeur ; l'email est unique et la matière principale doit
+     * exister.
      */
 
     @Transactional
@@ -107,12 +105,11 @@ public class ProfesseurService {
                 request.nom(), request.prenom(), request.email(), request.telephone())));
     }
 
-    /** Modifie les coordonnées et la matière principale du professeur. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie les coordonnées et la matière principale du professeur.
      */
 
     @Transactional
@@ -130,12 +127,11 @@ public class ProfesseurService {
         return toResponse(professeur);
     }
 
-    /** Refuse la suppression d'un professeur affecté à une classe (F4). */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Refuse la suppression d'un professeur affecté à une classe (F4).
      */
 
     @Transactional
@@ -148,12 +144,12 @@ public class ProfesseurService {
         professeurRepository.delete(professeur);
     }
 
-    /** Affecte une matière à un professeur dans une classe ; un seul professeur par couple (F12). */
 
     // ── affecter() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute affecter().
+     * Affecte une matière à un professeur dans une classe ; un seul professeur
+     * par couple (F12).
      */
 
     @Transactional
@@ -183,12 +179,11 @@ public class ProfesseurService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Retourne le professeur ou lève une erreur métier 404. */
 
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Retourne le professeur ou lève une erreur métier 404.
      */
 
     public Professeur required(Integer id) {
@@ -196,12 +191,12 @@ public class ProfesseurService {
                 .orElseThrow(() -> new RessourceIntrouvableException("Professeur", id));
     }
 
-    /** Convertit un professeur en DTO en retrouvant ses matières via enseignement. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit un professeur en DTO en retrouvant ses matières via
+     * enseignement.
      */
 
     private ProfesseurResponse toResponse(Professeur professeur) {

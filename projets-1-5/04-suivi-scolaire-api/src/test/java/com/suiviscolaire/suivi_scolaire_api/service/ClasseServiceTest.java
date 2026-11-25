@@ -47,7 +47,8 @@ class ClasseServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -153,12 +154,11 @@ class ClasseServiceTest {
         verify(classeRepository).delete(classe);
     }
 
-    /** Construit une classe avec son identifiant. */
 
     // ── classe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour classe().
+     * Construit une classe avec son identifiant.
      */
 
     private Classe classe(Integer id, String nom) {

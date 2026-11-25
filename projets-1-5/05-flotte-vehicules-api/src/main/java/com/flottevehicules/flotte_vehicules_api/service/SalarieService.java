@@ -45,36 +45,33 @@ public class SalarieService {
         this.affectationMapper = affectationMapper;
     }
 
-    /** F3 : salariés triés par nom. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * F3 : salariés triés par nom.
      */
 
     public List<SalarieResponse> findAll() {
         return salarieRepository.findAllByOrderByNomAsc().stream().map(mapper::toResponse).toList();
     }
 
-    /** F3 : un salarié par identifiant ; 404 si inconnu. */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * F3 : un salarié par identifiant ; 404 si inconnu.
      */
 
     public SalarieResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F3 : crée un salarié ; matricule et email doivent être uniques. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * F3 : crée un salarié ; matricule et email doivent être uniques.
      */
 
     @Transactional
@@ -92,12 +89,11 @@ public class SalarieService {
                 request.matricule(), request.service())));
     }
 
-    /** F3 : nom, prénom, email et service modifiables ; matricule figé. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * F3 : nom, prénom, email et service modifiables ; matricule figé.
      */
 
     @Transactional
@@ -113,12 +109,11 @@ public class SalarieService {
         return mapper.toResponse(salarieRepository.save(salarie));
     }
 
-    /** F3 : suppression refusée si le salarié a une affectation en cours. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * F3 : suppression refusée si le salarié a une affectation en cours.
      */
 
     @Transactional
@@ -131,12 +126,11 @@ public class SalarieService {
         salarieRepository.delete(salarie);
     }
 
-    /** F7 : affectations d'un salarié, de la plus récente à la plus ancienne. */
 
     // ── affectations() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute affectations().
+     * F7 : affectations d'un salarié, de la plus récente à la plus ancienne.
      */
 
     public List<AffectationSalarieResponse> affectations(Integer id) {
@@ -149,7 +143,7 @@ public class SalarieService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère un salarié par identifiant ou lève une exception si absent.
      */
 
     private Salarie required(Integer id) {

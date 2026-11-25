@@ -34,7 +34,6 @@ public class HistoriqueEntretienController {
         this.service = service;
     }
 
-    /** F8 : entretiens triés par date décroissante et coût cumulé. */
 
     // ── historique() — GET /flotte-vehicules/vehicule/{id}/entretiens ────────
 

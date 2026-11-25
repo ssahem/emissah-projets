@@ -72,7 +72,8 @@ class EvenementServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -89,7 +90,7 @@ class EvenementServiceTest {
     // ── evenement() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour evenement().
+     * Prépare un événement de test avec des valeurs nominales.
      */
 
     private Evenement evenement(int id, LocalDateTime date) {
@@ -192,7 +193,7 @@ class EvenementServiceTest {
     // ── salleAvecId() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour salleAvecId().
+     * Prépare le contexte nécessaire à l’opération salleAvecId().
      */
 
     private Salle salleAvecId() {
@@ -204,7 +205,7 @@ class EvenementServiceTest {
     // ── place() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour place().
+     * Prépare un événement de test avec des valeurs nominales.
      */
 
     private Place place(Salle salle, String categorie, int numero) {
@@ -216,7 +217,7 @@ class EvenementServiceTest {
     // ── placeReservee() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour placeReservee().
+     * Prépare le contexte nécessaire à l’opération placeReservee().
      */
 
     private ReservationPlace placeReservee(int numero) {
@@ -231,7 +232,7 @@ class EvenementServiceTest {
     // ── preparerEvenementEtPlaces() ──────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparerEvenementEtPlaces().
+     * Prépare evenement et places pour le scénario de test.
      */
 
     private void preparerEvenementEtPlaces(List<Place> places) {

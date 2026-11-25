@@ -18,12 +18,11 @@ public class SiteMapper {
     //  CONSTANTES ET CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Convertit une entité en réponse. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une entité en réponse.
      */
 
     public SiteResponse toResponse(Site site) {

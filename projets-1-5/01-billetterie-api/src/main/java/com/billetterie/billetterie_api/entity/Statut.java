@@ -51,11 +51,17 @@ public class Statut {
 
     // ── getIdStatut() ────────────────────────────────────────────────────────
 
-    /** Retourne idStatut. */
+    /**
+     * Retourne idStatut.
+     */
+
     public Integer getIdStatut() { return idStatut; }
 
     // ── getLibelle() ─────────────────────────────────────────────────────────
 
-    /** Retourne libelle. */
+    /**
+     * Retourne libelle.
+     */
+
     public String getLibelle() { return libelle; }
 }

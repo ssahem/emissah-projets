@@ -17,14 +17,24 @@ import jakarta.validation.constraints.Positive;
  */
 @Schema(description = "Modification d'un professeur")
 public record UpdateProfesseurRequest(
-        @Schema(description = "Email unique", example = "claire.durand@example.test")
-        @NotBlank @Email String email,
-        @Schema(description = "Téléphone", example = "0102030401") String telephone,
-        @Schema(description = "Identifiant de la matière principale", example = "1")
-        @NotNull @Positive Integer idMatierePrincipale) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Email
+        @Schema(description = "Email unique", example = "claire.durand@example.test")
+        @NotBlank
+        @Email
+        String email,
+        // Téléphone
+        @Schema(description = "Téléphone", example = "0102030401")
+        String telephone,
+        // Identifiant de la matièreprincipale
+        @Schema(description = "Identifiant de la matière principale", example = "1")
+        @NotNull
+        @Positive
+        Integer idMatierePrincipale
+) {
 
 }

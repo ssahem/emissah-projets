@@ -80,12 +80,12 @@ public class Note {
     public Integer getIdEnseignement() { return idEnseignement; }
     public String getNumeroInscription() { return numeroInscription; }
 
-    /** Modifie la valeur ; l'élève, la matière et le trimestre restent figés (F5). */
 
     // ── modifierValeur() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute modifierValeur().
+     * Modifie la valeur ; l'élève, la matière et le trimestre restent figés
+     * (F5).
      */
 
     public void modifierValeur(BigDecimal valeur) { this.valeur = Objects.requireNonNull(valeur, "valeur"); }

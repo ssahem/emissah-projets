@@ -54,9 +54,9 @@ public class SalleController {
     // ── list() — GET /billetterie/salle/list ─────────────────────────────────
 
     /**
-     * Liste les salles.
-     * Réponses : 200 | 500.
+     * Liste les salles. Réponses : 200 | 500.
      */
+
     @Operation(summary = "Lister les salles")
     @ApiResponse(responseCode = "200", description = "Salles renvoyées")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
@@ -68,9 +68,9 @@ public class SalleController {
     // ── getById() — GET /billetterie/salle/get/{id} ──────────────────────────
 
     /**
-     * Consulte une salle.
-     * Réponses : 200 | 400 | 404 | 500.
+     * Consulte une salle. Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Consulter une salle")
     @ApiResponse(responseCode = "200", description = "Salle renvoyée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -84,9 +84,9 @@ public class SalleController {
     // ── create() — POST /billetterie/salle/create ────────────────────────────
 
     /**
-     * Crée une salle.
-     * Réponses : 201 | 400 | 409 | 500.
+     * Crée une salle. Réponses : 201 | 400 | 409 | 500.
      */
+
     @Operation(summary = "Créer une salle")
     @ApiResponse(responseCode = "201", description = "Salle créée")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -101,9 +101,9 @@ public class SalleController {
     // ── update() — PUT /billetterie/salle/update/{id} ────────────────────────
 
     /**
-     * Modifie une salle.
-     * Réponses : 200 | 400 | 404 | 409 | 500.
+     * Modifie une salle. Réponses : 200 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Modifier une salle")
     @ApiResponse(responseCode = "200", description = "Salle modifiée")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -118,9 +118,9 @@ public class SalleController {
     // ── delete() — DELETE /billetterie/salle/delete/{id} ─────────────────────
 
     /**
-     * Supprime une salle vide.
-     * Réponses : 204 | 400 | 404 | 409 | 500.
+     * Supprime une salle vide. Réponses : 204 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Supprimer une salle")
     @ApiResponse(responseCode = "204", description = "Salle supprimée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -139,6 +139,7 @@ public class SalleController {
      * Liste les places d'une salle, avec filtre catégorie optionnel (F5, F6).
      * Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Lister les places d'une salle")
     @ApiResponse(responseCode = "200", description = "Places renvoyées")
     @ApiResponse(responseCode = "400", description = "Catégorie inconnue")
@@ -153,9 +154,10 @@ public class SalleController {
     // ── programmation() — GET /billetterie/salle/evenements/{id} ─────────────
 
     /**
-     * Retourne la programmation d'une salle (F7).
-     * Réponses : 200 | 400 | 404 | 500.
+     * Retourne la programmation d'une salle (F7). Réponses : 200 | 400 | 404 |
+     * 500.
      */
+
     @Operation(summary = "Lister les événements d'une salle")
     @ApiResponse(responseCode = "200", description = "Programmation renvoyée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

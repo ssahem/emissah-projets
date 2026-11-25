@@ -49,7 +49,8 @@ class MatiereServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -131,12 +132,11 @@ class MatiereServiceTest {
                 .coefficient()).isEqualByComparingTo("10");
     }
 
-    /** Construit une matière avec son identifiant. */
 
     // ── matiere() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour matiere().
+     * Construit une matière avec son identifiant.
      */
 
     private Matiere matiere(Integer id) {

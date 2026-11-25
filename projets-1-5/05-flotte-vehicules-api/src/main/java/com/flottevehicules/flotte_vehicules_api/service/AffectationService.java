@@ -60,12 +60,11 @@ public class AffectationService {
         this.clock = clock;
     }
 
-    /** F4 : affectations triées par date de début décroissante. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * F4 : affectations triées par date de début décroissante.
      */
 
     public List<AffectationResponse> findAll() {
@@ -73,24 +72,22 @@ public class AffectationService {
                 .map(mapper::toResponse).toList();
     }
 
-    /** F4 : une affectation par identifiant ; 404 si inconnue. */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * F4 : une affectation par identifiant ; 404 si inconnue.
      */
 
     public AffectationResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F4, F11, F12 : crée une affectation après contrôle des chevauchements. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * F4, F11, F12 : crée une affectation après contrôle des chevauchements.
      */
 
     @Transactional
@@ -117,12 +114,12 @@ public class AffectationService {
         return mapper.toResponse(affectation);
     }
 
-    /** F4 : modification de la date de fin ; parties figées dès le début de l'affectation. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * F4 : modification de la date de fin ; parties figées dès le début de
+     * l'affectation.
      */
 
     @Transactional
@@ -164,12 +161,11 @@ public class AffectationService {
         return mapper.toResponse(affectationRepository.save(affectation));
     }
 
-    /** F4 : suppression possible uniquement avant le début de l'affectation. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * F4 : suppression possible uniquement avant le début de l'affectation.
      */
 
     @Transactional
@@ -182,12 +178,12 @@ public class AffectationService {
         affectationRepository.delete(affectation);
     }
 
-    /** F13 et F14 : clôture l'affectation avec date et relevé kilométrique croissant. */
 
     // ── restituer() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute restituer().
+     * F13 et F14 : clôture l'affectation avec date et relevé kilométrique
+     * croissant.
      */
 
     @Transactional
@@ -220,7 +216,7 @@ public class AffectationService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère une affectation par identifiant ou lève une exception si absent.
      */
 
     private Affectation required(Integer id) {
@@ -228,12 +224,12 @@ public class AffectationService {
                 .orElseThrow(() -> new RessourceIntrouvableException("Affectation", id));
     }
 
-    /** F11 et F12 : refuse le chevauchement avec une affectation ou une immobilisation. */
 
     // ── verifierDisponibilite() ──────────────────────────────────────────────
 
     /**
-     * Exécute verifierDisponibilite().
+     * F11 et F12 : refuse le chevauchement avec une affectation ou une
+     * immobilisation.
      */
 
     private void verifierDisponibilite(Integer idVehicule, LocalDate debut, LocalDate fin, Integer idExclu) {
@@ -265,12 +261,12 @@ public class AffectationService {
         }
     }
 
-    /** F14 (D-01) : le compteur ne recule pas ; le refus indique la dernière valeur et sa date. */
 
     // ── verifierKmCroissant() ────────────────────────────────────────────────
 
     /**
-     * Exécute verifierKmCroissant().
+     * F14 (D-01) : le compteur ne recule pas ; le refus indique la dernière
+     * valeur et sa date.
      */
 
     private void verifierKmCroissant(Integer idVehicule, Integer km) {

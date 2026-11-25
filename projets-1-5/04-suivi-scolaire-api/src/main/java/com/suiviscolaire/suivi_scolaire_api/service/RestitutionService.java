@@ -89,11 +89,11 @@ public class RestitutionService {
     // ── moyennesParMatiere() ─────────────────────────────────────────────────
 
     /**
- * F17 — Moyenne de l'élève dans chaque matière enseignée dans sa classe. Une matière sans
- *   note
- * est renvoyée avec moyenne null et evaluee=false ; les moyennes viennent de
- *   v_moyenne_matiere.
+     * F17 — Moyenne de l'élève dans chaque matière enseignée dans sa classe.
+     * Une matière sans note est renvoyée avec moyenne null et evaluee=false ;
+     * les moyennes viennent de v_moyenne_matiere.
      */
+
     public MoyennesResponse moyennesParMatiere(Integer idEleve, Integer trimestre) {
         eleveRepository.findById(idEleve)
                 .orElseThrow(() -> new RessourceIntrouvableException("Eleve", idEleve));
@@ -127,10 +127,11 @@ public class RestitutionService {
     // ── moyenneGenerale() ────────────────────────────────────────────────────
 
     /**
- * F18 — Moyenne générale pondérée par les coefficients des matières (vue
- *   v_moyenne_generale),
-     * avec le détail du calcul. Sans aucune note, la moyenne est absente (null), jamais zéro.
+     * F18 — Moyenne générale pondérée par les coefficients des matières (vue
+     * v_moyenne_generale), avec le détail du calcul. Sans aucune note, la
+     * moyenne est absente (null), jamais zéro.
      */
+
     public MoyenneGeneraleResponse moyenneGenerale(Integer idEleve, Integer trimestre) {
         eleveRepository.findById(idEleve)
                 .orElseThrow(() -> new RessourceIntrouvableException("Eleve", idEleve));
@@ -153,10 +154,11 @@ public class RestitutionService {
     // ── classement() ─────────────────────────────────────────────────────────
 
     /**
- * F19 — Classement d'une classe : rangs densifiés de la vue pour les élèves évalués, élèves
- *   sans
-     * note en fin de liste sans rang, moyenne de classe, meilleure et plus faible moyenne.
+     * F19 — Classement d'une classe : rangs densifiés de la vue pour les élèves
+     * évalués, élèves sans note en fin de liste sans rang, moyenne de classe,
+     * meilleure et plus faible moyenne.
      */
+
     public ClassementResponse classement(Integer idClasse, Integer trimestre) {
         Classe classe = classeRepository.findById(idClasse)
                 .orElseThrow(() -> new RessourceIntrouvableException("Classe", idClasse));
@@ -201,12 +203,11 @@ public class RestitutionService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Retourne l'inscription courante d'un élève ou une erreur 400 explicite. */
 
     // ── inscriptionCourante() ────────────────────────────────────────────────
 
     /**
-     * Exécute inscriptionCourante().
+     * Retourne l'inscription courante d'un élève ou une erreur 400 explicite.
      */
 
     private Inscription inscriptionCourante(Integer idEleve) {

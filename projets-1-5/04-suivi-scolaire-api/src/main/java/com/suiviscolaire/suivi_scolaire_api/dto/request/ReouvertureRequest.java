@@ -15,14 +15,20 @@ import jakarta.validation.constraints.Size;
  */
 @Schema(description = "Réouverture d'un trimestre")
 public record ReouvertureRequest(
-        @Schema(description = "Motif d'au moins 20 caractères",
-                example = "Correction d'une erreur de saisie sur une note")
-        @NotBlank @Size(min = 20) String motif,
-        @Schema(description = "Auteur de la réouverture (texte libre)",
-                example = "Responsable scolarite") @NotBlank String auteur) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Motif
+        @Schema(description = "Motif d'au moins 20 caractères", example = "Correction d'une erreur de saisie sur une note")
+        @NotBlank
+        @Size(min = 20)
+        String motif,
+        // Auteur
+        @Schema(description = "Auteur", example = "Exemple")
+        @NotBlank
+        String auteur
+) {
 
 }

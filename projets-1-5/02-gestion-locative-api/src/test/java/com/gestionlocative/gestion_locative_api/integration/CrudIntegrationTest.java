@@ -79,7 +79,7 @@ class CrudIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource
@@ -97,7 +97,7 @@ class CrudIntegrationTest {
     // ── nettoyer() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour nettoyer().
+     * Vide les tables utilisées par les scénarios d’intégration.
      */
 
     @Autowired private BailClotureService bailClotureService;
@@ -589,12 +589,12 @@ class CrudIntegrationTest {
 
     // ── Outils de préparation ────────────────────────────────────────────────
 
-    /** Crée un propriétaire, un immeuble et un appartement pour les tests de cycle de vie. */
 
     // ── preparerAppartement() ────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparerAppartement().
+     * Crée un propriétaire, un immeuble et un appartement pour les tests de
+     * cycle de vie.
      */
 
     private Integer preparerAppartement() throws Exception {
@@ -603,12 +603,11 @@ class CrudIntegrationTest {
         return creerAppartement(idImmeuble, "1A");
     }
 
-    /** Compte les événements d'un motif donné pour un bail. */
 
     // ── nombreEvenements() ───────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour nombreEvenements().
+     * Compte les événements d'un motif donné pour un bail.
      */
 
     private int nombreEvenements(Integer idBail, String motif) {
@@ -617,12 +616,11 @@ class CrudIntegrationTest {
                 Integer.class, idBail, motif);
     }
 
-    /** Crée un propriétaire et retourne son identifiant. */
 
     // ── creerProprietaire() ──────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerProprietaire().
+     * Crée un propriétaire et retourne son identifiant.
      */
 
     private Integer creerProprietaire(String prefixe) throws Exception {
@@ -636,12 +634,11 @@ class CrudIntegrationTest {
         return id(resultat, "idProprietaire");
     }
 
-    /** Crée un immeuble et retourne son identifiant. */
 
     // ── creerImmeuble() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerImmeuble().
+     * Crée un immeuble et retourne son identifiant.
      */
 
     private Integer creerImmeuble(Integer idProprietaire) throws Exception {
@@ -655,24 +652,22 @@ class CrudIntegrationTest {
         return id(resultat, "idImmeuble");
     }
 
-    /** Crée un appartement et retourne son identifiant. */
 
     // ── creerAppartement() ───────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerAppartement().
+     * Crée un appartement et retourne son identifiant.
      */
 
     private Integer creerAppartement(Integer idImmeuble, String numero) throws Exception {
         return creerAppartement(idImmeuble, numero, 45.50, 1);
     }
 
-    /** Crée un appartement avec une surface et un étage choisis. */
 
     // ── creerAppartement() ───────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerAppartement().
+     * Crée un appartement avec une surface et un étage choisis.
      */
 
     private Integer creerAppartement(Integer idImmeuble, String numero,
@@ -687,12 +682,11 @@ class CrudIntegrationTest {
         return id(resultat, "idAppartement");
     }
 
-    /** Crée un locataire et retourne son identifiant. */
 
     // ── creerLocataire() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerLocataire().
+     * Crée un locataire et retourne son identifiant.
      */
 
     private Integer creerLocataire(String prefixe) throws Exception {
@@ -706,12 +700,11 @@ class CrudIntegrationTest {
         return id(resultat, "idLocataire");
     }
 
-    /** Prépare un appartement libre avec son locataire (identifiant 1). */
 
     // ── preparerAppartementLibre() ───────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparerAppartementLibre().
+     * Prépare un appartement libre avec son locataire (identifiant 1).
      */
 
     private Integer preparerAppartementLibre() throws Exception {
@@ -721,12 +714,11 @@ class CrudIntegrationTest {
         return creerAppartement(idImmeuble, "1A");
     }
 
-    /** Crée un bail et retourne la réponse HTTP. */
 
     // ── creerBail() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerBail().
+     * Crée un bail et retourne la réponse HTTP.
      */
 
     private MvcResult creerBail(Integer idAppartement, Integer idLocataire,
@@ -741,24 +733,22 @@ class CrudIntegrationTest {
                 .andReturn();
     }
 
-    /** Lit un identifiant dans une réponse JSON. */
 
     // ── id() ─────────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour id().
+     * Lit un identifiant dans une réponse JSON.
      */
 
     private Integer id(MvcResult resultat, String champ) throws Exception {
         return Integer.valueOf(lire(resultat, champ));
     }
 
-    /** Lit un champ texte dans une réponse JSON. */
 
     // ── lire() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour lire().
+     * Lit un champ texte dans une réponse JSON.
      */
 
     private String lire(MvcResult resultat, String champ) throws Exception {

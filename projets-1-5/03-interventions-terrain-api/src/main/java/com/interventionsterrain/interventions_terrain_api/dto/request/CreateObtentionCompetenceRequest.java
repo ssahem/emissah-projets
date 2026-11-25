@@ -21,12 +21,17 @@ public record CreateObtentionCompetenceRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Identifiant de la compétence", example = "5")
-    @NotNull @Positive Integer idCompetence,
-
-    @Schema(description = "Date d'obtention", example = "2026-01-10")
-    @NotNull LocalDate dateObtention,
-
-    @Schema(description = "Date d'expiration, facultative", example = "2027-01-10")
-    LocalDate dateExpiration) {
+        // Identifiant de la compétence
+        @Schema(description = "Identifiant de la compétence", example = "5")
+        @NotNull
+        @Positive
+        Integer idCompetence,
+        // Date obtention
+        @Schema(description = "Date d'obtention", example = "2026-01-10")
+        @NotNull
+        LocalDate dateObtention,
+        // Date expiration
+        @Schema(description = "Date d'expiration, facultative", example = "2027-01-10")
+        LocalDate dateExpiration
+) {
 }

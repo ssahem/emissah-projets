@@ -25,16 +25,30 @@ public record CreateAppartementRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Numéro, unique dans l'immeuble
-        @Schema(description = "Numéro", example = "1A") @NotBlank @Size(max = 10) String numero,
-        // Surface en m²
+        // Numéro
+        @Schema(description = "Numéro", example = "1A")
+        @NotBlank
+        @Size(max = 10)
+        String numero,
+        // Surface
         @Schema(description = "Surface en m²", example = "45.50")
-        @NotNull @DecimalMin(value = "0.01", message = "La surface doit être positive") BigDecimal surface,
+        @NotNull
+        @DecimalMin(value = "0.01", message = "La surface doit être positive")
+        BigDecimal surface,
         // Nombre de pièces
-        @Schema(description = "Nombre de pièces", example = "2") @NotNull @Positive Integer nbPieces,
-        // Étage (0 = rez-de-chaussée)
-        @Schema(description = "Étage", example = "1") @NotNull @PositiveOrZero Integer etage,
-        // Immeuble
+        @Schema(description = "Nombre de pièces", example = "2")
+        @NotNull
+        @Positive
+        Integer nbPieces,
+        // Étage
+        @Schema(description = "Étage", example = "1")
+        @NotNull
+        @PositiveOrZero
+        Integer etage,
+        // Identifiant de l’immeuble
         @Schema(description = "Identifiant de l'immeuble", example = "1")
-        @NotNull @Positive Integer idImmeuble) {
+        @NotNull
+        @Positive
+        Integer idImmeuble
+) {
 }

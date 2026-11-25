@@ -82,7 +82,7 @@ public class Technicien {
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie un technicien identifié, après contrôle des règles métier.
      */
 
     public void modifier(String nom, String prenom, String email, String telephone, Integer idEquipe) {

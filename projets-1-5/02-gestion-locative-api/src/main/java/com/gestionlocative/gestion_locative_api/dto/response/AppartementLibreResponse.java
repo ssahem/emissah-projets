@@ -19,12 +19,17 @@ public record AppartementLibreResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idAppartement,
+        // Identifiant de l’appartement
+        @Schema(description = "Identifiant", example = "1")
+        Integer idAppartement,
         // Numéro
-        @Schema(description = "Numéro", example = "1A") String numero,
+        @Schema(description = "Numéro", example = "1A")
+        String numero,
         // Surface
-        @Schema(description = "Surface en m²", example = "45.50") BigDecimal surface,
-        // Dernier montant de revision_loyer, ou null si l'appartement n'a jamais été loué
-        @Schema(description = "Dernier loyer connu", example = "850.00") BigDecimal dernierLoyer) {
+        @Schema(description = "Surface en m²", example = "45.50")
+        BigDecimal surface,
+        // Dernier loyer
+        @Schema(description = "Dernier loyer connu", example = "850.00")
+        BigDecimal dernierLoyer
+) {
 }

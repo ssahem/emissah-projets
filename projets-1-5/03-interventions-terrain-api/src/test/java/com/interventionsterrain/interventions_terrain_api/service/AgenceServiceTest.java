@@ -52,7 +52,8 @@ class AgenceServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -138,12 +139,11 @@ class AgenceServiceTest {
         verify(agenceRepository, never()).delete(any());
     }
 
-    /** Construit une agence avec son identifiant. */
 
     // ── agence() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour agence().
+     * Construit une agence avec son identifiant.
      */
 
     private Agence agence(Integer id, String nom, String ville) {

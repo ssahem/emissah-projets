@@ -19,12 +19,11 @@ public class ClockConfig {
     //  CONSTANTES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Fournit l'horloge système UTC utilisée par les services temporels. */
 
     // ── clock() ──────────────────────────────────────────────────────────────
 
     /**
-     * Exécute clock().
+     * Fournit l'horloge système UTC utilisée par les services temporels.
      */
 
     @Bean

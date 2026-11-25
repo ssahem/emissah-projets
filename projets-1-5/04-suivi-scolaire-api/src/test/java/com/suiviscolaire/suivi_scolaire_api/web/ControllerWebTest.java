@@ -384,24 +384,22 @@ class ControllerWebTest {
 
     private static final String MOTIF = "Correction d'une erreur de saisie avérée";
 
-    /** Réponse élève nominative. */
 
     // ── eleve() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour eleve().
+     * Réponse élève nominative.
      */
 
     private EleveResponse eleve() {
         return new EleveResponse(1, "Kouassi", "Aya", LocalDate.of(2011, 2, 14), 1, "6A");
     }
 
-    /** Réponse note nominative. */
 
     // ── note() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour note().
+     * Réponse note nominative.
      */
 
     private NoteResponse note() {

@@ -43,7 +43,7 @@ class SocleIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource

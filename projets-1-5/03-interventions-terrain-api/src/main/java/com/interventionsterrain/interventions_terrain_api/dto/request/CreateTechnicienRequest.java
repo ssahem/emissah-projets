@@ -23,24 +23,37 @@ public record CreateTechnicienRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Nom", example = "Martin")
-    @NotBlank @Size(max = 100) String nom,
-
-    @Schema(description = "Prénom (facultatif)", example = "Camille")
-    @Size(max = 100) String prenom,
-
-    @Schema(description = "Email (facultatif : valeur unique générée si absent)")
-    @Email @Size(max = 255) String email,
-
-    @Schema(description = "Téléphone", example = "0102030405")
-    @Size(max = 20) String telephone,
-
-    @Schema(description = "Identifiant de l'agence", example = "1")
-    @NotNull @Positive Integer idAgence,
-
-    @Schema(description = "Identifiant d'une équipe précise de l'agence (facultatif)")
-    @Positive Integer idEquipe,
-
-    @Schema(description = "Matricule", example = "MAT001")
-    @NotBlank @Size(max = 50) String matricule) {
+        // Nom
+        @Schema(description = "Nom", example = "Martin")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Kofi")
+        @Size(max = 100)
+        String prenom,
+        // Email
+        @Schema(description = "Email", example = "kofi@example.test")
+        @Email
+        @Size(max = 255)
+        String email,
+        // Téléphone
+        @Schema(description = "Téléphone", example = "0102030405")
+        @Size(max = 20)
+        String telephone,
+        // Identifiant de l’agence
+        @Schema(description = "Identifiant de l'agence", example = "1")
+        @NotNull
+        @Positive
+        Integer idAgence,
+        // Identifiant de l’equipe
+        @Schema(description = "Identifiant de l’equipe", example = "1")
+        @Positive
+        Integer idEquipe,
+        // Matricule
+        @Schema(description = "Matricule", example = "MAT001")
+        @NotBlank
+        @Size(max = 50)
+        String matricule
+) {
 }

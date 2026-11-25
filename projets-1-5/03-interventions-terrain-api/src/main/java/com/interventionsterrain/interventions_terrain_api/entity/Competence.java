@@ -61,7 +61,7 @@ public class Competence {
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie une compétence identifié, après contrôle des règles métier.
      */
 
     public void modifier(String libelle, String description) {

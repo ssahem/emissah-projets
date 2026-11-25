@@ -86,7 +86,10 @@ public class EvenementService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne tous les événements triés par date croissante. */
+    /**
+     * Retourne tous les événements triés par date croissante.
+     */
+
     public List<EvenementResponse> findAll() {
         return evenementRepository.findAllByOrderByDateHeureAsc().stream()
                 .map(evenementMapper::toResponse)
@@ -96,10 +99,12 @@ public class EvenementService {
     // ── findBetween() ────────────────────────────────────────────────────────
 
     /**
-     * Filtre les événements entre deux bornes inclusives, une borne ou aucune (F8).
+     * Filtre les événements entre deux bornes inclusives, une borne ou aucune
+     * (F8). la borne de fin.
      *
-     * @throws PeriodeInvalideException si la borne de début est postérieure à la borne de fin.
+     * @throws PeriodeInvalideException si la borne de début est postérieure à
      */
+
     public List<EvenementResponse> findBetween(LocalDateTime du, LocalDateTime au) {
         // ── Étape 1/2 : valider la période ───────────────────────────────────
         if (du != null && au != null && du.isAfter(au)) {
@@ -123,10 +128,11 @@ public class EvenementService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Retourne un événement par identifiant.
+     * Retourne un événement par identifiant. identifiant.
      *
-     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     * @throws EvenementNotFoundException si aucun événement ne porte cet
      */
+
     public EvenementResponse findById(Integer idEvenement) {
         return evenementMapper.toResponse(requireEvenement(idEvenement));
     }
@@ -134,12 +140,13 @@ public class EvenementService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Crée un événement futur dans une salle pourvue de places. Modifie la base.
+     * Crée un événement futur dans une salle pourvue de places. Modifie la
+     * base. passée.
      *
-     * @throws DateEvenementPasseeException si la date de l’événement est déjà passée.
-     *
+     * @throws DateEvenementPasseeException si la date de l’événement est déjà
      * @throws SalleSansPlaceException si la salle ne contient aucune place.
      */
+
     @Transactional
     public EvenementResponse create(CreateEvenementRequest request) {
         // ── Étape 1/3 : résoudre les références et contrôler les règles ──────
@@ -162,12 +169,13 @@ public class EvenementService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie un événement ; la salle est figée dès la première réservation. Modifie la base.
+     * Modifie un événement ; la salle est figée dès la première réservation.
+     * Modifie la base. identifiant. être modifiée.
      *
-     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
-     *
-     * @throws SalleEvenementFigeeException si la salle ou la date ne peut plus être modifiée.
+     * @throws EvenementNotFoundException si aucun événement ne porte cet
+     * @throws SalleEvenementFigeeException si la salle ou la date ne peut plus
      */
+
     @Transactional
     public EvenementResponse update(Integer idEvenement, UpdateEvenementRequest request) {
         // ── Étape 1/3 : charger et contrôler ─────────────────────────────────
@@ -196,12 +204,13 @@ public class EvenementService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Supprime un événement sans réservation. Modifie la base.
+     * Supprime un événement sans réservation. Modifie la base. identifiant. des
+     * réservations.
      *
-     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
-     *
-     * @throws EvenementNonSupprimableException si l’événement comporte encore des réservations.
+     * @throws EvenementNotFoundException si aucun événement ne porte cet
+     * @throws EvenementNonSupprimableException si l’événement comporte encore
      */
+
     @Transactional
     public void delete(Integer idEvenement) {
         Evenement evenement = requireEvenement(idEvenement);
@@ -219,11 +228,12 @@ public class EvenementService {
 
     /**
      * Calcule les places encore libres, groupées par catégorie (F17).
+     * identifiant.
      *
-     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
-     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet
      * @throws SalleSansPlaceException si la salle ne contient aucune place.
      */
+
     public PlacesLibresResponse findPlacesLibres(Integer idEvenement) {
         // ── Étape 1/3 : charger l'événement et les places de sa salle ────────
         Evenement evenement = requireEvenement(idEvenement);
@@ -258,12 +268,13 @@ public class EvenementService {
     // ── findRemplissage() ────────────────────────────────────────────────────
 
     /**
-     * Calcule le taux de remplissage d'un événement, détaillé par catégorie (F18).
+     * Calcule le taux de remplissage d'un événement, détaillé par catégorie
+     * (F18). identifiant.
      *
-     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
-     *
+     * @throws EvenementNotFoundException si aucun événement ne porte cet
      * @throws SalleSansPlaceException si la salle ne contient aucune place.
      */
+
     public RemplissageResponse findRemplissage(Integer idEvenement) {
         // ── Étape 1/4 : charger l'événement et vérifier les places de la sa… ─
         Evenement evenement = requireEvenement(idEvenement);
@@ -295,10 +306,11 @@ public class EvenementService {
     // ── exportReservations() ─────────────────────────────────────────────────
 
     /**
-     * Exporte les réservations de l'événement au format CSV (F19).
+     * Exporte les réservations de l'événement au format CSV (F19). identifiant.
      *
-     * @throws EvenementNotFoundException si aucun événement ne porte cet identifiant.
+     * @throws EvenementNotFoundException si aucun événement ne porte cet
      */
+
     public String exportReservations(Integer idEvenement, boolean inclureAnnulees) {
         requireEvenement(idEvenement);
         return csvExportMapper.toCsv(
@@ -311,7 +323,11 @@ public class EvenementService {
 
     // ── compterParStatut() ───────────────────────────────────────────────────
 
-    /** Compte les places d'un statut et les ventile dans les cumuls par catégorie (F18). */
+    /**
+     * Compte les places d'un statut et les ventile dans les cumuls par
+     * catégorie (F18).
+     */
+
     private long compterParStatut(Integer idSalle, Integer idEvenement, String statut,
                                   Map<String, long[]> cumuls, int index) {
         long total = 0;
@@ -329,7 +345,10 @@ public class EvenementService {
 
     // ── pourcentage() ────────────────────────────────────────────────────────
 
-    /** Calcule un pourcentage arrondi à deux décimales. */
+    /**
+     * Calcule un pourcentage arrondi à deux décimales.
+     */
+
     private BigDecimal pourcentage(long occupees, long total) {
         if (total == 0) {
             return BigDecimal.ZERO.setScale(2);
@@ -341,7 +360,10 @@ public class EvenementService {
 
     // ── requireEvenement() ───────────────────────────────────────────────────
 
-    /** Charge un événement ou lève l'erreur 404. */
+    /**
+     * Charge un événement ou lève l'erreur 404.
+     */
+
     private Evenement requireEvenement(Integer idEvenement) {
         return evenementRepository.findById(idEvenement)
                 .orElseThrow(() -> new EvenementNotFoundException(idEvenement));
@@ -349,7 +371,10 @@ public class EvenementService {
 
     // ── requireSalle() ───────────────────────────────────────────────────────
 
-    /** Charge une salle ou lève l'erreur 404. */
+    /**
+     * Charge une salle ou lève l'erreur 404.
+     */
+
     private Salle requireSalle(Integer idSalle) {
         return salleRepository.findById(idSalle)
                 .orElseThrow(() -> new SalleNotFoundException(idSalle));
@@ -357,7 +382,10 @@ public class EvenementService {
 
     // ── requireFutur() ───────────────────────────────────────────────────────
 
-    /** Vérifie que la date est dans le futur (format déjà validé par le DTO). */
+    /**
+     * Vérifie que la date est dans le futur (format déjà validé par le DTO).
+     */
+
     private void requireFutur(LocalDateTime dateHeure) {
         if (!dateHeure.isAfter(LocalDateTime.now(clock))) {
             throw new DateEvenementPasseeException();
@@ -366,7 +394,10 @@ public class EvenementService {
 
     // ── requireSalleAvecPlace() ──────────────────────────────────────────────
 
-    /** Refuse une salle sans place (règle F3). */
+    /**
+     * Refuse une salle sans place (règle F3).
+     */
+
     private void requireSalleAvecPlace(Salle salle) {
         if (placeRepository.countBySalle_IdSalle(salle.getIdSalle()) == 0) {
             throw new SalleSansPlaceException(salle.getIdSalle());

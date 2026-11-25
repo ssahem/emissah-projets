@@ -26,6 +26,10 @@ public interface BailLocataireRepository extends JpaRepository<BailLocataire, Ba
 
     // ── deleteByIdIdBail() ───────────────────────────────────────────────────
 
-    /** Supprime les liaisons d'un bail avant la suppression du bail lui-même (F5). */
+    /**
+     * Supprime les liaisons d'un bail avant la suppression du bail lui-même
+     * (F5).
+     */
+
     void deleteByIdIdBail(Integer idBail);
 }

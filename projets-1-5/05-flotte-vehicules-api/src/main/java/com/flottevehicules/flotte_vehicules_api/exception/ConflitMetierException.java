@@ -22,12 +22,11 @@ public class ConflitMetierException extends ApiException {
         super(HttpStatus.CONFLICT, "Conflit métier", type, detail);
     }
 
-    /** Ajoute une donnée complémentaire au corps de l'erreur. */
 
     // ── avec() ───────────────────────────────────────────────────────────────
 
     /**
-     * Exécute avec().
+     * Ajoute une donnée complémentaire au corps de l'erreur.
      */
 
     public ConflitMetierException avec(String cle, Object valeur) {

@@ -19,12 +19,17 @@ public record ImmeubleAppartementsLibresResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant de l'immeuble
-        @Schema(description = "Identifiant", example = "1") Integer idImmeuble,
+        // Identifiant de l’immeuble
+        @Schema(description = "Identifiant", example = "1")
+        Integer idImmeuble,
         // Adresse
-        @Schema(description = "Adresse", example = "12 rue des Acacias") String adresse,
+        @Schema(description = "Adresse", example = "12 rue des Acacias")
+        String adresse,
         // Ville
-        @Schema(description = "Ville", example = "Paris") String ville,
-        // Appartements disponibles à la date demandée
-        @Schema(description = "Appartements libres") List<AppartementLibreResponse> appartements) {
+        @Schema(description = "Ville", example = "Paris")
+        String ville,
+        // Appartements
+        @Schema(description = "Appartements libres")
+        List<AppartementLibreResponse> appartements
+) {
 }

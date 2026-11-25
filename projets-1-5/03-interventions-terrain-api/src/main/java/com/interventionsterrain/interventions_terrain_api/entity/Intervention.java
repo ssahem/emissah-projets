@@ -95,7 +95,7 @@ public class Intervention {
     // ── modifierCreneau() ────────────────────────────────────────────────────
 
     /**
-     * Exécute modifierCreneau().
+     * Modifie créneau.
      */
 
     public void modifierCreneau(LocalDateTime debutPrevu, LocalDateTime finPrevue) {
@@ -106,7 +106,7 @@ public class Intervention {
     // ── modifierOrigine() ────────────────────────────────────────────────────
 
     /**
-     * Exécute modifierOrigine().
+     * Modifie origine.
      */
 
     public void modifierOrigine(Integer idInterventionOrigine) {

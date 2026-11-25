@@ -20,7 +20,10 @@ public class SalleMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit une salle en réponse HTTP. */
+    /**
+     * Convertit une salle en réponse HTTP.
+     */
+
     public SalleResponse toResponse(Salle salle) {
         return new SalleResponse(
                 salle.getIdSalle(), salle.getNom(), salle.getAdresse(),

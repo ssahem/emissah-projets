@@ -16,11 +16,16 @@ import java.math.BigDecimal;
  */
 @Schema(description = "Modification du poids d'un type d'évaluation")
 public record UpdatePoidsRequest(
-        @Schema(description = "Poids strictement positif", example = "2.5")
-        @NotNull @DecimalMin(value = "0.01") BigDecimal poids) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Poids
+        @Schema(description = "Poids strictement positif", example = "2.5")
+        @NotNull
+        @DecimalMin(value = "0.01")
+        BigDecimal poids
+) {
 
 }

@@ -50,9 +50,10 @@ public class PlaceController {
     // ── list() — GET /billetterie/place/list ─────────────────────────────────
 
     /**
-     * Liste toutes les places triées par rang puis par numéro.
-     * Réponses : 200 | 500.
+     * Liste toutes les places triées par rang puis par numéro. Réponses : 200 |
+     * 500.
      */
+
     @Operation(summary = "Lister les places")
     @ApiResponse(responseCode = "200", description = "Places renvoyées")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
@@ -64,9 +65,9 @@ public class PlaceController {
     // ── getById() — GET /billetterie/place/get/{id} ──────────────────────────
 
     /**
-     * Consulte une place.
-     * Réponses : 200 | 400 | 404 | 500.
+     * Consulte une place. Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Consulter une place")
     @ApiResponse(responseCode = "200", description = "Place renvoyée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -80,9 +81,9 @@ public class PlaceController {
     // ── create() — POST /billetterie/place/create ────────────────────────────
 
     /**
-     * Crée une place.
-     * Réponses : 201 | 400 | 404 | 409 | 500.
+     * Crée une place. Réponses : 201 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Créer une place")
     @ApiResponse(responseCode = "201", description = "Place créée")
     @ApiResponse(responseCode = "400", description = "Catégorie inconnue ou données invalides")
@@ -99,9 +100,10 @@ public class PlaceController {
     // ── update() — PUT /billetterie/place/update/{id} ────────────────────────
 
     /**
-     * Modifie une place ; la position est figée après réservation.
-     * Réponses : 200 | 400 | 404 | 409 | 500.
+     * Modifie une place ; la position est figée après réservation. Réponses :
+     * 200 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Modifier une place")
     @ApiResponse(responseCode = "200", description = "Place modifiée")
     @ApiResponse(responseCode = "400", description = "Catégorie inconnue ou données invalides")
@@ -117,9 +119,9 @@ public class PlaceController {
     // ── delete() — DELETE /billetterie/place/delete/{id} ─────────────────────
 
     /**
-     * Supprime une place non réservée.
-     * Réponses : 204 | 400 | 404 | 409 | 500.
+     * Supprime une place non réservée. Réponses : 204 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Supprimer une place")
     @ApiResponse(responseCode = "204", description = "Place supprimée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

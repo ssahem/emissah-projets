@@ -105,7 +105,8 @@ class ReglesMetierServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -440,7 +441,7 @@ class ReglesMetierServiceTest {
     // ── prepareCreate() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour prepareCreate().
+     * Prépare create pour le scénario de test.
      */
 
     private void prepareCreate() {
@@ -473,7 +474,7 @@ class ReglesMetierServiceTest {
     // ── agence() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour agence().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Agence agence(Integer id, String nom) {
@@ -485,7 +486,7 @@ class ReglesMetierServiceTest {
     // ── equipe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour equipe().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Equipe equipe(Integer id, Integer idAgence) {
@@ -497,7 +498,7 @@ class ReglesMetierServiceTest {
     // ── technicien() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour technicien().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Technicien technicien(Integer id, String nom, Integer idEquipe) {
@@ -510,7 +511,7 @@ class ReglesMetierServiceTest {
     // ── competence() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour competence().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Competence competence(Integer id, String libelle) {
@@ -522,7 +523,7 @@ class ReglesMetierServiceTest {
     // ── type() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour type().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private TypeIntervention type(Integer id, String code) {
@@ -535,7 +536,7 @@ class ReglesMetierServiceTest {
     // ── client() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour client().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Client client(Integer id, String nom) {
@@ -548,7 +549,7 @@ class ReglesMetierServiceTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Intervention intervention(Integer id, LocalDateTime debut, LocalDateTime fin) {
@@ -561,7 +562,7 @@ class ReglesMetierServiceTest {
     // ── affectation() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour affectation().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Affectation affectation(Integer id, Integer idIntervention, Integer idTechnicien) {
@@ -573,7 +574,7 @@ class ReglesMetierServiceTest {
     // ── statut() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour statut().
+     * Prépare un reglesmetier de test avec des valeurs nominales.
      */
 
     private Statut statut(String libelle) {

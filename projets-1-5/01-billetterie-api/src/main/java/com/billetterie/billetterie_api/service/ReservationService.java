@@ -100,7 +100,10 @@ public class ReservationService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne une page de réservations, triée et limitée à 100 éléments (F9). */
+    /**
+     * Retourne une page de réservations, triée et limitée à 100 éléments (F9).
+     */
+
     public PageResponse<ReservationResponse> findAll(Pageable pageable) {
         Pageable normalise = normaliser(pageable);
         Page<Reservation> page = reservationRepository.findAll(normalise);
@@ -111,7 +114,11 @@ public class ReservationService {
 
     // ── findByEmail() ────────────────────────────────────────────────────────
 
-    /** Retrouve les réservations d'un email, sans tenir compte de la casse (F10). */
+    /**
+     * Retrouve les réservations d'un email, sans tenir compte de la casse
+     * (F10).
+     */
+
     public List<ReservationResponse> findByEmail(String email) {
         return reservationRepository.findAllByClient_EmailIgnoreCaseOrderByDateCreationDesc(email).stream()
                 .map(this::toResponse)
@@ -121,10 +128,11 @@ public class ReservationService {
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Retourne une réservation par identifiant.
+     * Retourne une réservation par identifiant. identifiant.
      *
-     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet
      */
+
     public ReservationResponse findById(Integer idReservation) {
         return toResponse(requireReservation(idReservation));
     }
@@ -132,12 +140,13 @@ public class ReservationService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Crée une réservation PROVISOIRE en appliquant F11, F12 et F13. Modifie la base.
+     * Crée une réservation PROVISOIRE en appliquant F11, F12 et F13. Modifie la
+     * base. événement.
      *
-     * @throws PlaceDejaReserveeException si la place est déjà réservée pour cet événement.
-     *
+     * @throws PlaceDejaReserveeException si la place est déjà réservée pour cet
      * @throws EvenementPasseException si l’événement est déjà passé.
      */
+
     @Transactional
     public ReservationResponse create(CreateReservationRequest request) {
         // ── Étape 1/5 : résoudre l'événement et la place ─────────────────────
@@ -180,10 +189,11 @@ public class ReservationService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie uniquement les informations client. Modifie la base.
+     * Modifie uniquement les informations client. Modifie la base. identifiant.
      *
-     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet
      */
+
     @Transactional
     public ReservationResponse update(Integer idReservation, UpdateReservationRequest request) {
         Reservation reservation = requireReservation(idReservation);
@@ -196,11 +206,12 @@ public class ReservationService {
 
     /**
      * Supprime une réservation provisoire ou annulée. Modifie la base.
+     * identifiant.
      *
-     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
-     *
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet
      * @throws ReservationNonSupprimableException si la réservation est payée.
      */
+
     @Transactional
     public void delete(Integer idReservation) {
         Reservation reservation = requireReservation(idReservation);
@@ -218,12 +229,13 @@ public class ReservationService {
     // ── payer() ──────────────────────────────────────────────────────────────
 
     /**
-     * Confirme le paiement d'une réservation provisoire dans les 15 minutes. Modifie la base.
+     * Confirme le paiement d'une réservation provisoire dans les 15 minutes.
+     * Modifie la base. pas PROVISOIRE. dépassé.
      *
-     * @throws StatutReservationIncompatibleException si la réservation n’est pas PROVISOIRE.
-     *
-     * @throws ReservationExpireeException si le délai de quinze minutes est dépassé.
+     * @throws StatutReservationIncompatibleException si la réservation n’est
+     * @throws ReservationExpireeException si le délai de quinze minutes est
      */
+
     @Transactional
     public ReservationResponse payer(Integer idReservation) {
         // ── Étape 1/4 : charger la réservation et son statut ─────────────────
@@ -262,12 +274,13 @@ public class ReservationService {
     // ── annuler() ────────────────────────────────────────────────────────────
 
     /**
-     * Annule une réservation et calcule le remboursement selon la distance à l'événement (F15).
+     * Annule une réservation et calcule le remboursement selon la distance à
+     * l'événement (F15). identifiant. déjà annulée.
      *
-     * @throws ReservationNotFoundException si aucune réservation ne porte cet identifiant.
-     *
-     * @throws ReservationAnnulationImpossibleException si la réservation est déjà annulée.
+     * @throws ReservationNotFoundException si aucune réservation ne porte cet
+     * @throws ReservationAnnulationImpossibleException si la réservation est
      */
+
     @Transactional
     public AnnulationResponse annuler(Integer idReservation) {
         // ── Étape 1/4 : charger et contrôler le statut ───────────────────────
@@ -314,7 +327,10 @@ public class ReservationService {
 
     // ── requireReservation() ─────────────────────────────────────────────────
 
-    /** Charge une réservation ou lève l'erreur 404. */
+    /**
+     * Charge une réservation ou lève l'erreur 404.
+     */
+
     private Reservation requireReservation(Integer idReservation) {
         return reservationRepository.findById(idReservation)
                 .orElseThrow(() -> new ReservationNotFoundException(idReservation));
@@ -322,7 +338,10 @@ public class ReservationService {
 
     // ── statut() ─────────────────────────────────────────────────────────────
 
-    /** Résout un statut de la table de référence. */
+    /**
+     * Résout un statut de la table de référence.
+     */
+
     private Statut statut(String libelle) {
         return statutRepository.findByLibelleIgnoreCase(libelle)
                 .orElseThrow(() -> new IllegalStateException("Statut manquant : " + libelle));
@@ -330,7 +349,10 @@ public class ReservationService {
 
     // ── statutCourant() ──────────────────────────────────────────────────────
 
-    /** Retourne le libellé du statut le plus récent. */
+    /**
+     * Retourne le libellé du statut le plus récent.
+     */
+
     public String statutCourant(Reservation reservation) {
         return historiqueStatutRepository
                 .findTopByReservation_IdReservationOrderByDateStatutDesc(reservation.getIdReservation())
@@ -340,7 +362,10 @@ public class ReservationService {
 
     // ── categorieDe() ────────────────────────────────────────────────────────
 
-    /** Retrouve la catégorie de la place de la réservation. */
+    /**
+     * Retrouve la catégorie de la place de la réservation.
+     */
+
     private String categorieDe(Reservation reservation) {
         ReservationPlace place = reservation.getPlaces().getFirst();
         return placeRepository.findBySalle_IdSalleAndRangAndNumero(
@@ -352,14 +377,21 @@ public class ReservationService {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Assemble le DTO d'une réservation en récupérant son statut et sa catégorie. */
+    /**
+     * Assemble le DTO d'une réservation en récupérant son statut et sa
+     * catégorie.
+     */
+
     private ReservationResponse toResponse(Reservation reservation) {
         return reservationMapper.toResponse(reservation, statutCourant(reservation), categorieDe(reservation));
     }
 
     // ── normaliser() ─────────────────────────────────────────────────────────
 
-    /** Plafonne la taille de page et applique le tri décroissant par défaut. */
+    /**
+     * Plafonne la taille de page et applique le tri décroissant par défaut.
+     */
+
     private Pageable normaliser(Pageable pageable) {
         int taille = Math.min(pageable.getPageSize(), TAILLE_MAX);
         Sort sort = pageable.getSort().isSorted() ? pageable.getSort() : TRI_DEFAUT;

@@ -30,7 +30,10 @@ public class StatutValidator implements ApplicationRunner {
 
     // ── run() ────────────────────────────────────────────────────────────────
 
-    /** Échoue au démarrage si la table statut n'est pas exploitable. */
+    /**
+     * Échoue au démarrage si la table statut n'est pas exploitable.
+     */
+
     @Override
     public void run(ApplicationArguments args) {
         List<String> missing = REQUIRED.stream()

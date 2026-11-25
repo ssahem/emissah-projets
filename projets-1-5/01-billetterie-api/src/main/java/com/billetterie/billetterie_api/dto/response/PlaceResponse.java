@@ -19,13 +19,19 @@ public record PlaceResponse(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Identifiant de la place
-        @Schema(description = "Identifiant de la place", example = "1") Integer idPlace,
+        @Schema(description = "Identifiant de la place", example = "1")
+        Integer idPlace,
         // Identifiant de la salle
-        @Schema(description = "Identifiant de la salle", example = "1") Integer idSalle,
+        @Schema(description = "Identifiant de la salle", example = "1")
+        Integer idSalle,
         // Rang
-        @Schema(description = "Rang", example = "A") String rang,
+        @Schema(description = "Rang", example = "A")
+        String rang,
         // Numéro
-        @Schema(description = "Numéro", example = "13") Integer numero,
+        @Schema(description = "Numéro", example = "13")
+        Integer numero,
         // Catégorie
-        @Schema(description = "Catégorie", example = "ORCHESTRE") String categorie) {
+        @Schema(description = "Catégorie", example = "ORCHESTRE")
+        String categorie
+) {
 }

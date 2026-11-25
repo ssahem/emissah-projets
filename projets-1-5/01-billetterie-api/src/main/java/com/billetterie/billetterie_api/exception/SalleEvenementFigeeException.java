@@ -29,6 +29,9 @@ public class SalleEvenementFigeeException extends ApiException {
 
     // ── getIdEvenement() ─────────────────────────────────────────────────────
 
-    /** Retourne idEvenement. */
+    /**
+     * Retourne idEvenement.
+     */
+
     public Integer getIdEvenement() { return idEvenement; }
 }

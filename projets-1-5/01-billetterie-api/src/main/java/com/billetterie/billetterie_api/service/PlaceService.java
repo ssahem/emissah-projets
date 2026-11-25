@@ -59,7 +59,10 @@ public class PlaceService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne toutes les places triées par rang puis par numéro. */
+    /**
+     * Retourne toutes les places triées par rang puis par numéro.
+     */
+
     public List<PlaceResponse> findAll() {
         return placeRepository.findAllByOrderByRangAscNumeroAsc().stream()
                 .map(placeMapper::toPlaceResponse)
@@ -73,6 +76,7 @@ public class PlaceService {
      *
      * @throws PlaceNotFoundException si aucune place ne porte cet identifiant.
      */
+
     public PlaceResponse findById(Integer idPlace) {
         return placeMapper.toPlaceResponse(requirePlace(idPlace));
     }
@@ -80,12 +84,13 @@ public class PlaceService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Crée une place dans le respect de la capacité et de l'unicité. Modifie la base.
+     * Crée une place dans le respect de la capacité et de l'unicité. Modifie la
+     * base. salle. dépassée.
      *
-     * @throws PlaceDejaExistanteException si la position existe déjà dans la salle.
-     *
-     * @throws CapaciteInsuffisanteException si la capacité de la salle est dépassée.
+     * @throws PlaceDejaExistanteException si la position existe déjà dans la
+     * @throws CapaciteInsuffisanteException si la capacité de la salle est
      */
+
     @Transactional
     public PlaceResponse create(CreatePlaceRequest request) {
         // ── Étape 1/3 : résoudre la salle et la catégorie ────────────────────
@@ -108,12 +113,13 @@ public class PlaceService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie une place ; sa position est figée dès la première réservation. Modifie la base.
+     * Modifie une place ; sa position est figée dès la première réservation.
+     * Modifie la base. est modifiée.
      *
      * @throws PlaceNotFoundException si aucune place ne porte cet identifiant.
-     *
-     * @throws PlacePositionFigeeException si la position d’une place réservée est modifiée.
+     * @throws PlacePositionFigeeException si la position d’une place réservée
      */
+
     @Transactional
     public PlaceResponse update(Integer idPlace, UpdatePlaceRequest request) {
         // ── Étape 1/3 : charger et résoudre ──────────────────────────────────
@@ -148,9 +154,9 @@ public class PlaceService {
      * Supprime une place non réservée. Modifie la base.
      *
      * @throws PlaceNotFoundException si aucune place ne porte cet identifiant.
-     *
      * @throws PlaceNonSupprimableException si la place est encore réservée.
      */
+
     @Transactional
     public void delete(Integer idPlace) {
         Place place = requirePlace(idPlace);
@@ -166,7 +172,10 @@ public class PlaceService {
 
     // ── requirePlace() ───────────────────────────────────────────────────────
 
-    /** Charge une place ou lève l'erreur 404. */
+    /**
+     * Charge une place ou lève l'erreur 404.
+     */
+
     private Place requirePlace(Integer idPlace) {
         return placeRepository.findById(idPlace)
                 .orElseThrow(() -> new PlaceNotFoundException(idPlace.toString()));
@@ -174,7 +183,10 @@ public class PlaceService {
 
     // ── requireSalle() ───────────────────────────────────────────────────────
 
-    /** Charge une salle ou lève l'erreur 404. */
+    /**
+     * Charge une salle ou lève l'erreur 404.
+     */
+
     private Salle requireSalle(Integer idSalle) {
         return salleRepository.findById(idSalle)
                 .orElseThrow(() -> new SalleNotFoundException(idSalle));
@@ -182,7 +194,10 @@ public class PlaceService {
 
     // ── requireCategorie() ───────────────────────────────────────────────────
 
-    /** Résout une catégorie ou lève l'erreur 400. */
+    /**
+     * Résout une catégorie ou lève l'erreur 400.
+     */
+
     private Categorie requireCategorie(String libelle) {
         return categorieRepository.findByLibelleIgnoreCase(libelle)
                 .orElseThrow(() -> new CategorieInconnueException(libelle));
@@ -190,7 +205,10 @@ public class PlaceService {
 
     // ── requireCapacite() ────────────────────────────────────────────────────
 
-    /** Refuse de dépasser la capacité de la salle. */
+    /**
+     * Refuse de dépasser la capacité de la salle.
+     */
+
     private void requireCapacite(Salle salle) {
         if (placeRepository.countBySalle_IdSalle(salle.getIdSalle()) >= salle.getCapacite()) {
             throw new CapaciteInsuffisanteException(salle.getIdSalle());

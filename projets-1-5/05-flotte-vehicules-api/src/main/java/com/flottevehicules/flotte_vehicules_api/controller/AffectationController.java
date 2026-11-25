@@ -46,7 +46,6 @@ public class AffectationController {
         this.service = service;
     }
 
-    /** F4, F11 et F12 : crée une affectation si le véhicule est libre. */
 
     // ── create() — POST /flotte-vehicules/affectation/create ─────────────────
 
@@ -67,7 +66,6 @@ public class AffectationController {
                 .body(affectation);
     }
 
-    /** F4 : liste triée par date de début décroissante. */
 
     // ── list() — GET /flotte-vehicules/affectation/list ──────────────────────
 
@@ -82,7 +80,6 @@ public class AffectationController {
         return service.findAll();
     }
 
-    /** F4 : détail d'une affectation. */
 
     // ── get() — GET /flotte-vehicules/affectation/{id} ───────────────────────
 
@@ -98,7 +95,6 @@ public class AffectationController {
         return service.findById(id);
     }
 
-    /** F4 : modifie la date de fin, et les parties avant le début. */
 
     // ── update() — PUT /flotte-vehicules/affectation/{id}/update ─────────────
 
@@ -115,7 +111,6 @@ public class AffectationController {
         return service.update(id, request);
     }
 
-    /** F4 : supprime une affectation qui n'a pas commencé. */
 
     // ── delete() — DELETE /flotte-vehicules/affectation/{id}/delete ──────────
 
@@ -132,7 +127,6 @@ public class AffectationController {
         return ResponseEntity.noContent().build();
     }
 
-    /** F13 et F14 : clôture l'affectation avec date et kilométrage. */
 
     // ── restitution() — POST /flotte-vehicules/affectation/{id}/restitution ──
 

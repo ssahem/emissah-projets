@@ -56,7 +56,7 @@ class ReglesMetierIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource
@@ -87,7 +87,8 @@ class ReglesMetierIntegrationTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -256,7 +257,7 @@ class ReglesMetierIntegrationTest {
     // ── statutCourant() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour statutCourant().
+     * Détermine le statut courant à partir de l’affectation responsable.
      */
 
     private String statutCourant(Integer idIntervention) {
@@ -268,7 +269,7 @@ class ReglesMetierIntegrationTest {
     // ── changerStatut() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour changerStatut().
+     * Appelle l’endpoint de changement de statut.
      */
 
     private void changerStatut(Integer idIntervention, String statut) throws Exception {
@@ -281,7 +282,7 @@ class ReglesMetierIntegrationTest {
     // ── createIntervention() ─────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour createIntervention().
+     * Prépare le contexte nécessaire à l’opération createIntervention().
      */
 
     private Integer createIntervention(String debut, String fin) throws Exception {
@@ -303,7 +304,7 @@ class ReglesMetierIntegrationTest {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour create().
+     * Crée un reglesmetier.
      */
 
     private Integer create(String ressource, Map<String, Object> body) throws Exception {

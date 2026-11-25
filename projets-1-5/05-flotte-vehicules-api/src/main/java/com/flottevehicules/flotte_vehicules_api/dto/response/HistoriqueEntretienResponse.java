@@ -16,20 +16,22 @@ import java.util.List;
 @Schema(description = "Historique d'entretien et cumul des coûts")
 public record HistoriqueEntretienResponse(
 
-        @Schema(description = "Véhicule", example = "1")
-        Integer idVehicule,
-
-        @Schema(description = "Immatriculation", example = "AB-123-CD")
-        String immatriculation,
-
-        @Schema(description = "Coût cumulé total", example = "600.00")
-        BigDecimal coutCumule,
-
-        @Schema(description = "Entretiens triés du plus récent au plus ancien")
-        List<EntretienResponse> entretiens) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du véhicule
+        @Schema(description = "Véhicule", example = "1")
+        Integer idVehicule,
+        // Immatriculation
+        @Schema(description = "Immatriculation", example = "AB-123-CD")
+        String immatriculation,
+        // Coût cumule
+        @Schema(description = "Coût cumulé total", example = "600.00")
+        BigDecimal coutCumule,
+        // Entretiens
+        @Schema(description = "Entretiens triés du plus récent au plus ancien")
+        List<EntretienResponse> entretiens
+) {
 
 }

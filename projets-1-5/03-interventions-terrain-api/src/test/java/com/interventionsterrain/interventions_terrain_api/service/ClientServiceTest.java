@@ -54,7 +54,8 @@ class ClientServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -129,12 +130,11 @@ class ClientServiceTest {
         verify(clientRepository, never()).delete(any());
     }
 
-    /** Construit un client avec son identifiant. */
 
     // ── client() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour client().
+     * Construit un client avec son identifiant.
      */
 
     private Client client(Integer id, String email) {

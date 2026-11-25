@@ -19,16 +19,35 @@ import java.math.BigDecimal;
  */
 @Schema(description = "Création d'une note")
 public record CreateNoteRequest(
-        @Schema(description = "Identifiant de l'élève", example = "1") @NotNull Integer idEleve,
-        @Schema(description = "Identifiant de la matière", example = "1") @NotNull Integer idMatiere,
-        @Schema(description = "Valeur entre 0 et 20", example = "14.5")
-        @NotNull @DecimalMin("0") @DecimalMax("20") BigDecimal valeur,
-        @Schema(description = "Numéro de trimestre (1 à 3)", example = "2")
-        @NotNull @Min(1) @Max(3) Integer trimestre,
-        @Schema(description = "Identifiant du type d'évaluation", example = "1") @NotNull Integer idTypeEval) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant de l’élève
+        @Schema(description = "Identifiant de l'élève", example = "1")
+        @NotNull
+        Integer idEleve,
+        // Identifiant de la matière
+        @Schema(description = "Identifiant de la matière", example = "1")
+        @NotNull
+        Integer idMatiere,
+        // Valeur
+        @Schema(description = "Valeur entre 0 et 20", example = "14.5")
+        @NotNull
+        @DecimalMin("0")
+        @DecimalMax("20")
+        BigDecimal valeur,
+        // Trimestre
+        @Schema(description = "Trimestre", example = "1")
+        @NotNull
+        @Min(1)
+        @Max(3)
+        Integer trimestre,
+        // Identifiant du type d’évaluation
+        @Schema(description = "Identifiant du type d'évaluation", example = "1")
+        @NotNull
+        Integer idTypeEval
+) {
 
 }

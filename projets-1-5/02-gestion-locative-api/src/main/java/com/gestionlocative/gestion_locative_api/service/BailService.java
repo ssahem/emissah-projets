@@ -114,9 +114,10 @@ public class BailService {
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Retourne une page de baux, triée par date de début décroissante par défaut (F5, F10).
-     * La taille demandée est plafonnée à 100 éléments.
+     * Retourne une page de baux, triée par date de début décroissante par
+     * défaut (F5, F10). La taille demandée est plafonnée à 100 éléments.
      */
+
     public PageResponse<BailResponse> findAll(Pageable pageable) {
         Pageable normalise = normaliser(pageable);
         Page<Bail> page = bailRepository.findAll(normalise);
@@ -127,7 +128,10 @@ public class BailService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne un bail par identifiant. */
+    /**
+     * Retourne un bail par identifiant.
+     */
+
     public BailResponse findById(Integer idBail) {
         return toResponse(requireBail(idBail));
     }
@@ -136,11 +140,12 @@ public class BailService {
 
     /**
      * Crée un bail sur un appartement libre, avec son locataire principal.
+     * (F12)
      *
      * @throws BailChevauchementException si la période est déjà occupée (F11)
-     *
-     * @throws BailDateFinInvalideException si la date de fin est incohérente (F12)
+     * @throws BailDateFinInvalideException si la date de fin est incohérente
      */
+
     @Transactional
     public BailResponse create(CreateBailRequest request) {
         // ── Étape 1/5 : vérifier l'existence des références ──────────────────
@@ -182,10 +187,12 @@ public class BailService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie un bail : avant le début, loyer et date de fin ; après, date de fin seulement.
+     * Modifie un bail : avant le début, loyer et date de fin ; après, date de
+     * fin seulement. le début
      *
-     * @throws BailModificationInterditeException si le loyer est modifié après le début
+     * @throws BailModificationInterditeException si le loyer est modifié après
      */
+
     @Transactional
     public BailResponse update(Integer idBail, UpdateBailRequest request) {
         // ── Étape 1/4 : charger le bail et déterminer s'il a commencé ────────
@@ -221,11 +228,12 @@ public class BailService {
     // ── resilier() ───────────────────────────────────────────────────────────
 
     /**
-     * Résilie un bail en ramenant sa fin à la date d'effet (F13).
+     * Résilie un bail en ramenant sa fin à la date d'effet (F13). commencé
      *
-     * @throws BailStatutInvalideException si le bail n'est pas actif ou n'a pas commencé
+     * @throws BailStatutInvalideException si le bail n'est pas actif ou n'a pas
      * @throws DateEffetInvalideException si la date est passée ou hors période
      */
+
     @Transactional
     public BailResponse resilier(Integer idBail, ResiliationBailRequest request) {
         // ── Étape 1/4 : charger le bail et l'horloge ─────────────────────────
@@ -257,12 +265,14 @@ public class BailService {
     // ── renouveler() ─────────────────────────────────────────────────────────
 
     /**
-     * Prolonge un bail en vérifiant la disponibilité de la période ajoutée (F14).
+     * Prolonge un bail en vérifiant la disponibilité de la période ajoutée
+     * (F14). échéance postérieure
      *
-     * @throws BailStatutInvalideException si le bail est résilié ou sans échéance
-     * @throws RenouvellementDateInvalideException si la date n'est pas postérieure
+     * @throws BailStatutInvalideException si le bail est résilié ou sans
+     * @throws RenouvellementDateInvalideException si la date n'est pas
      * @throws BailChevauchementException si la période ajoutée est occupée
      */
+
     @Transactional
     public BailResponse renouveler(Integer idBail, RenouvellementBailRequest request) {
         // ── Étape 1/4 : charger le bail et vérifier son état (409) ───────────
@@ -304,11 +314,13 @@ public class BailService {
 
     /**
      * Ajoute une révision de loyer et met à jour le montant courant (F15).
+     * positif antérieure
      *
-     * @throws RevisionLoyerMontantInvalideException si le montant n'est pas positif
+     * @throws RevisionLoyerMontantInvalideException si le montant n'est pas
      * @throws RevisionLoyerDejaExistanteException si la date est déjà utilisée
-     * @throws RevisionLoyerDateInvalideException si la date est hors période ou antérieure
+     * @throws RevisionLoyerDateInvalideException si la date est hors période ou
      */
+
     @Transactional
     public BailResponse reviserLoyer(Integer idBail, RevisionLoyerRequest request) {
         // ── Étape 1/4 : vérifier le montant (400) ────────────────────────────
@@ -343,7 +355,10 @@ public class BailService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime un bail qui n'a pas commencé. Modifie la base. */
+    /**
+     * Supprime un bail qui n'a pas commencé. Modifie la base.
+     */
+
     @Transactional
     public void delete(Integer idBail) {
         Bail bail = requireBail(idBail);
@@ -362,7 +377,10 @@ public class BailService {
 
     // ── requireBail() ────────────────────────────────────────────────────────
 
-    /** Charge un bail ou lève l'erreur métier 404. */
+    /**
+     * Charge un bail ou lève l'erreur métier 404.
+     */
+
     private Bail requireBail(Integer idBail) {
         return bailRepository.findById(idBail)
                 .orElseThrow(() -> new BailNotFoundException(idBail));
@@ -370,7 +388,10 @@ public class BailService {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Enrichit le bail avec son locataire principal avant conversion. */
+    /**
+     * Enrichit le bail avec son locataire principal avant conversion.
+     */
+
     private BailResponse toResponse(Bail bail) {
         Locataire principal = bailLocataireRepository.findByIdIdBail(bail.getIdBail()).stream()
                 .findFirst()
@@ -382,7 +403,10 @@ public class BailService {
 
     // ── tracer() ─────────────────────────────────────────────────────────────
 
-    /** Écrit un événement de cycle de vie dans historique_bail (V5). */
+    /**
+     * Écrit un événement de cycle de vie dans historique_bail (V5).
+     */
+
     private void tracer(Integer idBail, MotifHistoriqueBail motif, LocalDate dateEvenement,
                         LocalDate dateFinAvant, LocalDate dateFinApres) {
         historiqueBailRepository.saveAndFlush(new HistoriqueBail(
@@ -391,7 +415,11 @@ public class BailService {
 
     // ── verifierDateFin() ────────────────────────────────────────────────────
 
-    /** Vérifie qu'une date de fin, si elle existe, est au moins un mois après le début (F12). */
+    /**
+     * Vérifie qu'une date de fin, si elle existe, est au moins un mois après le
+     * début (F12).
+     */
+
     private void verifierDateFin(LocalDate dateDebut, LocalDate dateFin) {
         if (dateFin != null
                 && (!dateFin.isAfter(dateDebut) || dateFin.isBefore(dateDebut.plusMonths(1)))) {
@@ -401,14 +429,22 @@ public class BailService {
 
     // ── valeur() ─────────────────────────────────────────────────────────────
 
-    /** Applique zéro pour un montant facultatif non renseigné (NOT NULL en base). */
+    /**
+     * Applique zéro pour un montant facultatif non renseigné (NOT NULL en
+     * base).
+     */
+
     private BigDecimal valeur(BigDecimal montant) {
         return montant == null ? BigDecimal.ZERO : montant;
     }
 
     // ── normaliser() ─────────────────────────────────────────────────────────
 
-    /** Plafonne la taille de page et applique le tri décroissant par défaut (F10). */
+    /**
+     * Plafonne la taille de page et applique le tri décroissant par défaut
+     * (F10).
+     */
+
     private Pageable normaliser(Pageable pageable) {
         int taille = Math.min(pageable.getPageSize(), TAILLE_MAX);
         Sort sort = pageable.getSort().isSorted() ? pageable.getSort() : TRI_DEFAUT;

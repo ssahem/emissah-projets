@@ -29,6 +29,9 @@ public class CapaciteInsuffisanteException extends ApiException {
 
     // ── getIdSalle() ─────────────────────────────────────────────────────────
 
-    /** Retourne idSalle. */
+    /**
+     * Retourne idSalle.
+     */
+
     public Integer getIdSalle() { return idSalle; }
 }

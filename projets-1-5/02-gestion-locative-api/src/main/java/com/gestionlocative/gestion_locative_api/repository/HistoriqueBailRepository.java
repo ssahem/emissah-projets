@@ -25,6 +25,9 @@ public interface HistoriqueBailRepository extends JpaRepository<HistoriqueBail, 
 
     // ── deleteByIdBail() ─────────────────────────────────────────────────────
 
-    /** Supprime les événements d'un bail avant sa suppression (F5). */
+    /**
+     * Supprime les événements d'un bail avant sa suppression (F5).
+     */
+
     void deleteByIdBail(Integer idBail);
 }

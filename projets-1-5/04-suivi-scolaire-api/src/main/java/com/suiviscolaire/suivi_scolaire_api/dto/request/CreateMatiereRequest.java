@@ -17,13 +17,24 @@ import java.math.BigDecimal;
  */
 @Schema(description = "Création d'une matière")
 public record CreateMatiereRequest(
-        @Schema(description = "Libellé", example = "Mathematiques") @NotBlank String libelle,
-        @Schema(description = "Code", example = "MATH") @NotBlank String code,
-        @Schema(description = "Coefficient strictement positif", example = "4")
-        @NotNull @DecimalMin(value = "0.01") BigDecimal coefficient) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Libellé
+        @Schema(description = "Libellé", example = "Mathematiques")
+        @NotBlank
+        String libelle,
+        // Code
+        @Schema(description = "Code", example = "MATH")
+        @NotBlank
+        String code,
+        // Coefficient
+        @Schema(description = "Coefficient strictement positif", example = "4")
+        @NotNull
+        @DecimalMin(value = "0.01")
+        BigDecimal coefficient
+) {
 
 }

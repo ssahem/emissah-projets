@@ -32,12 +32,12 @@ public class EntretienMapper {
         this.prestataireRepository = prestataireRepository;
     }
 
-    /** Convertit une entité en réponse ; alerteCreee est renseignée par le service. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une entité en réponse ; alerteCreee est renseignée par le
+     * service.
      */
 
     public EntretienResponse toResponse(Entretien entretien, boolean alerteCreee) {

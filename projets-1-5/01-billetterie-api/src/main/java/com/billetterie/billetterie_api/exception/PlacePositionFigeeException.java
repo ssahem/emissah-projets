@@ -30,6 +30,9 @@ public class PlacePositionFigeeException extends ApiException {
 
     // ── getIdPlace() ─────────────────────────────────────────────────────────
 
-    /** Retourne idPlace. */
+    /**
+     * Retourne idPlace.
+     */
+
     public Integer getIdPlace() { return idPlace; }
 }

@@ -18,10 +18,13 @@ import java.time.LocalDate;
 @Schema(description = "Renouvellement d'un bail")
 public record RenouvellementBailRequest(
 
-        // ═════════════════════════════════════════════════════════════════════
-        //  CHAMPS
-        // ═════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
+        // Date de fin
         @Schema(description = "Nouvelle date de fin", example = "2028-06-30")
-        @NotNull LocalDate dateFin) {
+        @NotNull
+        LocalDate dateFin
+) {
 }

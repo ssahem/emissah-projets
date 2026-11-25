@@ -58,7 +58,10 @@ public class LocataireService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne les locataires triés par nom (F4). */
+    /**
+     * Retourne les locataires triés par nom (F4).
+     */
+
     public List<LocataireResponse> findAll() {
         return locataireRepository.findAllByOrderByNomAscPrenomAsc().stream()
                 .map(locataireMapper::toResponse)
@@ -67,14 +70,21 @@ public class LocataireService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne un locataire par identifiant. */
+    /**
+     * Retourne un locataire par identifiant.
+     */
+
     public LocataireResponse findById(Integer idLocataire) {
         return locataireMapper.toResponse(requireLocataire(idLocataire));
     }
 
     // ── create() ─────────────────────────────────────────────────────────────
 
-    /** Crée un locataire après contrôle de l'unicité de l'email. Modifie la base. */
+    /**
+     * Crée un locataire après contrôle de l'unicité de l'email. Modifie la
+     * base.
+     */
+
     @Transactional
     public LocataireResponse create(CreateLocataireRequest request) {
         // ── Étape 1/3 : vérifier l'unicité de l'email ────────────────────────
@@ -92,7 +102,10 @@ public class LocataireService {
 
     // ── update() ─────────────────────────────────────────────────────────────
 
-    /** Modifie les coordonnées d'un locataire. Modifie la base. */
+    /**
+     * Modifie les coordonnées d'un locataire. Modifie la base.
+     */
+
     @Transactional
     public LocataireResponse update(Integer idLocataire, UpdateLocataireRequest request) {
         // ── Étape 1/3 : charger et contrôler l'unicité ───────────────────────
@@ -109,7 +122,10 @@ public class LocataireService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime un locataire sans bail en cours. Modifie la base. */
+    /**
+     * Supprime un locataire sans bail en cours. Modifie la base.
+     */
+
     @Transactional
     public void delete(Integer idLocataire) {
         requireLocataire(idLocataire);
@@ -125,7 +141,10 @@ public class LocataireService {
 
     // ── requireLocataire() ───────────────────────────────────────────────────
 
-    /** Charge un locataire ou lève l'erreur métier 404. */
+    /**
+     * Charge un locataire ou lève l'erreur métier 404.
+     */
+
     private Locataire requireLocataire(Integer idLocataire) {
         return locataireRepository.findById(idLocataire)
                 .orElseThrow(() -> new LocataireNotFoundException(idLocataire));
@@ -133,7 +152,10 @@ public class LocataireService {
 
     // ── verifierEmailLibre() ─────────────────────────────────────────────────
 
-    /** Vérifie qu'aucun autre locataire n'utilise cet email. */
+    /**
+     * Vérifie qu'aucun autre locataire n'utilise cet email.
+     */
+
     private void verifierEmailLibre(String email, Integer idLocataireExclu) {
         Optional<Locataire> existant = locataireRepository.findByEmail(email.trim());
         if (existant.isPresent() && !existant.get().getIdLocataire().equals(idLocataireExclu)) {
@@ -143,7 +165,10 @@ public class LocataireService {
 
     // ── valeur() ─────────────────────────────────────────────────────────────
 
-    /** Normalise un champ facultatif : la base impose NOT NULL sur prenom. */
+    /**
+     * Normalise un champ facultatif : la base impose NOT NULL sur prenom.
+     */
+
     private String valeur(String valeur) {
         return valeur == null ? "" : valeur.trim();
     }

@@ -24,7 +24,10 @@ public class CsvExportMapper {
 
     // ── toCsv() ──────────────────────────────────────────────────────────────
 
-    /** Construit le CSV ; l'en-tête est présent même s'il n'y a aucune ligne. */
+    /**
+     * Construit le CSV ; l'en-tête est présent même s'il n'y a aucune ligne.
+     */
+
     public String toCsv(List<Object[]> lignes) {
         StringBuilder csv = new StringBuilder("rang,numero,categorie,nom,email,statut,date_creation\n");
         for (Object[] ligne : lignes) {
@@ -41,7 +44,10 @@ public class CsvExportMapper {
 
     // ── escape() ─────────────────────────────────────────────────────────────
 
-    /** Échappe une valeur selon les règles CSV (doublage des guillemets). */
+    /**
+     * Échappe une valeur selon les règles CSV (doublage des guillemets).
+     */
+
     private static String escape(Object valeur) {
         if (valeur == null) {
             return "";
@@ -53,7 +59,10 @@ public class CsvExportMapper {
 
     // ── format() ─────────────────────────────────────────────────────────────
 
-    /** Formate une date SQL en ISO local. */
+    /**
+     * Formate une date SQL en ISO local.
+     */
+
     private static String format(Object valeur) {
         if (valeur instanceof LocalDateTime date) {
             return date.format(DATE_FORMAT);

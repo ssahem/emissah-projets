@@ -96,10 +96,11 @@ public class ReglesMetierService {
     // ── modifierPoids() ──────────────────────────────────────────────────────
 
     /**
-     * F13 — Modifie le poids d'un type d'évaluation. Le code est un alias lisible (DEV, INTERRO,
- * ORAL), le libellé exact ou l'identifiant numérique ; la clôture d'un trimestre fige les
- *   poids.
+     * F13 — Modifie le poids d'un type d'évaluation. Le code est un alias
+     * lisible (DEV, INTERRO, ORAL), le libellé exact ou l'identifiant numérique
+     * ; la clôture d'un trimestre fige les poids.
      */
+
     @Transactional
     public PoidsResponse modifierPoids(String code, BigDecimal poids) {
         // ── Étape 1/3 : refuser un poids nul ou négatif avant toute écriture ─
@@ -121,11 +122,11 @@ public class ReglesMetierService {
     // ── cloturer() ───────────────────────────────────────────────────────────
 
     /**
- * F14 — Clôture un trimestre seulement si chaque enseignement de chaque classe possède au
- *   moins
- * une note pour ce trimestre ; la réponse 409 porte la liste des classes et matières
- *   manquantes.
+     * F14 — Clôture un trimestre seulement si chaque enseignement de chaque
+     * classe possède au moins une note pour ce trimestre ; la réponse 409 porte
+     * la liste des classes et matières manquantes.
      */
+
     @Transactional
     public ClotureResponse cloturer(Integer numero) {
         Trimestre trimestre = trimestreLookup.required(numero);
@@ -162,9 +163,11 @@ public class ReglesMetierService {
     // ── reouvrir() ───────────────────────────────────────────────────────────
 
     /**
-     * F15 — Rouvre le dernier trimestre clôturé : le motif fait au moins 20 caractères, le
-     * trimestre visé doit être clôturé, être le plus récent et ne pas avoir déjà été rouvert.
+     * F15 — Rouvre le dernier trimestre clôturé : le motif fait au moins 20
+     * caractères, le trimestre visé doit être clôturé, être le plus récent et
+     * ne pas avoir déjà été rouvert.
      */
+
     @Transactional
     public ReouvertureResponse reouvrir(Integer numero, String motif, String auteur) {
         // ── Étape 1/4 : le motif est obligatoire et suffisamment explicite ───
@@ -204,12 +207,12 @@ public class ReglesMetierService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Résout un code F13 par alias, par libellé (cas indifférent) ou par identifiant numérique. */
 
     // ── resoudreType() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute resoudreType().
+     * Résout un code F13 par alias, par libellé (cas indifférent) ou par
+     * identifiant numérique.
      */
 
     private TypeEvaluation resoudreType(String code) {

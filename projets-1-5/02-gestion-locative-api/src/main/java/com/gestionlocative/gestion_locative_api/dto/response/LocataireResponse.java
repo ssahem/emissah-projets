@@ -18,14 +18,20 @@ public record LocataireResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idLocataire,
+        // Identifiant du locataire
+        @Schema(description = "Identifiant", example = "1")
+        Integer idLocataire,
         // Nom
-        @Schema(description = "Nom", example = "Traore") String nom,
+        @Schema(description = "Nom", example = "Traore")
+        String nom,
         // Prénom
-        @Schema(description = "Prénom", example = "Kofi") String prenom,
+        @Schema(description = "Prénom", example = "Kofi")
+        String prenom,
         // Email
-        @Schema(description = "Email", example = "kofi.traore@example.test") String email,
+        @Schema(description = "Email", example = "kofi.traore@example.test")
+        String email,
         // Téléphone
-        @Schema(description = "Téléphone", example = "0102030406") String telephone) {
+        @Schema(description = "Téléphone", example = "0102030406")
+        String telephone
+) {
 }

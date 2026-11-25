@@ -20,8 +20,11 @@ public record LoyerHistoriqueResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Date de prise d'effet
-        @Schema(description = "Date d'effet", example = "2026-01-01") LocalDate dateEffet,
+        // Date effet
+        @Schema(description = "Date d'effet", example = "2026-01-01")
+        LocalDate dateEffet,
         // Montant
-        @Schema(description = "Montant", example = "850.00") BigDecimal montant) {
+        @Schema(description = "Montant", example = "850.00")
+        BigDecimal montant
+) {
 }

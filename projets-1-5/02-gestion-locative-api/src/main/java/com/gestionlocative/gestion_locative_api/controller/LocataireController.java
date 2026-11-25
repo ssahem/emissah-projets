@@ -53,7 +53,10 @@ public class LocataireController {
 
     // ── list() — GET /gestion-locative/locataire/list ────────────────────────
 
-    /** Liste les locataires triés par nom. Réponses : 200 | 500. */
+    /**
+     * Liste les locataires triés par nom. Réponses : 200 | 500.
+     */
+
     @Operation(summary = "Lister les locataires")
     @ApiResponse(responseCode = "200", description = "Locataires renvoyés")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
@@ -64,7 +67,10 @@ public class LocataireController {
 
     // ── getById() — GET /gestion-locative/locataire/get/{id} ─────────────────
 
-    /** Consulte un locataire. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Consulte un locataire. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Consulter un locataire")
     @ApiResponse(responseCode = "200", description = "Locataire renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -77,7 +83,10 @@ public class LocataireController {
 
     // ── create() — POST /gestion-locative/locataire/create ───────────────────
 
-    /** Crée un locataire. Réponses : 201 | 400 | 409 | 500. */
+    /**
+     * Crée un locataire. Réponses : 201 | 400 | 409 | 500.
+     */
+
     @Operation(summary = "Créer un locataire")
     @ApiResponse(responseCode = "201", description = "Locataire créé")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -93,7 +102,10 @@ public class LocataireController {
 
     // ── update() — PUT /gestion-locative/locataire/update/{id} ───────────────
 
-    /** Modifie un locataire. Réponses : 200 | 400 | 404 | 409 | 500. */
+    /**
+     * Modifie un locataire. Réponses : 200 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Modifier un locataire")
     @ApiResponse(responseCode = "200", description = "Locataire modifié")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -108,7 +120,11 @@ public class LocataireController {
 
     // ── delete() — DELETE /gestion-locative/locataire/delete/{id} ────────────
 
-    /** Supprime un locataire sans bail en cours. Réponses : 204 | 400 | 404 | 409 | 500. */
+    /**
+     * Supprime un locataire sans bail en cours. Réponses : 204 | 400 | 404 |
+     * 409 | 500.
+     */
+
     @Operation(summary = "Supprimer un locataire")
     @ApiResponse(responseCode = "204", description = "Locataire supprimé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

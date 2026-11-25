@@ -51,7 +51,6 @@ public class VehiculeController {
         this.service = service;
     }
 
-    /** F2 : crée un véhicule. */
 
     // ── create() — POST /flotte-vehicules/vehicule/create ────────────────────
 
@@ -70,7 +69,6 @@ public class VehiculeController {
                 .body(vehicule);
     }
 
-    /** F2 et F9 : liste ou recherche combinée. */
 
     // ── list() — GET /flotte-vehicules/vehicule/list ─────────────────────────
 
@@ -87,7 +85,6 @@ public class VehiculeController {
         return service.findAll(immatriculation, marque);
     }
 
-    /** F2 : détail d'un véhicule. */
 
     // ── get() — GET /flotte-vehicules/vehicule/{id} ──────────────────────────
 
@@ -103,7 +100,6 @@ public class VehiculeController {
         return service.findById(id);
     }
 
-    /** F2 : transfert de site, marque et modèle modifiables. */
 
     // ── update() — PUT /flotte-vehicules/vehicule/{id}/update ────────────────
 
@@ -120,7 +116,6 @@ public class VehiculeController {
         return service.update(id, request);
     }
 
-    /** F2 : suppression refusée en cas d'affectations ou d'entretiens. */
 
     // ── delete() — DELETE /flotte-vehicules/vehicule/{id}/delete ─────────────
 
@@ -137,7 +132,6 @@ public class VehiculeController {
         return ResponseEntity.noContent().build();
     }
 
-    /** F17 : véhicules disponibles sur une période, regroupés par site. */
 
     // ── disponibles() — GET /flotte-vehicules/vehicule/disponibles ───────────
 
@@ -155,7 +149,6 @@ public class VehiculeController {
         return service.disponibles(du, au);
     }
 
-    /** F15 : prochaine échéance périodique. */
 
     // ── prochainEntretien() — GET …ehicules/vehicule/{id}/prochain-entretien ─
 
@@ -171,7 +164,6 @@ public class VehiculeController {
         return service.prochainEntretien(id);
     }
 
-    /** F18 : coût total des entretiens et répartition par type. */
 
     // ── cout() — GET /flotte-vehicules/vehicule/{id}/cout ────────────────────
 

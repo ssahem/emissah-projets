@@ -113,7 +113,10 @@ public class Appartement {
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
-    /** Met à jour surface et nombre de pièces ; l'immeuble reste figé (F3). */
+    /**
+     * Met à jour surface et nombre de pièces ; l'immeuble reste figé (F3).
+     */
+
     public void modifier(BigDecimal surface, Integer nbPieces) {
         this.surface = Objects.requireNonNull(surface, "surface");
         this.nbPieces = Objects.requireNonNull(nbPieces, "nbPieces");

@@ -29,6 +29,9 @@ public class PlaceNotFoundException extends ApiException {
 
     // ── getRang() ────────────────────────────────────────────────────────────
 
-    /** Retourne rang. */
+    /**
+     * Retourne rang.
+     */
+
     public String getRang() { return rang; }
 }

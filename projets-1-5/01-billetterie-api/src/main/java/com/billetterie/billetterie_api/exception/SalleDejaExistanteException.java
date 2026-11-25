@@ -29,6 +29,9 @@ public class SalleDejaExistanteException extends ApiException {
 
     // ── getNom() ─────────────────────────────────────────────────────────────
 
-    /** Retourne nom. */
+    /**
+     * Retourne nom.
+     */
+
     public String getNom() { return nom; }
 }

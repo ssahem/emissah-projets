@@ -30,6 +30,9 @@ public class ReservationAnnulationImpossibleException extends ApiException {
 
     // ── getIdReservation() ───────────────────────────────────────────────────
 
-    /** Retourne idReservation. */
+    /**
+     * Retourne idReservation.
+     */
+
     public Integer getIdReservation() { return idReservation; }
 }

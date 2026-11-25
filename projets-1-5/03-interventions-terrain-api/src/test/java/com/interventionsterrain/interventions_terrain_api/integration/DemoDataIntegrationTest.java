@@ -40,12 +40,11 @@ class DemoDataIntegrationTest {
             .withUsername("root")
             .withPassword("root");
 
-    /** Fournit une base PostgreSQL vierge à Spring. */
 
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Fournit une base PostgreSQL vierge à Spring.
      */
 
     @DynamicPropertySource

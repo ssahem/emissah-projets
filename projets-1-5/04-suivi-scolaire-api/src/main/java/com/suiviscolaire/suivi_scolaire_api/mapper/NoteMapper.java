@@ -55,12 +55,12 @@ public class NoteMapper {
         this.trimestreRepository = trimestreRepository;
     }
 
-    /** Convertit une note en DTO ; la date affichée est le début du trimestre (A-03). */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une note en DTO ; la date affichée est le début du trimestre
+     * (A-03).
      */
 
     public NoteResponse toResponse(Note note) {

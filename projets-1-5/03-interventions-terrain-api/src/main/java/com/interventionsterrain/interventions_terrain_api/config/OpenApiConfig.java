@@ -19,12 +19,11 @@ public class OpenApiConfig {
     //  CONSTANTES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Construit la documentation. */
 
     // ── openAPI() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute openAPI().
+     * Construit la documentation.
      */
 
     @Bean

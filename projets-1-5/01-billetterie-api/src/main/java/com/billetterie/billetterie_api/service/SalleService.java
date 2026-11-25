@@ -64,7 +64,10 @@ public class SalleService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne toutes les salles triées par nom puis ville. */
+    /**
+     * Retourne toutes les salles triées par nom puis ville.
+     */
+
     public List<SalleResponse> findAll() {
         return salleRepository.findAllByOrderByNomAscVilleAsc().stream()
                 .map(salleMapper::toResponse)
@@ -78,6 +81,7 @@ public class SalleService {
      *
      * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
      */
+
     public SalleResponse findById(Integer idSalle) {
         return salleMapper.toResponse(requireSalle(idSalle));
     }
@@ -85,10 +89,12 @@ public class SalleService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Crée une salle ; le couple (nom, ville) doit être unique. Modifie la base.
+     * Crée une salle ; le couple (nom, ville) doit être unique. Modifie la
+     * base.
      *
      * @throws SalleDejaExistanteException si le couple nom/ville existe déjà.
      */
+
     @Transactional
     public SalleResponse create(CreateSalleRequest request) {
         // ── Étape 1/3 : vérifier la clé métier ───────────────────────────────
@@ -108,12 +114,13 @@ public class SalleService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie une salle en vérifiant l'unicité et la capacité minimale. Modifie la base.
+     * Modifie une salle en vérifiant l'unicité et la capacité minimale. Modifie
+     * la base. inférieure aux places existantes.
      *
      * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
-     *
-     * @throws CapaciteInsuffisanteException si la nouvelle capacité est inférieure aux places existantes.
+     * @throws CapaciteInsuffisanteException si la nouvelle capacité est
      */
+
     @Transactional
     public SalleResponse update(Integer idSalle, UpdateSalleRequest request) {
         // ── Étape 1/3 : charger et contrôler les contraintes ─────────────────
@@ -138,12 +145,12 @@ public class SalleService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Supprime une salle vide. Modifie la base.
+     * Supprime une salle vide. Modifie la base. places ou des événements.
      *
      * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
-     *
-     * @throws SalleNonSupprimableException si la salle comporte encore des places ou des événements.
+     * @throws SalleNonSupprimableException si la salle comporte encore des
      */
+
     @Transactional
     public void delete(Integer idSalle) {
         Salle salle = requireSalle(idSalle);
@@ -164,9 +171,9 @@ public class SalleService {
      * Retourne les places d'une salle, filtrées ou non par catégorie.
      *
      * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
-     *
      * @throws CategorieInconnueException si la catégorie demandée n’existe pas.
      */
+
     public List<PlaceSalleResponse> findPlaces(Integer idSalle, String categorie) {
         requireSalle(idSalle);
         if (categorie == null || categorie.isBlank()) {
@@ -190,6 +197,7 @@ public class SalleService {
      *
      * @throws SalleNotFoundException si aucune salle ne porte cet identifiant.
      */
+
     public List<ProgrammationResponse> findProgrammation(Integer idSalle) {
         requireSalle(idSalle);
         return evenementRepository.findAllBySalle_IdSalleOrderByDateHeureAsc(idSalle).stream()
@@ -203,7 +211,10 @@ public class SalleService {
 
     // ── requireSalle() ───────────────────────────────────────────────────────
 
-    /** Charge une salle ou lève l'erreur métier 404. */
+    /**
+     * Charge une salle ou lève l'erreur métier 404.
+     */
+
     private Salle requireSalle(Integer idSalle) {
         return salleRepository.findById(idSalle)
                 .orElseThrow(() -> new SalleNotFoundException(idSalle));

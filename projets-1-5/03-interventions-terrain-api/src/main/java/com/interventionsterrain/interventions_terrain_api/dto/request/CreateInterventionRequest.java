@@ -23,27 +23,42 @@ public record CreateInterventionRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Identifiant du client", example = "1")
-    @NotNull @Positive Integer idClient,
-
-    @Schema(description = "Code du type d'intervention", example = "RACCORDEMENT_FIBRE")
-    @NotBlank @Size(max = 100) String codeType,
-
-    @Schema(description = "Identifiant du technicien responsable", example = "1")
-    @NotNull @Positive Integer idTechnicienResponsable,
-
-    @Schema(description = "Date et heure de la demande", example = "2026-11-24T09:00:00")
-    @NotNull LocalDateTime dateDemande,
-
-    @Schema(description = "Début du créneau prévu", example = "2026-12-01T09:00:00")
-    @NotNull LocalDateTime debutPrevu,
-
-    @Schema(description = "Fin du créneau prévu", example = "2026-12-01T12:00:00")
-    @NotNull LocalDateTime finPrevue,
-
-    @Schema(description = "Voie du lieu d'intervention", example = "12 rue de la Paix")
-    @NotBlank @Size(max = 255) String voie,
-
-    @Schema(description = "Commune du lieu d'intervention", example = "Paris")
-    @NotBlank @Size(max = 100) String commune) {
+        // Identifiant du client
+        @Schema(description = "Identifiant du client", example = "1")
+        @NotNull
+        @Positive
+        Integer idClient,
+        // Code du type
+        @Schema(description = "Code du type d'intervention", example = "RACCORDEMENT_FIBRE")
+        @NotBlank
+        @Size(max = 100)
+        String codeType,
+        // Identifiant du technicien responsable
+        @Schema(description = "Identifiant du technicien responsable", example = "1")
+        @NotNull
+        @Positive
+        Integer idTechnicienResponsable,
+        // Date demande
+        @Schema(description = "Date et heure de la demande", example = "2026-11-24T09:00:00")
+        @NotNull
+        LocalDateTime dateDemande,
+        // Début prévu
+        @Schema(description = "Début du créneau prévu", example = "2026-12-01T09:00:00")
+        @NotNull
+        LocalDateTime debutPrevu,
+        // Fin prévue
+        @Schema(description = "Fin du créneau prévu", example = "2026-12-01T12:00:00")
+        @NotNull
+        LocalDateTime finPrevue,
+        // Voie
+        @Schema(description = "Voie du lieu d'intervention", example = "12 rue de la Paix")
+        @NotBlank
+        @Size(max = 255)
+        String voie,
+        // Commune
+        @Schema(description = "Commune du lieu d'intervention", example = "Paris")
+        @NotBlank
+        @Size(max = 100)
+        String commune
+) {
 }

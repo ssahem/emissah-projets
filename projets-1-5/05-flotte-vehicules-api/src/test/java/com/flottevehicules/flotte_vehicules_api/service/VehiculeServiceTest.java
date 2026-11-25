@@ -67,7 +67,8 @@ class VehiculeServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -81,7 +82,7 @@ class VehiculeServiceTest {
     // ── vehicule() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour vehicule().
+     * Prépare un véhicule de test avec des valeurs nominales.
      */
 
     private Vehicule vehicule(Integer id, String immatriculation, Integer idSite) {
@@ -94,7 +95,7 @@ class VehiculeServiceTest {
     // ── request() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour request().
+     * Prépare un véhicule de test avec des valeurs nominales.
      */
 
     private CreateVehiculeRequest request(String immatriculation, LocalDate date, Integer idSite,

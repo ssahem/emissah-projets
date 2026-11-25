@@ -61,7 +61,8 @@ class RestitutionServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -205,12 +206,11 @@ class RestitutionServiceTest {
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
 
-    /** Prépare un élève, son inscription courante et le trimestre. */
 
     // ── prepEleveInscriptionTrimestre() ──────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour prepEleveInscriptionTrimestre().
+     * Prépare un élève, son inscription courante et le trimestre.
      */
 
     private void prepEleveInscriptionTrimestre() {
@@ -220,12 +220,11 @@ class RestitutionServiceTest {
                 .thenReturn(Optional.of(inscription(10, 1)));
     }
 
-    /** Construit un élève avec son identifiant. */
 
     // ── eleve() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour eleve().
+     * Construit un élève avec son identifiant.
      */
 
     private Eleve eleve(Integer id) {
@@ -234,12 +233,11 @@ class RestitutionServiceTest {
         return e;
     }
 
-    /** Construit une inscription avec son identifiant. */
 
     // ── inscription() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour inscription().
+     * Construit une inscription avec son identifiant.
      */
 
     private Inscription inscription(Integer id, Integer idEleve) {
@@ -248,12 +246,11 @@ class RestitutionServiceTest {
         return i;
     }
 
-    /** Construit une classe. */
 
     // ── classe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour classe().
+     * Construit une classe.
      */
 
     private Classe classe() {
@@ -262,12 +259,11 @@ class RestitutionServiceTest {
         return c;
     }
 
-    /** Construit un trimestre ouvert. */
 
     // ── trimestre() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour trimestre().
+     * Construit un trimestre ouvert.
      */
 
     private Trimestre trimestre() {
@@ -277,12 +273,11 @@ class RestitutionServiceTest {
         return t;
     }
 
-    /** Construit un enseignement avec son identifiant. */
 
     // ── enseignement() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour enseignement().
+     * Construit un enseignement avec son identifiant.
      */
 
     private Enseignement enseignement(Integer id, Integer idMatiere) {
@@ -291,12 +286,11 @@ class RestitutionServiceTest {
         return e;
     }
 
-    /** Construit une matière avec son identifiant. */
 
     // ── matiere() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour matiere().
+     * Construit une matière avec son identifiant.
      */
 
     private Matiere matiere(Integer id, String libelle, BigDecimal coefficient) {

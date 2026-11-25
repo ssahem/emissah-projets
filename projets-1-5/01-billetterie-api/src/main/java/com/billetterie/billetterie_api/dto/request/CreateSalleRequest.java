@@ -22,12 +22,25 @@ public record CreateSalleRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Nom de la salle
-        @Schema(description = "Nom de la salle", example = "Grand Hall") @NotBlank @Size(max = 100) String nom,
-        // Adresse postale
-        @Schema(description = "Adresse postale", example = "12 rue des Arts") @NotBlank @Size(max = 255) String adresse,
+        // Nom
+        @Schema(description = "Nom de la salle", example = "Grand Hall")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Adresse
+        @Schema(description = "Adresse postale", example = "12 rue des Arts")
+        @NotBlank
+        @Size(max = 255)
+        String adresse,
         // Ville
-        @Schema(description = "Ville", example = "Abidjan") @NotBlank @Size(max = 100) String ville,
+        @Schema(description = "Ville", example = "Abidjan")
+        @NotBlank
+        @Size(max = 100)
+        String ville,
         // Capacité
-        @Schema(description = "Capacité", example = "120") @NotNull @Positive Integer capacite) {
+        @Schema(description = "Capacité", example = "120")
+        @NotNull
+        @Positive
+        Integer capacite
+) {
 }

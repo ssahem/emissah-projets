@@ -64,12 +64,11 @@ public class Matiere {
     public String getCode() { return code; }
     public BigDecimal getCoefficient() { return coefficient; }
 
-    /** Modifie le libellé et le coefficient (F3). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie le libellé et le coefficient (F3).
      */
 
     public void modifier(String libelle, BigDecimal coefficient) {

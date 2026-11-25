@@ -29,6 +29,9 @@ public class ReservationExpireeException extends ApiException {
 
     // ── getIdReservation() ───────────────────────────────────────────────────
 
-    /** Retourne idReservation. */
+    /**
+     * Retourne idReservation.
+     */
+
     public Integer getIdReservation() { return idReservation; }
 }

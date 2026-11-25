@@ -15,25 +15,27 @@ import jakarta.validation.constraints.NotBlank;
 @Schema(description = "Modification d'un salarié ; le matricule n'est pas modifiable")
 public record UpdateSalarieRequest(
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+        // Nom
         @Schema(description = "Nom", example = "Martin")
         @NotBlank(message = "Le nom est obligatoire")
         String nom,
-
+        // Prénom
         @Schema(description = "Prénom", example = "Alice")
         @NotBlank(message = "Le prénom est obligatoire")
         String prenom,
-
+        // Email
         @Schema(description = "Adresse électronique unique", example = "alice.martin@example.test")
         @NotBlank(message = "L'email est obligatoire")
         @Email(message = "L'email doit être valide")
         String email,
-
+        // Service
         @Schema(description = "Nouveau service", example = "Technique")
         @NotBlank(message = "Le service est obligatoire")
-        String service) {
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  CHAMPS
-    // ═════════════════════════════════════════════════════════════════════════
+        String service
+) {
 
 }

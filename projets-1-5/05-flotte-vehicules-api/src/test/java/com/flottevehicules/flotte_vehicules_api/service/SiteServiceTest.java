@@ -64,7 +64,8 @@ class SiteServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -77,7 +78,7 @@ class SiteServiceTest {
     // ── site() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour site().
+     * Prépare un site de test avec des valeurs nominales.
      */
 
     private Site site(Integer id, String nom, String ville) {
@@ -89,7 +90,7 @@ class SiteServiceTest {
     // ── vehicule() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour vehicule().
+     * Prépare un site de test avec des valeurs nominales.
      */
 
     private Vehicule vehicule(Integer id) {

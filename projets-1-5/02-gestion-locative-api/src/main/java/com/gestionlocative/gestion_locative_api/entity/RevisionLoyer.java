@@ -83,7 +83,10 @@ public class RevisionLoyer {
 
     // ── modifierMontant() ────────────────────────────────────────────────────
 
-    /** Ajuste la révision initiale quand le loyer change avant le début du bail. */
+    /**
+     * Ajuste la révision initiale quand le loyer change avant le début du bail.
+     */
+
     public void modifierMontant(BigDecimal montant) {
         this.montant = Objects.requireNonNull(montant, "montant");
     }

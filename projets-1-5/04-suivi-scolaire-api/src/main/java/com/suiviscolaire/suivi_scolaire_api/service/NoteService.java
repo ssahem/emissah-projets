@@ -71,12 +71,12 @@ public class NoteService {
         this.mapper = mapper;
     }
 
-    /** Liste les notes groupées par matière (F5 : forme par défaut de GET /note/list). */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Liste les notes groupées par matière (F5 : forme par défaut de GET
+     * /note/list).
      */
 
     public List<NotesMatiereResponse> findAll() {
@@ -95,24 +95,23 @@ public class NoteService {
         }).toList();
     }
 
-    /** Consulte une note par identifiant (404 si inconnue). */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Consulte une note par identifiant (404 si inconnue).
      */
 
     public NoteResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** Crée une note : l'élève, la matière, le type et le trimestre ouvert sont vérifiés. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée une note : l'élève, la matière, le type et le trimestre ouvert sont
+     * vérifiés.
      */
 
     @Transactional
@@ -140,12 +139,11 @@ public class NoteService {
         return mapper.toResponse(note);
     }
 
-    /** Modifie la valeur d'une note tant que le trimestre n'est pas clôturé. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie la valeur d'une note tant que le trimestre n'est pas clôturé.
      */
 
     @Transactional
@@ -156,12 +154,11 @@ public class NoteService {
         return mapper.toResponse(note);
     }
 
-    /** Supprime une note tant que le trimestre n'est pas clôturé. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Supprime une note tant que le trimestre n'est pas clôturé.
      */
 
     @Transactional
@@ -171,12 +168,11 @@ public class NoteService {
         noteRepository.delete(note);
     }
 
-    /** Retourne la note ou lève une erreur métier 404. */
 
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Retourne la note ou lève une erreur métier 404.
      */
 
     public Note required(Integer id) {
@@ -184,24 +180,22 @@ public class NoteService {
                 .orElseThrow(() -> new RessourceIntrouvableException("Note", id));
     }
 
-    /** Construit l'en-tête Location d'une note créée. */
 
     // ── location() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute location().
+     * Construit l'en-tête Location d'une note créée.
      */
 
     public URI location(Integer id) {
         return URI.create("/suivi-scolaire/note/get/" + id);
     }
 
-    /** Valeur minimale autorisée pour une note (0). */
 
     // ── valeurMinimale() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute valeurMinimale().
+     * Valeur minimale autorisée pour une note (0).
      */
 
     public BigDecimal valeurMinimale() { return BigDecimal.ZERO; }

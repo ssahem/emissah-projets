@@ -45,7 +45,6 @@ public class SalarieController {
         this.service = service;
     }
 
-    /** F3 : crée une fiche salarié. */
 
     // ── create() — POST /flotte-vehicules/salarie/create ─────────────────────
 
@@ -64,7 +63,6 @@ public class SalarieController {
                 .body(salarie);
     }
 
-    /** F3 : liste triée par nom. */
 
     // ── list() — GET /flotte-vehicules/salarie/list ──────────────────────────
 
@@ -79,7 +77,6 @@ public class SalarieController {
         return service.findAll();
     }
 
-    /** F3 : détail d'un salarié. */
 
     // ── get() — GET /flotte-vehicules/salarie/{id} ───────────────────────────
 
@@ -95,7 +92,6 @@ public class SalarieController {
         return service.findById(id);
     }
 
-    /** F3 : modifie les champs autorisés ; matricule figé. */
 
     // ── update() — PUT /flotte-vehicules/salarie/{id}/update ─────────────────
 
@@ -112,7 +108,6 @@ public class SalarieController {
         return service.update(id, request);
     }
 
-    /** F3 : suppression refusée si une affectation est en cours. */
 
     // ── delete() — DELETE /flotte-vehicules/salarie/{id}/delete ──────────────
 
@@ -129,7 +124,6 @@ public class SalarieController {
         return ResponseEntity.noContent().build();
     }
 
-    /** F7 : affectations du salarié, de la plus récente à la plus ancienne. */
 
     // ── affectations() — GET /flotte-vehicules/salarie/{id}/affectations ─────
 

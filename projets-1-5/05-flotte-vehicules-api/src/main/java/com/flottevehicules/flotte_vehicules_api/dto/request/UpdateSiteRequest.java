@@ -14,16 +14,18 @@ import jakarta.validation.constraints.NotBlank;
 @Schema(description = "Modification de l'adresse et de la ville d'un site")
 public record UpdateSiteRequest(
 
-        @Schema(description = "Nouvelle adresse", example = "14 rue de la Paix")
-        @NotBlank(message = "L'adresse est obligatoire")
-        String adresse,
-
-        @Schema(description = "Nouvelle ville", example = "Paris")
-        @NotBlank(message = "La ville est obligatoire")
-        String ville) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Adresse
+        @Schema(description = "Nouvelle adresse", example = "14 rue de la Paix")
+        @NotBlank(message = "L'adresse est obligatoire")
+        String adresse,
+        // Ville
+        @Schema(description = "Nouvelle ville", example = "Paris")
+        @NotBlank(message = "La ville est obligatoire")
+        String ville
+) {
 
 }

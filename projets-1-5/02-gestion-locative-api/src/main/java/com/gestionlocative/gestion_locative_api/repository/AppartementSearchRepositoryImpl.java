@@ -29,12 +29,11 @@ public class AppartementSearchRepositoryImpl implements AppartementSearchReposit
     //  SEARCH()
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Construit la requête à partir des seuls critères renseignés. */
 
     // ── search() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute search().
+     * Construit la requête à partir des seuls critères renseignés.
      */
 
     @Override

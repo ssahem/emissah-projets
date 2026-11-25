@@ -23,11 +23,24 @@ public record UpdatePlaceRequest(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Identifiant de la salle
-        @Schema(description = "Identifiant de la salle", example = "1") @NotNull @Positive Integer idSalle,
+        @Schema(description = "Identifiant de la salle", example = "1")
+        @NotNull
+        @Positive
+        Integer idSalle,
         // Rang
-        @Schema(description = "Rang", example = "A") @NotBlank @Size(max = 5) String rang,
+        @Schema(description = "Rang", example = "A")
+        @NotBlank
+        @Size(max = 5)
+        String rang,
         // Numéro
-        @Schema(description = "Numéro", example = "13") @NotNull @Positive Integer numero,
+        @Schema(description = "Numéro", example = "13")
+        @NotNull
+        @Positive
+        Integer numero,
         // Catégorie
-        @Schema(description = "Catégorie", example = "ORCHESTRE") @NotBlank @Size(max = 20) String categorie) {
+        @Schema(description = "Catégorie", example = "ORCHESTRE")
+        @NotBlank
+        @Size(max = 20)
+        String categorie
+) {
 }

@@ -71,7 +71,8 @@ class ConsultationServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -230,12 +231,11 @@ class ConsultationServiceTest {
                 .isEqualTo(Sort.Direction.DESC);
     }
 
-    /** Prépare les références nécessaires à NoteMapper. */
 
     // ── prepNoteMapper() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour prepNoteMapper().
+     * Prépare les références nécessaires à NoteMapper.
      */
 
     private void prepNoteMapper() {
@@ -250,12 +250,11 @@ class ConsultationServiceTest {
         when(trimestreRepository.findByNumero(2)).thenReturn(Optional.of(trimestre()));
     }
 
-    /** Construit une classe. */
 
     // ── classe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour classe().
+     * Construit une classe.
      */
 
     private Classe classe() {
@@ -264,12 +263,11 @@ class ConsultationServiceTest {
         return c;
     }
 
-    /** Construit un élève. */
 
     // ── eleve() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour eleve().
+     * Construit un élève.
      */
 
     private Eleve eleve(Integer id, String nom) {
@@ -278,12 +276,11 @@ class ConsultationServiceTest {
         return e;
     }
 
-    /** Construit une inscription courante. */
 
     // ── inscription() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour inscription().
+     * Construit une inscription courante.
      */
 
     private Inscription inscription(Integer id, Integer idEleve) {
@@ -292,12 +289,11 @@ class ConsultationServiceTest {
         return i;
     }
 
-    /** Construit un enseignement. */
 
     // ── enseignement() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour enseignement().
+     * Construit un enseignement.
      */
 
     private Enseignement enseignement(Integer id) {
@@ -306,12 +302,11 @@ class ConsultationServiceTest {
         return e;
     }
 
-    /** Construit une matière. */
 
     // ── matiere() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour matiere().
+     * Construit une matière.
      */
 
     private Matiere matiere(Integer id, String libelle) {
@@ -320,12 +315,11 @@ class ConsultationServiceTest {
         return m;
     }
 
-    /** Construit un trimestre. */
 
     // ── trimestre() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour trimestre().
+     * Construit un trimestre.
      */
 
     private Trimestre trimestre() {
@@ -335,24 +329,22 @@ class ConsultationServiceTest {
         return t;
     }
 
-    /** Construit une note de valeur 12. */
 
     // ── note() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour note().
+     * Construit une note de valeur 12.
      */
 
     private Note note(Integer id, Integer idEnseignement) {
         return noteAvecValeur(id, idEnseignement, "12.00");
     }
 
-    /** Construit une note avec une valeur explicite. */
 
     // ── noteAvecValeur() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour noteAvecValeur().
+     * Construit une note avec une valeur explicite.
      */
 
     private Note noteAvecValeur(Integer id, Integer idEnseignement, String valeur) {

@@ -18,12 +18,11 @@ public class SalarieMapper {
     //  CONSTANTES ET CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Convertit une entité en réponse. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une entité en réponse.
      */
 
     public SalarieResponse toResponse(Salarie salarie) {

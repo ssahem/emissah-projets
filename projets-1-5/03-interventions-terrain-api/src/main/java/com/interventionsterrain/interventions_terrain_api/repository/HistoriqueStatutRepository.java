@@ -33,7 +33,7 @@ public interface HistoriqueStatutRepository extends JpaRepository<HistoriqueStat
     // ── deleteByIdAffectation() ──────────────────────────────────────────────
 
     /**
-     * Exécute deleteByIdAffectation().
+     * Supprime by id affectation.
      */
 
     void deleteByIdAffectation(@Param("idAffectation") Integer idAffectation);

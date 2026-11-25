@@ -54,7 +54,10 @@ public class ProprietaireController {
 
     // ── list() — GET /gestion-locative/proprietaire/list ─────────────────────
 
-    /** Liste les propriétaires triés par nom. Réponses : 200 | 500. */
+    /**
+     * Liste les propriétaires triés par nom. Réponses : 200 | 500.
+     */
+
     @Operation(summary = "Lister les propriétaires")
     @ApiResponse(responseCode = "200", description = "Propriétaires renvoyés")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
@@ -65,7 +68,10 @@ public class ProprietaireController {
 
     // ── getById() — GET /gestion-locative/proprietaire/get/{id} ──────────────
 
-    /** Consulte un propriétaire. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Consulte un propriétaire. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Consulter un propriétaire")
     @ApiResponse(responseCode = "200", description = "Propriétaire renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -78,7 +84,11 @@ public class ProprietaireController {
 
     // ── immeubles() — GET /gestion-locative/proprietaire/immeubles/{id} ──────
 
-    /** Liste les immeubles avec leurs compteurs. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Liste les immeubles avec leurs compteurs. Réponses : 200 | 400 | 404 |
+     * 500.
+     */
+
     @Operation(summary = "Lister les immeubles d'un propriétaire")
     @ApiResponse(responseCode = "200", description = "Immeubles renvoyés")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -91,7 +101,10 @@ public class ProprietaireController {
 
     // ── create() — POST /gestion-locative/proprietaire/create ────────────────
 
-    /** Crée un propriétaire. Réponses : 201 | 400 | 409 | 500. */
+    /**
+     * Crée un propriétaire. Réponses : 201 | 400 | 409 | 500.
+     */
+
     @Operation(summary = "Créer un propriétaire")
     @ApiResponse(responseCode = "201", description = "Propriétaire créé")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -108,7 +121,10 @@ public class ProprietaireController {
 
     // ── update() — PUT /gestion-locative/proprietaire/update/{id} ────────────
 
-    /** Modifie un propriétaire. Réponses : 200 | 400 | 404 | 409 | 500. */
+    /**
+     * Modifie un propriétaire. Réponses : 200 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Modifier un propriétaire")
     @ApiResponse(responseCode = "200", description = "Propriétaire modifié")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -123,7 +139,11 @@ public class ProprietaireController {
 
     // ── delete() — DELETE /gestion-locative/proprietaire/delete/{id} ─────────
 
-    /** Supprime un propriétaire sans immeuble. Réponses : 204 | 400 | 404 | 409 | 500. */
+    /**
+     * Supprime un propriétaire sans immeuble. Réponses : 204 | 400 | 404 | 409
+     * | 500.
+     */
+
     @Operation(summary = "Supprimer un propriétaire")
     @ApiResponse(responseCode = "204", description = "Propriétaire supprimé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

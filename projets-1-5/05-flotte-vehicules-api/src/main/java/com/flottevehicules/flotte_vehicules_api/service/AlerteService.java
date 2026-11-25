@@ -61,12 +61,12 @@ public class AlerteService {
         this.clock = clock;
     }
 
-    /** Tâche nocturne F16 : génère les alertes ; l'expression cron vient de la configuration. */
 
     // ── tacheQuotidienne() ───────────────────────────────────────────────────
 
     /**
-     * Exécute tacheQuotidienne().
+     * Tâche nocturne F16 : génère les alertes ; l'expression cron vient de la
+     * configuration.
      */
 
     @Scheduled(cron = "${flotte-vehicules.alertes-entretiens.cron}")
@@ -77,12 +77,11 @@ public class AlerteService {
                 alertes.stream().mapToInt(a -> a.alertes().size()).sum(), alertes.size());
     }
 
-    /** F16 : génère les alertes manquantes et les regroupe par site. */
 
     // ── genererAlertes() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute genererAlertes().
+     * F16 : génère les alertes manquantes et les regroupe par site.
      */
 
     @Transactional
@@ -114,12 +113,11 @@ public class AlerteService {
         return alertesParSite();
     }
 
-    /** Consultation des alertes persistées, toutes ou filtrées par véhicule. */
 
     // ── lister() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute lister().
+     * Consultation des alertes persistées, toutes ou filtrées par véhicule.
      */
 
     public List<AlerteResponse> lister(Integer idVehicule) {
@@ -130,12 +128,11 @@ public class AlerteService {
                 .stream().map(this::toResponse).toList();
     }
 
-    /** Consultation d'une alerte par identifiant. */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Consultation d'une alerte par identifiant.
      */
 
     public AlerteResponse findById(Integer id) {
@@ -151,7 +148,7 @@ public class AlerteService {
     // ── doitAlerter() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute doitAlerter().
+     * Réalise l’opération doitAlerter sur une alerte.
      */
 
     private boolean doitAlerter(VueRepository.EcheanceRow echeance, LocalDate aujourdHui) {
@@ -165,7 +162,7 @@ public class AlerteService {
     // ── alertesParSite() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute alertesParSite().
+     * Réalise l’opération alertesParSite sur une alerte.
      */
 
     private List<AlertesParSiteResponse> alertesParSite() {
@@ -191,7 +188,7 @@ public class AlerteService {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une alerte en DTO de réponse.
      */
 
     private AlerteResponse toResponse(AlerteVehicule alerte) {

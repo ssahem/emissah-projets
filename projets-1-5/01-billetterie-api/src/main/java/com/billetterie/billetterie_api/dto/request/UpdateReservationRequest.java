@@ -21,10 +21,21 @@ public record UpdateReservationRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Nom du client
-        @Schema(description = "Nom du client", example = "Dupont") @NotBlank @Size(max = 100) String nom,
-        // Prénom du client
-        @Schema(description = "Prénom du client", example = "Jean") @NotBlank @Size(max = 100) String prenom,
+        // Nom
+        @Schema(description = "Nom du client", example = "Dupont")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom du client", example = "Jean")
+        @NotBlank
+        @Size(max = 100)
+        String prenom,
         // Email
-        @Schema(description = "Email", example = "jean@example.com") @NotBlank @Email @Size(max = 255) String email) {
+        @Schema(description = "Email", example = "jean@example.com")
+        @NotBlank
+        @Email
+        @Size(max = 255)
+        String email
+) {
 }

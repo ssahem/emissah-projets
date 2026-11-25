@@ -124,7 +124,7 @@ public class RestitutionService {
     // ── findDisponibles() ────────────────────────────────────────────────────
 
     /**
-     * Exécute findDisponibles().
+     * Recherche disponibles.
      */
 
     public DisponiblesResponse findDisponibles(LocalDateTime debut, LocalDateTime fin, String codeType) {
@@ -168,12 +168,12 @@ public class RestitutionService {
         return new DisponiblesResponse(agences, agences.isEmpty() ? RAISON_AUCUN : null);
     }
 
-    /** F18 : nombre d'interventions et heures occupées par technicien d'une agence, avec totaux. */
 
     // ── findCharge() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute findCharge().
+     * F18 : nombre d'interventions et heures occupées par technicien d'une
+     * agence, avec totaux.
      */
 
     public ChargeAgenceResponse findCharge(Integer idAgence, LocalDateTime du, LocalDateTime au) {
@@ -203,12 +203,11 @@ public class RestitutionService {
                 totalInterventions, enHeures(totalDuree));
     }
 
-    /** F19 : taux mensuel TERMINEE / (TERMINEE + ECHOUEE), global et par type. */
 
     // ── findTauxReussite() ───────────────────────────────────────────────────
 
     /**
-     * Exécute findTauxReussite().
+     * F19 : taux mensuel TERMINEE / (TERMINEE + ECHOUEE), global et par type.
      */
 
     public TauxReussiteResponse findTauxReussite(Integer idAgence, String mois) {
@@ -271,7 +270,7 @@ public class RestitutionService {
     // ── techniciensDe() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute techniciensDe().
+     * Réalise l’opération techniciensDe sur un restitution.
      */
 
     private List<Technicien> techniciensDe(Integer idAgence) {
@@ -286,7 +285,7 @@ public class RestitutionService {
     // ── requiredAgence() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute requiredAgence().
+     * Récupère un restitution par identifiant ou lève une exception si absent.
      */
 
     private Agence requiredAgence(Integer idAgence) {
@@ -297,7 +296,7 @@ public class RestitutionService {
     // ── nomAgence() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute nomAgence().
+     * Retourne agence.
      */
 
     private String nomAgence(Integer idAgence) {
@@ -308,7 +307,7 @@ public class RestitutionService {
     // ── competencesSatisfaites() ─────────────────────────────────────────────
 
     /**
-     * Exécute competencesSatisfaites().
+     * Réalise l’opération competencesSatisfaites sur un restitution.
      */
 
     private boolean competencesSatisfaites(Integer idTechnicien, Integer idType, LocalDate date) {
@@ -334,7 +333,7 @@ public class RestitutionService {
     // ── statutCourant() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute statutCourant().
+     * Détermine le statut courant à partir de l’affectation responsable.
      */
 
     private StatutIntervention statutCourant(Intervention intervention) {
@@ -345,7 +344,7 @@ public class RestitutionService {
     // ── statutCourant() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute statutCourant().
+     * Détermine le statut courant à partir de l’affectation responsable.
      */
 
     private StatutIntervention statutCourant(Affectation responsable) {
@@ -360,7 +359,7 @@ public class RestitutionService {
     // ── responsable() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute responsable().
+     * Réalise l’opération responsable sur un restitution.
      */
 
     private Affectation responsable(Integer idIntervention) {
@@ -368,12 +367,12 @@ public class RestitutionService {
                 .orElse(null);
     }
 
-    /** Somme des durées des interventions actives, ramenées à la période demandée. */
 
     // ── heuresOccupees() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute heuresOccupees().
+     * Somme des durées des interventions actives, ramenées à la période
+     * demandée.
      */
 
     private Duration heuresOccupees(List<Intervention> interventions, LocalDateTime debut,
@@ -394,7 +393,7 @@ public class RestitutionService {
     // ── enHeures() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute enHeures().
+     * Convertit heures.
      */
 
     private BigDecimal enHeures(Duration duree) {
@@ -405,7 +404,7 @@ public class RestitutionService {
     // ── taux() ───────────────────────────────────────────────────────────────
 
     /**
-     * Exécute taux().
+     * Calcule un restitution.
      */
 
     private BigDecimal taux(long reussites, long echecs) {

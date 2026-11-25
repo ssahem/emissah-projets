@@ -15,20 +15,22 @@ import java.time.LocalDate;
 @Schema(description = "Véhicule libre avec compteur et prochaine échéance")
 public record DisponibleVehiculeResponse(
 
-        @Schema(description = "Véhicule", example = "1")
-        Integer idVehicule,
-
-        @Schema(description = "Immatriculation", example = "AB-123-CD")
-        String immatriculation,
-
-        @Schema(description = "Kilométrage courant", example = "19000")
-        Integer kmActuel,
-
-        @Schema(description = "Prochaine échéance d'entretien", example = "2027-10-15")
-        LocalDate prochaineEcheance) {
-
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du véhicule
+        @Schema(description = "Véhicule", example = "1")
+        Integer idVehicule,
+        // Immatriculation
+        @Schema(description = "Immatriculation", example = "AB-123-CD")
+        String immatriculation,
+        // Kilométrage actuel
+        @Schema(description = "Kilométrage courant", example = "19000")
+        Integer kmActuel,
+        // Prochaine echeance
+        @Schema(description = "Prochaine échéance d'entretien", example = "2027-10-15")
+        LocalDate prochaineEcheance
+) {
 
 }

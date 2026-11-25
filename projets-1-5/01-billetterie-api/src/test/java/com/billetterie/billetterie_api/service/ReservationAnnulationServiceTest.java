@@ -76,7 +76,8 @@ class ReservationAnnulationServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -89,7 +90,7 @@ class ReservationAnnulationServiceTest {
     // ── reservation() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour reservation().
+     * Prépare un reservationannulation de test avec des valeurs nominales.
      */
 
     private Reservation reservation(LocalDateTime dateEvenement) {
@@ -107,7 +108,7 @@ class ReservationAnnulationServiceTest {
     // ── preparer() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparer().
+     * Prépare un reservationannulation pour le scénario de test.
      */
 
     private void preparer(Reservation reservation, String statutCourant, boolean dejaAnnulee) {
@@ -117,7 +118,7 @@ class ReservationAnnulationServiceTest {
     // ── preparer() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour preparer().
+     * Prépare un reservationannulation pour le scénario de test.
      */
 
     private void preparer(Reservation reservation, String statutCourant, boolean dejaAnnulee,
@@ -139,7 +140,7 @@ class ReservationAnnulationServiceTest {
     // ── ajouterPlace() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour ajouterPlace().
+     * Prépare le contexte nécessaire à l’opération ajouterPlace().
      */
 
     private void ajouterPlace(Reservation reservation, String prix) {

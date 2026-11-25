@@ -18,12 +18,11 @@ public class MatiereMapper {
     //  CONSTANTES ET CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Convertit une matière en DTO. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une matière en DTO.
      */
 
     public MatiereResponse toResponse(Matiere matiere) {

@@ -153,7 +153,7 @@ class ReglesMetierWebTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un reglesmetierweb de test avec des valeurs nominales.
      */
 
     private InterventionResponse intervention(Integer id) {

@@ -21,21 +21,35 @@ public record UpdateClientRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Nom", example = "Dupont")
-    @NotBlank @Size(max = 100) String nom,
-
-    @Schema(description = "Prénom", example = "Marie")
-    @Size(max = 100) String prenom,
-
-    @Schema(description = "Email", example = "marie.dupont@example.test")
-    @NotBlank @Email @Size(max = 255) String email,
-
-    @Schema(description = "Téléphone", example = "0102030407")
-    @NotBlank @Size(max = 20) String telephone,
-
-    @Schema(description = "Adresse du client", example = "5 avenue du parc")
-    @NotBlank @Size(max = 255) String adresse,
-
-    @Schema(description = "Commune du client", example = "Paris")
-    @NotBlank @Size(max = 100) String commune) {
+        // Nom
+        @Schema(description = "Nom", example = "Dupont")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Marie")
+        @Size(max = 100)
+        String prenom,
+        // Email
+        @Schema(description = "Email", example = "marie.dupont@example.test")
+        @NotBlank
+        @Email
+        @Size(max = 255)
+        String email,
+        // Téléphone
+        @Schema(description = "Téléphone", example = "0102030407")
+        @NotBlank
+        @Size(max = 20)
+        String telephone,
+        // Adresse
+        @Schema(description = "Adresse du client", example = "5 avenue du parc")
+        @NotBlank
+        @Size(max = 255)
+        String adresse,
+        // Commune
+        @Schema(description = "Commune du client", example = "Paris")
+        @NotBlank
+        @Size(max = 100)
+        String commune
+) {
 }

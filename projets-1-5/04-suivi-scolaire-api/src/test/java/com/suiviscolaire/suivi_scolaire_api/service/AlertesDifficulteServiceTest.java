@@ -64,7 +64,8 @@ class AlertesDifficulteServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -198,12 +199,11 @@ class AlertesDifficulteServiceTest {
                 .hasMessageContaining("entre 1 et 3");
     }
 
-    /** Prépare le trimestre contenant la date de l'horloge fixe. */
 
     // ── prepTrimestreEnCours() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour prepTrimestreEnCours().
+     * Prépare le trimestre contenant la date de l'horloge fixe.
      */
 
     private void prepTrimestreEnCours() {
@@ -212,12 +212,11 @@ class AlertesDifficulteServiceTest {
         when(trimestreRepository.findContenant(AUJOURDHUI)).thenReturn(List.of(t));
     }
 
-    /** Prépare les références utilisées pour enrichir la réponse. */
 
     // ── prepReferences() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour prepReferences().
+     * Prépare les références utilisées pour enrichir la réponse.
      */
 
     private void prepReferences() {
@@ -226,12 +225,11 @@ class AlertesDifficulteServiceTest {
         when(classeRepository.findById(1)).thenReturn(Optional.of(classe()));
     }
 
-    /** Construit une inscription courante. */
 
     // ── inscription() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour inscription().
+     * Construit une inscription courante.
      */
 
     private Inscription inscription() {
@@ -240,12 +238,11 @@ class AlertesDifficulteServiceTest {
         return i;
     }
 
-    /** Construit une alerte déjà persistée. */
 
     // ── alerte() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour alerte().
+     * Construit une alerte déjà persistée.
      */
 
     private AlerteDifficulte alerte() {
@@ -255,12 +252,11 @@ class AlertesDifficulteServiceTest {
         return a;
     }
 
-    /** Construit un élève. */
 
     // ── eleve() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour eleve().
+     * Construit un élève.
      */
 
     private Eleve eleve() {
@@ -269,12 +265,11 @@ class AlertesDifficulteServiceTest {
         return e;
     }
 
-    /** Construit une classe. */
 
     // ── classe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour classe().
+     * Construit une classe.
      */
 
     private Classe classe() {

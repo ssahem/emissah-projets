@@ -37,13 +37,15 @@ public class BailLocataireId implements Serializable {
 
     // ── BailLocataireId(Integer, Integer) ────────────────────────────────────
 
-    /** Crée la clé composite. */
+    /**
+     * Crée la clé composite.
+     */
+
     public BailLocataireId(Integer idBail, Integer idLocataire) {
         this.idBail = Objects.requireNonNull(idBail, "idBail");
         this.idLocataire = Objects.requireNonNull(idLocataire, "idLocataire");
     }
 
-    /** Retourne l'identifiant du bail. */
     public Integer getIdBail() { return idBail; }
 
     /** Retourne l'identifiant du locataire. */
@@ -51,7 +53,10 @@ public class BailLocataireId implements Serializable {
 
     // ── equals() ─────────────────────────────────────────────────────────────
 
-    /** Égalité sur les deux identifiants. */
+    /**
+     * Égalité sur les deux identifiants.
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -66,7 +71,10 @@ public class BailLocataireId implements Serializable {
 
     // ── hashCode() ───────────────────────────────────────────────────────────
 
-    /** Cohérent avec equals(). */
+    /**
+     * Cohérent avec equals().
+     */
+
     @Override
     public int hashCode() {
         return Objects.hash(idBail, idLocataire);

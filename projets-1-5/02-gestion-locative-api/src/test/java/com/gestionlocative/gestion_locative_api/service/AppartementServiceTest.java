@@ -73,7 +73,8 @@ class AppartementServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -87,7 +88,7 @@ class AppartementServiceTest {
     // ── request() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour request().
+     * Prépare un appartement de test avec des valeurs nominales.
      */
 
     private CreateAppartementRequest request(int etage) {

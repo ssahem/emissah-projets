@@ -51,11 +51,17 @@ public class Categorie {
 
     // ── getIdCategorie() ─────────────────────────────────────────────────────
 
-    /** Retourne idCategorie. */
+    /**
+     * Retourne idCategorie.
+     */
+
     public Integer getIdCategorie() { return idCategorie; }
 
     // ── getLibelle() ─────────────────────────────────────────────────────────
 
-    /** Retourne libelle. */
+    /**
+     * Retourne libelle.
+     */
+
     public String getLibelle() { return libelle; }
 }

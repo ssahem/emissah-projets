@@ -1,5 +1,6 @@
 package com.suiviscolaire.suivi_scolaire_api.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -9,15 +10,28 @@ import java.util.List;
  * COUCHE       : DTO (contrat public)
  * RÔLE         : Moyenne générale d'un élève et détail du calcul (F18).
  * IMMUABLE     : record Java.
- * PRODUIT PAR  : RestitutionService.
- * NE FAIT PAS  : de logique métier. Une moyenne absente est null, jamais zéro.
+ * PRODUIT PAR  : MoyenneGeneraleMapper.
+ * NE FAIT PAS  : d’accès base ni de logique métier.
  */
+@Schema(description = "Moyenne générale d'un élève et détail du calcul (F18)")
 public record MoyenneGeneraleResponse(
-        Integer idEleve, Integer trimestre, BigDecimal moyenneGenerale,
-        List<DetailCoefficientResponse> detail) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant de l’élève
+        @Schema(description = "Identifiant de l’élève", example = "1")
+        Integer idEleve,
+        // Trimestre
+        @Schema(description = "Trimestre", example = "1")
+        Integer trimestre,
+        // Moyenne générale
+        @Schema(description = "Moyenne générale", example = "12.34")
+        BigDecimal moyenneGenerale,
+        // Detail
+        @Schema(description = "Detail", example = "Exemple")
+        List<DetailCoefficientResponse> detail
+) {
 
 }

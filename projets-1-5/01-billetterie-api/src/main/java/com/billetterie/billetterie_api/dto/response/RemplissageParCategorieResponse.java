@@ -20,13 +20,19 @@ public record RemplissageParCategorieResponse(
     // ═════════════════════════════════════════════════════════════════════════
 
         // Catégorie
-        @Schema(description = "Catégorie", example = "ORCHESTRE") String categorie,
-        // Nombre total de places
-        @Schema(description = "Nombre total de places", example = "10") long total,
-        // Réservations provisoires
-        @Schema(description = "Réservations provisoires", example = "2") long provisoires,
-        // Réservations payées
-        @Schema(description = "Réservations payées", example = "3") long payees,
-        // Taux de remplissage en pourcentage
-        @Schema(description = "Taux de remplissage en pourcentage", example = "50.00") BigDecimal taux) {
+        @Schema(description = "Catégorie", example = "ORCHESTRE")
+        String categorie,
+        // Total
+        @Schema(description = "Nombre total de places", example = "10")
+        long total,
+        // Provisoires
+        @Schema(description = "Réservations provisoires", example = "2")
+        long provisoires,
+        // Payées
+        @Schema(description = "Réservations payées", example = "3")
+        long payees,
+        // Taux
+        @Schema(description = "Taux de remplissage en pourcentage", example = "50.00")
+        BigDecimal taux
+) {
 }

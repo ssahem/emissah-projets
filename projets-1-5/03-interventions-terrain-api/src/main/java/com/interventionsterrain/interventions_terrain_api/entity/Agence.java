@@ -71,7 +71,7 @@ public class Agence {
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie une agence identifié, après contrôle des règles métier.
      */
 
     public void modifier(String nom, String responsable, String ville) {

@@ -73,32 +73,50 @@ public class Salle {
 
     // ── getIdSalle() ─────────────────────────────────────────────────────────
 
-    /** Retourne l'identifiant technique. */
+    /**
+     * Retourne l'identifiant technique.
+     */
+
     public Integer getIdSalle() { return idSalle; }
 
     // ── getNom() ─────────────────────────────────────────────────────────────
 
-    /** Retourne le nom. */
+    /**
+     * Retourne le nom.
+     */
+
     public String getNom() { return nom; }
 
     // ── getAdresse() ─────────────────────────────────────────────────────────
 
-    /** Retourne l'adresse. */
+    /**
+     * Retourne l'adresse.
+     */
+
     public String getAdresse() { return adresse; }
 
     // ── getVille() ───────────────────────────────────────────────────────────
 
-    /** Retourne la ville. */
+    /**
+     * Retourne la ville.
+     */
+
     public String getVille() { return ville; }
 
     // ── getCapacite() ────────────────────────────────────────────────────────
 
-    /** Retourne la capacité. */
+    /**
+     * Retourne la capacité.
+     */
+
     public Integer getCapacite() { return capacite; }
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
-    /** Met à jour les champs modifiables. */
+    /**
+     * Met à jour les champs modifiables.
+     */
+
     public void modifier(String nom, String adresse, String ville, Integer capacite) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.adresse = Objects.requireNonNull(adresse, "adresse");
@@ -112,7 +130,10 @@ public class Salle {
 
     // ── equals() ─────────────────────────────────────────────────────────────
 
-    /** Égalité sur (nom, ville), la clé métier. */
+    /**
+     * Égalité sur (nom, ville), la clé métier.
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
@@ -122,7 +143,10 @@ public class Salle {
 
     // ── hashCode() ───────────────────────────────────────────────────────────
 
-    /** Cohérent avec equals() : calculé sur la clé métier. */
+    /**
+     * Cohérent avec equals() : calculé sur la clé métier.
+     */
+
     @Override
     public int hashCode() { return Objects.hash(nom, ville); }
 }

@@ -23,7 +23,7 @@ public class AffectationMapper {
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une affectation en reprenant ses champs.
      */
 
     public AffectationResponse toResponse(Affectation affectation) {

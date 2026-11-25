@@ -18,25 +18,25 @@ import java.time.LocalDate;
 @Schema(description = "Modification du coût et du prestataire ; date et kilométrage figés")
 public record UpdateEntretienRequest(
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+        // Coût
         @Schema(description = "Nouveau coût", example = "350.00")
         @NotNull(message = "Le coût est obligatoire")
         @Positive(message = "Le coût doit être strictement positif")
         BigDecimal cout,
-
+        // Identifiant du prestataire
         @Schema(description = "Nouveau prestataire", example = "2")
         @NotNull(message = "Le prestataire est obligatoire")
         Integer idPrestataire,
-
-        @Schema(description = "Date inchangée, transmise pour détection d'une tentative de modification",
-                example = "2026-11-10")
+        // Date
+        @Schema(description = "Date inchangée, transmise pour détection d'une tentative de modification", example = "2026-11-10")
         LocalDate date,
-
-        @Schema(description = "Kilométrage inchangé, transmis pour détection d'une tentative de modification",
-                example = "19000")
-        Integer km) {
-
-    // ═════════════════════════════════════════════════════════════════════════
-    //  CHAMPS
-    // ═════════════════════════════════════════════════════════════════════════
+        // Kilométrage
+        @Schema(description = "Kilométrage inchangé, transmis pour détection d'une tentative de modification", example = "19000")
+        Integer km
+) {
 
 }

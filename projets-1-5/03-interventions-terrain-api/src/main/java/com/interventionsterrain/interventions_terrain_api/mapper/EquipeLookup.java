@@ -34,7 +34,7 @@ public class EquipeLookup implements EquipeSupport {
     // ── findRequired() ───────────────────────────────────────────────────────
 
     /**
-     * Exécute findRequired().
+     * Recherche required.
      */
 
     @Override
@@ -46,7 +46,7 @@ public class EquipeLookup implements EquipeSupport {
     // ── nomAgence() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute nomAgence().
+     * Retourne agence.
      */
 
     @Override

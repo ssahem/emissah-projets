@@ -88,7 +88,10 @@ public class Proprietaire {
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
-    /** Met à jour les coordonnées, modifiables à tout moment (F1). */
+    /**
+     * Met à jour les coordonnées, modifiables à tout moment (F1).
+     */
+
     public void modifier(String nom, String prenom, String email, String telephone) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.prenom = prenom == null ? "" : prenom;

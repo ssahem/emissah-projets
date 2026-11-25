@@ -49,12 +49,18 @@ public class HistoriqueStatutId implements Serializable {
 
     // ── getIdReservation() ───────────────────────────────────────────────────
 
-    /** Retourne idReservation. */
+    /**
+     * Retourne idReservation.
+     */
+
     public Integer getIdReservation() { return idReservation; }
 
     // ── getIdStatut() ────────────────────────────────────────────────────────
 
-    /** Retourne idStatut. */
+    /**
+     * Retourne idStatut.
+     */
+
     public Integer getIdStatut() { return idStatut; }
 
     // ═════════════════════════════════════════════════════════════════════════
@@ -63,7 +69,10 @@ public class HistoriqueStatutId implements Serializable {
 
     // ── equals() ─────────────────────────────────────────────────────────────
 
-    /** Égalité sur la clé composite (idReservation, idStatut). */
+    /**
+     * Égalité sur la clé composite (idReservation, idStatut).
+     */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) { return true; }
@@ -73,7 +82,10 @@ public class HistoriqueStatutId implements Serializable {
 
     // ── hashCode() ───────────────────────────────────────────────────────────
 
-    /** Cohérent avec equals() : calculé sur la clé composite. */
+    /**
+     * Cohérent avec equals() : calculé sur la clé composite.
+     */
+
     @Override
     public int hashCode() { return Objects.hash(idReservation, idStatut); }
 }

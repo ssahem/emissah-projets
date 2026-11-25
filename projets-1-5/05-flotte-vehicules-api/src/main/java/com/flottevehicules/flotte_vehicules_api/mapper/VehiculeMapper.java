@@ -31,12 +31,11 @@ public class VehiculeMapper {
         this.vueRepository = vueRepository;
     }
 
-    /** Convertit une entité en réponse enrichie. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit une entité en réponse enrichie.
      */
 
     public VehiculeResponse toResponse(Vehicule vehicule) {
@@ -52,12 +51,11 @@ public class VehiculeMapper {
                 vehicule.getModeAcquisition(), vehicule.getIdSite(), nomSite, kmActuel);
     }
 
-    /** Retourne le compteur courant d'un véhicule, zéro s'il est inconnu. */
 
     // ── kmActuel() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute kmActuel().
+     * Retourne le compteur courant d'un véhicule, zéro s'il est inconnu.
      */
 
     public Integer kmActuel(Integer idVehicule) {

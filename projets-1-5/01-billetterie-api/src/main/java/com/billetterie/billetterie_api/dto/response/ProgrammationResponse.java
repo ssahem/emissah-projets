@@ -19,12 +19,17 @@ public record ProgrammationResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idEvenement,
+        // Identifiant de l’evenement
+        @Schema(description = "Identifiant", example = "1")
+        Integer idEvenement,
         // Titre
-        @Schema(description = "Titre", example = "Concert Jazz") String titre,
-        // Date ISO-8601
-        @Schema(description = "Date ISO-8601", example = "2026-12-20T20:00:00") LocalDateTime dateHeure,
-        // Vrai si la date est future
-        @Schema(description = "Vrai si la date est future", example = "true") boolean avenir) {
+        @Schema(description = "Titre", example = "Concert Jazz")
+        String titre,
+        // Date heure
+        @Schema(description = "Date ISO-8601", example = "2026-12-20T20:00:00")
+        LocalDateTime dateHeure,
+        // Avenir
+        @Schema(description = "Vrai si la date est future", example = "true")
+        boolean avenir
+) {
 }

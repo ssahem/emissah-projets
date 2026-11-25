@@ -48,36 +48,34 @@ public class MatiereService {
         this.mapper = mapper;
     }
 
-    /** Liste les matières triées par libellé. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * Liste les matières triées par libellé.
      */
 
     public List<MatiereResponse> findAll() {
         return matiereRepository.findAllByOrderByLibelleAsc().stream().map(mapper::toResponse).toList();
     }
 
-    /** Consulte une matière par identifiant (404 si inconnue). */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * Consulte une matière par identifiant (404 si inconnue).
      */
 
     public MatiereResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** Crée une matière avec un libellé unique et un coefficient strictement positif. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * Crée une matière avec un libellé unique et un coefficient strictement
+     * positif.
      */
 
     @Transactional
@@ -90,12 +88,12 @@ public class MatiereService {
                 request.libelle(), request.code(), request.coefficient())));
     }
 
-    /** Modifie le libellé et le coefficient tant qu'aucun trimestre n'est clôturé. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * Modifie le libellé et le coefficient tant qu'aucun trimestre n'est
+     * clôturé.
      */
 
     @Transactional
@@ -115,12 +113,12 @@ public class MatiereService {
         return mapper.toResponse(matiere);
     }
 
-    /** Refuse la suppression d'une matière ayant des notes ou un professeur affecté. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * Refuse la suppression d'une matière ayant des notes ou un professeur
+     * affecté.
      */
 
     @Transactional
@@ -133,12 +131,11 @@ public class MatiereService {
         matiereRepository.delete(matiere);
     }
 
-    /** Retourne la matière ou lève une erreur métier 404. */
 
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Retourne la matière ou lève une erreur métier 404.
      */
 
     public Matiere required(Integer id) {

@@ -20,12 +20,19 @@ public record UpdateAgenceRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Nom", example = "Agence Paris Centre")
-    @NotBlank @Size(max = 100) String nom,
-
-    @Schema(description = "Ville", example = "Paris")
-    @NotBlank @Size(max = 100) String ville,
-
-    @Schema(description = "Responsable (facultatif)")
-    @Size(max = 100) String responsable) {
+        // Nom
+        @Schema(description = "Nom", example = "Agence Paris Centre")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Ville
+        @Schema(description = "Ville", example = "Paris")
+        @NotBlank
+        @Size(max = 100)
+        String ville,
+        // Responsable
+        @Schema(description = "Responsable", example = "Exemple")
+        @Size(max = 100)
+        String responsable
+) {
 }

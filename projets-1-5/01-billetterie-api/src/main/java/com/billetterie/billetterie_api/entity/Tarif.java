@@ -63,21 +63,33 @@ public class Tarif {
 
     // ── getIdTarif() ─────────────────────────────────────────────────────────
 
-    /** Retourne idTarif. */
+    /**
+     * Retourne idTarif.
+     */
+
     public Integer getIdTarif() { return idTarif; }
 
     // ── getEvenement() ───────────────────────────────────────────────────────
 
-    /** Retourne evenement. */
+    /**
+     * Retourne evenement.
+     */
+
     public Evenement getEvenement() { return evenement; }
 
     // ── getCategorie() ───────────────────────────────────────────────────────
 
-    /** Retourne categorie. */
+    /**
+     * Retourne categorie.
+     */
+
     public String getCategorie() { return categorie; }
 
     // ── getPrix() ────────────────────────────────────────────────────────────
 
-    /** Retourne prix. */
+    /**
+     * Retourne prix.
+     */
+
     public BigDecimal getPrix() { return prix; }
 }

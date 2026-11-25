@@ -21,21 +21,34 @@ public record CreateClientRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Nom", example = "Dupont")
-    @NotBlank @Size(max = 100) String nom,
-
-    @Schema(description = "Prénom (facultatif)", example = "Marie")
-    @Size(max = 100) String prenom,
-
-    @Schema(description = "Email (facultatif : valeur unique générée si absent)")
-    @Email @Size(max = 255) String email,
-
-    @Schema(description = "Téléphone", example = "0102030407")
-    @NotBlank @Size(max = 20) String telephone,
-
-    @Schema(description = "Adresse du client (texte, sans FK)", example = "5 avenue du parc")
-    @NotBlank @Size(max = 255) String adresse,
-
-    @Schema(description = "Commune du client (texte, sans FK)", example = "Paris")
-    @NotBlank @Size(max = 100) String commune) {
+        // Nom
+        @Schema(description = "Nom", example = "Dupont")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Prénom
+        @Schema(description = "Prénom", example = "Kofi")
+        @Size(max = 100)
+        String prenom,
+        // Email
+        @Schema(description = "Email", example = "kofi@example.test")
+        @Email
+        @Size(max = 255)
+        String email,
+        // Téléphone
+        @Schema(description = "Téléphone", example = "0102030407")
+        @NotBlank
+        @Size(max = 20)
+        String telephone,
+        // Adresse
+        @Schema(description = "Adresse", example = "12 rue de la Paix")
+        @NotBlank
+        @Size(max = 255)
+        String adresse,
+        // Commune
+        @Schema(description = "Commune", example = "Exemple")
+        @NotBlank
+        @Size(max = 100)
+        String commune
+) {
 }

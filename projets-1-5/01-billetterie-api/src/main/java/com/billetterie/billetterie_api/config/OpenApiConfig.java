@@ -22,7 +22,10 @@ public class OpenApiConfig {
 
     // ── openAPI() ────────────────────────────────────────────────────────────
 
-    /** Construit la documentation. */
+    /**
+     * Construit la documentation.
+     */
+
     @Bean
     public OpenAPI openAPI() {
         // ── Étape 1/1 : métadonnées ──────────────────────────────────────────

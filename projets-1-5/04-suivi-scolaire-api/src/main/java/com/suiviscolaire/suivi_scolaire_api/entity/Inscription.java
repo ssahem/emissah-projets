@@ -86,12 +86,12 @@ public class Inscription {
     /** Retourne l'élève rattaché (lecture seule, A-01). */
     public Eleve getEleve() { return eleve; }
 
-    /** Clôture l'affectation courante sans effacer les notes rattachées au numéro. */
 
     // ── clore() ──────────────────────────────────────────────────────────────
 
     /**
-     * Exécute clore().
+     * Clôture l'affectation courante sans effacer les notes rattachées au
+     * numéro.
      */
 
     public void clore(LocalDate dateFin) { this.dateFin = Objects.requireNonNull(dateFin, "dateFin"); }

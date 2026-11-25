@@ -53,7 +53,7 @@ class RestitutionIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource
@@ -84,7 +84,8 @@ class RestitutionIntegrationTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -222,7 +223,7 @@ class RestitutionIntegrationTest {
     // ── changerStatut() ──────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour changerStatut().
+     * Appelle l’endpoint de changement de statut.
      */
 
     private void changerStatut(Integer idIntervention, String statut) throws Exception {
@@ -235,7 +236,7 @@ class RestitutionIntegrationTest {
     // ── createIntervention() ─────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour createIntervention().
+     * Prépare le contexte nécessaire à l’opération createIntervention().
      */
 
     private Integer createIntervention(Integer idClient, String debut, String fin) throws Exception {
@@ -253,7 +254,7 @@ class RestitutionIntegrationTest {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour create().
+     * Crée un restitution.
      */
 
     private Integer create(String ressource, Map<String, Object> body) throws Exception {

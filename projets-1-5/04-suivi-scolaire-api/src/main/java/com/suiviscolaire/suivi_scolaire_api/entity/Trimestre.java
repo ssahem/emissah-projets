@@ -82,12 +82,11 @@ public class Trimestre {
     public boolean isEstCloture() { return estCloture; }
     public LocalDate getDateCloture() { return dateCloture; }
 
-    /** Clôture le trimestre à la date donnée (F14). */
 
     // ── cloturer() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute cloturer().
+     * Clôture le trimestre à la date donnée (F14).
      */
 
     public void cloturer(LocalDate dateCloture) {
@@ -95,12 +94,12 @@ public class Trimestre {
         this.dateCloture = Objects.requireNonNull(dateCloture, "dateCloture");
     }
 
-    /** Rouvre le trimestre (F15) ; la date de clôture est effacée mais l'historique subsiste. */
 
     // ── reouvrir() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute reouvrir().
+     * Rouvre le trimestre (F15) ; la date de clôture est effacée mais
+     * l'historique subsiste.
      */
 
     public void reouvrir() {

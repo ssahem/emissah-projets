@@ -72,7 +72,10 @@ public class ProprietaireService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne les propriétaires triés par nom (F1). */
+    /**
+     * Retourne les propriétaires triés par nom (F1).
+     */
+
     public List<ProprietaireResponse> findAll() {
         return proprietaireRepository.findAllByOrderByNomAscPrenomAsc().stream()
                 .map(proprietaireMapper::toResponse)
@@ -81,7 +84,10 @@ public class ProprietaireService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne un propriétaire par identifiant. */
+    /**
+     * Retourne un propriétaire par identifiant.
+     */
+
     public ProprietaireResponse findById(Integer idProprietaire) {
         return proprietaireMapper.toResponse(requireProprietaire(idProprietaire));
     }
@@ -89,11 +95,12 @@ public class ProprietaireService {
     // ── findImmeubles() ──────────────────────────────────────────────────────
 
     /**
-     * Retourne les immeubles d'un propriétaire avec leurs compteurs (F7).
-     * Le nombre de baux en cours est calculé par jointure sur les appartements.
+     * Retourne les immeubles d'un propriétaire avec leurs compteurs (F7). Le
+     * nombre de baux en cours est calculé par jointure sur les appartements.
      *
      * @throws ProprietaireNotFoundException si le propriétaire n'existe pas
      */
+
     public List<ImmeubleProprietaireResponse> findImmeubles(Integer idProprietaire) {
         // ── Étape 1/3 : vérifier l'existence du propriétaire ─────────────────
         requireProprietaire(idProprietaire);
@@ -108,10 +115,12 @@ public class ProprietaireService {
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Crée un propriétaire après contrôle de l'unicité de l'email. Modifie la base.
+     * Crée un propriétaire après contrôle de l'unicité de l'email. Modifie la
+     * base.
      *
      * @throws ProprietaireEmailDejaUtiliseException si l'email existe déjà
      */
+
     @Transactional
     public ProprietaireResponse create(CreateProprietaireRequest request) {
         // ── Étape 1/3 : vérifier l'unicité de l'email ────────────────────────
@@ -130,12 +139,12 @@ public class ProprietaireService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie les coordonnées d'un propriétaire. Modifie la base.
+     * Modifie les coordonnées d'un propriétaire. Modifie la base. autre
      *
      * @throws ProprietaireNotFoundException si l'identifiant est inconnu
-     *
-     * @throws ProprietaireEmailDejaUtiliseException si l'email appartient à un autre
+     * @throws ProprietaireEmailDejaUtiliseException si l'email appartient à un
      */
+
     @Transactional
     public ProprietaireResponse update(Integer idProprietaire, UpdateProprietaireRequest request) {
         // ── Étape 1/3 : charger et contrôler l'unicité ───────────────────────
@@ -153,10 +162,11 @@ public class ProprietaireService {
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Supprime un propriétaire sans immeuble. Modifie la base.
+     * Supprime un propriétaire sans immeuble. Modifie la base. immeubles (V2)
      *
-     * @throws ProprietaireNonSupprimableException s'il possède encore des immeubles (V2)
+     * @throws ProprietaireNonSupprimableException s'il possède encore des
      */
+
     @Transactional
     public void delete(Integer idProprietaire) {
         requireProprietaire(idProprietaire);
@@ -172,7 +182,10 @@ public class ProprietaireService {
 
     // ── requireProprietaire() ────────────────────────────────────────────────
 
-    /** Charge un propriétaire ou lève l'erreur métier 404. */
+    /**
+     * Charge un propriétaire ou lève l'erreur métier 404.
+     */
+
     private Proprietaire requireProprietaire(Integer idProprietaire) {
         return proprietaireRepository.findById(idProprietaire)
                 .orElseThrow(() -> new ProprietaireNotFoundException(idProprietaire));
@@ -180,7 +193,10 @@ public class ProprietaireService {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Enrichit un immeuble avec ses deux compteurs pour F7. */
+    /**
+     * Enrichit un immeuble avec ses deux compteurs pour F7.
+     */
+
     private ImmeubleProprietaireResponse toResponse(Immeuble immeuble) {
         long nbAppartements = appartementRepository.countByIdImmeuble(immeuble.getIdImmeuble());
         long nbBauxEnCours = bailRepository.countEnCoursByIdImmeuble(
@@ -190,7 +206,10 @@ public class ProprietaireService {
 
     // ── verifierEmailLibre() ─────────────────────────────────────────────────
 
-    /** Vérifie qu'aucun autre propriétaire n'utilise cet email. */
+    /**
+     * Vérifie qu'aucun autre propriétaire n'utilise cet email.
+     */
+
     private void verifierEmailLibre(String email, Integer idProprietaireExclu) {
         Optional<Proprietaire> existant = proprietaireRepository.findByEmail(email.trim());
         if (existant.isPresent()
@@ -201,7 +220,10 @@ public class ProprietaireService {
 
     // ── valeur() ─────────────────────────────────────────────────────────────
 
-    /** Normalise un champ facultatif : la base impose NOT NULL sur prenom. */
+    /**
+     * Normalise un champ facultatif : la base impose NOT NULL sur prenom.
+     */
+
     private String valeur(String valeur) {
         return valeur == null ? "" : valeur.trim();
     }

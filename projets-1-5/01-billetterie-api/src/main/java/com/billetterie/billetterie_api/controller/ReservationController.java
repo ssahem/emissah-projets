@@ -55,9 +55,10 @@ public class ReservationController {
     // ── list() — GET /billetterie/reservation/list ───────────────────────────
 
     /**
-     * Liste les réservations par page, ou filtre par email (F9, F10).
-     * Réponses : 200 | 400 | 500.
+     * Liste les réservations par page, ou filtre par email (F9, F10). Réponses
+     * : 200 | 400 | 500.
      */
+
     @Operation(summary = "Lister ou rechercher les réservations")
     @ApiResponse(responseCode = "200", description = "Réservations renvoyées")
     @ApiResponse(responseCode = "400", description = "Paramètres invalides")
@@ -76,9 +77,9 @@ public class ReservationController {
     // ── getById() — GET /billetterie/reservation/get/{id} ────────────────────
 
     /**
-     * Consulte une réservation.
-     * Réponses : 200 | 400 | 404 | 500.
+     * Consulte une réservation. Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Consulter une réservation")
     @ApiResponse(responseCode = "200", description = "Réservation renvoyée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -92,9 +93,9 @@ public class ReservationController {
     // ── create() — POST /billetterie/reservation/create ──────────────────────
 
     /**
-     * Crée une réservation provisoire.
-     * Réponses : 201 | 400 | 404 | 409 | 500.
+     * Crée une réservation provisoire. Réponses : 201 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Créer une réservation")
     @ApiResponse(responseCode = "201", description = "Réservation créée")
     @ApiResponse(responseCode = "400", description = "Place ou événement incohérent")
@@ -111,9 +112,9 @@ public class ReservationController {
     // ── update() — PUT /billetterie/reservation/update/{id} ──────────────────
 
     /**
-     * Modifie les informations client.
-     * Réponses : 200 | 400 | 404 | 500.
+     * Modifie les informations client. Réponses : 200 | 400 | 404 | 500.
      */
+
     @Operation(summary = "Modifier les informations client")
     @ApiResponse(responseCode = "200", description = "Réservation modifiée")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -128,9 +129,10 @@ public class ReservationController {
     // ── delete() — DELETE /billetterie/reservation/delete/{id} ───────────────
 
     /**
-     * Supprime une réservation provisoire ou annulée.
-     * Réponses : 204 | 400 | 404 | 409 | 500.
+     * Supprime une réservation provisoire ou annulée. Réponses : 204 | 400 |
+     * 404 | 409 | 500.
      */
+
     @Operation(summary = "Supprimer une réservation")
     @ApiResponse(responseCode = "204", description = "Réservation supprimée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -146,9 +148,9 @@ public class ReservationController {
     // ── payer() — POST /billetterie/reservation/paiement/{id} ────────────────
 
     /**
-     * Confirme le paiement (F14).
-     * Réponses : 200 | 400 | 404 | 409 | 500.
+     * Confirme le paiement (F14). Réponses : 200 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Confirmer le paiement d'une réservation")
     @ApiResponse(responseCode = "200", description = "Réservation payée")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -163,9 +165,10 @@ public class ReservationController {
     // ── annuler() — POST /billetterie/reservation/annulation/{id} ────────────
 
     /**
-     * Annule une réservation et renvoie le montant remboursé (F15).
-     * Réponses : 200 | 400 | 404 | 409 | 500.
+     * Annule une réservation et renvoie le montant remboursé (F15). Réponses :
+     * 200 | 400 | 404 | 409 | 500.
      */
+
     @Operation(summary = "Annuler une réservation et calculer le remboursement",
             description = "Remboursement intégral au-delà de 48 h, moitié entre 48 h et 24 h, nul en deçà.")
     @ApiResponse(responseCode = "200", description = "Réservation annulée et montant remboursé")

@@ -21,7 +21,10 @@ public class ProprietaireMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit un propriétaire en réponse HTTP. */
+    /**
+     * Convertit un propriétaire en réponse HTTP.
+     */
+
     public ProprietaireResponse toResponse(Proprietaire proprietaire) {
         return new ProprietaireResponse(
                 proprietaire.getIdProprietaire(), proprietaire.getNom(), proprietaire.getPrenom(),

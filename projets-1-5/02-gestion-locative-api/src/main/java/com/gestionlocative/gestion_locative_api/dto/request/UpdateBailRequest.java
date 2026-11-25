@@ -26,10 +26,12 @@ public record UpdateBailRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Nouvelle date de fin : absent = inchangée
+        // Date de fin
         @Schema(description = "Nouvelle date de fin", example = "2027-12-31")
         Optional<LocalDate> dateFin,
-        // Nouveau loyer : absent = inchangé
+        // Loyer mensuel
         @Schema(description = "Nouveau loyer mensuel", example = "900.00")
-        @DecimalMin(value = "0.01", message = "Le loyer doit être positif") BigDecimal loyerMensuel) {
+        @DecimalMin(value = "0.01", message = "Le loyer doit être positif")
+        BigDecimal loyerMensuel
+) {
 }

@@ -76,12 +76,11 @@ public class VehiculeService {
         this.clock = clock;
     }
 
-    /** F2 et F9 : liste triée, avec recherche optionnelle et combinable. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * F2 et F9 : liste triée, avec recherche optionnelle et combinable.
      */
 
     public List<VehiculeResponse> findAll(String immatriculation, String marque) {
@@ -91,24 +90,23 @@ public class VehiculeService {
         return vehicules.stream().map(mapper::toResponse).toList();
     }
 
-    /** F2 : un véhicule par identifiant ; 404 si inconnu. */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * F2 : un véhicule par identifiant ; 404 si inconnu.
      */
 
     public VehiculeResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F2 : crée un véhicule avec contrôle de la date, du site et du mode d'acquisition. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * F2 : crée un véhicule avec contrôle de la date, du site et du mode
+     * d'acquisition.
      */
 
     @Transactional
@@ -144,12 +142,12 @@ public class VehiculeService {
         return mapper.toResponse(vehicule);
     }
 
-    /** F2 : transfert de site possible ; immatriculation et date de mise en service figées. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * F2 : transfert de site possible ; immatriculation et date de mise en
+     * service figées.
      */
 
     @Transactional
@@ -161,12 +159,11 @@ public class VehiculeService {
         return mapper.toResponse(vehiculeRepository.save(vehicule));
     }
 
-    /** F2 : suppression refusée s'il existe des affectations ou des entretiens. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * F2 : suppression refusée s'il existe des affectations ou des entretiens.
      */
 
     @Transactional
@@ -183,12 +180,11 @@ public class VehiculeService {
         vehiculeRepository.delete(vehicule);
     }
 
-    /** F15 : première échéance périodique, avec le seuil qui la déclenchera. */
 
     // ── prochainEntretien() ──────────────────────────────────────────────────
 
     /**
-     * Exécute prochainEntretien().
+     * F15 : première échéance périodique, avec le seuil qui la déclenchera.
      */
 
     public ProchainEntretienResponse prochainEntretien(Integer id) {
@@ -216,12 +212,11 @@ public class VehiculeService {
                 echeance.kmProchain(), echeance.kmActuel(), seuil, echeance.enRetard());
     }
 
-    /** F18 : coût des entretiens uniquement (D-03) et répartition par type. */
 
     // ── cout() ───────────────────────────────────────────────────────────────
 
     /**
-     * Exécute cout().
+     * F18 : coût des entretiens uniquement (D-03) et répartition par type.
      */
 
     public CoutVehiculeResponse cout(Integer id) {
@@ -249,12 +244,12 @@ public class VehiculeService {
                         .toList());
     }
 
-    /** F17 : véhicules libres sur la période, regroupés par site ; semaine courante par défaut. */
 
     // ── disponibles() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute disponibles().
+     * F17 : véhicules libres sur la période, regroupés par site ; semaine
+     * courante par défaut.
      */
 
     public List<DisponibilitesParSiteResponse> disponibles(LocalDate du, LocalDate au) {
@@ -297,7 +292,7 @@ public class VehiculeService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère un véhicule par identifiant ou lève une exception si absent.
      */
 
     private Vehicule required(Integer id) {

@@ -65,32 +65,50 @@ public class Place {
 
     // ── getIdPlace() ─────────────────────────────────────────────────────────
 
-    /** Retourne idPlace. */
+    /**
+     * Retourne idPlace.
+     */
+
     public Integer getIdPlace() { return idPlace; }
 
     // ── getRang() ────────────────────────────────────────────────────────────
 
-    /** Retourne rang. */
+    /**
+     * Retourne rang.
+     */
+
     public String getRang() { return rang; }
 
     // ── getNumero() ──────────────────────────────────────────────────────────
 
-    /** Retourne numero. */
+    /**
+     * Retourne numero.
+     */
+
     public Integer getNumero() { return numero; }
 
     // ── getSalle() ───────────────────────────────────────────────────────────
 
-    /** Retourne salle. */
+    /**
+     * Retourne salle.
+     */
+
     public Salle getSalle() { return salle; }
 
     // ── getCategorie() ───────────────────────────────────────────────────────
 
-    /** Retourne categorie. */
+    /**
+     * Retourne categorie.
+     */
+
     public Categorie getCategorie() { return categorie; }
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
-    /** Applique une modification complète de la place (F2). */
+    /**
+     * Applique une modification complète de la place (F2).
+     */
+
     public void modifier(String rang, Integer numero, Salle salle, Categorie categorie) {
         this.rang = Objects.requireNonNull(rang, "rang");
         this.numero = Objects.requireNonNull(numero, "numero");

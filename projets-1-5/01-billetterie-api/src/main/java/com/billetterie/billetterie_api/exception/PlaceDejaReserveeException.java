@@ -29,6 +29,9 @@ public class PlaceDejaReserveeException extends ApiException {
 
     // ── getNumero() ──────────────────────────────────────────────────────────
 
-    /** Retourne numero. */
+    /**
+     * Retourne numero.
+     */
+
     public Integer getNumero() { return numero; }
 }

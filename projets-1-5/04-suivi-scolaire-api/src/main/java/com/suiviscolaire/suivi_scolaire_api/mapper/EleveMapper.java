@@ -32,12 +32,12 @@ public class EleveMapper {
         this.classeRepository = classeRepository;
     }
 
-    /** Convertit un élève en DTO ; classe et nom de classe sont null si aucune inscription. */
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute toResponse().
+     * Convertit un élève en DTO ; classe et nom de classe sont null si aucune
+     * inscription.
      */
 
     public EleveResponse toResponse(Eleve eleve) {

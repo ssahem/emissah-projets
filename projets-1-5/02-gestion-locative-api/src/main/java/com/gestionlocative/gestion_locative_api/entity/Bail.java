@@ -134,7 +134,10 @@ public class Bail {
 
     // ── modifierAvantDebut() ─────────────────────────────────────────────────
 
-    /** Modifie loyer et date de fin avant le début du bail (F5). */
+    /**
+     * Modifie loyer et date de fin avant le début du bail (F5).
+     */
+
     public void modifierAvantDebut(BigDecimal loyerMensuel, LocalDate dateFin) {
         this.loyerMensuel = Objects.requireNonNull(loyerMensuel, "loyerMensuel");
         this.dateFin = dateFin;
@@ -142,7 +145,10 @@ public class Bail {
 
     // ── modifierDateFin() ────────────────────────────────────────────────────
 
-    /** Modifie la date de fin après le début du bail (F5). */
+    /**
+     * Modifie la date de fin après le début du bail (F5).
+     */
+
     public void modifierDateFin(LocalDate dateFin) {
         this.dateFin = dateFin;
     }
@@ -154,9 +160,10 @@ public class Bail {
     // ── resilier() ───────────────────────────────────────────────────────────
 
     /**
-     * Résilie le bail à la date d'effet : la fin est ramenée à cette date (F13).
-     * Les règles d'éligibilité restent dans le service.
+     * Résilie le bail à la date d'effet : la fin est ramenée à cette date
+     * (F13). Les règles d'éligibilité restent dans le service.
      */
+
     public void resilier(LocalDate dateEffet) {
         this.statut = StatutBail.RESILIE;
         this.dateResiliation = Objects.requireNonNull(dateEffet, "dateEffet");
@@ -165,7 +172,10 @@ public class Bail {
 
     // ── renouveler() ─────────────────────────────────────────────────────────
 
-    /** Prolonge l'échéance ; un bail clôturé redevient actif (F14). */
+    /**
+     * Prolonge l'échéance ; un bail clôturé redevient actif (F14).
+     */
+
     public void renouveler(LocalDate nouvelleDateFin) {
         this.dateFin = Objects.requireNonNull(nouvelleDateFin, "nouvelleDateFin");
         if (this.statut == StatutBail.TERMINE) {
@@ -176,7 +186,10 @@ public class Bail {
 
     // ── cloturer() ───────────────────────────────────────────────────────────
 
-    /** Clôture un bail échu sans modifier sa date de fin (F16). */
+    /**
+     * Clôture un bail échu sans modifier sa date de fin (F16).
+     */
+
     public void cloturer(LocalDate dateCloture) {
         this.statut = StatutBail.TERMINE;
         this.dateCloture = Objects.requireNonNull(dateCloture, "dateCloture");
@@ -184,7 +197,10 @@ public class Bail {
 
     // ── appliquerLoyer() ─────────────────────────────────────────────────────
 
-    /** Remplace le loyer courant après une révision (F15). */
+    /**
+     * Remplace le loyer courant après une révision (F15).
+     */
+
     public void appliquerLoyer(BigDecimal montant) {
         this.loyerMensuel = Objects.requireNonNull(montant, "montant");
     }
@@ -196,9 +212,11 @@ public class Bail {
     // ── estEnCoursLe() ───────────────────────────────────────────────────────
 
     /**
-     * Vrai si le bail occupe effectivement l'appartement à la date donnée (F6, F8).
-     * Un bail sans date de fin reste en cours tant qu'il n'est pas résilié.
+     * Vrai si le bail occupe effectivement l'appartement à la date donnée (F6,
+     * F8). Un bail sans date de fin reste en cours tant qu'il n'est pas
+     * résilié.
      */
+
     public boolean estEnCoursLe(LocalDate date) {
         return statut == StatutBail.EN_COURS
                 && !dateDebut.isAfter(date)
@@ -207,7 +225,11 @@ public class Bail {
 
     // ── estFuturLe() ─────────────────────────────────────────────────────────
 
-    /** Vrai si le bail est prévu mais n'a pas encore commencé à la date donnée (F6). */
+    /**
+     * Vrai si le bail est prévu mais n'a pas encore commencé à la date donnée
+     * (F6).
+     */
+
     public boolean estFuturLe(LocalDate date) {
         return statut == StatutBail.EN_COURS && dateDebut.isAfter(date);
     }
@@ -215,9 +237,10 @@ public class Bail {
     // ── contient() ───────────────────────────────────────────────────────────
 
     /**
-     * Vrai si la date appartient à la période contractuelle, indépendamment
-     * du statut : utilisé pour borner une résiliation (F13) ou une révision (F15).
+     * Vrai si la date appartient à la période contractuelle, indépendamment du
+     * statut : utilisé pour borner une résiliation (F13) ou une révision (F15).
      */
+
     public boolean contient(LocalDate date) {
         return !dateDebut.isAfter(date) && (dateFin == null || !date.isAfter(dateFin));
     }

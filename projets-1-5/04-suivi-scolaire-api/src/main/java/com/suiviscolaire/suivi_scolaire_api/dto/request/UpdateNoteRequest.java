@@ -17,11 +17,17 @@ import java.math.BigDecimal;
  */
 @Schema(description = "Modification de la valeur d'une note")
 public record UpdateNoteRequest(
-        @Schema(description = "Nouvelle valeur entre 0 et 20", example = "16")
-        @NotNull @DecimalMin("0") @DecimalMax("20") BigDecimal valeur) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Valeur
+        @Schema(description = "Nouvelle valeur entre 0 et 20", example = "16")
+        @NotNull
+        @DecimalMin("0")
+        @DecimalMax("20")
+        BigDecimal valeur
+) {
 
 }

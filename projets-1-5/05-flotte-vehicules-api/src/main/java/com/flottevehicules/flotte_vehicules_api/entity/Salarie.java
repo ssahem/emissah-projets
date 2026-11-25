@@ -88,12 +88,11 @@ public class Salarie {
     //  COMPORTEMENT
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Modifie les champs autorisés ; le matricule est figé (F3). */
 
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie les champs autorisés ; le matricule est figé (F3).
      */
 
     public void modifier(String nom, String prenom, String email, String service) {

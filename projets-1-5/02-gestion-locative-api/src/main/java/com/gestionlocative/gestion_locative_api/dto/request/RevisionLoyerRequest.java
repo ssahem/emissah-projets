@@ -20,15 +20,18 @@ import java.time.LocalDate;
 @Schema(description = "Révision du loyer d'un bail")
 public record RevisionLoyerRequest(
 
-        // ═════════════════════════════════════════════════════════════════════
-        //  CHAMPS
-        // ═════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
+        // Montant
         @Schema(description = "Nouveau loyer mensuel", example = "920.00")
         @NotNull
         @DecimalMin(value = "0.01", message = "Le loyer doit être positif")
         BigDecimal montant,
-
+        // Date effet
         @Schema(description = "Date de prise d'effet du nouveau loyer", example = "2027-01-01")
-        @NotNull LocalDate dateEffet) {
+        @NotNull
+        LocalDate dateEffet
+) {
 }

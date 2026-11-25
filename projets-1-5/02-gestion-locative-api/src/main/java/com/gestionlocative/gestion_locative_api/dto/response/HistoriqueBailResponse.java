@@ -23,20 +23,32 @@ public record HistoriqueBailResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idBail,
-        // Locataire principal
-        @Schema(description = "Nom du locataire principal", example = "Traore") String nomLocataire,
-        @Schema(description = "Prénom du locataire principal", example = "Kofi") String prenomLocataire,
-        // Dates
-        @Schema(description = "Date de début", example = "2026-01-01") LocalDate dateDebut,
-        @Schema(description = "Date de fin", example = "2026-12-31") LocalDate dateFin,
-        // Loyer courant
-        @Schema(description = "Loyer mensuel courant", example = "850.00") BigDecimal loyerMensuel,
-        // Statut du cycle de vie
-        @Schema(description = "Statut", example = "EN_COURS") StatutBail statut,
-        // Vrai si le bail est actuellement en cours
-        @Schema(description = "Bail en cours", example = "true") boolean enCours,
-        // Montants antérieurs, hors révision courante
-        @Schema(description = "Loyers passés") List<LoyerHistoriqueResponse> loyersPasses) {
+        // Identifiant du bail
+        @Schema(description = "Identifiant", example = "1")
+        Integer idBail,
+        // Nom du locataire
+        @Schema(description = "Nom du locataire principal", example = "Traore")
+        String nomLocataire,
+        // Prénom du locataire
+        @Schema(description = "Prénom du locataire principal", example = "Kofi")
+        String prenomLocataire,
+        // Date de début
+        @Schema(description = "Date de début", example = "2026-01-01")
+        LocalDate dateDebut,
+        // Date de fin
+        @Schema(description = "Date de fin", example = "2026-12-31")
+        LocalDate dateFin,
+        // Loyer mensuel
+        @Schema(description = "Loyer mensuel courant", example = "850.00")
+        BigDecimal loyerMensuel,
+        // Statut
+        @Schema(description = "Statut", example = "EN_COURS")
+        StatutBail statut,
+        // En cours
+        @Schema(description = "Bail en cours", example = "true")
+        boolean enCours,
+        // Loyers passes
+        @Schema(description = "Loyers passés")
+        List<LoyerHistoriqueResponse> loyersPasses
+) {
 }

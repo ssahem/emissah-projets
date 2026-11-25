@@ -69,7 +69,8 @@ class ReglesMetierServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -274,12 +275,11 @@ class ReglesMetierServiceTest {
         verify(historiqueRepository, never()).save(any());
     }
 
-    /** Construit un trimestre avec son identifiant. */
 
     // ── trimestre() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour trimestre().
+     * Construit un trimestre avec son identifiant.
      */
 
     private Trimestre trimestre(Integer numero, boolean cloture) {
@@ -292,12 +292,11 @@ class ReglesMetierServiceTest {
         return t;
     }
 
-    /** Construit un enseignement avec son identifiant. */
 
     // ── enseignement() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour enseignement().
+     * Construit un enseignement avec son identifiant.
      */
 
     private Enseignement enseignement(Integer id) {
@@ -306,12 +305,11 @@ class ReglesMetierServiceTest {
         return e;
     }
 
-    /** Construit un type d'évaluation avec son identifiant. */
 
     // ── type() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour type().
+     * Construit un type d'évaluation avec son identifiant.
      */
 
     private TypeEvaluation type(String libelle, Integer id) {
@@ -320,12 +318,11 @@ class ReglesMetierServiceTest {
         return t;
     }
 
-    /** Construit une classe avec son identifiant. */
 
     // ── classe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour classe().
+     * Construit une classe avec son identifiant.
      */
 
     private Classe classe(Integer id, String nom) {
@@ -334,12 +331,11 @@ class ReglesMetierServiceTest {
         return c;
     }
 
-    /** Construit une matière avec son identifiant. */
 
     // ── matiere() ────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour matiere().
+     * Construit une matière avec son identifiant.
      */
 
     private Matiere matiere(Integer id, String libelle) {

@@ -19,12 +19,11 @@ public class InterventionsTerrainApiApplication {
     //  CONSTANTES
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Lance l'application. */
 
     // ── main() ───────────────────────────────────────────────────────────────
 
     /**
-     * Exécute main().
+     * Lance l'application.
      */
 
     public static void main(String[] args) {

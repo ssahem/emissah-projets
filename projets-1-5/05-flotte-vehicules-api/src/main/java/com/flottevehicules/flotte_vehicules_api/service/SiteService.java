@@ -59,36 +59,33 @@ public class SiteService {
         this.clock = clock;
     }
 
-    /** F1 : tous les sites triés par ville puis par nom. */
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute findAll().
+     * F1 : tous les sites triés par ville puis par nom.
      */
 
     public List<SiteResponse> findAll() {
         return siteRepository.findAllByOrderByVilleAscNomAsc().stream().map(mapper::toResponse).toList();
     }
 
-    /** F1 : un site par identifiant ; 404 si inconnu. */
 
     // ── findById() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute findById().
+     * F1 : un site par identifiant ; 404 si inconnu.
      */
 
     public SiteResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
-    /** F1 : crée un site ; le nom doit être unique. */
 
     // ── create() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute create().
+     * F1 : crée un site ; le nom doit être unique.
      */
 
     @Transactional
@@ -101,12 +98,11 @@ public class SiteService {
                 new Site(request.nom(), request.ville(), request.adresse())));
     }
 
-    /** F1 : adresse et ville modifiables, nom figé. */
 
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute update().
+     * F1 : adresse et ville modifiables, nom figé.
      */
 
     @Transactional
@@ -116,12 +112,11 @@ public class SiteService {
         return mapper.toResponse(siteRepository.save(site));
     }
 
-    /** F1 : suppression refusée si le site a des véhicules. */
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute delete().
+     * F1 : suppression refusée si le site a des véhicules.
      */
 
     @Transactional
@@ -134,12 +129,12 @@ public class SiteService {
         siteRepository.delete(site);
     }
 
-    /** F6 : véhicules d'un site triés par immatriculation avec leur état courant. */
 
     // ── vehicules() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute vehicules().
+     * F6 : véhicules d'un site triés par immatriculation avec leur état
+     * courant.
      */
 
     public List<VehiculeSiteResponse> vehicules(Integer id) {
@@ -155,12 +150,11 @@ public class SiteService {
                 .toList();
     }
 
-    /** F19 : kilométrage total du site sur un mois, détaillé par véhicule. */
 
     // ── kilometrage() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute kilometrage().
+     * F19 : kilométrage total du site sur un mois, détaillé par véhicule.
      */
 
     public KilometrageSiteResponse kilometrage(Integer id, String mois) {
@@ -184,7 +178,7 @@ public class SiteService {
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Récupère un site par identifiant ou lève une exception si absent.
      */
 
     private Site required(Integer id) {
@@ -195,7 +189,7 @@ public class SiteService {
     // ── etatAffectation() ────────────────────────────────────────────────────
 
     /**
-     * Exécute etatAffectation().
+     * Réalise l’opération etatAffectation sur un site.
      */
 
     private String etatAffectation(Vehicule vehicule, LocalDate date) {
@@ -212,7 +206,7 @@ public class SiteService {
     // ── parseMois() ──────────────────────────────────────────────────────────
 
     /**
-     * Exécute parseMois().
+     * Réalise l’opération parseMois sur un site.
      */
 
     private YearMonth parseMois(String mois) {

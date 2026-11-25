@@ -23,29 +23,44 @@ public record BailResponse(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-        // Identifiant
-        @Schema(description = "Identifiant", example = "1") Integer idBail,
-        // Appartement
-        @Schema(description = "Identifiant de l'appartement", example = "1") Integer idAppartement,
-        // Locataire principal
-        @Schema(description = "Identifiant du locataire principal", example = "1") Integer idLocataire,
-        // Nom du locataire principal
-        @Schema(description = "Nom du locataire principal", example = "Traore") String nomLocataire,
-        // Prénom du locataire principal
-        @Schema(description = "Prénom du locataire principal", example = "Kofi") String prenomLocataire,
+        // Identifiant du bail
+        @Schema(description = "Identifiant", example = "1")
+        Integer idBail,
+        // Identifiant de l’appartement
+        @Schema(description = "Identifiant de l'appartement", example = "1")
+        Integer idAppartement,
+        // Identifiant du locataire
+        @Schema(description = "Identifiant du locataire principal", example = "1")
+        Integer idLocataire,
+        // Nom du locataire
+        @Schema(description = "Nom du locataire principal", example = "Traore")
+        String nomLocataire,
+        // Prénom du locataire
+        @Schema(description = "Prénom du locataire principal", example = "Kofi")
+        String prenomLocataire,
         // Date de début
-        @Schema(description = "Date de début", example = "2026-01-01") LocalDate dateDebut,
+        @Schema(description = "Date de début", example = "2026-01-01")
+        LocalDate dateDebut,
         // Date de fin
-        @Schema(description = "Date de fin", example = "2026-12-31") LocalDate dateFin,
-        // Loyer courant
-        @Schema(description = "Loyer mensuel", example = "850.00") BigDecimal loyerMensuel,
-        // Provision
-        @Schema(description = "Provision pour charges", example = "50.00") BigDecimal provisionCharges,
-        // Dépôt
-        @Schema(description = "Dépôt de garantie", example = "900.00") BigDecimal depotGarantie,
-        // Statut issu de V4
-        @Schema(description = "Statut", example = "EN_COURS") StatutBail statut,
-        // Dates de cycle de vie renseignées par F13 et F16
-        @Schema(description = "Date de résiliation", example = "2026-09-30") LocalDate dateResiliation,
-        @Schema(description = "Date de clôture", example = "2026-12-31") LocalDate dateCloture) {
+        @Schema(description = "Date de fin", example = "2026-12-31")
+        LocalDate dateFin,
+        // Loyer mensuel
+        @Schema(description = "Loyer mensuel", example = "850.00")
+        BigDecimal loyerMensuel,
+        // Provision pour charges
+        @Schema(description = "Provision pour charges", example = "50.00")
+        BigDecimal provisionCharges,
+        // Dépôt de garantie
+        @Schema(description = "Dépôt de garantie", example = "900.00")
+        BigDecimal depotGarantie,
+        // Statut
+        @Schema(description = "Statut", example = "EN_COURS")
+        StatutBail statut,
+        // Date resiliation
+        @Schema(description = "Date de résiliation", example = "2026-09-30")
+        LocalDate dateResiliation,
+        // Date de clôture
+        @Schema(description = "Date de clôture", example = "2026-12-31")
+        LocalDate dateCloture
+) {
 }

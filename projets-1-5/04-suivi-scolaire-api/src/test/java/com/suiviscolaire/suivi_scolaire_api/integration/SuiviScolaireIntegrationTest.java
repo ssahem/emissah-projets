@@ -59,12 +59,11 @@ class SuiviScolaireIntegrationTest {
             .withUsername("root")
             .withPassword("root");
 
-    /** Fournit une base vierge à Spring. */
 
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Fournit une base vierge à Spring.
      */
 
     @DynamicPropertySource
@@ -90,12 +89,11 @@ class SuiviScolaireIntegrationTest {
     @Autowired private JdbcTemplate jdbcTemplate;
     @Autowired private AlertesDifficulteService alertesService;
 
-    /** Recréé un jeu de données minimal et cohérent avant chaque test. */
 
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Recréé un jeu de données minimal et cohérent avant chaque test.
      */
 
     @BeforeEach
@@ -153,12 +151,12 @@ class SuiviScolaireIntegrationTest {
         alignerSequences();
     }
 
-    /** Replace les séquences IDENTITY après les insertions à identifiant explicite du jeu de test. */
 
     // ── alignerSequences() ───────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour alignerSequences().
+     * Replace les séquences IDENTITY après les insertions à identifiant
+     * explicite du jeu de test.
      */
 
     private void alignerSequences() {
@@ -521,24 +519,22 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$[0].moyenne").value(7.0));
     }
 
-    /** Sérialise un corps de requête. */
 
     // ── json() ───────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour json().
+     * Sérialise un corps de requête.
      */
 
     private String json(Map<String, Object> body) throws Exception {
         return objectMapper.writeValueAsString(body);
     }
 
-    /** Retourne les colonnes d'une table. */
 
     // ── colonnes() ───────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour colonnes().
+     * Retourne les colonnes d'une table.
      */
 
     private List<String> colonnes(String table) {

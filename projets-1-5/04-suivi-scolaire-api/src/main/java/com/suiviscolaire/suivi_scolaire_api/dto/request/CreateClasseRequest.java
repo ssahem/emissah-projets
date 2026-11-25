@@ -16,13 +16,28 @@ import jakarta.validation.constraints.Positive;
  */
 @Schema(description = "Création d'une classe")
 public record CreateClasseRequest(
-        @Schema(description = "Nom de la classe", example = "6A") @NotBlank String nom,
-        @Schema(description = "Identifiant de l'année scolaire", example = "2") @NotNull Integer idAnnee,
-        @Schema(description = "Identifiant du niveau", example = "1") @NotNull Integer idNiveau,
-        @Schema(description = "Effectif maximal", example = "30") @NotNull @Positive Integer effectifMax) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Nom
+        @Schema(description = "Nom de la classe", example = "6A")
+        @NotBlank
+        String nom,
+        // Identifiant de l’annee
+        @Schema(description = "Identifiant de l'année scolaire", example = "2")
+        @NotNull
+        Integer idAnnee,
+        // Identifiant du niveau
+        @Schema(description = "Identifiant du niveau", example = "1")
+        @NotNull
+        Integer idNiveau,
+        // Effectif maximal
+        @Schema(description = "Effectif maximal", example = "30")
+        @NotNull
+        @Positive
+        Integer effectifMax
+) {
 
 }

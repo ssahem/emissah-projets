@@ -96,7 +96,11 @@ public class ImmeubleService {
 
     // ── findAll() ────────────────────────────────────────────────────────────
 
-    /** Retourne les immeubles triés par adresse, avec leur nombre d'appartements. */
+    /**
+     * Retourne les immeubles triés par adresse, avec leur nombre
+     * d'appartements.
+     */
+
     public List<ImmeubleResponse> findAll() {
         return immeubleRepository.findAllByOrderByAdresseAsc().stream()
                 .map(immeuble -> immeubleMapper.toResponse(
@@ -106,7 +110,10 @@ public class ImmeubleService {
 
     // ── findById() ───────────────────────────────────────────────────────────
 
-    /** Retourne un immeuble par identifiant. */
+    /**
+     * Retourne un immeuble par identifiant.
+     */
+
     public ImmeubleResponse findById(Integer idImmeuble) {
         Immeuble immeuble = requireImmeuble(idImmeuble);
         return immeubleMapper.toResponse(
@@ -122,6 +129,7 @@ public class ImmeubleService {
      *
      * @throws ImmeubleNotFoundException si l'immeuble n'existe pas
      */
+
     public List<AppartementOccupationResponse> findAppartements(Integer idImmeuble) {
         // ── Étape 1/3 : vérifier l'existence de l'immeuble ───────────────────
         requireImmeuble(idImmeuble);
@@ -137,13 +145,14 @@ public class ImmeubleService {
     // ── calculerRevenu() ─────────────────────────────────────────────────────
 
     /**
-     * Calcule le revenu locatif d'un immeuble sur un mois (F19).
-     * Les loyers sont pondérés par le nombre de jours couverts dans le mois,
-     * en tenant compte des révisions de revision_loyer (E-06).
+     * Calcule le revenu locatif d'un immeuble sur un mois (F19). Les loyers
+     * sont pondérés par le nombre de jours couverts dans le mois, en tenant
+     * compte des révisions de revision_loyer (E-06).
      *
      * @throws MoisInvalideException si le mois n'est pas au format AAAA-MM
      * @throws ImmeubleNotFoundException si l'immeuble n'existe pas
      */
+
     public RevenuImmeubleResponse calculerRevenu(Integer idImmeuble, String mois) {
         // ── Étape 1/4 : vérifier l'immeuble et le format du mois ─────────────
         requireImmeuble(idImmeuble);
@@ -203,6 +212,7 @@ public class ImmeubleService {
      *
      * @throws ProprietaireNotFoundException si le propriétaire n'existe pas
      */
+
     @Transactional
     public ImmeubleResponse create(CreateImmeubleRequest request) {
         // ── Étape 1/3 : vérifier que le propriétaire existe ──────────────────
@@ -223,10 +233,12 @@ public class ImmeubleService {
     // ── update() ─────────────────────────────────────────────────────────────
 
     /**
-     * Modifie un immeuble en vérifiant le mandat et l'étage maximal. Modifie la base.
+     * Modifie un immeuble en vérifiant le mandat et l'étage maximal. Modifie la
+     * base. trop bas
      *
-     * @throws NbEtagesInsuffisantException si le nouveau nombre d'étages est trop bas
+     * @throws NbEtagesInsuffisantException si le nouveau nombre d'étages est
      */
+
     @Transactional
     public ImmeubleResponse update(Integer idImmeuble, UpdateImmeubleRequest request) {
         // ── Étape 1/3 : charger, vérifier le propriétaire et l'étage maximal ─
@@ -250,7 +262,10 @@ public class ImmeubleService {
 
     // ── delete() ─────────────────────────────────────────────────────────────
 
-    /** Supprime un immeuble vide. Modifie la base. */
+    /**
+     * Supprime un immeuble vide. Modifie la base.
+     */
+
     @Transactional
     public void delete(Integer idImmeuble) {
         requireImmeuble(idImmeuble);
@@ -266,7 +281,10 @@ public class ImmeubleService {
 
     // ── requireImmeuble() ────────────────────────────────────────────────────
 
-    /** Charge un immeuble ou lève l'erreur métier 404. */
+    /**
+     * Charge un immeuble ou lève l'erreur métier 404.
+     */
+
     private Immeuble requireImmeuble(Integer idImmeuble) {
         return immeubleRepository.findById(idImmeuble)
                 .orElseThrow(() -> new ImmeubleNotFoundException(idImmeuble));
@@ -274,7 +292,10 @@ public class ImmeubleService {
 
     // ── toOccupationResponse() ───────────────────────────────────────────────
 
-    /** Détermine l'état d'occupation d'un appartement à une date donnée (F6). */
+    /**
+     * Détermine l'état d'occupation d'un appartement à une date donnée (F6).
+     */
+
     private AppartementOccupationResponse toOccupationResponse(
             Appartement appartement, LocalDate date) {
         List<Bail> baux = bailRepository.findAllByIdAppartementOrderByDateDebutDesc(
@@ -293,7 +314,11 @@ public class ImmeubleService {
 
     // ── parseMois() ──────────────────────────────────────────────────────────
 
-    /** Convertit un mois AAAA-MM strictement, sans laisser java.time le corriger. */
+    /**
+     * Convertit un mois AAAA-MM strictement, sans laisser java.time le
+     * corriger.
+     */
+
     private YearMonth parseMois(String mois) {
         if (mois == null || !mois.matches("\\d{4}-\\d{2}")) {
             throw new MoisInvalideException(mois);
@@ -309,10 +334,11 @@ public class ImmeubleService {
     // ── loyersPonderes() ─────────────────────────────────────────────────────
 
     /**
-     * Somme des loyers multipliés par leur nombre de jours, sur la période demandée.
-     * La division par le nombre de jours du mois est faite ensuite par l'appelant,
-     * ce qui évite les arrondis intermédiaires (F19).
+     * Somme des loyers multipliés par leur nombre de jours, sur la période
+     * demandée. La division par le nombre de jours du mois est faite ensuite
+     * par l'appelant, ce qui évite les arrondis intermédiaires (F19).
      */
+
     private BigDecimal loyersPonderes(Bail bail, LocalDate debut, LocalDate fin) {
         List<RevisionLoyer> revisions = revisionLoyerRepository
                 .findByIdBailOrderByDateEffetAsc(bail.getIdBail());
@@ -353,7 +379,10 @@ public class ImmeubleService {
 
     // ── ponderer() ───────────────────────────────────────────────────────────
 
-    /** Multiplie un montant par le nombre de jours de la période inclusive. */
+    /**
+     * Multiplie un montant par le nombre de jours de la période inclusive.
+     */
+
     private BigDecimal ponderer(BigDecimal montant, LocalDate debut, LocalDate fin) {
         long jours = ChronoUnit.DAYS.between(debut, fin) + 1;
         return montant.multiply(BigDecimal.valueOf(jours));
@@ -361,7 +390,10 @@ public class ImmeubleService {
 
     // ── pourcentage() ────────────────────────────────────────────────────────
 
-    /** Retourne un pourcentage arrondi à deux décimales. */
+    /**
+     * Retourne un pourcentage arrondi à deux décimales.
+     */
+
     private BigDecimal pourcentage(long joursOccupes, long capacite) {
         return BigDecimal.valueOf(joursOccupes)
                 .multiply(BigDecimal.valueOf(100))

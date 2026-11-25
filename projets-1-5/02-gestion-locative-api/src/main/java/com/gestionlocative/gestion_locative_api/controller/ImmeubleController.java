@@ -57,7 +57,10 @@ public class ImmeubleController {
 
     // ── list() — GET /gestion-locative/immeuble/list ─────────────────────────
 
-    /** Liste les immeubles triés par adresse. Réponses : 200 | 500. */
+    /**
+     * Liste les immeubles triés par adresse. Réponses : 200 | 500.
+     */
+
     @Operation(summary = "Lister les immeubles")
     @ApiResponse(responseCode = "200", description = "Immeubles renvoyés")
     @ApiResponse(responseCode = "500", description = "Erreur interne générique")
@@ -68,7 +71,10 @@ public class ImmeubleController {
 
     // ── getById() — GET /gestion-locative/immeuble/get/{id} ──────────────────
 
-    /** Consulte un immeuble. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Consulte un immeuble. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Consulter un immeuble")
     @ApiResponse(responseCode = "200", description = "Immeuble renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -81,7 +87,11 @@ public class ImmeubleController {
 
     // ── appartements() — GET /gestion-locative/immeuble/appartements/{id} ────
 
-    /** Liste les appartements avec leur occupation. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Liste les appartements avec leur occupation. Réponses : 200 | 400 | 404 |
+     * 500.
+     */
+
     @Operation(summary = "Lister les appartements d'un immeuble")
     @ApiResponse(responseCode = "200", description = "Appartements renvoyés")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -94,7 +104,10 @@ public class ImmeubleController {
 
     // ── revenu() — GET /gestion-locative/immeuble/revenu/{id} ────────────────
 
-    /** Calcule le revenu du mois. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Calcule le revenu du mois. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Calculer le revenu locatif d'un immeuble sur un mois")
     @ApiResponse(responseCode = "200", description = "Revenu total, détail et occupation")
     @ApiResponse(responseCode = "400", description = "Mois ou identifiant invalide")
@@ -108,7 +121,10 @@ public class ImmeubleController {
 
     // ── create() — POST /gestion-locative/immeuble/create ────────────────────
 
-    /** Crée un immeuble. Réponses : 201 | 400 | 404 | 500. */
+    /**
+     * Crée un immeuble. Réponses : 201 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Créer un immeuble")
     @ApiResponse(responseCode = "201", description = "Immeuble créé")
     @ApiResponse(responseCode = "400", description = "Données invalides")
@@ -123,7 +139,10 @@ public class ImmeubleController {
 
     // ── update() — PUT /gestion-locative/immeuble/update/{id} ────────────────
 
-    /** Modifie un immeuble. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Modifie un immeuble. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Modifier un immeuble")
     @ApiResponse(responseCode = "200", description = "Immeuble modifié")
     @ApiResponse(responseCode = "400", description = "Nombre d'étages insuffisant")
@@ -137,7 +156,10 @@ public class ImmeubleController {
 
     // ── delete() — DELETE /gestion-locative/immeuble/delete/{id} ─────────────
 
-    /** Supprime un immeuble vide. Réponses : 204 | 400 | 404 | 409 | 500. */
+    /**
+     * Supprime un immeuble vide. Réponses : 204 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Supprimer un immeuble")
     @ApiResponse(responseCode = "204", description = "Immeuble supprimé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

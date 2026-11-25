@@ -33,12 +33,12 @@ public class TrimestreLookup {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    /** Retourne le trimestre de numéro donné, ou 400/404 si le numéro est invalide/inconnu. */
 
     // ── required() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute required().
+     * Retourne le trimestre de numéro donné, ou 400/404 si le numéro est
+     * invalide/inconnu.
      */
 
     public Trimestre required(Integer numero) {
@@ -51,12 +51,12 @@ public class TrimestreLookup {
                 .orElseThrow(() -> new RessourceIntrouvableException("Trimestre", numero));
     }
 
-    /** Retourne le trimestre en interdisant toute écriture de notes après clôture. */
 
     // ── exigible() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute exigible().
+     * Retourne le trimestre en interdisant toute écriture de notes après
+     * clôture.
      */
 
     public Trimestre exigible(Integer numero, String operation) {

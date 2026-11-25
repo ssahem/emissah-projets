@@ -82,7 +82,7 @@ public class Client {
     // ── modifier() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute modifier().
+     * Modifie un client identifié, après contrôle des règles métier.
      */
 
     public void modifier(String nom, String prenom, String email, String telephone,

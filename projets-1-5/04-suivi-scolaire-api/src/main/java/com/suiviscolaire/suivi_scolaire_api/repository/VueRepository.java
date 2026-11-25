@@ -50,12 +50,11 @@ public class VueRepository {
                 idInscription);
     }
 
-    /** Moyenne générale d'une inscription pour un trimestre (F18). */
 
     // ── moyenneGenerale() ────────────────────────────────────────────────────
 
     /**
-     * Exécute moyenneGenerale().
+     * Moyenne générale d'une inscription pour un trimestre (F18).
      */
 
     public BigDecimal moyenneGenerale(Integer idInscription, Integer trimestre) {

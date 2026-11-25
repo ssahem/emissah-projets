@@ -21,7 +21,10 @@ public class LocataireMapper {
 
     // ── toResponse() ─────────────────────────────────────────────────────────
 
-    /** Convertit un locataire en réponse HTTP. */
+    /**
+     * Convertit un locataire en réponse HTTP.
+     */
+
     public LocataireResponse toResponse(Locataire locataire) {
         return new LocataireResponse(
                 locataire.getIdLocataire(), locataire.getNom(), locataire.getPrenom(),

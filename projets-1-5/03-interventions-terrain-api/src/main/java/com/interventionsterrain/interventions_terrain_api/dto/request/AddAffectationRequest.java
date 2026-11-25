@@ -20,19 +20,21 @@ public record AddAffectationRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Identifiant du technicien", example = "2")
-    @NotNull @Positive Integer idTechnicien,
+        // Identifiant du technicien
+        @Schema(description = "Identifiant du technicien", example = "2")
+        @NotNull
+        @Positive
+        Integer idTechnicien,
+        // Est Responsable
+        @Schema(description = "Promouvoir ce technicien comme responsable ; un seul responsable autorisé", example = "false")
+        Boolean estResponsable
+) {
 
-    @Schema(description = "Promouvoir ce technicien comme responsable ; un seul responsable autorisé",
-            example = "false")
-    Boolean estResponsable) {
-
-    /** Le défaut est un technicien non responsable. */
 
     // ── responsable() ────────────────────────────────────────────────────────
 
     /**
-     * Exécute responsable().
+     * Le défaut est un technicien non responsable.
      */
 
     public boolean responsable() {

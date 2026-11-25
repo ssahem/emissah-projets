@@ -99,7 +99,8 @@ class ConsultationServiceTest {
     // ── setUp() ──────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour setUp().
+     * Initialise le service et les collaborateurs simulés nécessaires aux
+     * tests.
      */
 
     @BeforeEach
@@ -311,7 +312,7 @@ class ConsultationServiceTest {
     // ── agence() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour agence().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Agence agence(Integer id, String nom) {
@@ -323,7 +324,7 @@ class ConsultationServiceTest {
     // ── equipe() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour equipe().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Equipe equipe(Integer id, Integer idAgence) {
@@ -335,7 +336,7 @@ class ConsultationServiceTest {
     // ── technicien() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour technicien().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Technicien technicien(Integer id, String nom, Integer idEquipe) {
@@ -348,7 +349,7 @@ class ConsultationServiceTest {
     // ── competence() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour competence().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Competence competence(Integer id, String libelle) {
@@ -360,7 +361,7 @@ class ConsultationServiceTest {
     // ── obtention() ──────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour obtention().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private ObtentionCompetence obtention(Integer idTechnicien, Integer idCompetence,
@@ -376,7 +377,7 @@ class ConsultationServiceTest {
     // ── client() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour client().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Client client(Integer id, String nom) {
@@ -388,7 +389,7 @@ class ConsultationServiceTest {
     // ── intervention() ───────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour intervention().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Intervention intervention(Integer id, Integer idClient, LocalDateTime dateDemande) {
@@ -401,7 +402,7 @@ class ConsultationServiceTest {
     // ── affectation() ────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour affectation().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Affectation affectation(Integer id, Integer idTechnicien, boolean responsable) {
@@ -411,7 +412,7 @@ class ConsultationServiceTest {
     // ── affectationSur() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour affectationSur().
+     * Prépare le contexte nécessaire à l’opération affectationSur().
      */
 
     private Affectation affectationSur(Integer id, Integer idIntervention, Integer idTechnicien,
@@ -424,7 +425,7 @@ class ConsultationServiceTest {
     // ── statut() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour statut().
+     * Prépare un consultation de test avec des valeurs nominales.
      */
 
     private Statut statut(String libelle) {

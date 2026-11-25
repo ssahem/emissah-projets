@@ -60,7 +60,10 @@ public class BailController {
 
     // ── list() — GET /gestion-locative/bail/list ─────────────────────────────
 
-    /** Liste les baux par page. Réponses : 200 | 400 | 500. */
+    /**
+     * Liste les baux par page. Réponses : 200 | 400 | 500.
+     */
+
     @Operation(summary = "Lister les baux par page")
     @ApiResponse(responseCode = "200", description = "Page de baux renvoyée")
     @ApiResponse(responseCode = "400", description = "Paramètres de pagination invalides")
@@ -74,7 +77,10 @@ public class BailController {
 
     // ── getById() — GET /gestion-locative/bail/get/{id} ──────────────────────
 
-    /** Consulte un bail. Réponses : 200 | 400 | 404 | 500. */
+    /**
+     * Consulte un bail. Réponses : 200 | 400 | 404 | 500.
+     */
+
     @Operation(summary = "Consulter un bail")
     @ApiResponse(responseCode = "200", description = "Bail renvoyé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")
@@ -87,7 +93,11 @@ public class BailController {
 
     // ── create() — POST /gestion-locative/bail/create ────────────────────────
 
-    /** Crée un bail sur un appartement libre. Réponses : 201 | 400 | 404 | 409 | 500. */
+    /**
+     * Crée un bail sur un appartement libre. Réponses : 201 | 400 | 404 | 409 |
+     * 500.
+     */
+
     @Operation(summary = "Créer un bail")
     @ApiResponse(responseCode = "201", description = "Bail créé")
     @ApiResponse(responseCode = "400", description = "Dates incohérentes")
@@ -103,7 +113,10 @@ public class BailController {
 
     // ── update() — PUT /gestion-locative/bail/update/{id} ────────────────────
 
-    /** Modifie un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
+    /**
+     * Modifie un bail. Réponses : 200 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Modifier un bail")
     @ApiResponse(responseCode = "200", description = "Bail modifié")
     @ApiResponse(responseCode = "400", description = "Date de fin invalide")
@@ -118,7 +131,10 @@ public class BailController {
 
     // ── resilier() — POST /gestion-locative/bail/resiliation/{id} ────────────
 
-    /** Résilie un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
+    /**
+     * Résilie un bail. Réponses : 200 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Résilier un bail par anticipation")
     @ApiResponse(responseCode = "200", description = "Bail résilié")
     @ApiResponse(responseCode = "400", description = "Date d'effet invalide")
@@ -133,7 +149,10 @@ public class BailController {
 
     // ── renouveler() — POST /gestion-locative/bail/renouvellement/{id} ───────
 
-    /** Renouvelle un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
+    /**
+     * Renouvelle un bail. Réponses : 200 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Renouveler un bail arrivant à échéance")
     @ApiResponse(responseCode = "200", description = "Bail renouvelé")
     @ApiResponse(responseCode = "400", description = "Nouvelle échéance invalide")
@@ -148,7 +167,10 @@ public class BailController {
 
     // ── reviser() — POST /gestion-locative/bail/revision/{id} ────────────────
 
-    /** Révise le loyer d'un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
+    /**
+     * Révise le loyer d'un bail. Réponses : 200 | 400 | 404 | 409 | 500.
+     */
+
     @Operation(summary = "Réviser le loyer en conservant l'historique")
     @ApiResponse(responseCode = "200", description = "Loyer révisé")
     @ApiResponse(responseCode = "400", description = "Montant ou date d'effet invalide")
@@ -163,7 +185,11 @@ public class BailController {
 
     // ── delete() — DELETE /gestion-locative/bail/delete/{id} ─────────────────
 
-    /** Supprime un bail qui n'a pas commencé. Réponses : 204 | 400 | 404 | 409 | 500. */
+    /**
+     * Supprime un bail qui n'a pas commencé. Réponses : 204 | 400 | 404 | 409 |
+     * 500.
+     */
+
     @Operation(summary = "Supprimer un bail")
     @ApiResponse(responseCode = "204", description = "Bail supprimé")
     @ApiResponse(responseCode = "400", description = "Identifiant invalide")

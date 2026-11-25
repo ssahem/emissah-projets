@@ -47,7 +47,6 @@ public class SiteController {
         this.service = service;
     }
 
-    /** F1 : crée un site. */
 
     // ── create() — POST /flotte-vehicules/site/create ────────────────────────
 
@@ -65,7 +64,6 @@ public class SiteController {
         return ResponseEntity.created(URI.create("/flotte-vehicules/site/" + site.idSite())).body(site);
     }
 
-    /** F1 : liste triée par ville puis nom. */
 
     // ── list() — GET /flotte-vehicules/site/list ─────────────────────────────
 
@@ -80,7 +78,6 @@ public class SiteController {
         return service.findAll();
     }
 
-    /** F1 : détail d'un site. */
 
     // ── get() — GET /flotte-vehicules/site/{id} ──────────────────────────────
 
@@ -96,7 +93,6 @@ public class SiteController {
         return service.findById(id);
     }
 
-    /** F1 : modifie adresse et ville. */
 
     // ── update() — PUT /flotte-vehicules/site/{id}/update ────────────────────
 
@@ -112,7 +108,6 @@ public class SiteController {
         return service.update(id, request);
     }
 
-    /** F1 : supprime un site sans véhicule. */
 
     // ── delete() — DELETE /flotte-vehicules/site/{id}/delete ─────────────────
 
@@ -129,7 +124,6 @@ public class SiteController {
         return ResponseEntity.noContent().build();
     }
 
-    /** F6 : véhicules d'un site et leur état courant. */
 
     // ── vehicules() — GET /flotte-vehicules/site/{id}/vehicules ──────────────
 
@@ -145,7 +139,6 @@ public class SiteController {
         return service.vehicules(id);
     }
 
-    /** F19 : kilométrage mensuel d'un site. */
 
     // ── kilometrage() — GET /flotte-vehicules/site/{id}/kilometrage ──────────
 

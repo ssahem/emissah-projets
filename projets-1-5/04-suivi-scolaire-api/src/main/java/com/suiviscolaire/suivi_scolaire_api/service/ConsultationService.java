@@ -83,12 +83,12 @@ public class ConsultationService {
         this.trimestreLookup = trimestreLookup;
     }
 
-    /** F6 : élèves d'une classe triés par nom puis prénom, avec effectif courant et maximal. */
 
     // ── elevesDeClasse() ─────────────────────────────────────────────────────
 
     /**
-     * Exécute elevesDeClasse().
+     * F6 : élèves d'une classe triés par nom puis prénom, avec effectif courant
+     * et maximal.
      */
 
     public EffectifClasseResponse elevesDeClasse(Integer idClasse) {
@@ -107,12 +107,12 @@ public class ConsultationService {
                 classe.getEffectifMax(), eleves);
     }
 
-    /** F7 : notes d'un élève, groupées par matière ; un trimestre absent signifie « toutes ». */
 
     // ── notesEleve() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute notesEleve().
+     * F7 : notes d'un élève, groupées par matière ; un trimestre absent
+     * signifie « toutes ».
      */
 
     public List<NotesMatiereResponse> notesEleve(Integer idEleve, Integer trimestre) {
@@ -137,12 +137,12 @@ public class ConsultationService {
                 .toList();
     }
 
-    /** F8 : notes d'une matière dans une classe avec moyenne de classe ; 400 si non enseignée. */
 
     // ── notesMatiereClasse() ─────────────────────────────────────────────────
 
     /**
-     * Exécute notesMatiereClasse().
+     * F8 : notes d'une matière dans une classe avec moyenne de classe ; 400 si
+     * non enseignée.
      */
 
     public NotesClasseResponse notesMatiereClasse(Integer idClasse, Integer idMatiere, Integer trimestre) {
@@ -175,12 +175,12 @@ public class ConsultationService {
                 moyenne(notes), eleves);
     }
 
-    /** F9 : recherche partielle et insensible à la casse ; une recherche vide est refusée. */
 
     // ── rechercher() ─────────────────────────────────────────────────────────
 
     /**
-     * Exécute rechercher().
+     * F9 : recherche partielle et insensible à la casse ; une recherche vide
+     * est refusée.
      */
 
     public List<EleveResponse> rechercher(String nom) {
@@ -191,12 +191,12 @@ public class ConsultationService {
         return eleveRepository.searchByNom(nom.trim()).stream().map(eleveMapper::toResponse).toList();
     }
 
-    /** F10 : page de notes, triée selon le paramètre sort ; taille plafonnée à 100. */
 
     // ── notesPaginees() ──────────────────────────────────────────────────────
 
     /**
-     * Exécute notesPaginees().
+     * F10 : page de notes, triée selon le paramètre sort ; taille plafonnée à
+     * 100.
      */
 
     public PageResponse<NoteResponse> notesPaginees(int page, int size, String sort) {
@@ -210,12 +210,11 @@ public class ConsultationService {
                 resultat.getNumber(), resultat.getSize(), resultat.getTotalElements(), resultat.getTotalPages());
     }
 
-    /** Calcule la moyenne arithmétique arrondie au centième. */
 
     // ── moyenne() ────────────────────────────────────────────────────────────
 
     /**
-     * Exécute moyenne().
+     * Calcule la moyenne arithmétique arrondie au centième.
      */
 
     private BigDecimal moyenne(List<Note> notes) {

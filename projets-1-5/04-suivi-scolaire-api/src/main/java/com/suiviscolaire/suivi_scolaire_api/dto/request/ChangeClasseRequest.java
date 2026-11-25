@@ -14,11 +14,15 @@ import jakarta.validation.constraints.NotNull;
  */
 @Schema(description = "Changement de classe d'un élève")
 public record ChangeClasseRequest(
-        @Schema(description = "Identifiant de la classe de destination", example = "2")
-        @NotNull Integer idClasseDestination) {
 
     // ═════════════════════════════════════════════════════════════════════════
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
+
+        // Identifiant du classedestination
+        @Schema(description = "Identifiant de la classe de destination", example = "2")
+        @NotNull
+        Integer idClasseDestination
+) {
 
 }

@@ -90,7 +90,7 @@ class BilletterieIntegrationTest {
     // ── datasourceProperties() ───────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour datasourceProperties().
+     * Injecte dans Spring les paramètres JDBC du conteneur PostgreSQL de test.
      */
 
     @DynamicPropertySource
@@ -508,12 +508,11 @@ class BilletterieIntegrationTest {
 
     // ── FICTIONS ─────────────────────────────────────────────────────────────
 
-    /** Crée une catégorie de référence si elle n'existe pas déjà. */
 
     // ── creerCategorie() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerCategorie().
+     * Crée une catégorie de référence si elle n'existe pas déjà.
      */
 
     private void creerCategorie(String libelle) {
@@ -523,12 +522,11 @@ class BilletterieIntegrationTest {
         }
     }
 
-    /** Crée une salle via l'API F1 et retourne son identifiant. */
 
     // ── creerSalle() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerSalle().
+     * Crée une salle via l'API F1 et retourne son identifiant.
      */
 
     private int creerSalle(String ville, int capacite) throws Exception {
@@ -542,12 +540,11 @@ class BilletterieIntegrationTest {
         return json(resultat).get("idSalle").asInt();
     }
 
-    /** Crée une place via l'API F2 et retourne son identifiant. */
 
     // ── creerPlace() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerPlace().
+     * Crée une place via l'API F2 et retourne son identifiant.
      */
 
     private int creerPlace(int idSalle, String rang, int numero, String categorie) throws Exception {
@@ -561,12 +558,11 @@ class BilletterieIntegrationTest {
         return json(resultat).get("idPlace").asInt();
     }
 
-    /** Crée un événement via l'API F3 et retourne son identifiant. */
 
     // ── creerEvenement() ─────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerEvenement().
+     * Crée un événement via l'API F3 et retourne son identifiant.
      */
 
     private int creerEvenement(int idSalle, String titre, LocalDateTime dateHeure) throws Exception {
@@ -581,12 +577,11 @@ class BilletterieIntegrationTest {
         return json(resultat).get("idEvenement").asInt();
     }
 
-    /** Crée le tarif d'une catégorie pour un événement. */
 
     // ── creerTarif() ─────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerTarif().
+     * Crée le tarif d'une catégorie pour un événement.
      */
 
     private void creerTarif(int idEvenement, String categorie, String prix) {
@@ -595,12 +590,11 @@ class BilletterieIntegrationTest {
         entityManager.flush();
     }
 
-    /** Crée une réservation via l'API F4 et retourne son identifiant. */
 
     // ── creerReservation() ───────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour creerReservation().
+     * Crée une réservation via l'API F4 et retourne son identifiant.
      */
 
     private int creerReservation(int idEvenement, String rang, int numero, String email) throws Exception {
@@ -615,12 +609,11 @@ class BilletterieIntegrationTest {
         return json(resultat).get("idReservation").asInt();
     }
 
-    /** Enregistre directement une réservation avec une date de création choisie. */
 
     // ── enregistrerReservation() ─────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour enregistrerReservation().
+     * Enregistre directement une réservation avec une date de création choisie.
      */
 
     private Reservation enregistrerReservation(Evenement evenement, String rang, Integer numero,
@@ -633,12 +626,12 @@ class BilletterieIntegrationTest {
         return reservationRepository.saveAndFlush(reservation);
     }
 
-    /** Génère un suffixe court pour éviter toute collision de clé métier entre méthodes. */
 
     // ── unique() ─────────────────────────────────────────────────────────────
 
     /**
-     * Prépare la donnée de test pour unique().
+     * Génère un suffixe court pour éviter toute collision de clé métier entre
+     * méthodes.
      */
 
     private static String unique(String prefixe) {
@@ -647,7 +640,10 @@ class BilletterieIntegrationTest {
 
     // ── json() ───────────────────────────────────────────────────────────────
 
-    /** Extrait le corps JSON d'une réponse MockMvc. */
+    /**
+     * Extrait le corps JSON d'une réponse MockMvc.
+     */
+
     private JsonNode json(MvcResult resultat) throws Exception {
         return objectMapper.readTree(resultat.getResponse().getContentAsString());
     }

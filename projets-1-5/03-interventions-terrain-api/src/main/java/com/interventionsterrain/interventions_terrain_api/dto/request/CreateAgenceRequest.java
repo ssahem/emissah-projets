@@ -20,15 +20,23 @@ public record CreateAgenceRequest(
     //  CHAMPS
     // ═════════════════════════════════════════════════════════════════════════
 
-    @Schema(description = "Nom", example = "Agence Paris Centre")
-    @NotBlank @Size(max = 100) String nom,
-
-    @Schema(description = "Ville", example = "Paris")
-    @NotBlank @Size(max = 100) String ville,
-
-    @Schema(description = "Adresse (facultative : valeur par défaut si absente)")
-    @Size(max = 255) String adresse,
-
-    @Schema(description = "Responsable (facultatif)")
-    @Size(max = 100) String responsable) {
+        // Nom
+        @Schema(description = "Nom", example = "Agence Paris Centre")
+        @NotBlank
+        @Size(max = 100)
+        String nom,
+        // Ville
+        @Schema(description = "Ville", example = "Paris")
+        @NotBlank
+        @Size(max = 100)
+        String ville,
+        // Adresse
+        @Schema(description = "Adresse", example = "12 rue de la Paix")
+        @Size(max = 255)
+        String adresse,
+        // Responsable
+        @Schema(description = "Responsable", example = "Exemple")
+        @Size(max = 100)
+        String responsable
+) {
 }

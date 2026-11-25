@@ -56,7 +56,7 @@ public class ExigenceCompetenceId implements Serializable {
     // ── equals() ─────────────────────────────────────────────────────────────
 
     /**
-     * Exécute equals().
+     * Égalité sur la clé métier, pas sur l’identifiant technique.
      */
 
     public boolean equals(Object other) {
@@ -68,7 +68,7 @@ public class ExigenceCompetenceId implements Serializable {
     // ── hashCode() ───────────────────────────────────────────────────────────
 
     /**
-     * Exécute hashCode().
+     * Cohérent avec equals() : calculé à partir de la clé métier uniquement.
      */
 
     @Override
