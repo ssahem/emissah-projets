@@ -234,12 +234,13 @@ class ReglesMetierServiceTest {
     // ── f13CompetencesManquantes() ───────────────────────────────────────────
 
     @Test
-    @DisplayName("F13 : les compétences exigées manquantes ou expirées sont listées dans le 400")
+    @DisplayName("F13 : le 400 identifie le technicien et sépare compétences absentes et expirées")
     void f13CompetencesManquantes() {
         TypeIntervention type = type(1, "RACCORDEMENT_FIBRE");
         when(clientRepository.existsById(7)).thenReturn(true);
         when(typeRepository.findByCode("RACCORDEMENT_FIBRE")).thenReturn(Optional.of(type));
         when(technicienRepository.existsById(3)).thenReturn(true);
+        when(technicienRepository.findById(3)).thenReturn(Optional.of(technicien(3, "Alice", 10)));
         when(exigenceRepository.findAllByIdIdType(1))
                 .thenReturn(List.of(new ExigenceCompetence(1, 5), new ExigenceCompetence(1, 6)));
         ObtentionCompetence expiree = new ObtentionCompetence(
@@ -253,8 +254,17 @@ class ReglesMetierServiceTest {
                 7, "RACCORDEMENT_FIBRE", 3, LocalDateTime.of(2026, 11, 24, 9, 0),
                 DEBUT, FIN, "12 rue de la Paix", "Paris")))
                 .isInstanceOf(DonneeInvalideException.class)
+                .hasMessageContaining("Le technicien 3 (MAT3)")
+                .hasMessageContaining("RACCORDEMENT_FIBRE")
+                .hasMessageContaining("2026-12-10")
                 .satisfies(e -> assertThat(((ApiException) e).getProperties())
-                        .containsEntry("competences", List.of("Fibre", "Cuivre")));
+                        .containsEntry("idTechnicien", 3)
+                        .containsEntry("matricule", "MAT3")
+                        .containsEntry("codeType", "RACCORDEMENT_FIBRE")
+                        .containsEntry("dateReference", LocalDate.of(2026, 12, 10))
+                        .containsEntry("competences", List.of("Fibre", "Cuivre"))
+                        .containsEntry("competencesAbsentes", List.of("Cuivre"))
+                        .containsEntry("competencesExpirees", List.of("Fibre")));
     }
 
     // ── f13SansExigence() ────────────────────────────────────────────────────

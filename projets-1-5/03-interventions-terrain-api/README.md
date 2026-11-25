@@ -89,7 +89,8 @@ créneau doit être futur et sa fin strictement postérieure à son début ; le 
   actif, sinon `400` / `409` (F11).
 - `POST /intervention/create` et `PUT /intervention/update/{id}` — contrôlent le chevauchement sous
   verrou pessimiste (toutes affectations, ANNULEE exclues) et les compétences exigées par le type,
-  avec `409` / `400` détaillées (F12, F13).
+  avec `409` / `400` détaillées (F12, F13). Le `400` F13 précise `idTechnicien`, `matricule`,
+  `codeType`, `dateReference` et sépare `competencesAbsentes` de `competencesExpirees`.
 - `POST /intervention/statut/{id}` — transitions `PLANIFIEE → EN_COURS → TERMINEE | ECHOUEE` et
   `PLANIFIEE → ANNULEE` ; toute autre transition renvoie `409` avec les statuts atteignables (F14).
 - `POST /intervention/reprise/{id}` — crée une intervention `PLANIFIEE` liée à l'origine, qui doit

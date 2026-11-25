@@ -1,6 +1,7 @@
 package com.interventionsterrain.interventions_terrain_api.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -179,7 +180,18 @@ class ReglesMetierIntegrationTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.type").value(
                         "https://api.interventions-terrain.local/problems/competences-manquantes"))
-                .andExpect(jsonPath("$.competences[0]").value("Fibre"));
+                .andExpect(jsonPath("$.title").value("Compétences du technicien insuffisantes"))
+                .andExpect(jsonPath("$.detail", containsString(
+                        "Le technicien " + idTechnicien + " (MAT001)")))
+                .andExpect(jsonPath("$.detail", containsString("RACCORDEMENT_FIBRE")))
+                .andExpect(jsonPath("$.detail", containsString("2026-12-01")))
+                .andExpect(jsonPath("$.idTechnicien").value(idTechnicien))
+                .andExpect(jsonPath("$.matricule").value("MAT001"))
+                .andExpect(jsonPath("$.codeType").value("RACCORDEMENT_FIBRE"))
+                .andExpect(jsonPath("$.dateReference").value("2026-12-01"))
+                .andExpect(jsonPath("$.competences[0]").value("Fibre"))
+                .andExpect(jsonPath("$.competencesAbsentes[0]").value("Fibre"))
+                .andExpect(jsonPath("$.competencesExpirees").isEmpty());
     }
 
     // ── f14CycleDeVie() ──────────────────────────────────────────────────────

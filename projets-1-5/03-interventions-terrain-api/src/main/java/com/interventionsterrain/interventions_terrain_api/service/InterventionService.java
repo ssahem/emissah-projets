@@ -38,6 +38,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -189,7 +190,7 @@ public class InterventionService {
         verifierCreneau(request.debutPrevu(), request.finPrevue());
         verifierDisponibilite(request.idTechnicienResponsable(), request.debutPrevu(),
                 request.finPrevue(), null);
-        verifierCompetences(request.idTechnicienResponsable(), type.getIdType(), request.debutPrevu());
+        verifierCompetences(request.idTechnicienResponsable(), type, request.debutPrevu());
 
         Adresse adresse = adresseRepository.save(new Adresse(request.voie(), request.commune()));
         Intervention intervention = interventionRepository.save(new Intervention(
@@ -219,7 +220,7 @@ public class InterventionService {
         verifierModifiable(responsable);
         verifierDisponibilite(request.idTechnicienResponsable(), request.debutPrevu(),
                 request.finPrevue(), id);
-        verifierCompetences(request.idTechnicienResponsable(), typeDe(intervention).getIdType(),
+        verifierCompetences(request.idTechnicienResponsable(), typeDe(intervention),
                 request.debutPrevu());
         intervention.modifierCreneau(request.debutPrevu(), request.finPrevue());
         if (!responsable.getIdTechnicien().equals(request.idTechnicienResponsable())) {
@@ -369,7 +370,7 @@ public class InterventionService {
         verifierCreneau(request.debutPrevu(), request.finPrevue());
         verifierDisponibilite(responsableOrigine.getIdTechnicien(), request.debutPrevu(),
                 request.finPrevue(), id);
-        verifierCompetences(responsableOrigine.getIdTechnicien(), typeDe(origine).getIdType(),
+        verifierCompetences(responsableOrigine.getIdTechnicien(), typeDe(origine),
                 request.debutPrevu());
 
         Intervention reprise = interventionRepository.save(new Intervention(
@@ -497,11 +498,13 @@ public class InterventionService {
 
     /**
      * F13 : toutes les compétences exigées doivent être détenues et valides à
-     * la date prévue.
+     * la date prévue ; le refus identifie le technicien contrôlé.
      */
 
-    private void verifierCompetences(Integer idTechnicien, Integer idType, LocalDateTime debutPrevu) {
-        List<ExigenceCompetence> exigences = exigenceRepository.findAllByIdIdType(idType);
+    private void verifierCompetences(Integer idTechnicien, TypeIntervention type,
+                                     LocalDateTime debutPrevu) {
+        List<ExigenceCompetence> exigences =
+                exigenceRepository.findAllByIdIdType(type.getIdType());
         if (exigences.isEmpty()) {
             return;
         }
@@ -509,21 +512,47 @@ public class InterventionService {
                 obtentionRepository.findAllByIdTechnicienOrderByDateObtentionDesc(idTechnicien);
         LocalDate datePrevue = debutPrevu.toLocalDate();
         List<String> manquantes = new ArrayList<>();
+        List<String> absentes = new ArrayList<>();
+        List<String> expirees = new ArrayList<>();
         for (ExigenceCompetence exigence : exigences) {
             Integer idCompetence = exigence.getId().getIdCompetence();
-            boolean satisfaite = obtentions.stream()
+            List<ObtentionCompetence> obtentionsCompetence = obtentions.stream()
                     .filter(o -> o.getIdCompetence().equals(idCompetence))
+                    .toList();
+            boolean satisfaite = obtentionsCompetence.stream()
                     .anyMatch(o -> o.getDateExpiration() == null
                             || !o.getDateExpiration().isBefore(datePrevue));
             if (!satisfaite) {
-                manquantes.add(competenceRepository.findById(idCompetence)
-                        .map(Competence::getLibelle).orElse("Compétence " + idCompetence));
+                String libelle = competenceRepository.findById(idCompetence)
+                        .map(Competence::getLibelle).orElse("Compétence " + idCompetence);
+                manquantes.add(libelle);
+                if (obtentionsCompetence.isEmpty()) {
+                    absentes.add(libelle);
+                } else {
+                    expirees.add(libelle);
+                }
             }
         }
         if (!manquantes.isEmpty()) {
-            throw new DonneeInvalideException("competences-manquantes",
-                    "Compétences manquantes ou expirées : " + String.join(", ", manquantes),
-                    Map.of("competences", manquantes));
+            Technicien technicien = technicienRepository.findById(idTechnicien).orElse(null);
+            String identifiant = technicien == null
+                    ? "Le technicien " + idTechnicien
+                    : "Le technicien " + idTechnicien + " (" + technicien.getMatricule() + ")";
+            String detail = identifiant + " ne satisfait pas les compétences exigées par "
+                    + type.getCode() + " à la date du " + datePrevue + " : "
+                    + String.join(", ", manquantes) + ".";
+            Map<String, Object> properties = new LinkedHashMap<>();
+            properties.put("idTechnicien", idTechnicien);
+            if (technicien != null) {
+                properties.put("matricule", technicien.getMatricule());
+            }
+            properties.put("codeType", type.getCode());
+            properties.put("dateReference", datePrevue);
+            properties.put("competences", manquantes);
+            properties.put("competencesAbsentes", absentes);
+            properties.put("competencesExpirees", expirees);
+            throw new DonneeInvalideException("Compétences du technicien insuffisantes",
+                    "competences-manquantes", detail, properties);
         }
     }
 
