@@ -38,9 +38,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Tests unitaires de F4, F11, F12, F13 et F14. */
+/**
+ * Tests unitaires de F4, F11, F12, F13 et F14.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de F4, F11, F12, F13 et F14.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class AffectationServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.parse("2026-11-24");
 
@@ -52,6 +62,12 @@ class AffectationServiceTest {
 
     private AffectationService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock clock = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -60,6 +76,12 @@ class AffectationServiceTest {
                 new AffectationMapper(vehiculeRepository, salarieRepository, clock), clock);
     }
 
+    // ── vehicule() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour vehicule().
+     */
+
     private Vehicule vehicule(Integer id, LocalDate miseEnService) {
         Vehicule vehicule = new Vehicule("AB-123-CD", "Peugeot", "308", miseEnService,
                 1, "PROPRIETE", false, BigDecimal.TEN);
@@ -67,11 +89,23 @@ class AffectationServiceTest {
         return vehicule;
     }
 
+    // ── salarie() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour salarie().
+     */
+
     private Salarie salarie(Integer id) {
         Salarie salarie = new Salarie("Martin", "Alice", "alice@example.test", "MAT001", "Direction");
         ReflectionTestUtils.setField(salarie, "idSalarie", id);
         return salarie;
     }
+
+    // ── affectation() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour affectation().
+     */
 
     private Affectation affectation(Integer id, LocalDate debut, LocalDate fin, Integer km) {
         Affectation affectation = new Affectation(debut, fin, 1, 1);
@@ -81,6 +115,8 @@ class AffectationServiceTest {
         }
         return affectation;
     }
+
+    // ── findAllTriee() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F4 : la liste est triée par date de début décroissante")
@@ -92,6 +128,8 @@ class AffectationServiceTest {
         assertThat(service.findAll()).extracting("idAffectation").containsExactly(2, 1);
     }
 
+    // ── findByIdPresent() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : une affectation existante est retournée")
     void findByIdPresent() {
@@ -101,6 +139,8 @@ class AffectationServiceTest {
         assertThat(service.findById(1).idAffectation()).isEqualTo(1);
     }
 
+    // ── findByIdAbsent() ─────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : un identifiant inconnu renvoie 404")
     void findByIdAbsent() {
@@ -109,6 +149,8 @@ class AffectationServiceTest {
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── createOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F4 : la création enregistre une affectation valide")
@@ -129,6 +171,8 @@ class AffectationServiceTest {
         assertThat(resultat.dateDebut()).isEqualTo(LocalDate.parse("2026-11-01"));
     }
 
+    // ── createAvantMiseEnService() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : une date avant la mise en service est refusée")
     void createAvantMiseEnService() {
@@ -140,6 +184,8 @@ class AffectationServiceTest {
                 1, 1, LocalDate.parse("2024-01-01"), null)))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── createChevauchement() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F11 : un chevauchement d'affectation est refusé en 409")
@@ -157,6 +203,8 @@ class AffectationServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
     }
 
+    // ── createImmobilisee() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F12 : une immobilisation est refusée en 409")
     void createImmobilisee() {
@@ -173,6 +221,8 @@ class AffectationServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
     }
 
+    // ── createDatesInversees() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : des dates inversées sont refusées")
     void createDatesInversees() {
@@ -185,6 +235,8 @@ class AffectationServiceTest {
                 .isInstanceOf(DonneeInvalideException.class);
     }
 
+    // ── updateApresDebut() ───────────────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : véhicule et salarié sont figés après le début")
     void updateApresDebut() {
@@ -194,6 +246,8 @@ class AffectationServiceTest {
         assertThatThrownBy(() -> service.update(1, new UpdateAffectationRequest(null, 2, null)))
                 .isInstanceOf(ConflitMetierException.class);
     }
+
+    // ── updateDateFin() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F4 : la date de fin peut être modifiée")
@@ -208,6 +262,8 @@ class AffectationServiceTest {
         assertThat(resultat.dateFin()).isEqualTo(LocalDate.parse("2026-12-15"));
     }
 
+    // ── deleteCommencee() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : une affectation commencée ne peut pas être supprimée")
     void deleteCommencee() {
@@ -217,6 +273,8 @@ class AffectationServiceTest {
         assertThatThrownBy(() -> service.delete(1)).isInstanceOf(ConflitMetierException.class);
         verify(affectationRepository, never()).delete(any());
     }
+
+    // ── deleteFuture() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F4 : une affectation future peut être supprimée")
@@ -228,6 +286,8 @@ class AffectationServiceTest {
 
         verify(affectationRepository).delete(existante);
     }
+
+    // ── restitutionOk() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F13 et F14 : la restitution fixe la date de fin et le relevé")
@@ -245,6 +305,8 @@ class AffectationServiceTest {
         assertThat(resultat.kmRestitution()).isEqualTo(19000);
     }
 
+    // ── restitutionDejaCloturee() ────────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : une affectation déjà clôturée est refusée")
     void restitutionDejaCloturee() {
@@ -256,6 +318,8 @@ class AffectationServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
     }
 
+    // ── restitutionDateFuture() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : une date future est refusée")
     void restitutionDateFuture() {
@@ -266,6 +330,8 @@ class AffectationServiceTest {
                 new CreateRestitutionRequest(LocalDate.parse("2027-01-01"), 19000)))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── restitutionKmDecroissant() ───────────────────────────────────────────
 
     @Test
     @DisplayName("F14 : un kilométrage inférieur au dernier relevé est refusé")
@@ -280,6 +346,8 @@ class AffectationServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("18000");
     }
+
+    // ── restitutionKmEgal() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("D-01 : un kilométrage égal au dernier relevé est accepté")

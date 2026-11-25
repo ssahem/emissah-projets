@@ -46,9 +46,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Restitution du niveau 4 : F17, F18 et F19. */
+/**
+ * Restitution du niveau 4 : F17, F18 et F19.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Restitution du niveau 4 : F17, F18 et F19.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class RestitutionServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final String CODE = "RACCORDEMENT_FIBRE";
     private static final LocalDateTime DEBUT = LocalDateTime.of(2026, 12, 10, 9, 0);
@@ -69,6 +79,12 @@ class RestitutionServiceTest {
     private final Map<Integer, Affectation> responsables = new HashMap<>();
     private final Map<Integer, Integer> idStatutParAffectation = new HashMap<>();
     private final Map<Integer, String> libelleParIdStatut = new HashMap<>();
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
 
     @BeforeEach
     void setUp() {
@@ -95,7 +111,9 @@ class RestitutionServiceTest {
                 });
     }
 
-    // ── F17 ─────────────────────────────────────────────────────────────────────
+    // ── F17 ──────────────────────────────────────────────────────────────────
+
+    // ── f17DisponibleAvecChargeDuJour() ──────────────────────────────────────
 
     @Test
     @DisplayName("F17 : un créneau annulé n'empêche pas la disponibilité ; la charge exclut les annulations")
@@ -126,6 +144,8 @@ class RestitutionServiceTest {
                 .isEqualByComparingTo("3.00");
     }
 
+    // ── f17IndisponiblePourChevauchement() ───────────────────────────────────
+
     @Test
     @DisplayName("F17 : un chevauchement non annulé rend le technicien indisponible")
     void f17IndisponiblePourChevauchement() {
@@ -145,6 +165,8 @@ class RestitutionServiceTest {
         assertThat(resultat.raisonFiltrage()).contains("disponible", "compétences");
     }
 
+    // ── f17CompetenceManquanteOuExpiree() ────────────────────────────────────
+
     @Test
     @DisplayName("F17 : une compétence exigée manquante ou expirée écarte le technicien")
     void f17CompetenceManquanteOuExpiree() {
@@ -163,6 +185,8 @@ class RestitutionServiceTest {
         assertThat(service.findDisponibles(DEBUT, FIN, CODE).agences()).isEmpty();
     }
 
+    // ── f17ParametresInvalides() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("F17 : un créneau inversé et un type inconnu sont refusés")
     void f17ParametresInvalides() {
@@ -174,7 +198,9 @@ class RestitutionServiceTest {
                 .hasMessageContaining("inconnu");
     }
 
-    // ── F18 ─────────────────────────────────────────────────────────────────────
+    // ── F18 ──────────────────────────────────────────────────────────────────
+
+    // ── f18ChargeAgence() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F18 : la charge d'agence compte les interventions actives et exclut les annulées")
@@ -209,6 +235,8 @@ class RestitutionServiceTest {
         assertThat(resultat.heuresOccupeesTotales()).isEqualByComparingTo("3.00");
     }
 
+    // ── f18AgenceInconnueEtPeriodeInversee() ─────────────────────────────────
+
     @Test
     @DisplayName("F18 : une agence inconnue renvoie 404 et une période inversée est refusée")
     void f18AgenceInconnueEtPeriodeInversee() {
@@ -221,7 +249,9 @@ class RestitutionServiceTest {
                 .hasMessageContaining("antérieure");
     }
 
-    // ── F19 ─────────────────────────────────────────────────────────────────────
+    // ── F19 ──────────────────────────────────────────────────────────────────
+
+    // ── f19TauxMensuel() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : taux global et par type, hors interventions non clôturées et hors mois")
@@ -252,6 +282,8 @@ class RestitutionServiceTest {
         assertThat(resultat.parType().get(0).taux()).isEqualByComparingTo("50.00");
     }
 
+    // ── f19AucuneCloturee() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F19 : une agence sans intervention clôturée renvoie un taux à zéro")
     void f19AucuneCloturee() {
@@ -266,6 +298,8 @@ class RestitutionServiceTest {
         assertThat(resultat.parType()).isEmpty();
     }
 
+    // ── f19ParametresInvalides() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("F19 : un mois invalide est refusé, une agence inconnue renvoie 404")
     void f19ParametresInvalides() {
@@ -277,6 +311,12 @@ class RestitutionServiceTest {
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
 
+    // ── preparerAgence() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparerAgence().
+     */
+
     private void preparerAgence(Technicien technicien, Integer idAgence, String nom) {
         lenient().when(agenceRepository.findById(idAgence))
                 .thenReturn(Optional.of(agence(idAgence, nom)));
@@ -284,6 +324,12 @@ class RestitutionServiceTest {
         when(equipeRepository.findById(technicien.getIdEquipe()))
                 .thenReturn(Optional.of(equipe(technicien.getIdEquipe(), idAgence)));
     }
+
+    // ── preparerAgenceUnTechnicien() ─────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparerAgenceUnTechnicien().
+     */
 
     private void preparerAgenceUnTechnicien() {
         Technicien technicien = technicien(3, "Alice", 10);
@@ -293,6 +339,12 @@ class RestitutionServiceTest {
                 .thenReturn(List.of(technicien));
     }
 
+    // ── statut() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour statut().
+     */
+
     private void statut(Integer idIntervention, Integer idTechnicien, String libelle) {
         Affectation affectation = affectation(idIntervention + 100, idIntervention, idTechnicien);
         responsables.put(idIntervention, affectation);
@@ -301,17 +353,35 @@ class RestitutionServiceTest {
         libelleParIdStatut.put(idStatut, libelle);
     }
 
+    // ── agence() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour agence().
+     */
+
     private Agence agence(Integer id, String nom) {
         Agence agence = new Agence(nom, nom, "Paris", null);
         ReflectionTestUtils.setField(agence, "idAgence", id);
         return agence;
     }
 
+    // ── equipe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour equipe().
+     */
+
     private Equipe equipe(Integer id, Integer idAgence) {
         Equipe equipe = new Equipe("Équipe " + id, idAgence);
         ReflectionTestUtils.setField(equipe, "idEquipe", id);
         return equipe;
     }
+
+    // ── technicien() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour technicien().
+     */
 
     private Technicien technicien(Integer id, String nom, Integer idEquipe) {
         Technicien technicien = new Technicien(nom, "Prenom", nom.toLowerCase() + "@example.test",
@@ -320,6 +390,12 @@ class RestitutionServiceTest {
         return technicien;
     }
 
+    // ── type() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour type().
+     */
+
     private TypeIntervention type(Integer id) {
         TypeIntervention type = mock(TypeIntervention.class);
         lenient().when(type.getIdType()).thenReturn(id);
@@ -327,17 +403,41 @@ class RestitutionServiceTest {
         return type;
     }
 
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
+
     private Intervention intervention(Integer id, LocalDateTime debut) {
         return intervention(id, CODE, debut);
     }
+
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
 
     private Intervention intervention(Integer id, String code, LocalDateTime debut) {
         return intervention(id, code, debut, debut.plusHours(3));
     }
 
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
+
     private Intervention intervention(Integer id, LocalDateTime debut, LocalDateTime fin) {
         return intervention(id, CODE, debut, fin);
     }
+
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
 
     private Intervention intervention(Integer id, String code, LocalDateTime debut, LocalDateTime fin) {
         Intervention intervention = new Intervention(LocalDateTime.of(2026, 11, 1, 8, 0),
@@ -346,11 +446,23 @@ class RestitutionServiceTest {
         return intervention;
     }
 
+    // ── affectation() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour affectation().
+     */
+
     private Affectation affectation(Integer id, Integer idIntervention, Integer idTechnicien) {
         Affectation affectation = new Affectation(idIntervention, idTechnicien, true);
         ReflectionTestUtils.setField(affectation, "idAffectation", id);
         return affectation;
     }
+
+    // ── statut() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour statut().
+     */
 
     private Statut statut(String libelle) {
         Statut statut = mock(Statut.class);

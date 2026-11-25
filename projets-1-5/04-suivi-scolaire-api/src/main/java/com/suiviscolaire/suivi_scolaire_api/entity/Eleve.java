@@ -66,6 +66,13 @@ public class Eleve {
     public LocalDate getDateNaissance() { return dateNaissance; }
 
     /** Modifie le nom et le prénom ; la date de naissance reste figée (F2). */
+
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String nom, String prenom) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.prenom = Objects.requireNonNull(prenom, "prenom");

@@ -88,18 +88,18 @@ public class PlaceService {
      */
     @Transactional
     public PlaceResponse create(CreatePlaceRequest request) {
-        // ── Étape 1/3 : résoudre la salle et la catégorie ──
+        // ── Étape 1/3 : résoudre la salle et la catégorie ────────────────────
         Salle salle = requireSalle(request.idSalle());
         Categorie categorie = requireCategorie(request.categorie());
 
-        // ── Étape 2/3 : appliquer les règles métier ──
+        // ── Étape 2/3 : appliquer les règles métier ──────────────────────────
         requireCapacite(salle);
         if (placeRepository.existsBySalle_IdSalleAndRangAndNumero(
                 request.idSalle(), request.rang(), request.numero())) {
             throw new PlaceDejaExistanteException(request.rang());
         }
 
-        // ── Étape 3/3 : enregistrer et convertir ──
+        // ── Étape 3/3 : enregistrer et convertir ─────────────────────────────
         Place place = placeRepository.saveAndFlush(
                 new Place(request.rang().trim(), request.numero(), salle, categorie));
         return placeMapper.toPlaceResponse(place);
@@ -116,12 +116,12 @@ public class PlaceService {
      */
     @Transactional
     public PlaceResponse update(Integer idPlace, UpdatePlaceRequest request) {
-        // ── Étape 1/3 : charger et résoudre ──
+        // ── Étape 1/3 : charger et résoudre ──────────────────────────────────
         Place place = requirePlace(idPlace);
         Salle salle = requireSalle(request.idSalle());
         Categorie categorie = requireCategorie(request.categorie());
 
-        // ── Étape 2/3 : appliquer les règles de figeté, d'unicité et de capacité ──
+        // ── Étape 2/3 : appliquer les règles de figeté, d'unicité et de cap… ─
         boolean positionModifiee = !Objects.equals(place.getRang(), request.rang())
                 || !Objects.equals(place.getNumero(), request.numero())
                 || !Objects.equals(place.getSalle().getIdSalle(), request.idSalle());
@@ -137,7 +137,7 @@ public class PlaceService {
             requireCapacite(salle);
         }
 
-        // ── Étape 3/3 : appliquer et convertir ──
+        // ── Étape 3/3 : appliquer et convertir ───────────────────────────────
         place.modifier(request.rang().trim(), request.numero(), salle, categorie);
         return placeMapper.toPlaceResponse(place);
     }

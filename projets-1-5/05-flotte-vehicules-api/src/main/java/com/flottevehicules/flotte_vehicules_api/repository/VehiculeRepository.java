@@ -17,6 +17,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface VehiculeRepository extends JpaRepository<Vehicule, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les véhicules triés par immatriculation (F2). */
     List<Vehicule> findAllByOrderByImmatriculationAsc();
 

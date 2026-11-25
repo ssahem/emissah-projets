@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Positive;
  * Corps de création d'une classe (F1).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une classe (F1).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : ClasseController avec @Valid.
  * NE FAIT PAS  : d'accès base ni de logique métier.
@@ -19,4 +20,9 @@ public record CreateClasseRequest(
         @Schema(description = "Identifiant de l'année scolaire", example = "2") @NotNull Integer idAnnee,
         @Schema(description = "Identifiant du niveau", example = "1") @NotNull Integer idNiveau,
         @Schema(description = "Effectif maximal", example = "30") @NotNull @Positive Integer effectifMax) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

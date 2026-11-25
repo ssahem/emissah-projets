@@ -31,9 +31,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Tests unitaires de F16 et de la consultation des alertes (A-02). */
+/**
+ * Tests unitaires de F16 et de la consultation des alertes (A-02).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de F16 et de la consultation des alertes (A-02).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class AlerteServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.parse("2026-11-24");
 
@@ -44,6 +54,12 @@ class AlerteServiceTest {
 
     private AlerteService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock clock = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -51,12 +67,24 @@ class AlerteServiceTest {
                 siteRepository, clock);
     }
 
+    // ── vehicule() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour vehicule().
+     */
+
     private Vehicule vehicule(Integer id, String immatriculation, Integer idSite) {
         Vehicule vehicule = new Vehicule(immatriculation, "Peugeot", "308",
                 LocalDate.parse("2024-01-15"), idSite, "PROPRIETE", false, BigDecimal.TEN);
         ReflectionTestUtils.setField(vehicule, "idVehicule", id);
         return vehicule;
     }
+
+    // ── alerte() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour alerte().
+     */
 
     private AlerteVehicule alerte(Integer id, Integer idVehicule, Integer idSite) {
         AlerteVehicule alerte = new AlerteVehicule(null, idVehicule, "ECHEANCE_ENTRETIEN",
@@ -66,12 +94,20 @@ class AlerteServiceTest {
         return alerte;
     }
 
+    // ── echeance() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour echeance().
+     */
+
     private VueRepository.EcheanceRow echeance(Integer idVehicule, int kmActuel,
                                                LocalDate dateProchaine) {
         return new VueRepository.EcheanceRow(idVehicule, 1, "Vidange périodique",
                 LocalDate.parse("2025-11-01"), 10000, 20000,
                 dateProchaine, kmActuel, false);
     }
+
+    // ── genererAlerteEcheanceDepassee() ──────────────────────────────────────
 
     @Test
     @DisplayName("F16 : une échéance dépassée produit une alerte avec ses écarts")
@@ -90,6 +126,8 @@ class AlerteServiceTest {
         assertThat(captor.getValue().getPeriode()).isEqualTo("2026-11");
     }
 
+    // ── genererAlerteProche() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : une échéance à moins de 30 jours produit une alerte")
     void genererAlerteProche() {
@@ -102,6 +140,8 @@ class AlerteServiceTest {
         verify(alerteRepository).save(any(AlerteVehicule.class));
     }
 
+    // ── pasAlerteSiLointaine() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : une échéance lointaine n'est pas signalée")
     void pasAlerteSiLointaine() {
@@ -112,6 +152,8 @@ class AlerteServiceTest {
 
         verify(alerteRepository, never()).save(any());
     }
+
+    // ── pasDeDuplication() ───────────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : une échéance déjà signalée n'est pas signalée deux fois")
@@ -125,6 +167,8 @@ class AlerteServiceTest {
 
         verify(alerteRepository, never()).save(any());
     }
+
+    // ── regroupementParSite() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : les alertes sont regroupées par site")
@@ -144,6 +188,8 @@ class AlerteServiceTest {
         assertThat(resultat.get(1).nomSite()).isEqualTo("Lyon");
     }
 
+    // ── listerFiltre() ───────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Les alertes peuvent être filtrées par véhicule")
     void listerFiltre() {
@@ -154,6 +200,8 @@ class AlerteServiceTest {
 
         assertThat(service.lister(1)).hasSize(1);
     }
+
+    // ── findByIdAbsent() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Une alerte inconnue renvoie 404")

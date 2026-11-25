@@ -51,13 +51,13 @@ public class Salle {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Salle() ──────────────────────────────────────────────────────────
+    // ── Salle() ──────────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Salle() {
     }
 
-    // ── Salle(String nom, String adresse, String ville, Integer capacite) ─
+    // ── Salle(String nom, String adresse, String ville, Integer capacite) ────
 
     /** Crée une salle valide ; aucun champ obligatoire ne peut être null. */
     public Salle(String nom, String adresse, String ville, Integer capacite) {
@@ -71,32 +71,32 @@ public class Salle {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdSalle() ─────────────────────────────────────────────────────
+    // ── getIdSalle() ─────────────────────────────────────────────────────────
 
     /** Retourne l'identifiant technique. */
     public Integer getIdSalle() { return idSalle; }
 
-    // ── getNom() ─────────────────────────────────────────────────────────
+    // ── getNom() ─────────────────────────────────────────────────────────────
 
     /** Retourne le nom. */
     public String getNom() { return nom; }
 
-    // ── getAdresse() ─────────────────────────────────────────────────────
+    // ── getAdresse() ─────────────────────────────────────────────────────────
 
     /** Retourne l'adresse. */
     public String getAdresse() { return adresse; }
 
-    // ── getVille() ───────────────────────────────────────────────────────
+    // ── getVille() ───────────────────────────────────────────────────────────
 
     /** Retourne la ville. */
     public String getVille() { return ville; }
 
-    // ── getCapacite() ────────────────────────────────────────────────────
+    // ── getCapacite() ────────────────────────────────────────────────────────
 
     /** Retourne la capacité. */
     public Integer getCapacite() { return capacite; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Met à jour les champs modifiables. */
     public void modifier(String nom, String adresse, String ville, Integer capacite) {
@@ -110,7 +110,7 @@ public class Salle {
     //  IDENTITÉ ET AFFICHAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── equals() ─────────────────────────────────────────────────────────
+    // ── equals() ─────────────────────────────────────────────────────────────
 
     /** Égalité sur (nom, ville), la clé métier. */
     @Override
@@ -120,7 +120,7 @@ public class Salle {
         return Objects.equals(nom, other.nom) && Objects.equals(ville, other.ville);
     }
 
-    // ── hashCode() ───────────────────────────────────────────────────────
+    // ── hashCode() ───────────────────────────────────────────────────────────
 
     /** Cohérent avec equals() : calculé sur la clé métier. */
     @Override

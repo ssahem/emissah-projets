@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class CsvExportMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final DateTimeFormatter DATE_FORMAT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 

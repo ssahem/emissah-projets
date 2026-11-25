@@ -121,6 +121,12 @@ public class RestitutionService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findDisponibles() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute findDisponibles().
+     */
+
     public DisponiblesResponse findDisponibles(LocalDateTime debut, LocalDateTime fin, String codeType) {
         if (debut == null || fin == null || !fin.isAfter(debut)) {
             throw new DonneeInvalideException("creneau-invalide",
@@ -163,6 +169,13 @@ public class RestitutionService {
     }
 
     /** F18 : nombre d'interventions et heures occupées par technicien d'une agence, avec totaux. */
+
+    // ── findCharge() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findCharge().
+     */
+
     public ChargeAgenceResponse findCharge(Integer idAgence, LocalDateTime du, LocalDateTime au) {
         Agence agence = requiredAgence(idAgence);
         if (du != null && au != null && au.isBefore(du)) {
@@ -191,6 +204,13 @@ public class RestitutionService {
     }
 
     /** F19 : taux mensuel TERMINEE / (TERMINEE + ECHOUEE), global et par type. */
+
+    // ── findTauxReussite() ───────────────────────────────────────────────────
+
+    /**
+     * Exécute findTauxReussite().
+     */
+
     public TauxReussiteResponse findTauxReussite(Integer idAgence, String mois) {
         Agence agence = requiredAgence(idAgence);
         YearMonth periode;
@@ -248,6 +268,12 @@ public class RestitutionService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── techniciensDe() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute techniciensDe().
+     */
+
     private List<Technicien> techniciensDe(Integer idAgence) {
         List<Integer> idsEquipe = equipeRepository.findAllByIdAgence(idAgence).stream()
                 .map(Equipe::getIdEquipe).toList();
@@ -257,15 +283,33 @@ public class RestitutionService {
         return technicienRepository.findAllByIdEquipeInOrderByNomAsc(idsEquipe);
     }
 
+    // ── requiredAgence() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute requiredAgence().
+     */
+
     private Agence requiredAgence(Integer idAgence) {
         return agenceRepository.findById(idAgence)
                 .orElseThrow(() -> new RessourceIntrouvableException("Agence", idAgence));
     }
 
+    // ── nomAgence() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute nomAgence().
+     */
+
     private String nomAgence(Integer idAgence) {
         return agenceRepository.findById(idAgence).map(Agence::getNom)
                 .orElse("Agence " + idAgence);
     }
+
+    // ── competencesSatisfaites() ─────────────────────────────────────────────
+
+    /**
+     * Exécute competencesSatisfaites().
+     */
 
     private boolean competencesSatisfaites(Integer idTechnicien, Integer idType, LocalDate date) {
         List<ExigenceCompetence> exigences = exigenceRepository.findAllByIdIdType(idType);
@@ -287,10 +331,22 @@ public class RestitutionService {
         return true;
     }
 
+    // ── statutCourant() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute statutCourant().
+     */
+
     private StatutIntervention statutCourant(Intervention intervention) {
         Affectation responsable = responsable(intervention.getIdIntervention());
         return responsable != null ? statutCourant(responsable) : StatutIntervention.PLANIFIEE;
     }
+
+    // ── statutCourant() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute statutCourant().
+     */
 
     private StatutIntervention statutCourant(Affectation responsable) {
         return historiqueRepository.findTopByIdAffectationOrderByDateHeureDescIdHistoriqueDesc(
@@ -301,12 +357,25 @@ public class RestitutionService {
                 .orElse(StatutIntervention.PLANIFIEE);
     }
 
+    // ── responsable() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute responsable().
+     */
+
     private Affectation responsable(Integer idIntervention) {
         return affectationRepository.findByIdInterventionAndEstResponsableTrue(idIntervention)
                 .orElse(null);
     }
 
     /** Somme des durées des interventions actives, ramenées à la période demandée. */
+
+    // ── heuresOccupees() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute heuresOccupees().
+     */
+
     private Duration heuresOccupees(List<Intervention> interventions, LocalDateTime debut,
                                     LocalDateTime fin) {
         Duration total = Duration.ZERO;
@@ -322,10 +391,22 @@ public class RestitutionService {
         return total;
     }
 
+    // ── enHeures() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute enHeures().
+     */
+
     private BigDecimal enHeures(Duration duree) {
         return BigDecimal.valueOf(duree.toMinutes())
                 .divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_UP);
     }
+
+    // ── taux() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute taux().
+     */
 
     private BigDecimal taux(long reussites, long echecs) {
         long total = reussites + echecs;

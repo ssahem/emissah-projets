@@ -55,13 +55,13 @@ public class Immeuble {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Immeuble() ───────────────────────────────────────────────────────
+    // ── Immeuble() ───────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Immeuble() {
     }
 
-    // ── Immeuble(String, String, String, Integer, Integer) ───────────────
+    // ── Immeuble(String, String, String, Integer, Integer) ───────────────────
 
     /** Crée un immeuble valide ; le nombre d'étages doit être positif. */
     public Immeuble(String adresse, String codePostal, String ville,
@@ -95,7 +95,7 @@ public class Immeuble {
     /** Retourne le nombre d'étages. */
     public Integer getNbEtages() { return nbEtages; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Met à jour l'adresse, le nombre d'étages et le propriétaire (F2). */
     public void modifier(String adresse, String codePostal, String ville,

@@ -37,10 +37,20 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Codes de réponse HTTP et corps des règles métier F11, F14 et F15. */
+/**
+ * Codes de réponse HTTP et corps des règles métier F11, F14 et F15.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Codes de réponse HTTP et corps des règles métier F11, F14 et F15.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @WebMvcTest
 @Import(GlobalExceptionHandler.class)
 class ReglesMetierWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Autowired private MockMvc mockMvc;
     @Autowired private JsonMapper objectMapper;
@@ -50,6 +60,9 @@ class ReglesMetierWebTest {
     @MockitoBean private CompetenceService competenceService;
     @MockitoBean private ClientService clientService;
     @MockitoBean private InterventionService interventionService;
+
+    // ── f11AssociationRenvoie201() ───────────────────────────────────────────
+
     @MockitoBean private RestitutionService restitutionService;
 
     @Test
@@ -67,6 +80,8 @@ class ReglesMetierWebTest {
                 .andExpect(jsonPath("$.libelle").value("Fibre"));
     }
 
+    // ── f11DatesIncoherentesRenvoient400() ───────────────────────────────────
+
     @Test
     @DisplayName("F11 : des dates incohérentes renvoient 400 en Problem Details")
     void f11DatesIncoherentesRenvoient400() throws Exception {
@@ -83,6 +98,8 @@ class ReglesMetierWebTest {
                         "https://api.interventions-terrain.local/problems/dates-competence-incoherentes"));
     }
 
+    // ── f14ChangementStatutRenvoie200() ──────────────────────────────────────
+
     @Test
     @DisplayName("F14 : POST intervention/statut/{id} accepte une transition autorisée")
     void f14ChangementStatutRenvoie200() throws Exception {
@@ -96,6 +113,8 @@ class ReglesMetierWebTest {
                 .andExpect(jsonPath("$.idIntervention").value(20));
         verify(interventionService).changerStatut(20, new UpdateStatutRequest("EN_COURS"));
     }
+
+    // ── f14TransitionInterditeRenvoie409() ───────────────────────────────────
 
     @Test
     @DisplayName("F14 : une transition interdite renvoie 409 avec les statuts atteignables")
@@ -113,6 +132,8 @@ class ReglesMetierWebTest {
                 .andExpect(jsonPath("$.atteignables[0]").value("ECHOUEE"));
     }
 
+    // ── f15RepriseRenvoie201() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("F15 : POST intervention/reprise/{id} renvoie 201 et un en-tête Location")
     void f15RepriseRenvoie201() throws Exception {
@@ -128,6 +149,12 @@ class ReglesMetierWebTest {
                 .andExpect(header().string("Location",
                         "/interventions-terrain/intervention/get/21"));
     }
+
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
 
     private InterventionResponse intervention(Integer id) {
         return new InterventionResponse(id, 7, "RACCORDEMENT_FIBRE",

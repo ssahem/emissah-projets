@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReservationMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit une réservation en réponse HTTP. */

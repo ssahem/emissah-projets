@@ -17,6 +17,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface EleveRepository extends JpaRepository<Eleve, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne tous les élèves triés par nom puis prénom. */
     List<Eleve> findAllByOrderByNomAscPrenomAsc();
 

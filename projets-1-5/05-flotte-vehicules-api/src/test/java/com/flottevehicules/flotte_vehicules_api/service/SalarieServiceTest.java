@@ -32,15 +32,31 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Tests unitaires de F3 et F7. */
+/**
+ * Tests unitaires de F3 et F7.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de F3 et F7.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class SalarieServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private SalarieRepository salarieRepository;
     @Mock private AffectationRepository affectationRepository;
     @Mock private VehiculeRepository vehiculeRepository;
 
     private SalarieService service;
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
 
     @BeforeEach
     void setUp() {
@@ -50,11 +66,19 @@ class SalarieServiceTest {
                 new SalarieMapper(), affectationMapper);
     }
 
+    // ── salarie() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour salarie().
+     */
+
     private Salarie salarie(Integer id, String nom) {
         Salarie salarie = new Salarie(nom, "Alice", "alice@example.test", "MAT" + id, "Direction");
         ReflectionTestUtils.setField(salarie, "idSalarie", id);
         return salarie;
     }
+
+    // ── findAllTriee() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F3 : la liste est triée par nom")
@@ -65,6 +89,8 @@ class SalarieServiceTest {
         assertThat(service.findAll()).extracting("nom").containsExactly("Bernard", "Martin");
     }
 
+    // ── findByIdPresent() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F3 : un salarié existant est retourné")
     void findByIdPresent() {
@@ -72,6 +98,8 @@ class SalarieServiceTest {
 
         assertThat(service.findById(1).matricule()).isEqualTo("MAT1");
     }
+
+    // ── findByIdAbsent() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F3 : un identifiant inconnu renvoie 404")
@@ -81,6 +109,8 @@ class SalarieServiceTest {
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── createOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F3 : la création enregistre le matricule et le service")
@@ -100,6 +130,8 @@ class SalarieServiceTest {
         assertThat(resultat.service()).isEqualTo("Technique");
     }
 
+    // ── createMatriculeDoublon() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("F3 : un matricule déjà utilisé est refusé")
     void createMatriculeDoublon() {
@@ -112,6 +144,8 @@ class SalarieServiceTest {
         verify(salarieRepository, never()).save(any());
     }
 
+    // ── createEmailDoublon() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("F3 : une adresse électronique déjà utilisée est refusée")
     void createEmailDoublon() {
@@ -123,6 +157,8 @@ class SalarieServiceTest {
                 "Martin", "Alice", "alice@example.test", "MAT009", "Technique")))
                 .isInstanceOf(ConflitMetierException.class);
     }
+
+    // ── updateGardeMatricule() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("F3 : la modification ne change pas le matricule")
@@ -139,6 +175,8 @@ class SalarieServiceTest {
         assertThat(resultat.service()).isEqualTo("Logistique");
     }
 
+    // ── deleteOk() ───────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F3 : la suppression est autorisée sans affectation en cours")
     void deleteOk() {
@@ -150,6 +188,8 @@ class SalarieServiceTest {
         verify(salarieRepository).delete(salarie);
     }
 
+    // ── deleteAvecAffectationEnCours() ───────────────────────────────────────
+
     @Test
     @DisplayName("F3 : la suppression est refusée avec une affectation en cours")
     void deleteAvecAffectationEnCours() {
@@ -159,6 +199,8 @@ class SalarieServiceTest {
         assertThatThrownBy(() -> service.delete(1)).isInstanceOf(ConflitMetierException.class);
         verify(salarieRepository, never()).delete(any());
     }
+
+    // ── affectationsTriees() ─────────────────────────────────────────────────
 
     @Test
     @DisplayName("F7 : les affectations sont retournées du plus récent au plus ancien")

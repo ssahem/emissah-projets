@@ -16,6 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class CompetenceMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public CompetenceResponse toResponse(Competence competence) {
         return new CompetenceResponse(
                 competence.getIdCompetence(),

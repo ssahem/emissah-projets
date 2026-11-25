@@ -6,8 +6,9 @@ import java.util.List;
  * Regroupement des techniciens disponibles par agence (F17).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Regroupement des techniciens disponibles par agence (F17).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : AgenceDisponibleService puis renvoyé par AgenceDisponibleController.
+ * PRODUIT PAR  : AgenceDisponibleService puis renvoyé par AgenceDisponibleController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record AgenceDisponibleResponse(

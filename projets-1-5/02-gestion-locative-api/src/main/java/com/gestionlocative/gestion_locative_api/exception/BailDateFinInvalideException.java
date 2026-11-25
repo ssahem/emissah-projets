@@ -7,12 +7,18 @@ import org.springframework.http.HttpStatus;
  * Exception métier : date de fin incohérente avec la date de début (F12).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : date de fin incohérente avec la date de début (F12).
  * LANCÉE PAR   : BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 400.
  * POURQUOI     : ck_bail_dates est conservé (E-03), mais un 400 explicite vaut
  *                mieux qu'une violation de contrainte SQL.
+ * NE FAIT PAS  : de logique métier.
  */
 public class BailDateFinInvalideException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec les deux dates en conflit. */
     public BailDateFinInvalideException(LocalDate dateDebut, LocalDate dateFin) {

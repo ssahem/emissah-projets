@@ -20,33 +20,33 @@ public interface SalleRepository extends JpaRepository<Salle, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByNomAscVilleAsc() ─────────────────────────────────
+    // ── findAllByOrderByNomAscVilleAsc() ─────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Salle> findAllByOrderByNomAscVilleAsc();
 
-    // ── existsByNomIgnoreCaseAndVilleIgnoreCase() ────────────────────────
+    // ── existsByNomIgnoreCaseAndVilleIgnoreCase() ────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByNomIgnoreCaseAndVilleIgnoreCase(String nom, String ville);
 
-    // ── existsByNomIgnoreCaseAndVilleIgnoreCaseAndIdSalleNot() ────────────
+    // ── existsByNomIgnoreCaseAndVilleIgnoreCaseAndIdSalleNot() ───────────────
 
     /** Vérifie si un autre salon porte déjà le même nom et la même ville. */
     boolean existsByNomIgnoreCaseAndVilleIgnoreCaseAndIdSalleNot(
             String nom, String ville, Integer idSalle);
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  REQUÊTES @Query
+    //  REQUÊTES @QUERY
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── countPlacesByIdSalle() ───────────────────────────────────────────
+    // ── countPlacesByIdSalle() ───────────────────────────────────────────────
 
     /** Compte les places d'une salle. */
     @Query("select count(p) from Place p where p.salle.idSalle = :idSalle")
     long countPlacesByIdSalle(@Param("idSalle") Integer idSalle);
 
-    // ── countEvenementsByIdSalle() ───────────────────────────────────────
+    // ── countEvenementsByIdSalle() ───────────────────────────────────────────
 
     /** Compte les événements prévus dans une salle. */
     @Query("select count(e) from Evenement e where e.salle.idSalle = :idSalle")

@@ -16,6 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClientMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public ClientResponse toResponse(Client client) {
         return new ClientResponse(
                 client.getIdClient(),

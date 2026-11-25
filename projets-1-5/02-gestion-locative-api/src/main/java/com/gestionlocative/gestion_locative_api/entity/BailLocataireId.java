@@ -17,6 +17,10 @@ import java.util.Objects;
 @Embeddable
 public class BailLocataireId implements Serializable {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Identifiant du bail. */
     @Column(name = "id_bail")
     private Integer idBail;
@@ -25,13 +29,13 @@ public class BailLocataireId implements Serializable {
     @Column(name = "id_locataire")
     private Integer idLocataire;
 
-    // ── BailLocataireId() ──────────────────────────────────────────────────
+    // ── BailLocataireId() ────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected BailLocataireId() {
     }
 
-    // ── BailLocataireId(Integer, Integer) ──────────────────────────────────
+    // ── BailLocataireId(Integer, Integer) ────────────────────────────────────
 
     /** Crée la clé composite. */
     public BailLocataireId(Integer idBail, Integer idLocataire) {

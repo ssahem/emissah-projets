@@ -34,18 +34,32 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires de la tâche d'expiration (F16).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : horloge fixée ; repositories simulés.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de la tâche d'expiration (F16).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : horloge fixée ; repositories simulés.
  * CAS COUVERTS : expiration journalisée, pas de double journalisation.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class ReservationExpirationServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Clock CLOCK = Clock.fixed(
             Instant.parse("2026-11-20T10:00:00Z"), ZoneOffset.UTC);
 
     @Mock private ReservationRepository reservationRepository;
     @Mock private HistoriqueStatutRepository historiqueStatutRepository;
+
+    // ── service() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour service().
+     */
+
     @Mock private StatutRepository statutRepository;
 
     private ReservationExpirationService service() {
@@ -53,10 +67,12 @@ class ReservationExpirationServiceTest {
                 historiqueStatutRepository, statutRepository, CLOCK);
     }
 
+    // ── libererReservationsExpirees_ajouteHistorique() ───────────────────────
+
     @Test
     @DisplayName("Une réservation expirée passe en ANNULEE et est journalisée")
     void libererReservationsExpirees_ajouteHistorique() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Reservation reservation = new Reservation(LocalDateTime.of(2026, 11, 20, 9, 40),
                 new Client("Dupont", "Jean", "jean@example.com"),
                 new Evenement(LocalDateTime.of(2026, 12, 20, 20, 0),
@@ -70,10 +86,10 @@ class ReservationExpirationServiceTest {
         when(statutRepository.findByLibelleIgnoreCase("ANNULEE")).thenReturn(Optional.of(annulee));
         when(historiqueStatutRepository.existsById(any(HistoriqueStatutId.class))).thenReturn(false);
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         service().libererReservationsExpirees();
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         ArgumentCaptor<HistoriqueStatutId> captor =
                 ArgumentCaptor.forClass(HistoriqueStatutId.class);
         verify(historiqueStatutRepository).existsById(captor.capture());
@@ -81,10 +97,12 @@ class ReservationExpirationServiceTest {
         assertThat(reservation.getHistorique()).hasSize(1);
     }
 
+    // ── libererReservationsExpirees_ignoreHistoriqueExistant() ───────────────
+
     @Test
     @DisplayName("Une réservation déjà annulée n'est pas journalisée deux fois")
     void libererReservationsExpirees_ignoreHistoriqueExistant() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Reservation reservation = new Reservation(LocalDateTime.of(2026, 11, 20, 9, 40),
                 new Client("Dupont", "Jean", "jean@example.com"),
                 new Evenement(LocalDateTime.of(2026, 12, 20, 20, 0),
@@ -97,10 +115,10 @@ class ReservationExpirationServiceTest {
         when(statutRepository.findByLibelleIgnoreCase("ANNULEE")).thenReturn(Optional.of(annulee));
         when(historiqueStatutRepository.existsById(any(HistoriqueStatutId.class))).thenReturn(true);
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         service().libererReservationsExpirees();
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         verify(historiqueStatutRepository, never())
                 .save(org.mockito.ArgumentMatchers.any());
         assertThat(reservation.getHistorique()).isEmpty();

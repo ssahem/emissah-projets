@@ -6,10 +6,11 @@ import java.time.LocalDate;
 /**
  * Affectation consultée depuis une fiche salarié (F7).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : SalarieService.
- * NE FAIT PAS : d'accès base.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Affectation consultée depuis une fiche salarié (F7).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : SalarieService.
+ * NE FAIT PAS  : d'accès base.
  */
 @Schema(description = "Affectation d'un salarié avec les dates et le véhicule")
 public record AffectationSalarieResponse(
@@ -31,4 +32,9 @@ public record AffectationSalarieResponse(
 
         @Schema(description = "Affectation en cours", example = "true")
         Boolean enCours) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

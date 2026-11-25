@@ -6,8 +6,9 @@ import java.time.LocalDate;
  * Une ligne d'alerte : technicien, compétence et date d'expiration (F16).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Une ligne d'alerte : technicien, compétence et date d'expiration (F16).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : AlerteCompetenceService puis renvoyé par AlerteCompetenceController.
+ * PRODUIT PAR  : AlerteCompetenceService puis renvoyé par AlerteCompetenceController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record AlerteCompetenceResponse(

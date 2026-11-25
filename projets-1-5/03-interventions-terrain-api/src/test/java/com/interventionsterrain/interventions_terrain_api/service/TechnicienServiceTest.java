@@ -38,9 +38,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F2 et résolution de l'agence via l'équipe (A-01). */
+/**
+ * Règles métier F2 et résolution de l'agence via l'équipe (A-01).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F2 et résolution de l'agence via l'équipe (A-01).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class TechnicienServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private TechnicienRepository technicienRepository;
     @Mock private EquipeRepository equipeRepository;
@@ -57,6 +67,12 @@ class TechnicienServiceTest {
 
     private TechnicienService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         TechnicienMapper mapper = new TechnicienMapper(new EquipeLookup(equipeRepository, agenceRepository));
@@ -64,6 +80,8 @@ class TechnicienServiceTest {
                 affectationRepository, obtentionRepository, competenceRepository, interventionRepository,
                 adresseRepository, clientRepository, historiqueRepository, statutRepository, mapper, clock);
     }
+
+    // ── createRefuseMatriculeDuplique() ──────────────────────────────────────
 
     @Test
     @DisplayName("Un matricule déjà utilisé est refusé avec un 409")
@@ -76,6 +94,8 @@ class TechnicienServiceTest {
                 .hasMessageContaining("matricule");
         verify(technicienRepository, never()).save(any());
     }
+
+    // ── createCreeEquipeParDefaut() ──────────────────────────────────────────
 
     @Test
     @DisplayName("Sans équipe précisée, une équipe de l'agence est créée et l'agence est déduite")
@@ -105,6 +125,8 @@ class TechnicienServiceTest {
         assertThat(response.email()).isEqualTo("camille@example.test");
     }
 
+    // ── createRefuseEquipeHorsAgence() ───────────────────────────────────────
+
     @Test
     @DisplayName("Une équipe d'une autre agence est refusée avec un 400")
     void createRefuseEquipeHorsAgence() {
@@ -116,6 +138,8 @@ class TechnicienServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("n'appartient pas");
     }
+
+    // ── updateRefuseMatriculeModifie() ───────────────────────────────────────
 
     @Test
     @DisplayName("Le matricule est figé en modification")
@@ -129,6 +153,8 @@ class TechnicienServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("ne peut pas être modifié");
     }
+
+    // ── deleteRefuseSiAffectation() ──────────────────────────────────────────
 
     @Test
     @DisplayName("La suppression est refusée si une affectation existe")
@@ -145,6 +171,13 @@ class TechnicienServiceTest {
     }
 
     /** Construit une agence avec son identifiant. */
+
+    // ── agence() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour agence().
+     */
+
     private Agence agence(Integer id, String nom) {
         Agence agence = new Agence(nom, nom, nom, null);
         ReflectionTestUtils.setField(agence, "idAgence", id);
@@ -152,6 +185,13 @@ class TechnicienServiceTest {
     }
 
     /** Construit une équipe avec son identifiant. */
+
+    // ── equipe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour equipe().
+     */
+
     private Equipe equipe(Integer id, Integer idAgence, Agence agence) {
         Equipe equipe = new Equipe("Équipe " + agence.getNom(), idAgence);
         ReflectionTestUtils.setField(equipe, "idEquipe", id);

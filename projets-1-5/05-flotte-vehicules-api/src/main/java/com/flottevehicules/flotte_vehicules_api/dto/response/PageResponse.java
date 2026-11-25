@@ -6,10 +6,11 @@ import java.util.List;
 /**
  * Enveloppe de pagination (F10).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : EntretienService.
- * NE FAIT PAS : de logique de pagination.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Enveloppe de pagination (F10).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : EntretienService.
+ * NE FAIT PAS  : de logique de pagination.
  */
 @Schema(description = "Page de résultats avecses métadonnées")
 public record PageResponse<T>(
@@ -28,4 +29,9 @@ public record PageResponse<T>(
 
         @Schema(description = "Nombre total de pages", example = "1")
         int totalPages) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

@@ -7,8 +7,9 @@ import java.util.List;
  * Enveloppe de pagination (F10).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Enveloppe de pagination (F10).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : ConsultationService.
+ * PRODUIT PAR  : ConsultationService.
  * NE FAIT PAS  : de logique métier.
  */
 @Schema(description = "Page de résultats")
@@ -18,4 +19,9 @@ public record PageResponse<T>(
         @Schema(description = "Taille de page", example = "30") int size,
         @Schema(description = "Nombre total d'éléments", example = "15") long totalElements,
         @Schema(description = "Nombre total de pages", example = "1") int totalPages) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

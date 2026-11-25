@@ -3,7 +3,13 @@ package com.flottevehicules.flotte_vehicules_api.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 
-/** Alerte d'échéance (F16) ou de conflit d'immobilisation (F12). */
+/**
+ * Alerte d'échéance (F16) ou de conflit d'immobilisation (F12).
+ *
+ * COUCHE       : DTO
+ * RÔLE         : Alerte d'échéance (F16) ou de conflit d'immobilisation (F12).
+ * NE FAIT PAS  : de logique métier ni d’accès base.
+ */
 @Schema(description = "Alerte produite par la tâche quotidienne ou lors d'un entretien")
 public record AlerteResponse(
 
@@ -42,4 +48,9 @@ public record AlerteResponse(
 
         @Schema(description = "Détail lisible", example = "Échéance dépassée")
         String detail) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

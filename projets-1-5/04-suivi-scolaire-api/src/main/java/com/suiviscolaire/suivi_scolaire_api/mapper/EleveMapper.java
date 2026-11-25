@@ -19,6 +19,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EleveMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final InscriptionRepository inscriptionRepository;
     private final ClasseRepository classeRepository;
 
@@ -29,6 +33,13 @@ public class EleveMapper {
     }
 
     /** Convertit un élève en DTO ; classe et nom de classe sont null si aucune inscription. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public EleveResponse toResponse(Eleve eleve) {
         if (eleve.getIdEleve() == null) {
             return new EleveResponse(null, eleve.getNom(), eleve.getPrenom(),

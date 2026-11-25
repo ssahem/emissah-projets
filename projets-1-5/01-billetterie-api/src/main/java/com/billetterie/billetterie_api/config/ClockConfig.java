@@ -15,6 +15,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ClockConfig {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── clock() ──────────────────────────────────────────────────────────────
 
     /** Fournit l'horloge système UTC utilisée par les services temporels. */

@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class LocataireMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit un locataire en réponse HTTP. */

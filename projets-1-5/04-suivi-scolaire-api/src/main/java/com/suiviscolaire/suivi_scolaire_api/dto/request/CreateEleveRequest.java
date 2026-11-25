@@ -9,6 +9,7 @@ import java.time.LocalDate;
  * Corps de création d'une fiche élève (F2).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une fiche élève (F2).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : EleveController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -19,4 +20,9 @@ public record CreateEleveRequest(
         @Schema(description = "Prénom", example = "Aya") @NotBlank String prenom,
         @Schema(description = "Date de naissance", example = "2011-02-14") @NotNull LocalDate dateNaissance,
         @Schema(description = "Identifiant de la classe", example = "1") @NotNull Integer idClasse) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

@@ -16,12 +16,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── openAPI() ────────────────────────────────────────────────────────────
 
     /** Construit la documentation. */
     @Bean
     public OpenAPI openAPI() {
-        // ── Étape 1/1 : métadonnées ──
+        // ── Étape 1/1 : métadonnées ──────────────────────────────────────────
         Info info = new Info()
                 .title("API de gestion locative")
                 .version("v1")

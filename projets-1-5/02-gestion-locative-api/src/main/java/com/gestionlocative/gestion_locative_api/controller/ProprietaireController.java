@@ -52,7 +52,7 @@ public class ProprietaireController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /gestion-locative/proprietaire/list ────────────────────
+    // ── list() — GET /gestion-locative/proprietaire/list ─────────────────────
 
     /** Liste les propriétaires triés par nom. Réponses : 200 | 500. */
     @Operation(summary = "Lister les propriétaires")
@@ -63,7 +63,7 @@ public class ProprietaireController {
         return proprietaireService.findAll();
     }
 
-    // ── getById() — GET /gestion-locative/proprietaire/get/{id} ─────────────
+    // ── getById() — GET /gestion-locative/proprietaire/get/{id} ──────────────
 
     /** Consulte un propriétaire. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Consulter un propriétaire")
@@ -76,7 +76,7 @@ public class ProprietaireController {
         return proprietaireService.findById(id);
     }
 
-    // ── immeubles() — GET /gestion-locative/proprietaire/immeubles/{id} ─────
+    // ── immeubles() — GET /gestion-locative/proprietaire/immeubles/{id} ──────
 
     /** Liste les immeubles avec leurs compteurs. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Lister les immeubles d'un propriétaire")
@@ -89,7 +89,7 @@ public class ProprietaireController {
         return proprietaireService.findImmeubles(id);
     }
 
-    // ── create() — POST /gestion-locative/proprietaire/create ───────────────
+    // ── create() — POST /gestion-locative/proprietaire/create ────────────────
 
     /** Crée un propriétaire. Réponses : 201 | 400 | 409 | 500. */
     @Operation(summary = "Créer un propriétaire")
@@ -106,7 +106,7 @@ public class ProprietaireController {
                 .body(created);
     }
 
-    // ── update() — PUT /gestion-locative/proprietaire/update/{id} ───────────
+    // ── update() — PUT /gestion-locative/proprietaire/update/{id} ────────────
 
     /** Modifie un propriétaire. Réponses : 200 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Modifier un propriétaire")
@@ -121,7 +121,7 @@ public class ProprietaireController {
         return proprietaireService.update(id, request);
     }
 
-    // ── delete() — DELETE /gestion-locative/proprietaire/delete/{id} ────────
+    // ── delete() — DELETE /gestion-locative/proprietaire/delete/{id} ─────────
 
     /** Supprime un propriétaire sans immeuble. Réponses : 204 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Supprimer un propriétaire")

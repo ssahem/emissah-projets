@@ -4,8 +4,9 @@ package com.interventionsterrain.interventions_terrain_api.dto.response;
  * Technicien d'une agence avec son nombre de compétences valides (F6).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Technicien d'une agence avec son nombre de compétences valides (F6).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : TechnicienEffectifService puis renvoyé par TechnicienEffectifController.
+ * PRODUIT PAR  : TechnicienEffectifService puis renvoyé par TechnicienEffectifController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record TechnicienEffectifResponse(

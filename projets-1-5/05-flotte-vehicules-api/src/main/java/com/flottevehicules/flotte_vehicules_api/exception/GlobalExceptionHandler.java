@@ -30,10 +30,21 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final String BASE = "https://api.flotte-vehicules.local/problems/";
 
     /** Traduit une erreur métier typée en Problem Detail. */
+
+    // ── handleApiException() ─────────────────────────────────────────────────
+
+    /**
+     * Exécute handleApiException().
+     */
+
     @ExceptionHandler(ApiException.class)
     public ProblemDetail handleApiException(ApiException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(ex.getStatus(), ex.getMessage());
@@ -45,6 +56,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /** Traduit une contrainte violée sur un paramètre de requête en 400 lisible. */
+
+    // ── handleConstraintViolation() ──────────────────────────────────────────
+
+    /**
+     * Exécute handleConstraintViolation().
+     */
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ProblemDetail handleConstraintViolation(ConstraintViolationException ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
@@ -60,6 +78,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /** Traduit un corps invalide en 400 en indiquant les champs en erreur. */
+
+    // ── handleMethodArgumentNotValid() ───────────────────────────────────────
+
+    /**
+     * Exécute handleMethodArgumentNotValid().
+     */
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers,
@@ -79,6 +104,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /** Traduit une violation de contrainte sans jamais exposer le message SQL. */
+
+    // ── handleIntegrityViolation() ───────────────────────────────────────────
+
+    /**
+     * Exécute handleIntegrityViolation().
+     */
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleIntegrityViolation(DataIntegrityViolationException ex) {
         String cause = String.valueOf(ex.getMostSpecificCause().getMessage()).toLowerCase(Locale.ROOT);
@@ -95,6 +127,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     /** Cache les détails techniques au client et les conserve dans les logs serveur. */
+
+    // ── handleUnexpected() ───────────────────────────────────────────────────
+
+    /**
+     * Exécute handleUnexpected().
+     */
+
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUnexpected(Exception ex) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(

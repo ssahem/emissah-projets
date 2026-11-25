@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProprietaireMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit un propriétaire en réponse HTTP. */

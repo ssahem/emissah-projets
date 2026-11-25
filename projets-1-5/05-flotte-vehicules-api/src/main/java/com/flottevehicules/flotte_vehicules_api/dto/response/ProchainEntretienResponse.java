@@ -6,10 +6,11 @@ import java.time.LocalDate;
 /**
  * Prochaine échéance d'entretien d'un véhicule (F15).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : VehiculeService.
- * NE FAIT PAS : d'accès base.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Prochaine échéance d'entretien d'un véhicule (F15).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : VehiculeService.
+ * NE FAIT PAS  : d'accès base.
  */
 @Schema(description = "Date estimée, kilométrage cible et seuil déclenchant")
 public record ProchainEntretienResponse(
@@ -37,4 +38,9 @@ public record ProchainEntretienResponse(
 
         @Schema(description = "Échéance déjà dépassée", example = "false")
         Boolean enRetard) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

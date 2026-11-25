@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Capacité insuffisante — erreur métier traduite en HTTP conflict. */
+/**
+ * Capacité insuffisante — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Capacité insuffisante — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class CapaciteInsuffisanteException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idSalle;
 
-    // ── CapaciteInsuffisanteException() ─────────────────────────────────────────────────────────────
+    // ── CapaciteInsuffisanteException() ──────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public CapaciteInsuffisanteException(Integer idSalle) {
@@ -17,7 +27,7 @@ public class CapaciteInsuffisanteException extends ApiException {
         addProperty("idSalle", idSalle);
     }
 
-    // ── getIdSalle() ───────────────────────────────────────
+    // ── getIdSalle() ─────────────────────────────────────────────────────────
 
     /** Retourne idSalle. */
     public Integer getIdSalle() { return idSalle; }

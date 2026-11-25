@@ -10,9 +10,10 @@ import java.time.LocalDate;
  * Corps de modification d'un entretien (F5) : coût et prestataire modifiables,
  * date et kilométrage figés (une valeur différente est refusée en 409).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'un entretien (F5) : coût et prestataire modifiables, date et kilométrage figés (une valeur différente est refusée en 409).
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de logique métier.
  */
 @Schema(description = "Modification du coût et du prestataire ; date et kilométrage figés")
 public record UpdateEntretienRequest(
@@ -33,4 +34,9 @@ public record UpdateEntretienRequest(
         @Schema(description = "Kilométrage inchangé, transmis pour détection d'une tentative de modification",
                 example = "19000")
         Integer km) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

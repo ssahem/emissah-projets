@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Réservation non supprimable — erreur métier traduite en HTTP conflict. */
+/**
+ * Réservation non supprimable — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Réservation non supprimable — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class ReservationNonSupprimableException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idReservation;
 
-    // ── ReservationNonSupprimableException() ─────────────────────────────────────────────────────────────
+    // ── ReservationNonSupprimableException() ─────────────────────────────────
 
     /** Construit l'erreur métier. */
     public ReservationNonSupprimableException(Integer idReservation) {
@@ -17,7 +27,7 @@ public class ReservationNonSupprimableException extends ApiException {
         addProperty("idReservation", idReservation);
     }
 
-    // ── getIdReservation() ───────────────────────────────────────
+    // ── getIdReservation() ───────────────────────────────────────────────────
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }

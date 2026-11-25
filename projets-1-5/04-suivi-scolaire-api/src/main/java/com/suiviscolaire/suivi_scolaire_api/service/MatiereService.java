@@ -29,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MatiereService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final MatiereRepository matiereRepository;
     private final EnseignementRepository enseignementRepository;
     private final TrimestreRepository trimestreRepository;
@@ -45,16 +49,37 @@ public class MatiereService {
     }
 
     /** Liste les matières triées par libellé. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<MatiereResponse> findAll() {
         return matiereRepository.findAllByOrderByLibelleAsc().stream().map(mapper::toResponse).toList();
     }
 
     /** Consulte une matière par identifiant (404 si inconnue). */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public MatiereResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** Crée une matière avec un libellé unique et un coefficient strictement positif. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public MatiereResponse create(CreateMatiereRequest request) {
         if (matiereRepository.findByLibelle(request.libelle()).isPresent()) {
@@ -66,6 +91,13 @@ public class MatiereService {
     }
 
     /** Modifie le libellé et le coefficient tant qu'aucun trimestre n'est clôturé. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public MatiereResponse update(Integer id, UpdateMatiereRequest request) {
         Matiere matiere = required(id);
@@ -84,6 +116,13 @@ public class MatiereService {
     }
 
     /** Refuse la suppression d'une matière ayant des notes ou un professeur affecté. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Matiere matiere = required(id);
@@ -95,6 +134,13 @@ public class MatiereService {
     }
 
     /** Retourne la matière ou lève une erreur métier 404. */
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     public Matiere required(Integer id) {
         return matiereRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Matiere", id));

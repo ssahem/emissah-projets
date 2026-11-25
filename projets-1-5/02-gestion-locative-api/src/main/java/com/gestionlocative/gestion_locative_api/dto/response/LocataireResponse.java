@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Locataire renvoyé par l'API (F4).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Locataire renvoyé par l'API (F4).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : LocataireMapper.
  * NE FAIT PAS  : d'accès base ni de logique métier.

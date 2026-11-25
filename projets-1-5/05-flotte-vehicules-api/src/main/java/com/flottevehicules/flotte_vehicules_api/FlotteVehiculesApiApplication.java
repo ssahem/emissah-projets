@@ -9,11 +9,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * COUCHE       : Application
  * RÔLE         : démarre le contexte Spring Boot.
  * SÉCURITÉ     : aucune authentification n'est configurée ni attendue par l'énoncé.
+ * NE FAIT PAS  : de logique applicative.
  */
 @SpringBootApplication
 public class FlotteVehiculesApiApplication {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Lance l'application. */
+
+    // ── main() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute main().
+     */
+
     public static void main(String[] args) {
         SpringApplication.run(FlotteVehiculesApiApplication.class, args);
     }

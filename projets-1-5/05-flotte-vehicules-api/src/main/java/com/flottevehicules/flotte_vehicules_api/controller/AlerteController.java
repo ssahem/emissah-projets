@@ -27,6 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Alerte", description = "Alertes d'échéance (F16) et de conflit (F12)")
 public class AlerteController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final AlerteService service;
 
     public AlerteController(AlerteService service) {
@@ -34,6 +38,13 @@ public class AlerteController {
     }
 
     /** F16 : liste des alertes persistées, avec filtre optionnel par véhicule. */
+
+    // ── list() — GET /flotte-vehicules/alerte/list ───────────────────────────
+
+    /**
+     * Lister les alertes.
+     */
+
     @GetMapping("/list")
     @Operation(summary = "Lister les alertes", description = "Consultation des alertes F12 et F16")
     @ApiResponse(responseCode = "200", description = "Liste des alertes")
@@ -42,6 +53,13 @@ public class AlerteController {
     }
 
     /** Consultation d'une alerte. */
+
+    // ── get() — GET /flotte-vehicules/alerte/{id} ────────────────────────────
+
+    /**
+     * Consulter une alerte.
+     */
+
     @GetMapping("/{id}")
     @Operation(summary = "Consulter une alerte")
     @ApiResponse(responseCode = "200", description = "Alerte trouvée")
@@ -51,6 +69,13 @@ public class AlerteController {
     }
 
     /** F16 : exécute la génération d'alertes et retourne le regroupement par site. */
+
+    // ── generer() — POST /flotte-vehicules/alerte/generer ────────────────────
+
+    /**
+     * Générer les alertes dues.
+     */
+
     @PostMapping("/generer")
     @Operation(summary = "Générer les alertes dues", description = "F16 — déclenchement manuel de la tâche nocturne")
     @ApiResponse(responseCode = "200", description = "Alertes produites par site")

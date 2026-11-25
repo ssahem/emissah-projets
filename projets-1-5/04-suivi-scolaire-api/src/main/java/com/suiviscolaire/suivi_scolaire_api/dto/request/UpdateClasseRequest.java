@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive;
  * Corps de modification d'une classe : seul l'effectif maximal est modifiable (F1).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une classe : seul l'effectif maximal est modifiable (F1).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : ClasseController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -15,4 +16,9 @@ import jakarta.validation.constraints.Positive;
 @Schema(description = "Modification d'une classe")
 public record UpdateClasseRequest(
         @Schema(description = "Nouvel effectif maximal", example = "32") @NotNull @Positive Integer effectifMax) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

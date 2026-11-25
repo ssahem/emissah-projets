@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
  * Corps de réouverture d'un trimestre (F15).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de réouverture d'un trimestre (F15).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : TrimestreController avec @Valid.
  * NE FAIT PAS  : d'authentification : l'auteur est un texte fourni par l'appelant.
@@ -19,4 +20,9 @@ public record ReouvertureRequest(
         @NotBlank @Size(min = 20) String motif,
         @Schema(description = "Auteur de la réouverture (texte libre)",
                 example = "Responsable scolarite") @NotBlank String auteur) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

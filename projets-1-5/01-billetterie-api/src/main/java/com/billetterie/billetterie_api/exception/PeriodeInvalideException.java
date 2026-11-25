@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Période invalide — erreur métier traduite en HTTP bad. */
+/**
+ * Période invalide — erreur métier traduite en HTTP bad.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Période invalide — erreur métier traduite en HTTP bad.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class PeriodeInvalideException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final String du;
 
-    // ── PeriodeInvalideException() ─────────────────────────────────────────────────────────────
+    // ── PeriodeInvalideException() ───────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public PeriodeInvalideException(String du) {
@@ -17,7 +27,7 @@ public class PeriodeInvalideException extends ApiException {
         addProperty("du", du);
     }
 
-    // ── getDu() ───────────────────────────────────────
+    // ── getDu() ──────────────────────────────────────────────────────────────
 
     /** Retourne du. */
     public String getDu() { return du; }

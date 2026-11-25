@@ -28,17 +28,30 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires de la clôture automatique des baux échus (F16).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : repositories simulés, horloge fixe au 15 juin 2026.
- * CONVENTION : Préparation → Action → Vérification.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de la clôture automatique des baux échus (F16).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : repositories simulés, horloge fixe au 15 juin 2026.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class BailClotureServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private BailRepository bailRepository;
     @Mock private HistoriqueBailRepository historiqueBailRepository;
 
     private BailClotureService service;
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
 
     @BeforeEach
     void setUp() {
@@ -46,34 +59,38 @@ class BailClotureServiceTest {
         service = new BailClotureService(bailRepository, historiqueBailRepository, horlogeFixe);
     }
 
+    // ── cloturerBauxEchus_clotureEtTrace() ───────────────────────────────────
+
     @Test
     @DisplayName("F16 — un bail échu passe TERMINE et sa clôture est tracée")
     void cloturerBauxEchus_clotureEtTrace() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Bail echu = new Bail(LocalDate.of(2026, 1, 1), LocalDate.of(2026, 5, 31),
                 BigDecimal.ZERO, BigDecimal.ZERO, 1, new BigDecimal("850.00"));
         ReflectionTestUtils.setField(echu, "idBail", 3);
         when(bailRepository.findByStatutAndDateFinBefore(
                 StatutBail.EN_COURS, LocalDate.of(2026, 6, 15))).thenReturn(List.of(echu));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         int nombre = service.cloturerBauxEchus();
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(nombre).isEqualTo(1);
         assertThat(echu.getStatut()).isEqualTo(StatutBail.TERMINE);
         assertThat(echu.getDateCloture()).isEqualTo(LocalDate.of(2026, 6, 15));
         verify(historiqueBailRepository).saveAndFlush(any(HistoriqueBail.class));
     }
 
+    // ── cloturerBauxEchus_sansEchuNEcritRien() ───────────────────────────────
+
     @Test
     @DisplayName("F16 — sans bail échu, aucune écriture n'est effectuée")
     void cloturerBauxEchus_sansEchuNEcritRien() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(bailRepository.findByStatutAndDateFinBefore(
                 StatutBail.EN_COURS, LocalDate.of(2026, 6, 15))).thenReturn(List.of());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThat(service.cloturerBauxEchus()).isZero();
         verifyNoInteractions(historiqueBailRepository);
     }

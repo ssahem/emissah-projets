@@ -15,6 +15,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class PlaceMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit une place en réponse HTTP. */

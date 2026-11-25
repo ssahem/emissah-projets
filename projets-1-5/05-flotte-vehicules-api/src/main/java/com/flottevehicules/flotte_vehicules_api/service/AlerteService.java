@@ -33,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * RÈGLE        : seuil d'alerte à moins de 1 000 km ou 30 jours de l'échéance, ou dépassement.
  * TRAÇABILITÉ  : une échéance déjà signalée n'est pas signalée une seconde fois avant
  *                entretien.
+ * RÔLE         : Alertes d'échéance d'entretien (F16) et consultation des alertes (A-02).
  * NE FAIT PAS  : de HTTP ni d'écriture dans les vues.
  */
 @Service
@@ -61,6 +62,13 @@ public class AlerteService {
     }
 
     /** Tâche nocturne F16 : génère les alertes ; l'expression cron vient de la configuration. */
+
+    // ── tacheQuotidienne() ───────────────────────────────────────────────────
+
+    /**
+     * Exécute tacheQuotidienne().
+     */
+
     @Scheduled(cron = "${flotte-vehicules.alertes-entretiens.cron}")
     @Transactional
     public void tacheQuotidienne() {
@@ -70,6 +78,13 @@ public class AlerteService {
     }
 
     /** F16 : génère les alertes manquantes et les regroupe par site. */
+
+    // ── genererAlertes() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute genererAlertes().
+     */
+
     @Transactional
     public List<AlertesParSiteResponse> genererAlertes() {
         LocalDate aujourdHui = LocalDate.now(clock);
@@ -100,6 +115,13 @@ public class AlerteService {
     }
 
     /** Consultation des alertes persistées, toutes ou filtrées par véhicule. */
+
+    // ── lister() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute lister().
+     */
+
     public List<AlerteResponse> lister(Integer idVehicule) {
         return (idVehicule == null
                 ? alerteRepository.findAllByOrderByDateAlerteDescIdAlerteDesc()
@@ -109,6 +131,13 @@ public class AlerteService {
     }
 
     /** Consultation d'une alerte par identifiant. */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public AlerteResponse findById(Integer id) {
         AlerteVehicule alerte = alerteRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Alerte", id));
@@ -119,6 +148,12 @@ public class AlerteService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── doitAlerter() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute doitAlerter().
+     */
+
     private boolean doitAlerter(VueRepository.EcheanceRow echeance, LocalDate aujourdHui) {
         if (echeance.dateProchaine() == null) {
             return false;
@@ -126,6 +161,12 @@ public class AlerteService {
         return echeance.kmActuel() >= echeance.kmProchain() - SEUIL_KM
                 || !echeance.dateProchaine().isAfter(aujourdHui.plusDays(SEUIL_JOURS));
     }
+
+    // ── alertesParSite() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute alertesParSite().
+     */
 
     private List<AlertesParSiteResponse> alertesParSite() {
         Map<Integer, List<AlerteResponse>> groupes = new TreeMap<>();
@@ -146,6 +187,12 @@ public class AlerteService {
         }
         return resultat;
     }
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
 
     private AlerteResponse toResponse(AlerteVehicule alerte) {
         Vehicule vehicule = vehiculeRepository.findById(alerte.getIdVehicule()).orElse(null);

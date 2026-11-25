@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive;
  * Corps d'ajout d'un technicien à une intervention (A-02).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps d'ajout d'un technicien à une intervention (A-02).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : AddAffectationController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.
@@ -27,6 +28,13 @@ public record AddAffectationRequest(
     Boolean estResponsable) {
 
     /** Le défaut est un technicien non responsable. */
+
+    // ── responsable() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute responsable().
+     */
+
     public boolean responsable() {
         return Boolean.TRUE.equals(estResponsable);
     }

@@ -18,14 +18,21 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 /**
  * Vérification des données de démonstration chargées par le profil "dev".
  *
- * TYPE       : Intégration (Testcontainers PostgreSQL)
- * STRATÉGIE  : migrations V1 à V7 plus V8 de db/dev, sur une base vierge.
- * CONVENTION : Préparation → Action → Vérification.
+ * COUCHE       : Service
+ * RÔLE         : Vérification des données de démonstration chargées par le profil "dev".
+ * TYPE         : Intégration (Testcontainers PostgreSQL)
+ * STRATÉGIE    : migrations V1 à V7 plus V8 de db/dev, sur une base vierge.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("dev")
 class DemoDataIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
@@ -34,6 +41,13 @@ class DemoDataIntegrationTest {
             .withPassword("root");
 
     /** Fournit une base PostgreSQL vierge à Spring. */
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
+
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
@@ -42,12 +56,14 @@ class DemoDataIntegrationTest {
         registry.add("spring.datasource.driver-class-name", POSTGRES::getDriverClassName);
     }
 
+    // ── donneesDemo() ────────────────────────────────────────────────────────
+
     @Autowired private JdbcTemplate jdbcTemplate;
 
     @Test
     @DisplayName("Le profil dev applique V8 et fournit un type avec ses compétences requises")
     void donneesDemo() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<String> versions = jdbcTemplate.queryForList(
                 "SELECT version FROM flyway_schema_history WHERE success = true ORDER BY installed_rank",
                 String.class);
@@ -58,7 +74,7 @@ class DemoDataIntegrationTest {
                         + "WHERE t.code = 'RACCORDEMENT_FIBRE'", Integer.class);
         Integer techniciens = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM technicien", Integer.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(versions).containsExactly("1", "2", "3", "4", "5", "6", "7", "8");
         assertThat(codes).containsExactly("RACCORDEMENT_FIBRE");
         assertThat(exigences).isEqualTo(2);

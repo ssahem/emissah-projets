@@ -18,6 +18,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EvenementMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final Clock clock;
 
     public EvenementMapper(Clock clock) {

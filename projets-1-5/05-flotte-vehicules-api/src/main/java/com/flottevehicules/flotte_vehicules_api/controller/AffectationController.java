@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * COUCHE       : Controller (interface HTTP)
  * URL          : /flotte-vehicules/affectation/... — action dans le chemin.
+ * RÔLE         : Endpoints des affectations : CRUD (F4), anti-chevauchement (F11), immobilisation (F12) et restitution (F13).
  * SÉCURITÉ     : aucune.
  * NE FAIT PAS  : de logique métier.
  */
@@ -35,6 +36,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Affectation", description = "Affectations, conflits et restitutions")
 public class AffectationController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final AffectationService service;
 
     public AffectationController(AffectationService service) {
@@ -42,6 +47,13 @@ public class AffectationController {
     }
 
     /** F4, F11 et F12 : crée une affectation si le véhicule est libre. */
+
+    // ── create() — POST /flotte-vehicules/affectation/create ─────────────────
+
+    /**
+     * Créer une affectation.
+     */
+
     @PostMapping("/create")
     @Operation(summary = "Créer une affectation",
             description = "F4, F11 et F12 — refuse le chevauchement ou l'immobilisation")
@@ -56,6 +68,13 @@ public class AffectationController {
     }
 
     /** F4 : liste triée par date de début décroissante. */
+
+    // ── list() — GET /flotte-vehicules/affectation/list ──────────────────────
+
+    /**
+     * Lister les affectations.
+     */
+
     @GetMapping("/list")
     @Operation(summary = "Lister les affectations")
     @ApiResponse(responseCode = "200", description = "Liste des affectations")
@@ -64,6 +83,13 @@ public class AffectationController {
     }
 
     /** F4 : détail d'une affectation. */
+
+    // ── get() — GET /flotte-vehicules/affectation/{id} ───────────────────────
+
+    /**
+     * Consulter une affectation.
+     */
+
     @GetMapping("/{id}")
     @Operation(summary = "Consulter une affectation")
     @ApiResponse(responseCode = "200", description = "Affectation trouvée")
@@ -73,6 +99,13 @@ public class AffectationController {
     }
 
     /** F4 : modifie la date de fin, et les parties avant le début. */
+
+    // ── update() — PUT /flotte-vehicules/affectation/{id}/update ─────────────
+
+    /**
+     * Modifier une affectation.
+     */
+
     @PutMapping("/{id}/update")
     @Operation(summary = "Modifier une affectation", description = "Véhicule et salarié figés après le début")
     @ApiResponse(responseCode = "200", description = "Affectation modifiée")
@@ -83,6 +116,13 @@ public class AffectationController {
     }
 
     /** F4 : supprime une affectation qui n'a pas commencé. */
+
+    // ── delete() — DELETE /flotte-vehicules/affectation/{id}/delete ──────────
+
+    /**
+     * Supprimer une affectation.
+     */
+
     @DeleteMapping("/{id}/delete")
     @Operation(summary = "Supprimer une affectation", description = "Possible uniquement avant le début")
     @ApiResponse(responseCode = "204", description = "Affectation supprimée")
@@ -93,6 +133,13 @@ public class AffectationController {
     }
 
     /** F13 et F14 : clôture l'affectation avec date et kilométrage. */
+
+    // ── restitution() — POST /flotte-vehicules/affectation/{id}/restitution ──
+
+    /**
+     * Restituer un véhicule.
+     */
+
     @PostMapping("/{id}/restitution")
     @Operation(summary = "Restituer un véhicule", description = "F13 et F14 — date valide et compteur croissant")
     @ApiResponse(responseCode = "200", description = "Affectation clôturée")

@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Appartement renvoyé par l'API (F3).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Appartement renvoyé par l'API (F3).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : AppartementMapper.
  * NE FAIT PAS  : d'accès base ni de logique métier.

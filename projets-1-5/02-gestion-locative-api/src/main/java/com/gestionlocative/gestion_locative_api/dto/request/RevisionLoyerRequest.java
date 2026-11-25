@@ -10,6 +10,7 @@ import java.time.LocalDate;
  * Corps d'une révision de loyer (F15).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps d'une révision de loyer (F15).
  * IMMUABLE     : record Java.
  * Le montant doit être strictement positif ; la date d'effet doit être
  * postérieure à la dernière révision et comprise dans la période du bail.

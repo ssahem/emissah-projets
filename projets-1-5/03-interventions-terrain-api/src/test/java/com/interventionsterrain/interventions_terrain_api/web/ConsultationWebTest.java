@@ -30,10 +30,20 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-/** Codes de réponse HTTP et paramètres des consultations F6 à F10. */
+/**
+ * Codes de réponse HTTP et paramètres des consultations F6 à F10.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Codes de réponse HTTP et paramètres des consultations F6 à F10.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @WebMvcTest
 @Import(GlobalExceptionHandler.class)
 class ConsultationWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Autowired private MockMvc mockMvc;
 
@@ -42,6 +52,9 @@ class ConsultationWebTest {
     @MockitoBean private CompetenceService competenceService;
     @MockitoBean private ClientService clientService;
     @MockitoBean private InterventionService interventionService;
+
+    // ── f6Effectif() ─────────────────────────────────────────────────────────
+
     @MockitoBean private RestitutionService restitutionService;
 
     @Test
@@ -56,6 +69,8 @@ class ConsultationWebTest {
                 .andExpect(jsonPath("$[0].nbCompetencesValides").value(2));
     }
 
+    // ── f7Competences() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F7 : GET technicien/competences/{id} signale les compétences expirées")
     void f7Competences() throws Exception {
@@ -67,6 +82,8 @@ class ConsultationWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].expiree").value(true));
     }
+
+    // ── f8Historique() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F8 : GET client/interventions/{id} renvoie l'historique")
@@ -80,6 +97,8 @@ class ConsultationWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].statut").value("TERMINEE"));
     }
+
+    // ── f9Filtres() ──────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F9 : GET intervention/list transmet les filtres au service")
@@ -100,6 +119,8 @@ class ConsultationWebTest {
                 LocalDate.of(2026, 12, 1), LocalDate.of(2026, 12, 7));
     }
 
+    // ── f9StatutInconnu() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F9 : un statut inconnu renvoie 400 en Problem Details")
     void f9StatutInconnu() throws Exception {
@@ -111,6 +132,8 @@ class ConsultationWebTest {
                 .andExpect(jsonPath("$.type").value(
                         "https://api.interventions-terrain.local/problems/statut-inconnu"));
     }
+
+    // ── f10Planning() ────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F10 : GET technicien/planning/{id} accepte une période explicite")

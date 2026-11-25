@@ -16,6 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ClasseMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final InscriptionRepository inscriptionRepository;
 
     /** Spring injecte le dépôt d'inscriptions pour l'effectif courant. */
@@ -24,6 +28,13 @@ public class ClasseMapper {
     }
 
     /** Convertit une classe en DTO avec son effectif actuel (F1, F6). */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public ClasseResponse toResponse(Classe classe) {
         long effectif = classe.getIdClasse() == null ? 0
                 : inscriptionRepository.countByIdClasseAndDateFinIsNull(classe.getIdClasse());

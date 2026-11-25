@@ -16,6 +16,10 @@ import org.springframework.http.HttpStatus;
  */
 public abstract class ApiException extends RuntimeException {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final String BASE = "https://api.flotte-vehicules.local/problems/";
 
     private final HttpStatus status;
@@ -43,5 +47,12 @@ public abstract class ApiException extends RuntimeException {
     public Map<String, Object> getProperties() { return Map.copyOf(properties); }
 
     /** Ajoute une donnée complémentaire au problème. */
+
+    // ── addProperty() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute addProperty().
+     */
+
     protected void addProperty(String key, Object value) { properties.put(key, value); }
 }

@@ -6,10 +6,11 @@ import java.time.LocalDate;
 /**
  * DTO de sortie d'une affectation (F4).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : AffectationMapper.
- * NE FAIT PAS : d'accès base ni de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : DTO de sortie d'une affectation (F4).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : AffectationMapper.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 @Schema(description = "Affectation d'un véhicule à un salarié")
 public record AffectationResponse(
@@ -40,4 +41,9 @@ public record AffectationResponse(
 
         @Schema(description = "Affectation en cours à la date du jour", example = "true")
         Boolean enCours) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

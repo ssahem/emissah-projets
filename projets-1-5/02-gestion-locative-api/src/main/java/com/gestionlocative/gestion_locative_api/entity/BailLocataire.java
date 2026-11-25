@@ -30,13 +30,13 @@ public class BailLocataire {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── BailLocataire() ────────────────────────────────────────────────────
+    // ── BailLocataire() ──────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected BailLocataire() {
     }
 
-    // ── BailLocataire(Integer, Integer) ────────────────────────────────────
+    // ── BailLocataire(Integer, Integer) ──────────────────────────────────────
 
     /** Crée la liaison pour le locataire principal d'un bail. */
     public BailLocataire(Integer idBail, Integer idLocataire) {

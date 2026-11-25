@@ -37,9 +37,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Tests unitaires de F1, F6 et F19. */
+/**
+ * Tests unitaires de F1, F6 et F19.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de F1, F6 et F19.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class SiteServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.parse("2026-11-24");
 
@@ -51,6 +61,12 @@ class SiteServiceTest {
 
     private SiteService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock clock = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -58,11 +74,23 @@ class SiteServiceTest {
                 entretienRepository, vueRepository, new SiteMapper(), clock);
     }
 
+    // ── site() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour site().
+     */
+
     private Site site(Integer id, String nom, String ville) {
         Site site = new Site(nom, ville, "1 rue de Paris");
         ReflectionTestUtils.setField(site, "idSite", id);
         return site;
     }
+
+    // ── vehicule() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour vehicule().
+     */
 
     private Vehicule vehicule(Integer id) {
         Vehicule vehicule = new Vehicule("AB-123-CD", "Peugeot", "308",
@@ -70,6 +98,8 @@ class SiteServiceTest {
         ReflectionTestUtils.setField(vehicule, "idVehicule", id);
         return vehicule;
     }
+
+    // ── findAllTriee() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F1 : la liste est triée par ville puis par nom")
@@ -82,6 +112,8 @@ class SiteServiceTest {
         assertThat(resultat).extracting("ville").containsExactly("Paris", "Lyon");
     }
 
+    // ── findByIdPresent() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F1 : un site existant est retourné")
     void findByIdPresent() {
@@ -89,6 +121,8 @@ class SiteServiceTest {
 
         assertThat(service.findById(1).nom()).isEqualTo("Paris Centre");
     }
+
+    // ── findByIdAbsent() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F1 : un identifiant inconnu renvoie 404")
@@ -98,6 +132,8 @@ class SiteServiceTest {
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── createOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F1 : la création enregistre un site avec sa ville")
@@ -115,6 +151,8 @@ class SiteServiceTest {
         assertThat(resultat.ville()).isEqualTo("Nantes");
     }
 
+    // ── createDoublon() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F1 : un nom déjà utilisé est refusé en 409")
     void createDoublon() {
@@ -125,6 +163,8 @@ class SiteServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
         verify(siteRepository, never()).save(any());
     }
+
+    // ── updateOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F1 : la modification touche adresse et ville")
@@ -140,6 +180,8 @@ class SiteServiceTest {
         assertThat(resultat.nom()).isEqualTo("Paris Centre");
     }
 
+    // ── deleteOk() ───────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F1 : la suppression est autorisée sans véhicule")
     void deleteOk() {
@@ -151,6 +193,8 @@ class SiteServiceTest {
         verify(siteRepository).delete(site);
     }
 
+    // ── deleteAvecVehicules() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F1 : la suppression est refusée si le site a des véhicules")
     void deleteAvecVehicules() {
@@ -161,6 +205,8 @@ class SiteServiceTest {
         assertThatThrownBy(() -> service.delete(1)).isInstanceOf(ConflitMetierException.class);
         verify(siteRepository, never()).delete(any());
     }
+
+    // ── vehiculesLibre() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F6 : un véhicule libre est signalé LIBRE")
@@ -176,6 +222,8 @@ class SiteServiceTest {
         assertThat(service.vehicules(1).get(0).etatAffectation()).isEqualTo("LIBRE");
     }
 
+    // ── vehiculesAffecte() ───────────────────────────────────────────────────
+
     @Test
     @DisplayName("F6 : un véhicule affecté est signalé AFFECTE")
     void vehiculesAffecte() {
@@ -190,6 +238,8 @@ class SiteServiceTest {
         assertThat(service.vehicules(1).get(0).etatAffectation()).isEqualTo("AFFECTE");
     }
 
+    // ── vehiculesImmobilise() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F6 : l'immobilisation prend le pas sur l'affectation")
     void vehiculesImmobilise() {
@@ -203,6 +253,8 @@ class SiteServiceTest {
         assertThat(service.vehicules(1).get(0).etatAffectation()).isEqualTo("IMMOBILISE");
         verify(affectationRepository, never()).findChevauchements(1, AUJOURD_HUI, AUJOURD_HUI);
     }
+
+    // ── kilometrageTotal() ───────────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : le kilométrage total est la somme des relevés du mois")
@@ -219,6 +271,8 @@ class SiteServiceTest {
         assertThat(resultat.vehicules()).hasSize(2);
         assertThat(resultat.mois()).isEqualTo("2026-11");
     }
+
+    // ── kilometrageMoisInvalide() ────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : un mois invalide est refusé en 400")

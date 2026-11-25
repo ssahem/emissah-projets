@@ -70,6 +70,13 @@ public class Classe {
     public Integer getEffectifMax() { return effectifMax; }
 
     /** Modifie la capacité d'accueil (contrôle de non-réduction fait par le service). */
+
+    // ── modifierEffectifMax() ────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierEffectifMax().
+     */
+
     public void modifierEffectifMax(Integer effectifMax) {
         this.effectifMax = Objects.requireNonNull(effectifMax, "effectifMax");
     }

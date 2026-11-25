@@ -7,8 +7,9 @@ import java.util.List;
  * Taux de réussite mensuel d'une agence, global et par type (F19).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Taux de réussite mensuel d'une agence, global et par type (F19).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : TauxReussiteService puis renvoyé par TauxReussiteController.
+ * PRODUIT PAR  : TauxReussiteService puis renvoyé par TauxReussiteController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record TauxReussiteResponse(

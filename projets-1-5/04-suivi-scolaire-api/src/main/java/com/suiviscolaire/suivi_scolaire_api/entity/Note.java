@@ -81,5 +81,12 @@ public class Note {
     public String getNumeroInscription() { return numeroInscription; }
 
     /** Modifie la valeur ; l'élève, la matière et le trimestre restent figés (F5). */
+
+    // ── modifierValeur() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierValeur().
+     */
+
     public void modifierValeur(BigDecimal valeur) { this.valeur = Objects.requireNonNull(valeur, "valeur"); }
 }

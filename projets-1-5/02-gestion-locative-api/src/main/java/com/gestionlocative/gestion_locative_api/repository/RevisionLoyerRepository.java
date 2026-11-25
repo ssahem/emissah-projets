@@ -19,22 +19,22 @@ public interface RevisionLoyerRepository extends JpaRepository<RevisionLoyer, In
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByIdBailOrderByDateEffetDesc() ─────────────────────────────────
+    // ── findByIdBailOrderByDateEffetDesc() ───────────────────────────────────
 
     /** Retourne les révisions d'un bail, de la plus récente à la plus ancienne. */
     List<RevisionLoyer> findByIdBailOrderByDateEffetDesc(Integer idBail);
 
-    // ── findByIdBailOrderByDateEffetAsc() ───────────────────────────────────
+    // ── findByIdBailOrderByDateEffetAsc() ────────────────────────────────────
 
     /** Retourne les paliers de loyer dans l'ordre chronologique (F18, F19). */
     List<RevisionLoyer> findByIdBailOrderByDateEffetAsc(Integer idBail);
 
-    // ── existsByIdBailAndDateEffet() ────────────────────────────────────────
+    // ── existsByIdBailAndDateEffet() ─────────────────────────────────────────
 
     /** Vrai si une révision existe déjà à cette date pour ce bail (F15). */
     boolean existsByIdBailAndDateEffet(Integer idBail, LocalDate dateEffet);
 
-    // ── deleteByIdBail() ────────────────────────────────────────────────────
+    // ── deleteByIdBail() ─────────────────────────────────────────────────────
 
     /** Supprime les révisions d'un bail avant sa suppression (F5). */
     void deleteByIdBail(Integer idBail);

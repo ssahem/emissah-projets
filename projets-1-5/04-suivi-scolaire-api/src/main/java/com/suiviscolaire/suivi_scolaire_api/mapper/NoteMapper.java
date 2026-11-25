@@ -29,6 +29,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class NoteMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final InscriptionRepository inscriptionRepository;
     private final EnseignementRepository enseignementRepository;
     private final MatiereRepository matiereRepository;
@@ -52,6 +56,13 @@ public class NoteMapper {
     }
 
     /** Convertit une note en DTO ; la date affichée est le début du trimestre (A-03). */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public NoteResponse toResponse(Note note) {
         Inscription inscription = inscriptionRepository.findByNumeroInscription(note.getNumeroInscription())
                 .orElse(null);

@@ -40,27 +40,62 @@ public class VueRepository {
     private final JdbcTemplate jdbcTemplate;
 
     /** Ligne de la vue v_echeance_entretien. */
+
+    // ── EcheanceRow() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute EcheanceRow().
+     */
+
     public record EcheanceRow(Integer idVehicule, Integer idTypeEntretien, String libelle,
                               LocalDate dateDernier, Integer kmDernier, Integer kmProchain,
                               LocalDate dateProchaine, Integer kmActuel, boolean enRetard) {
     }
 
     /** Ligne de la vue v_bilan_vehicule. */
+
+    // ── BilanRow() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute BilanRow().
+     */
+
     public record BilanRow(Integer idVehicule, String immatriculation, BigDecimal coutTotal,
                            Integer ageAnnees, Integer kmCompteurActuel, BigDecimal coutAuKm) {
     }
 
     /** Ligne de la vue v_cout_total_vehicule. */
+
+    // ── CoutRow() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute CoutRow().
+     */
+
     public record CoutRow(Integer idVehicule, String immatriculation, BigDecimal coutAchat,
                           BigDecimal coutContrats, BigDecimal coutEntretiens,
                           BigDecimal coutDepenses, BigDecimal coutTotal) {
     }
 
     /** Dernier kilométrage connu d'un véhicule et date de sa relevée (F14). */
+
+    // ── DernierKm() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute DernierKm().
+     */
+
     public record DernierKm(Integer km, LocalDate date) {
     }
 
     /** Relevé de restitution agrégé par véhicule sur un mois (F19). */
+
+    // ── KilometrageRow() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute KilometrageRow().
+     */
+
     public record KilometrageRow(Integer idVehicule, String immatriculation, Integer km) {
     }
 
@@ -219,6 +254,12 @@ public class VueRepository {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── mapEcheance() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute mapEcheance().
+     */
+
     private static EcheanceRow mapEcheance(ResultSet rs, int rowNum) throws SQLException {
         return new EcheanceRow(
                 rs.getInt("id_vehicule"),
@@ -232,6 +273,12 @@ public class VueRepository {
                 rs.getBoolean("en_retard"));
     }
 
+    // ── mapBilan() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute mapBilan().
+     */
+
     private static BilanRow mapBilan(ResultSet rs) throws SQLException {
         return new BilanRow(
                 rs.getInt("id_vehicule"),
@@ -241,6 +288,12 @@ public class VueRepository {
                 (Integer) rs.getObject("km_compteur_actuel"),
                 rs.getBigDecimal("cout_au_km"));
     }
+
+    // ── mapCout() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute mapCout().
+     */
 
     private static CoutRow mapCout(ResultSet rs) throws SQLException {
         return new CoutRow(
@@ -252,6 +305,12 @@ public class VueRepository {
                 rs.getBigDecimal("cout_depenses"),
                 rs.getBigDecimal("cout_total"));
     }
+
+    // ── toLocalDate() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toLocalDate().
+     */
 
     private static LocalDate toLocalDate(ResultSet rs, String colonne) throws SQLException {
         Date date = rs.getDate(colonne);

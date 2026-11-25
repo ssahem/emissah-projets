@@ -78,13 +78,13 @@ public class Bail {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Bail() ─────────────────────────────────────────────────────────────
+    // ── Bail() ───────────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Bail() {
     }
 
-    // ── Bail(LocalDate, LocalDate, BigDecimal, BigDecimal, Integer, BigDecimal) ──
+    // ── Bail(LocalDate, LocalDate, BigDecimal, BigDecimal, Integer, BigDeci… ─
 
     /** Crée un bail au statut initial EN_COURS. */
     public Bail(LocalDate dateDebut, LocalDate dateFin, BigDecimal provisionCharges,
@@ -132,7 +132,7 @@ public class Bail {
     /** Retourne la date de clôture, éventuellement nulle. */
     public LocalDate getDateCloture() { return dateCloture; }
 
-    // ── modifierAvantDebut() ────────────────────────────────────────────────
+    // ── modifierAvantDebut() ─────────────────────────────────────────────────
 
     /** Modifie loyer et date de fin avant le début du bail (F5). */
     public void modifierAvantDebut(BigDecimal loyerMensuel, LocalDate dateFin) {
@@ -140,7 +140,7 @@ public class Bail {
         this.dateFin = dateFin;
     }
 
-    // ── modifierDateFin() ───────────────────────────────────────────────────
+    // ── modifierDateFin() ────────────────────────────────────────────────────
 
     /** Modifie la date de fin après le début du bail (F5). */
     public void modifierDateFin(LocalDate dateFin) {
@@ -151,7 +151,7 @@ public class Bail {
     //  TRANSITIONS DU CYCLE DE VIE (F13–F16)
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── resilier() ──────────────────────────────────────────────────────────
+    // ── resilier() ───────────────────────────────────────────────────────────
 
     /**
      * Résilie le bail à la date d'effet : la fin est ramenée à cette date (F13).
@@ -163,7 +163,7 @@ public class Bail {
         this.dateFin = dateEffet;
     }
 
-    // ── renouveler() ────────────────────────────────────────────────────────
+    // ── renouveler() ─────────────────────────────────────────────────────────
 
     /** Prolonge l'échéance ; un bail clôturé redevient actif (F14). */
     public void renouveler(LocalDate nouvelleDateFin) {
@@ -174,7 +174,7 @@ public class Bail {
         }
     }
 
-    // ── cloturer() ──────────────────────────────────────────────────────────
+    // ── cloturer() ───────────────────────────────────────────────────────────
 
     /** Clôture un bail échu sans modifier sa date de fin (F16). */
     public void cloturer(LocalDate dateCloture) {
@@ -182,7 +182,7 @@ public class Bail {
         this.dateCloture = Objects.requireNonNull(dateCloture, "dateCloture");
     }
 
-    // ── appliquerLoyer() ────────────────────────────────────────────────────
+    // ── appliquerLoyer() ─────────────────────────────────────────────────────
 
     /** Remplace le loyer courant après une révision (F15). */
     public void appliquerLoyer(BigDecimal montant) {
@@ -193,7 +193,7 @@ public class Bail {
     //  ÉTAT À UNE DATE DONNÉE
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── estEnCoursLe() ──────────────────────────────────────────────────────
+    // ── estEnCoursLe() ───────────────────────────────────────────────────────
 
     /**
      * Vrai si le bail occupe effectivement l'appartement à la date donnée (F6, F8).
@@ -205,14 +205,14 @@ public class Bail {
                 && (dateFin == null || !dateFin.isBefore(date));
     }
 
-    // ── estFuturLe() ────────────────────────────────────────────────────────
+    // ── estFuturLe() ─────────────────────────────────────────────────────────
 
     /** Vrai si le bail est prévu mais n'a pas encore commencé à la date donnée (F6). */
     public boolean estFuturLe(LocalDate date) {
         return statut == StatutBail.EN_COURS && dateDebut.isAfter(date);
     }
 
-    // ── contient() ──────────────────────────────────────────────────────────
+    // ── contient() ───────────────────────────────────────────────────────────
 
     /**
      * Vrai si la date appartient à la période contractuelle, indépendamment

@@ -73,15 +73,34 @@ public class AgenceService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<AgenceResponse> findAll() {
         return agenceRepository.findAllByOrderByVilleAscNomAsc().stream().map(mapper::toResponse).toList();
     }
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
 
     public AgenceResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F6 : les techniciens de l'agence via equipe.id_agence, triés par nom, avec leurs compétences valides. */
+
+    // ── findTechniciens() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute findTechniciens().
+     */
+
     public List<TechnicienEffectifResponse> findTechniciens(Integer id) {
         required(id);
         List<Integer> idsEquipe = equipeRepository.findAllByIdAgence(id).stream()
@@ -97,6 +116,12 @@ public class AgenceService {
                 .toList();
     }
 
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public AgenceResponse create(CreateAgenceRequest request) {
         if (agenceRepository.findByNom(request.nom()).isPresent()) {
@@ -109,6 +134,12 @@ public class AgenceService {
                 new Agence(request.nom(), adresse, request.ville(), request.responsable()));
         return mapper.toResponse(agence);
     }
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
 
     @Transactional
     public AgenceResponse update(Integer id, UpdateAgenceRequest request) {
@@ -128,6 +159,12 @@ public class AgenceService {
         return mapper.toResponse(agence);
     }
 
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Agence agence = required(id);
@@ -141,6 +178,12 @@ public class AgenceService {
     // ═════════════════════════════════════════════════════════════════════════
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Agence required(Integer id) {
         return agenceRepository.findById(id)

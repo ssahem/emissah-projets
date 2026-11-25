@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Salle non supprimable — erreur métier traduite en HTTP conflict. */
+/**
+ * Salle non supprimable — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Salle non supprimable — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class SalleNonSupprimableException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idSalle;
 
-    // ── SalleNonSupprimableException() ─────────────────────────────────────────────────────────────
+    // ── SalleNonSupprimableException() ───────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public SalleNonSupprimableException(Integer idSalle) {
@@ -17,7 +27,7 @@ public class SalleNonSupprimableException extends ApiException {
         addProperty("idSalle", idSalle);
     }
 
-    // ── getIdSalle() ───────────────────────────────────────
+    // ── getIdSalle() ─────────────────────────────────────────────────────────
 
     /** Retourne idSalle. */
     public Integer getIdSalle() { return idSalle; }

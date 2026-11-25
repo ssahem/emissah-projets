@@ -14,7 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class MatiereMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Convertit une matière en DTO. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public MatiereResponse toResponse(Matiere matiere) {
         return new MatiereResponse(matiere.getIdMatiere(), matiere.getLibelle(),
                 matiere.getCode(), matiere.getCoefficient());

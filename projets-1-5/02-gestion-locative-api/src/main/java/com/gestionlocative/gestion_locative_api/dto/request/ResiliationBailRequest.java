@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * Corps d'une résiliation anticipée (F13).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps d'une résiliation anticipée (F13).
  * IMMUABLE     : record Java.
  * La date d'effet doit être comprise dans la période du bail et ne pas être
  * antérieure à aujourd'hui ; ces règles sont vérifiées par le service.

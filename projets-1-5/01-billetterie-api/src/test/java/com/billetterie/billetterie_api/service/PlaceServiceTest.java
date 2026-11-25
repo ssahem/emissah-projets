@@ -33,13 +33,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires du CRUD des places (F2).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : repositories simulés, mapper réel.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires du CRUD des places (F2).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : repositories simulés, mapper réel.
  * CAS COUVERTS : doublon, capacité, salle/catégorie inconnue, position figée, suppression refusée.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class PlaceServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private PlaceRepository placeRepository;
     @Mock private SalleRepository salleRepository;
@@ -48,11 +55,23 @@ class PlaceServiceTest {
 
     private PlaceService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new PlaceService(placeRepository, salleRepository, categorieRepository,
                 reservationPlaceRepository, new PlaceMapper());
     }
+
+    // ── salle() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour salle().
+     */
 
     private Salle salle(int capacite) {
         Salle salle = new Salle("Grand Hall", "12 rue des Arts", "Abidjan", capacite);
@@ -60,69 +79,91 @@ class PlaceServiceTest {
         return salle;
     }
 
+    // ── createRequest() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour createRequest().
+     */
+
     private CreatePlaceRequest createRequest() {
         return new CreatePlaceRequest(1, "A", 13, "ORCHESTRE");
     }
+
+    // ── updateRequest() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour updateRequest().
+     */
 
     private UpdatePlaceRequest updateRequest() {
         return new UpdatePlaceRequest(1, "A", 13, "ORCHESTRE");
     }
 
+    // ── create_throwsWhenDoublon() ───────────────────────────────────────────
+
     @Test
     @DisplayName("La création refuse une position déjà utilisée dans la salle")
     void create_throwsWhenDoublon() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.of(salle(120)));
         when(categorieRepository.findByLibelleIgnoreCase("ORCHESTRE"))
                 .thenReturn(Optional.of(new Categorie("ORCHESTRE")));
         when(placeRepository.existsBySalle_IdSalleAndRangAndNumero(1, "A", 13)).thenReturn(true);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(createRequest()))
                 .isInstanceOf(PlaceDejaExistanteException.class);
     }
 
+    // ── create_throwsWhenCapaciteAtteinte() ──────────────────────────────────
+
     @Test
     @DisplayName("La création refuse de dépasser la capacité de la salle")
     void create_throwsWhenCapaciteAtteinte() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.of(salle(1)));
         when(categorieRepository.findByLibelleIgnoreCase("ORCHESTRE"))
                 .thenReturn(Optional.of(new Categorie("ORCHESTRE")));
         when(placeRepository.countBySalle_IdSalle(1)).thenReturn(1L);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(createRequest()))
                 .isInstanceOf(CapaciteInsuffisanteException.class);
     }
 
+    // ── create_throwsWhenSalleInconnue() ─────────────────────────────────────
+
     @Test
     @DisplayName("La création refuse une salle inconnue")
     void create_throwsWhenSalleInconnue() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.empty());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(createRequest()))
                 .isInstanceOf(SalleNotFoundException.class);
     }
 
+    // ── create_throwsWhenCategorieInconnue() ─────────────────────────────────
+
     @Test
     @DisplayName("La création refuse une catégorie inconnue")
     void create_throwsWhenCategorieInconnue() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.of(salle(120)));
         when(categorieRepository.findByLibelleIgnoreCase("ORCHESTRE")).thenReturn(Optional.empty());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(createRequest()))
                 .isInstanceOf(CategorieInconnueException.class);
     }
 
+    // ── create_returnsPlace() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("La création renvoie la place enregistrée")
     void create_returnsPlace() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Salle salle = salle(120);
         when(salleRepository.findById(1)).thenReturn(Optional.of(salle));
         when(categorieRepository.findByLibelleIgnoreCase("ORCHESTRE"))
@@ -134,10 +175,10 @@ class PlaceServiceTest {
                     return place;
                 });
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         PlaceResponse resultat = service.create(createRequest());
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.idPlace()).isEqualTo(5);
         assertThat(resultat.idSalle()).isEqualTo(1);
         assertThat(resultat.rang()).isEqualTo("A");
@@ -145,10 +186,12 @@ class PlaceServiceTest {
         assertThat(resultat.categorie()).isEqualTo("ORCHESTRE");
     }
 
+    // ── update_throwsWhenPlaceReservee() ─────────────────────────────────────
+
     @Test
     @DisplayName("La position d'une place réservée est figée")
     void update_throwsWhenPlaceReservee() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Place place = new Place("A", 12, salle(120), new Categorie("ORCHESTRE"));
         when(placeRepository.findById(1)).thenReturn(Optional.of(place));
         when(salleRepository.findById(1)).thenReturn(Optional.of(salle(120)));
@@ -156,38 +199,42 @@ class PlaceServiceTest {
                 .thenReturn(Optional.of(new Categorie("ORCHESTRE")));
         when(reservationPlaceRepository.existsByRangAndNumero("A", 12)).thenReturn(true);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.update(1, updateRequest()))
                 .isInstanceOf(PlacePositionFigeeException.class);
     }
 
+    // ── update_acceptsCategorieSeule() ───────────────────────────────────────
+
     @Test
     @DisplayName("La catégorie d'une place réservée reste modifiable")
     void update_acceptsCategorieSeule() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Place place = new Place("A", 12, salle(120), new Categorie("ORCHESTRE"));
         when(placeRepository.findById(1)).thenReturn(Optional.of(place));
         when(salleRepository.findById(1)).thenReturn(Optional.of(salle(120)));
         when(categorieRepository.findByLibelleIgnoreCase("BALCON"))
                 .thenReturn(Optional.of(new Categorie("BALCON")));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         PlaceResponse resultat = service.update(1,
                 new UpdatePlaceRequest(1, "A", 12, "BALCON"));
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.categorie()).isEqualTo("BALCON");
     }
+
+    // ── delete_throwsWhenPlaceReservee() ─────────────────────────────────────
 
     @Test
     @DisplayName("La suppression d'une place réservée est refusée")
     void delete_throwsWhenPlaceReservee() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Place place = new Place("A", 12, salle(120), new Categorie("ORCHESTRE"));
         when(placeRepository.findById(1)).thenReturn(Optional.of(place));
         when(reservationPlaceRepository.existsByRangAndNumero("A", 12)).thenReturn(true);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.delete(1))
                 .isInstanceOf(PlaceNonSupprimableException.class);
     }

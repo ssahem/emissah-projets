@@ -20,6 +20,10 @@ import jakarta.persistence.Table;
 @Table(name = "type_depense")
 public class TypeDepense {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_type_depense")

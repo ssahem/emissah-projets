@@ -6,12 +6,18 @@ import org.springframework.http.HttpStatus;
  * Exception métier : l'état du bail n'autorise pas l'action demandée (F13, F14).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : l'état du bail n'autorise pas l'action demandée (F13, F14).
  * LANCÉE PAR   : BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 409.
  * POURQUOI     : le conflit porte sur l'état courant (déjà résilié, terminé,
  *                non commencé ou sans échéance), pas sur le format de la requête.
+ * NE FAIT PAS  : de logique métier.
  */
 public class BailStatutInvalideException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec le bail concerné et la raison du refus. */
     public BailStatutInvalideException(Integer idBail, String raison) {

@@ -15,7 +15,18 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class BilletterieApiApplication {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Lance l'application. */
+
+    // ── main() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute main().
+     */
+
     public static void main(String[] args) {
         SpringApplication.run(BilletterieApiApplication.class, args);
     }

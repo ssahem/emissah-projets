@@ -92,10 +92,22 @@ public class Intervention {
     public Integer getIdInterventionOrigine() { return idInterventionOrigine; }
     public String getCodeTypeIntervention() { return codeTypeIntervention; }
 
+    // ── modifierCreneau() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierCreneau().
+     */
+
     public void modifierCreneau(LocalDateTime debutPrevu, LocalDateTime finPrevue) {
         this.debutPrevu = Objects.requireNonNull(debutPrevu, "debutPrevu");
         this.finPrevue = Objects.requireNonNull(finPrevue, "finPrevue");
     }
+
+    // ── modifierOrigine() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierOrigine().
+     */
 
     public void modifierOrigine(Integer idInterventionOrigine) {
         this.idInterventionOrigine = idInterventionOrigine;

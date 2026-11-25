@@ -34,9 +34,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Détection hebdomadaire des difficultés (F16, arbitrage A-05). */
+/**
+ * Détection hebdomadaire des difficultés (F16, arbitrage A-05).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Détection hebdomadaire des difficultés (F16, arbitrage A-05).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class AlertesDifficulteServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Clock CLOCK =
             Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -51,12 +61,20 @@ class AlertesDifficulteServiceTest {
 
     private AlertesDifficulteService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new AlertesDifficulteService(vueRepository, alerteRepository,
                 inscriptionRepository, trimestreRepository, eleveRepository, classeRepository,
                 CLOCK, "0 0 1 * * MON");
     }
+
+    // ── detecteMoyenneFaible() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : une moyenne inférieure à 8 crée une alerte")
@@ -81,6 +99,8 @@ class AlertesDifficulteServiceTest {
         assertThat(rapport.alertes().get(0).nomEleve()).isEqualTo("Kouassi");
     }
 
+    // ── detecteChuteForte() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : une chute de plus de 4 points crée une alerte")
     void detecteChuteForte() {
@@ -99,6 +119,8 @@ class AlertesDifficulteServiceTest {
         assertThat(rapport.alertes().get(0).ecart()).isEqualByComparingTo("5.00");
     }
 
+    // ── neCreeRienSansDifficulte() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : aucune alerte si la moyenne est stable et supérieure à 8")
     void neCreeRienSansDifficulte() {
@@ -112,6 +134,8 @@ class AlertesDifficulteServiceTest {
         assertThat(rapport.alertesCreees()).isZero();
         verify(alerteRepository, never()).save(any());
     }
+
+    // ── neDupliquePasAlerte() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : une alerte déjà présente n'est pas dupliquée")
@@ -130,6 +154,8 @@ class AlertesDifficulteServiceTest {
         verify(alerteRepository, never()).save(any());
     }
 
+    // ── aucunTrimestreEnCours() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : la détection est ignorée hors d'un trimestre en cours")
     void aucunTrimestreEnCours() {
@@ -141,6 +167,8 @@ class AlertesDifficulteServiceTest {
         assertThat(rapport.alertesCreees()).isZero();
         verify(inscriptionRepository, never()).findAll();
     }
+
+    // ── consulteAlertes() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : la consultation expose les alertes persistées")
@@ -160,6 +188,8 @@ class AlertesDifficulteServiceTest {
         });
     }
 
+    // ── consulteTrimestreInvalide() ──────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : un numéro de trimestre hors de 1 à 3 est refusé")
     void consulteTrimestreInvalide() {
@@ -169,6 +199,13 @@ class AlertesDifficulteServiceTest {
     }
 
     /** Prépare le trimestre contenant la date de l'horloge fixe. */
+
+    // ── prepTrimestreEnCours() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour prepTrimestreEnCours().
+     */
+
     private void prepTrimestreEnCours() {
         Trimestre t = new Trimestre(2, LocalDate.of(2026, 11, 1),
                 LocalDate.of(2027, 2, 28), 2);
@@ -176,6 +213,13 @@ class AlertesDifficulteServiceTest {
     }
 
     /** Prépare les références utilisées pour enrichir la réponse. */
+
+    // ── prepReferences() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour prepReferences().
+     */
+
     private void prepReferences() {
         when(inscriptionRepository.findById(1)).thenReturn(Optional.of(inscription()));
         when(eleveRepository.findById(1)).thenReturn(Optional.of(eleve()));
@@ -183,6 +227,13 @@ class AlertesDifficulteServiceTest {
     }
 
     /** Construit une inscription courante. */
+
+    // ── inscription() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour inscription().
+     */
+
     private Inscription inscription() {
         Inscription i = new Inscription(LocalDate.of(2026, 9, 2), 1, 1, "INS-2026-001");
         ReflectionTestUtils.setField(i, "idInscription", 1);
@@ -190,6 +241,13 @@ class AlertesDifficulteServiceTest {
     }
 
     /** Construit une alerte déjà persistée. */
+
+    // ── alerte() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour alerte().
+     */
+
     private AlerteDifficulte alerte() {
         AlerteDifficulte a = new AlerteDifficulte(1, 2, new BigDecimal("7.00"),
                 new BigDecimal("2.00"), AUJOURDHUI);
@@ -198,6 +256,13 @@ class AlertesDifficulteServiceTest {
     }
 
     /** Construit un élève. */
+
+    // ── eleve() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour eleve().
+     */
+
     private Eleve eleve() {
         Eleve e = new Eleve("Kouassi", "Aya", LocalDate.of(2011, 2, 14));
         ReflectionTestUtils.setField(e, "idEleve", 1);
@@ -205,6 +270,13 @@ class AlertesDifficulteServiceTest {
     }
 
     /** Construit une classe. */
+
+    // ── classe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour classe().
+     */
+
     private Classe classe() {
         Classe c = new Classe("6A", 2, 1, 30);
         ReflectionTestUtils.setField(c, "idClasse", 1);

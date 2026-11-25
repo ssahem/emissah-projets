@@ -25,9 +25,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F3. */
+/**
+ * Règles métier F3.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F3.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class CompetenceServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private CompetenceRepository competenceRepository;
     @Mock private ObtentionCompetenceRepository obtentionRepository;
@@ -35,11 +45,19 @@ class CompetenceServiceTest {
 
     private CompetenceService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new CompetenceService(competenceRepository, obtentionRepository,
                 exigenceRepository, new CompetenceMapper());
     }
+
+    // ── createRefuseLibelleDuplique() ────────────────────────────────────────
 
     @Test
     @DisplayName("Un libellé déjà utilisé est refusé")
@@ -51,6 +69,8 @@ class CompetenceServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
         verify(competenceRepository, never()).save(any());
     }
+
+    // ── updateModifieDescription() ───────────────────────────────────────────
 
     @Test
     @DisplayName("La description est modifiable")
@@ -65,6 +85,8 @@ class CompetenceServiceTest {
         assertThat(response.description()).isEqualTo("Raccordement fibre optique");
     }
 
+    // ── deleteRefuseSiObtention() ────────────────────────────────────────────
+
     @Test
     @DisplayName("Une compétence obtenue par un technicien ne peut pas être supprimée")
     void deleteRefuseSiObtention() {
@@ -77,6 +99,8 @@ class CompetenceServiceTest {
                 .hasMessageContaining("obtenue");
         verify(competenceRepository, never()).delete(any());
     }
+
+    // ── deleteRefuseSiExigence() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("Une compétence exigée par un type ne peut pas être supprimée")
@@ -91,6 +115,13 @@ class CompetenceServiceTest {
     }
 
     /** Construit une compétence avec son identifiant. */
+
+    // ── competence() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour competence().
+     */
+
     private Competence competence(Integer id, String libelle) {
         Competence competence = new Competence(libelle, null);
         ReflectionTestUtils.setField(competence, "idCompetence", id);

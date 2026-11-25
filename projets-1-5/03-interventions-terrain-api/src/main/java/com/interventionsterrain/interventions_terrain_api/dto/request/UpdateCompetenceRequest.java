@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
  * Corps de modification d'une compétence (F3).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une compétence (F3).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : CompetenceController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

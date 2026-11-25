@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Salle introuvable — erreur métier traduite en HTTP not. */
+/**
+ * Salle introuvable — erreur métier traduite en HTTP not.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Salle introuvable — erreur métier traduite en HTTP not.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class SalleNotFoundException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idSalle;
 
-    // ── SalleNotFoundException() ─────────────────────────────────────────────────────────────
+    // ── SalleNotFoundException() ─────────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public SalleNotFoundException(Integer idSalle) {
@@ -17,7 +27,7 @@ public class SalleNotFoundException extends ApiException {
         addProperty("idSalle", idSalle);
     }
 
-    // ── getIdSalle() ───────────────────────────────────────
+    // ── getIdSalle() ─────────────────────────────────────────────────────────
 
     /** Retourne idSalle. */
     public Integer getIdSalle() { return idSalle; }

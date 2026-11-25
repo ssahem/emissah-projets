@@ -56,7 +56,7 @@ public class LocataireService {
     //  CAS D'USAGE — F4
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAll() ───────────────────────────────────────────────────────────
+    // ── findAll() ────────────────────────────────────────────────────────────
 
     /** Retourne les locataires triés par nom (F4). */
     public List<LocataireResponse> findAll() {
@@ -65,49 +65,49 @@ public class LocataireService {
                 .toList();
     }
 
-    // ── findById() ──────────────────────────────────────────────────────────
+    // ── findById() ───────────────────────────────────────────────────────────
 
     /** Retourne un locataire par identifiant. */
     public LocataireResponse findById(Integer idLocataire) {
         return locataireMapper.toResponse(requireLocataire(idLocataire));
     }
 
-    // ── create() ────────────────────────────────────────────────────────────
+    // ── create() ─────────────────────────────────────────────────────────────
 
     /** Crée un locataire après contrôle de l'unicité de l'email. Modifie la base. */
     @Transactional
     public LocataireResponse create(CreateLocataireRequest request) {
-        // ── Étape 1/3 : vérifier l'unicité de l'email ──
+        // ── Étape 1/3 : vérifier l'unicité de l'email ────────────────────────
         verifierEmailLibre(request.email(), null);
 
-        // ── Étape 2/3 : construire et enregistrer ──
+        // ── Étape 2/3 : construire et enregistrer ────────────────────────────
         Locataire locataire = new Locataire(
                 request.nom().trim(), valeur(request.prenom()),
                 request.email().trim(), request.telephone().trim());
         Locataire enregistre = locataireRepository.saveAndFlush(locataire);
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return locataireMapper.toResponse(enregistre);
     }
 
-    // ── update() ────────────────────────────────────────────────────────────
+    // ── update() ─────────────────────────────────────────────────────────────
 
     /** Modifie les coordonnées d'un locataire. Modifie la base. */
     @Transactional
     public LocataireResponse update(Integer idLocataire, UpdateLocataireRequest request) {
-        // ── Étape 1/3 : charger et contrôler l'unicité ──
+        // ── Étape 1/3 : charger et contrôler l'unicité ───────────────────────
         Locataire locataire = requireLocataire(idLocataire);
         verifierEmailLibre(request.email(), idLocataire);
 
-        // ── Étape 2/3 : appliquer les changements ──
+        // ── Étape 2/3 : appliquer les changements ────────────────────────────
         locataire.modifier(request.nom().trim(), valeur(request.prenom()),
                 request.email().trim(), request.telephone().trim());
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return locataireMapper.toResponse(locataire);
     }
 
-    // ── delete() ────────────────────────────────────────────────────────────
+    // ── delete() ─────────────────────────────────────────────────────────────
 
     /** Supprime un locataire sans bail en cours. Modifie la base. */
     @Transactional
@@ -123,7 +123,7 @@ public class LocataireService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── requireLocataire() ──────────────────────────────────────────────────
+    // ── requireLocataire() ───────────────────────────────────────────────────
 
     /** Charge un locataire ou lève l'erreur métier 404. */
     private Locataire requireLocataire(Integer idLocataire) {
@@ -131,7 +131,7 @@ public class LocataireService {
                 .orElseThrow(() -> new LocataireNotFoundException(idLocataire));
     }
 
-    // ── verifierEmailLibre() ────────────────────────────────────────────────
+    // ── verifierEmailLibre() ─────────────────────────────────────────────────
 
     /** Vérifie qu'aucun autre locataire n'utilise cet email. */
     private void verifierEmailLibre(String email, Integer idLocataireExclu) {
@@ -141,7 +141,7 @@ public class LocataireService {
         }
     }
 
-    // ── valeur() ────────────────────────────────────────────────────────────
+    // ── valeur() ─────────────────────────────────────────────────────────────
 
     /** Normalise un champ facultatif : la base impose NOT NULL sur prenom. */
     private String valeur(String valeur) {

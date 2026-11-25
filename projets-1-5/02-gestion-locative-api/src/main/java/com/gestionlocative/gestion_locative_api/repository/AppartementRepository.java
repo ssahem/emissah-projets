@@ -22,28 +22,28 @@ public interface AppartementRepository extends JpaRepository<Appartement, Intege
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByEtageAscSurfaceAsc() ────────────────────────────────
+    // ── findAllByOrderByEtageAscSurfaceAsc() ─────────────────────────────────
 
     /** Retourne les appartements triés par étage, puis par surface croissante. */
     List<Appartement> findAllByOrderByEtageAscSurfaceAsc();
 
-    // ── findAllByIdImmeubleOrderByEtageAscSurfaceAsc() ──────────────────────
+    // ── findAllByIdImmeubleOrderByEtageAscSurfaceAsc() ───────────────────────
 
     /** Retourne les appartements d'un immeuble pour la consultation F6. */
     List<Appartement> findAllByIdImmeubleOrderByEtageAscSurfaceAsc(Integer idImmeuble);
 
-    // ── findByNumeroAndIdImmeuble() ────────────────────────────────────────
+    // ── findByNumeroAndIdImmeuble() ──────────────────────────────────────────
 
     /** Cherche un appartement par numéro dans un immeuble (clé métier). */
     Optional<Appartement> findByNumeroAndIdImmeuble(String numero, Integer idImmeuble);
 
-    // ── findMaxEtageByIdImmeuble() ──────────────────────────────────────────
+    // ── findMaxEtageByIdImmeuble() ───────────────────────────────────────────
 
     /** Retourne l'étage le plus élevé d'un immeuble, ou null s'il est vide. */
     @Query("SELECT MAX(a.etage) FROM Appartement a WHERE a.idImmeuble = :idImmeuble")
     Integer findMaxEtageByIdImmeuble(@Param("idImmeuble") Integer idImmeuble);
 
-    // ── countByIdImmeuble() ─────────────────────────────────────────────────
+    // ── countByIdImmeuble() ──────────────────────────────────────────────────
 
     /** Compte les appartements d'un immeuble, pour refuser sa suppression (F2). */
     long countByIdImmeuble(Integer idImmeuble);

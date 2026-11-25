@@ -37,9 +37,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F5 (notes, avec A-01 et A-03). */
+/**
+ * Règles métier F5 (notes, avec A-01 et A-03).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F5 (notes, avec A-01 et A-03).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class NoteServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private NoteRepository noteRepository;
     @Mock private InscriptionRepository inscriptionRepository;
@@ -52,6 +62,12 @@ class NoteServiceTest {
 
     private NoteService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         NoteMapper mapper = new NoteMapper(inscriptionRepository, enseignementRepository,
@@ -60,6 +76,8 @@ class NoteServiceTest {
                 eleveRepository, typeEvaluationRepository, matiereRepository,
                 new TrimestreLookup(trimestreRepository), mapper);
     }
+
+    // ── createRefuseTrimestreCloture() ───────────────────────────────────────
 
     @Test
     @DisplayName("La création refuse un trimestre clôturé")
@@ -73,6 +91,8 @@ class NoteServiceTest {
         verify(noteRepository, never()).save(any());
     }
 
+    // ── createRefuseTrimestreInconnu() ───────────────────────────────────────
+
     @Test
     @DisplayName("La création refuse un trimestre inconnu avec un 400")
     void createRefuseTrimestreInconnu() {
@@ -81,6 +101,8 @@ class NoteServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("entre 1 et 3");
     }
+
+    // ── createResoutInscription() ────────────────────────────────────────────
 
     @Test
     @DisplayName("La création résout l'élève via son numéro d'inscription (A-01)")
@@ -98,6 +120,8 @@ class NoteServiceTest {
                 .hasMessageContaining("pas enseignée");
         verify(noteRepository, never()).save(any());
     }
+
+    // ── createNominal() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("La création persiste la note avec le numéro d'inscription")
@@ -121,6 +145,8 @@ class NoteServiceTest {
                 .idNote()).isEqualTo(20);
     }
 
+    // ── updateRefuseApresCloture() ───────────────────────────────────────────
+
     @Test
     @DisplayName("La modification est refusée après clôture")
     void updateRefuseApresCloture() {
@@ -131,6 +157,8 @@ class NoteServiceTest {
         assertThatThrownBy(() -> service.update(20, new UpdateNoteRequest(BigDecimal.TEN)))
                 .isInstanceOf(ConflitMetierException.class);
     }
+
+    // ── updateNominal() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("La modification ne change que la valeur")
@@ -146,6 +174,8 @@ class NoteServiceTest {
         assertThat(note.getNumeroTrimestre()).isEqualTo(2);
     }
 
+    // ── deleteNominal() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("La suppression est possible si le trimestre est ouvert")
     void deleteNominal() {
@@ -158,6 +188,8 @@ class NoteServiceTest {
         verify(noteRepository).delete(note);
     }
 
+    // ── findByIdIntrouvable() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("Une note inconnue renvoie une erreur 404 métier")
     void findByIdIntrouvable() {
@@ -169,6 +201,13 @@ class NoteServiceTest {
     }
 
     /** Construit une note rattachée au trimestre 2. */
+
+    // ── note() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour note().
+     */
+
     private Note note() {
         Note n = new Note(BigDecimal.valueOf(14), 2, 1, 1, "INS-2026-001");
         ReflectionTestUtils.setField(n, "idNote", 20);
@@ -176,6 +215,13 @@ class NoteServiceTest {
     }
 
     /** Construit un élève. */
+
+    // ── eleve() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour eleve().
+     */
+
     private Eleve eleve() {
         Eleve e = new Eleve("Kouassi", "Aya", LocalDate.of(2011, 2, 14));
         ReflectionTestUtils.setField(e, "idEleve", 1);
@@ -183,6 +229,13 @@ class NoteServiceTest {
     }
 
     /** Construit une inscription courante. */
+
+    // ── inscription() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour inscription().
+     */
+
     private Inscription inscription() {
         Inscription i = new Inscription(LocalDate.of(2026, 9, 2), 1, 1, "INS-2026-001");
         ReflectionTestUtils.setField(i, "idInscription", 1);
@@ -190,6 +243,13 @@ class NoteServiceTest {
     }
 
     /** Construit un enseignement avec son identifiant. */
+
+    // ── enseignement() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour enseignement().
+     */
+
     private Enseignement enseignement() {
         Enseignement e = new Enseignement(1, 1, 1);
         ReflectionTestUtils.setField(e, "idEnseignement", 5);
@@ -197,6 +257,13 @@ class NoteServiceTest {
     }
 
     /** Construit un trimestre ouvert. */
+
+    // ── trimestreOuvert() ────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour trimestreOuvert().
+     */
+
     private Trimestre trimestreOuvert() {
         Trimestre t = new Trimestre(2, LocalDate.of(2026, 11, 16),
                 LocalDate.of(2027, 2, 15), 2);
@@ -205,6 +272,13 @@ class NoteServiceTest {
     }
 
     /** Construit un trimestre clôturé. */
+
+    // ── trimestreCloture() ───────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour trimestreCloture().
+     */
+
     private Trimestre trimestreCloture() {
         Trimestre t = trimestreOuvert();
         t.cloturer(LocalDate.of(2026, 11, 20));

@@ -31,17 +31,33 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Règles métier F11 à F16 exécutées sur une vraie base PostgreSQL. */
+/**
+ * Règles métier F11 à F16 exécutées sur une vraie base PostgreSQL.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F11 à F16 exécutées sur une vraie base PostgreSQL.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 class ReglesMetierIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("interventions_terrain")
             .withUsername("root")
             .withPassword("root");
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
@@ -67,6 +83,12 @@ class ReglesMetierIntegrationTest {
 
     private Integer idTechnicien;
     private Integer idClient;
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
 
     @BeforeEach
     void setUp() throws Exception {
@@ -94,6 +116,8 @@ class ReglesMetierIntegrationTest {
                 "telephone", "0102030407", "adresse", "5 avenue du parc", "commune", "Paris"));
     }
 
+    // ── f11Competence() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F11 : associer une compétence persiste l'obtention et refuse un doublon actif")
     void f11Competence() throws Exception {
@@ -119,6 +143,8 @@ class ReglesMetierIntegrationTest {
                 Integer.class, idTechnicien, idCompetence)).isEqualTo(1);
     }
 
+    // ── f12Chevauchement() ───────────────────────────────────────────────────
+
     @Test
     @DisplayName("F12 : un second chevauchement est refusé avec l'intervention bloquante")
     void f12Chevauchement() throws Exception {
@@ -134,6 +160,8 @@ class ReglesMetierIntegrationTest {
                 .andExpect(jsonPath("$.idInterventionBloquant").value(premiere))
                 .andExpect(jsonPath("$.debut").value("2026-12-01T09:00:00"));
     }
+
+    // ── f13CompetenceRequise() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("F13 : une compétence exigée mais non détenue bloque la création")
@@ -152,6 +180,8 @@ class ReglesMetierIntegrationTest {
                         "https://api.interventions-terrain.local/problems/competences-manquantes"))
                 .andExpect(jsonPath("$.competences[0]").value("Fibre"));
     }
+
+    // ── f14CycleDeVie() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F14 : le cycle de vie est horodaté et les transitions interdites sont refusées")
@@ -174,6 +204,8 @@ class ReglesMetierIntegrationTest {
         assertThat(nbHistoriques).isEqualTo(2);
         assertThat(statutCourant(idIntervention)).isEqualTo("EN_COURS");
     }
+
+    // ── f15Reprise() ─────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F15 : une reprise d'intervention échouée référence l'origine et démarre en PLANIFIEE")
@@ -200,6 +232,8 @@ class ReglesMetierIntegrationTest {
                 Integer.class, idReprise)).isEqualTo(idTechnicien);
     }
 
+    // ── f16Alerte() ──────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : une compétence proche de l'expiration est signalée une seule fois par agence")
     void f16Alerte() throws Exception {
@@ -219,11 +253,23 @@ class ReglesMetierIntegrationTest {
         assertThat(alerteService.genererAlertes()).isEmpty();
     }
 
+    // ── statutCourant() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour statutCourant().
+     */
+
     private String statutCourant(Integer idIntervention) {
         return jdbcTemplate.queryForObject(
                 "SELECT statut FROM v_intervention_statut WHERE id_intervention = ?",
                 String.class, idIntervention);
     }
+
+    // ── changerStatut() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour changerStatut().
+     */
 
     private void changerStatut(Integer idIntervention, String statut) throws Exception {
         mockMvc.perform(post("/interventions-terrain/intervention/statut/" + idIntervention)
@@ -231,6 +277,12 @@ class ReglesMetierIntegrationTest {
                         .content(objectMapper.writeValueAsString(Map.of("statut", statut))))
                 .andExpect(status().isOk());
     }
+
+    // ── createIntervention() ─────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour createIntervention().
+     */
 
     private Integer createIntervention(String debut, String fin) throws Exception {
         return create("intervention", corpsIntervention(debut, fin));
@@ -247,6 +299,12 @@ class ReglesMetierIntegrationTest {
                 "voie", "12 rue de la Paix",
                 "commune", "Paris");
     }
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour create().
+     */
 
     private Integer create(String ressource, Map<String, Object> body) throws Exception {
         String json = mockMvc.perform(post("/interventions-terrain/" + ressource + "/create")

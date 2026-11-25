@@ -22,6 +22,10 @@ import java.util.Objects;
 @Table(name = "alerte_vehicule")
 public class AlerteVehicule {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_alerte")

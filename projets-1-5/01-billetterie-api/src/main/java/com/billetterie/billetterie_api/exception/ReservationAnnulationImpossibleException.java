@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Annulation impossible — erreur métier traduite en HTTP conflict. */
+/**
+ * Annulation impossible — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Annulation impossible — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class ReservationAnnulationImpossibleException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idReservation;
 
-    // ── ReservationAnnulationImpossibleException() ─────────────────────────────────────────────────
+    // ── ReservationAnnulationImpossibleException() ───────────────────────────
 
     /** Construit l'erreur métier. */
     public ReservationAnnulationImpossibleException(Integer idReservation) {
@@ -18,7 +28,7 @@ public class ReservationAnnulationImpossibleException extends ApiException {
         addProperty("idReservation", idReservation);
     }
 
-    // ── getIdReservation() ─────────────────────────────────
+    // ── getIdReservation() ───────────────────────────────────────────────────
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }

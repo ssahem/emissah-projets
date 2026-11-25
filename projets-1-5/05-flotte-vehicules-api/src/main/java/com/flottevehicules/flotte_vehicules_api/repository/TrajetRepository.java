@@ -12,4 +12,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * NE FAIT PAS  : de contrôle de cohérence kilométrique.
  */
 public interface TrajetRepository extends JpaRepository<Trajet, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

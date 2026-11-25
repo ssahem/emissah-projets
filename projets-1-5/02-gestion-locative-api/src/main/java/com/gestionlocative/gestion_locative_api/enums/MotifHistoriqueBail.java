@@ -9,6 +9,11 @@ package com.gestionlocative.gestion_locative_api.enums;
  * NE FAIT PAS  : de logique métier.
  */
 public enum MotifHistoriqueBail {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     RESILIATION,
     RENOUVELLEMENT,
     CLOTURE

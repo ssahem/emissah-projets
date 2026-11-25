@@ -51,6 +51,13 @@ public class VueRepository {
     }
 
     /** Moyenne générale d'une inscription pour un trimestre (F18). */
+
+    // ── moyenneGenerale() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute moyenneGenerale().
+     */
+
     public BigDecimal moyenneGenerale(Integer idInscription, Integer trimestre) {
         return jdbcTemplate.query(
                 "SELECT moyenne_generale FROM v_moyenne_generale "

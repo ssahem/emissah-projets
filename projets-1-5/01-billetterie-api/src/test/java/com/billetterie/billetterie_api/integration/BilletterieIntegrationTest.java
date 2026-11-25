@@ -59,18 +59,25 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Tests d'intégration de bout en bout.
  *
- * TYPE       : Intégration (Testcontainers PostgreSQL)
- * STRATÉGIE  : schéma issu des migrations Flyway V1 à V6, API via MockMvc, horloge gelée au
+ * COUCHE       : Service
+ * RÔLE         : Tests d'intégration de bout en bout.
+ * TYPE         : Intégration (Testcontainers PostgreSQL)
+ * STRATÉGIE    : schéma issu des migrations Flyway V1 à V6, API via MockMvc, horloge gelée au
  *              23 novembre 2026 10:00 UTC. Chaque test est transactionnel et annulé à la fin :
  *              les fixtures ne se chevauchent jamais.
  * CAS COUVERTS : F1 à F19 (scénario complet puis cas ciblés sur les règles limites), arbitrage E-04.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
 class BilletterieIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDateTime MAINTENANT = LocalDateTime.parse("2026-11-23T10:00:00");
 
@@ -79,6 +86,12 @@ class BilletterieIntegrationTest {
             .withDatabaseName("billetterie")
             .withUsername("root")
             .withPassword("root");
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
@@ -110,12 +123,15 @@ class BilletterieIntegrationTest {
     @Autowired private ReservationRepository reservationRepository;
     @Autowired private ReservationPlaceRepository reservationPlaceRepository;
     @Autowired private StatutRepository statutRepository;
+
+    // ── fluxComplet_salleEvenementReservationPaiementEtRestitutions() ────────
+
     @Autowired private EntityManager entityManager;
 
     @Test
     @DisplayName("Le flux complet de la salle au paiement respecte les règles métier")
     void fluxComplet_salleEvenementReservationPaiementEtRestitutions() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         entityManager.persist(new Categorie("ORCHESTRE"));
         entityManager.flush();
         String salleJson = """
@@ -130,7 +146,7 @@ class BilletterieIntegrationTest {
                  "idEvenement":%d,"rang":"A","numero":12}
                 """;
 
-        // ── Action + Vérification — F1 ──
+        // ── Action + Vérification — F1 ───────────────────────────────────────
         MvcResult salleResult = mockMvc.perform(post("/billetterie/salle/create")
                         .contentType(MediaType.APPLICATION_JSON).content(salleJson))
                 .andExpect(status().isCreated())
@@ -142,7 +158,7 @@ class BilletterieIntegrationTest {
         Categorie categorie = categorieRepository.findByLibelleIgnoreCase("ORCHESTRE").orElseThrow();
         placeRepository.saveAndFlush(new Place("A", 12, salle, categorie));
 
-        // ── Action + Vérification — F3 ──
+        // ── Action + Vérification — F3 ───────────────────────────────────────
         MvcResult evenementResult = mockMvc.perform(post("/billetterie/evenement/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(evenementJson.formatted(idSalle)))
@@ -154,7 +170,7 @@ class BilletterieIntegrationTest {
         entityManager.persist(new Tarif(evenement, "ORCHESTRE", new BigDecimal("25.00")));
         entityManager.flush();
 
-        // ── Action + Vérification — F4 et F11 ──
+        // ── Action + Vérification — F4 et F11 ────────────────────────────────
         String corpsReservation = reservationJson.formatted(idEvenement);
         MvcResult reservationResult = mockMvc.perform(post("/billetterie/reservation/create")
                         .contentType(MediaType.APPLICATION_JSON).content(corpsReservation))
@@ -167,7 +183,7 @@ class BilletterieIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON).content(corpsReservation))
                 .andExpect(status().isConflict());
 
-        // ── Action + Vérification — F5, F6 et F7 ──
+        // ── Action + Vérification — F5, F6 et F7 ─────────────────────────────
         mockMvc.perform(get("/billetterie/salle/places/{id}", idSalle))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].numero").value(12));
@@ -179,7 +195,7 @@ class BilletterieIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].avenir").value(true));
 
-        // ── Action + Vérification — F9 et F10 ──
+        // ── Action + Vérification — F9 et F10 ────────────────────────────────
         mockMvc.perform(get("/billetterie/reservation/list").param("page", "0").param("size", "200"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size").value(100))
@@ -188,12 +204,12 @@ class BilletterieIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].idReservation").value(idReservation));
 
-        // ── Action + Vérification — F14 ──
+        // ── Action + Vérification — F14 ──────────────────────────────────────
         mockMvc.perform(post("/billetterie/reservation/paiement/{id}", idReservation))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statut").value("PAYEE"));
 
-        // ── Action + Vérification — F17 et F19 ──
+        // ── Action + Vérification — F17 et F19 ───────────────────────────────
         mockMvc.perform(get("/billetterie/evenement/places-libres/{id}", idEvenement))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.placesTotales").value(1))
@@ -203,20 +219,22 @@ class BilletterieIntegrationTest {
                 .andExpect(content().string(Matchers.containsString(
                         "rang,numero,categorie,nom,email,statut,date_creation")));
 
-        // ── Vérification finale ──
+        // ── Vérification finale ──────────────────────────────────────────────
         assertThat(salleRepository.count()).isEqualTo(1);
         assertThat(evenementRepository.count()).isEqualTo(1);
     }
 
+    // ── place_crudCreateUpdateDelete() ───────────────────────────────────────
+
     @Test
     @DisplayName("F2 — les places se créent, se modifient et se suppriment via l'API")
     void place_crudCreateUpdateDelete() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         creerCategorie("BALCON");
         int idSalle = creerSalle("Abidjan", 2);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         int idPlace = creerPlace(idSalle, "A", 1, "ORCHESTRE");
 
         mockMvc.perform(post("/billetterie/place/create")
@@ -260,10 +278,12 @@ class BilletterieIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Place introuvable"));
     }
 
+    // ── evenement_triEtFiltrePeriode() ───────────────────────────────────────
+
     @Test
     @DisplayName("F3 et F8 — les événements sont triés et filtrés par période, bornes incluses")
     void evenement_triEtFiltrePeriode() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         int idSalle = creerSalle("Abidjan", 1);
         creerPlace(idSalle, "A", 1, "ORCHESTRE");
@@ -274,13 +294,13 @@ class BilletterieIntegrationTest {
         creerEvenement(idSalle, "Concert début", debut);
         creerEvenement(idSalle, "Concert fin", fin);
 
-        // ── Action + Vérification — F3 ──
+        // ── Action + Vérification — F3 ───────────────────────────────────────
         mockMvc.perform(get("/billetterie/evenement/list"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].titre").value("Concert début"))
                 .andExpect(jsonPath("$[2].titre").value("Concert fin"));
 
-        // ── Action + Vérification — F8 ──
+        // ── Action + Vérification — F8 ───────────────────────────────────────
         mockMvc.perform(get("/billetterie/evenement/list")
                         .param("du", debut.toString()).param("au", milieu.toString()))
                 .andExpect(status().isOk())
@@ -299,17 +319,19 @@ class BilletterieIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Période invalide"));
     }
 
+    // ── salleSansDonnees_restitutionsVides() ─────────────────────────────────
+
     @Test
     @DisplayName("F5, F7 et F17 — une salle et un événement sans réservation renvoient des listes vides")
     void salleSansDonnees_restitutionsVides() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         int idSalleVide = creerSalle("Bouaké", 4);
         int idSalle = creerSalle("Abidjan", 4);
         creerPlace(idSalle, "A", 1, "ORCHESTRE");
         int idEvenement = creerEvenement(idSalle, "Concert sans réservation", MAINTENANT.plusDays(12));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/billetterie/salle/places/{id}", idSalleVide))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
@@ -323,10 +345,12 @@ class BilletterieIntegrationTest {
                 .andExpect(jsonPath("$.parCategorie[0].placesOccupees").value(0));
     }
 
+    // ── salle_erreursEtSuppression() ─────────────────────────────────────────
+
     @Test
     @DisplayName("F1 — validation 400, salle introuvable 404 et suppression 204")
     void salle_erreursEtSuppression() throws Exception {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/billetterie/salle/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -344,10 +368,12 @@ class BilletterieIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    // ── annulation_remboursementRemplissageEtExport() ────────────────────────
+
     @Test
     @DisplayName("F15, F18 et F19 — annulation, remplissage recalculé et export filtré")
     void annulation_remboursementRemplissageEtExport() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         int idSalle = creerSalle("Abidjan", 2);
         creerPlace(idSalle, "A", 1, "ORCHESTRE");
@@ -361,7 +387,7 @@ class BilletterieIntegrationTest {
         mockMvc.perform(post("/billetterie/reservation/paiement/{id}", idPayee))
                 .andExpect(status().isOk());
 
-        // ── Action + Vérification — F18 avant annulation ──
+        // ── Action + Vérification — F18 avant annulation ─────────────────────
         mockMvc.perform(get("/billetterie/evenement/remplissage/{id}", idEvenement))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.placesTotales").value(2))
@@ -370,7 +396,7 @@ class BilletterieIntegrationTest {
                 .andExpect(jsonPath("$.taux").value(100.00))
                 .andExpect(jsonPath("$.parCategorie[0].categorie").value("ORCHESTRE"));
 
-        // ── Action + Vérification — F15 ──
+        // ── Action + Vérification — F15 ──────────────────────────────────────
         mockMvc.perform(post("/billetterie/reservation/annulation/{id}", idPayee))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statut").value("ANNULEE"))
@@ -382,7 +408,7 @@ class BilletterieIntegrationTest {
                 .andExpect(jsonPath("$.statut").value("ANNULEE"))
                 .andExpect(jsonPath("$.montantRembourse").value(25.00));
 
-        // ── Action + Vérification — F18 et F17 après annulation ──
+        // ── Action + Vérification — F18 et F17 après annulation ──────────────
         mockMvc.perform(get("/billetterie/evenement/remplissage/{id}", idEvenement))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.provisoires").value(1))
@@ -393,7 +419,7 @@ class BilletterieIntegrationTest {
                 .andExpect(jsonPath("$.parCategorie[0].placesLibres").value(1))
                 .andExpect(jsonPath("$.parCategorie[0].placesOccupees").value(1));
 
-        // ── Action + Vérification — F19 ──
+        // ── Action + Vérification — F19 ──────────────────────────────────────
         MvcResult sansAnnulees = mockMvc.perform(
                         get("/billetterie/evenement/reservations/export/{id}", idEvenement))
                 .andExpect(status().isOk())
@@ -409,10 +435,12 @@ class BilletterieIntegrationTest {
                 .contains(emailProvisoire, emailPayant);
     }
 
+    // ── paiement_apresDelaiExpire() ──────────────────────────────────────────
+
     @Test
     @DisplayName("F14 — le paiement est refusé après le délai de quinze minutes")
     void paiement_apresDelaiExpire() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         int idSalle = creerSalle("Abidjan", 1);
         creerPlace(idSalle, "A", 1, "ORCHESTRE");
@@ -422,16 +450,18 @@ class BilletterieIntegrationTest {
         Reservation expiree = enregistrerReservation(evenement, "A", 1,
                 MAINTENANT.minusMinutes(16), unique("expire") + "@example.com");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/billetterie/reservation/paiement/{id}", expiree.getIdReservation()))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.title").value("Réservation expirée"));
     }
 
+    // ── reservationPlace_uniciteEnBase() ─────────────────────────────────────
+
     @Test
     @DisplayName("F11 — l'unicité (événement, position) est garantie par la base")
     void reservationPlace_uniciteEnBase() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         int idSalle = creerSalle("Abidjan", 1);
         creerPlace(idSalle, "A", 1, "ORCHESTRE");
@@ -446,15 +476,17 @@ class BilletterieIntegrationTest {
         seconde.ajouterHistorique(new HistoriqueStatut(seconde,
                 statutRepository.findByLibelleIgnoreCase("PROVISOIRE").orElseThrow(), MAINTENANT));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> reservationRepository.saveAndFlush(seconde))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
 
+    // ── reservationPlace_uniciteAvecPositionsNulles() ────────────────────────
+
     @Test
     @DisplayName("E-04 — l'unicité couvre aussi les positions rang/numero NULL (V6)")
     void reservationPlace_uniciteAvecPositionsNulles() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         creerCategorie("ORCHESTRE");
         int idSalle = creerSalle("Abidjan", 1);
         creerPlace(idSalle, "A", 1, "ORCHESTRE");
@@ -469,7 +501,7 @@ class BilletterieIntegrationTest {
         seconde.ajouterHistorique(new HistoriqueStatut(seconde,
                 statutRepository.findByLibelleIgnoreCase("PROVISOIRE").orElseThrow(), MAINTENANT));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> reservationRepository.saveAndFlush(seconde))
                 .isInstanceOf(DataIntegrityViolationException.class);
     }
@@ -477,6 +509,13 @@ class BilletterieIntegrationTest {
     // ── FICTIONS ─────────────────────────────────────────────────────────────
 
     /** Crée une catégorie de référence si elle n'existe pas déjà. */
+
+    // ── creerCategorie() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerCategorie().
+     */
+
     private void creerCategorie(String libelle) {
         if (!categorieRepository.existsByLibelleIgnoreCase(libelle)) {
             entityManager.persist(new Categorie(libelle));
@@ -485,6 +524,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Crée une salle via l'API F1 et retourne son identifiant. */
+
+    // ── creerSalle() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerSalle().
+     */
+
     private int creerSalle(String ville, int capacite) throws Exception {
         String corps = """
                 {"nom":"%s","adresse":"1 rue de Test","ville":"%s","capacite":%d}
@@ -497,6 +543,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Crée une place via l'API F2 et retourne son identifiant. */
+
+    // ── creerPlace() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerPlace().
+     */
+
     private int creerPlace(int idSalle, String rang, int numero, String categorie) throws Exception {
         String corps = """
                 {"idSalle":%d,"rang":"%s","numero":%d,"categorie":"%s"}
@@ -509,6 +562,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Crée un événement via l'API F3 et retourne son identifiant. */
+
+    // ── creerEvenement() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerEvenement().
+     */
+
     private int creerEvenement(int idSalle, String titre, LocalDateTime dateHeure) throws Exception {
         String corps = """
                 {"titre":"%s","type":"CONCERT","placementNumerote":true,
@@ -522,6 +582,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Crée le tarif d'une catégorie pour un événement. */
+
+    // ── creerTarif() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerTarif().
+     */
+
     private void creerTarif(int idEvenement, String categorie, String prix) {
         entityManager.persist(new Tarif(
                 evenementRepository.findById(idEvenement).orElseThrow(), categorie, new BigDecimal(prix)));
@@ -529,6 +596,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Crée une réservation via l'API F4 et retourne son identifiant. */
+
+    // ── creerReservation() ───────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerReservation().
+     */
+
     private int creerReservation(int idEvenement, String rang, int numero, String email) throws Exception {
         String corps = """
                 {"nom":"Dupont","prenom":"Jean","email":"%s",
@@ -542,6 +616,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Enregistre directement une réservation avec une date de création choisie. */
+
+    // ── enregistrerReservation() ─────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour enregistrerReservation().
+     */
+
     private Reservation enregistrerReservation(Evenement evenement, String rang, Integer numero,
                                                LocalDateTime dateCreation, String email) {
         Client client = clientRepository.saveAndFlush(new Client("Dupont", "Jean", email));
@@ -553,6 +634,13 @@ class BilletterieIntegrationTest {
     }
 
     /** Génère un suffixe court pour éviter toute collision de clé métier entre méthodes. */
+
+    // ── unique() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour unique().
+     */
+
     private static String unique(String prefixe) {
         return prefixe + "-" + UUID.randomUUID().toString().substring(0, 8);
     }

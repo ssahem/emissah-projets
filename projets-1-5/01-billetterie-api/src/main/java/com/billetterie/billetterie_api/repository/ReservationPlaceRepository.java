@@ -16,19 +16,19 @@ import org.springframework.data.repository.query.Param;
  */
 public interface ReservationPlaceRepository extends JpaRepository<ReservationPlace, Integer> {
 
-    // ── findAllByReservation_Evenement_IdEvenementAndRangAndNumero() ───────
+    // ── findAllByReservation_Evenement_IdEvenementAndRangAndNumero() ─────────
 
     /** Retrouve l'historique des réservations d'une position pour un événement. */
     List<ReservationPlace> findAllByReservation_Evenement_IdEvenementAndRangAndNumero(
             Integer idEvenement, String rang, Integer numero);
 
-    // ── existsByReservation_Evenement_IdEvenementAndRangAndNumero() ────────
+    // ── existsByReservation_Evenement_IdEvenementAndRangAndNumero() ──────────
 
     /** Indique si une position a déjà été réservée pour un événement. */
     boolean existsByReservation_Evenement_IdEvenementAndRangAndNumero(
             Integer idEvenement, String rang, Integer numero);
 
-    // ── existsByRangAndNumeroAndReservation_Evenement_Salle_IdSalle() ───────
+    // ── existsByRangAndNumeroAndReservation_Evenement_Salle_IdSalle() ────────
 
     /** Indique si une position est déjà réservée dans une salle, tous événements confondus. */
     boolean existsByRangAndNumeroAndReservation_Evenement_Salle_IdSalle(
@@ -38,21 +38,21 @@ public interface ReservationPlaceRepository extends JpaRepository<ReservationPla
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── existsByRangAndNumero() ──────────────────────────────────────────
+    // ── existsByRangAndNumero() ──────────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByRangAndNumero(String rang, Integer numero);
 
-    // ── findAllByReservation_Evenement_IdEvenement() ─────────────────────
+    // ── findAllByReservation_Evenement_IdEvenement() ─────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<ReservationPlace> findAllByReservation_Evenement_IdEvenement(Integer idEvenement);
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  REQUÊTES @Query
+    //  REQUÊTES @QUERY
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findPlacesActivesByEvenement() ───────────────────────────────────
+    // ── findPlacesActivesByEvenement() ───────────────────────────────────────
 
     /** Places occupées par une réservation encore active, déduites de la vue statut. */
     @Query(value = """

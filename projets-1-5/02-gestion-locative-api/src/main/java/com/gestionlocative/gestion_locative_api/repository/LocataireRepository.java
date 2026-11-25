@@ -19,12 +19,12 @@ public interface LocataireRepository extends JpaRepository<Locataire, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByNomAsc() ────────────────────────────────────────────
+    // ── findAllByOrderByNomAsc() ─────────────────────────────────────────────
 
     /** Retourne les locataires triés par nom, puis par prénom. */
     List<Locataire> findAllByOrderByNomAscPrenomAsc();
 
-    // ── findByEmail() ───────────────────────────────────────────────────────
+    // ── findByEmail() ────────────────────────────────────────────────────────
 
     /** Cherche un locataire par email (unicité métier). */
     Optional<Locataire> findByEmail(String email);

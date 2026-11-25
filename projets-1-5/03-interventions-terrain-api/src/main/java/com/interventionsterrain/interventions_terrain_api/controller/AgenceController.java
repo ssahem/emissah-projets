@@ -62,11 +62,23 @@ public class AgenceController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /interventions-terrain/agence/list ──────────────────────
+
+    /**
+     * Lister les agences.
+     */
+
     @Operation(summary = "Lister les agences", description = "Triées par ville puis par nom")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AgenceResponse> list() {
         return service.findAll();
     }
+
+    // ── get() — GET /interventions-terrain/agence/get/{id} ───────────────────
+
+    /**
+     * Lire une agence.
+     */
 
     @Operation(summary = "Lire une agence")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,12 +86,24 @@ public class AgenceController {
         return service.findById(id);
     }
 
+    // ── techniciens() — GET /interventions-terrain/agence/techniciens/{id} ───
+
+    /**
+     * Lister les techniciens d'une agence.
+     */
+
     @Operation(summary = "Lister les techniciens d'une agence",
             description = "Résolution via equipe.id_agence et compétences valides (F6)")
     @GetMapping(path = "/techniciens/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TechnicienEffectifResponse> techniciens(@PathVariable Integer id) {
         return service.findTechniciens(id);
     }
+
+    // ── charge() — GET /interventions-terrain/agence/charge/{id} ─────────────
+
+    /**
+     * Mesurer la charge d'une agence.
+     */
 
     @Operation(summary = "Mesurer la charge d'une agence",
             description = "Détail par technicien et totaux, annulations exclues (F18)")
@@ -91,6 +115,12 @@ public class AgenceController {
         return restitutionService.findCharge(id, du, au);
     }
 
+    // ── tauxReussite() — GET …nterventions-terrain/agence/taux-reussite/{id} ─
+
+    /**
+     * Taux de réussite mensuel d'une agence.
+     */
+
     @Operation(summary = "Taux de réussite mensuel d'une agence",
             description = "TERMINEE / (TERMINEE + ECHOUEE), global et par type (F19)")
     @GetMapping(path = "/taux-reussite/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -98,6 +128,12 @@ public class AgenceController {
                                              @RequestParam String mois) {
         return restitutionService.findTauxReussite(id, mois);
     }
+
+    // ── create() — POST /interventions-terrain/agence/create ─────────────────
+
+    /**
+     * Créer une agence.
+     */
 
     @Operation(summary = "Créer une agence")
     @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -108,12 +144,24 @@ public class AgenceController {
                 .body(created);
     }
 
+    // ── update() — PUT /interventions-terrain/agence/update/{id} ─────────────
+
+    /**
+     * Modifier une agence.
+     */
+
     @Operation(summary = "Modifier une agence")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public AgenceResponse update(@PathVariable Integer id, @Valid @RequestBody UpdateAgenceRequest request) {
         return service.update(id, request);
     }
+
+    // ── delete() — DELETE /interventions-terrain/agence/delete/{id} ──────────
+
+    /**
+     * Supprimer une agence.
+     */
 
     @Operation(summary = "Supprimer une agence")
     @DeleteMapping(path = "/delete/{id}")

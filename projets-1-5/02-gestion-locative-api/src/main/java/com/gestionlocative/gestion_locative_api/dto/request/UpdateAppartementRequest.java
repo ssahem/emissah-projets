@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * Corps de modification d'un appartement (F3).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'un appartement (F3).
  * IMMUABLE     : record Java.
  * L'immeuble est figé : il ne figure pas dans ce contrat (F3).
  * UTILISÉ PAR  : AppartementController, avec @Valid, pour valider le corps reçu.

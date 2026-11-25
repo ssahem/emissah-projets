@@ -51,13 +51,13 @@ public class Locataire {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Locataire() ──────────────────────────────────────────────────────
+    // ── Locataire() ──────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Locataire() {
     }
 
-    // ── Locataire(String, String, String, String) ────────────────────────
+    // ── Locataire(String, String, String, String) ────────────────────────────
 
     /** Crée un locataire valide. */
     public Locataire(String nom, String prenom, String email, String telephone) {
@@ -86,7 +86,7 @@ public class Locataire {
     /** Retourne le téléphone. */
     public String getTelephone() { return telephone; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Met à jour les coordonnées, modifiables à tout moment (F4). */
     public void modifier(String nom, String prenom, String email, String telephone) {

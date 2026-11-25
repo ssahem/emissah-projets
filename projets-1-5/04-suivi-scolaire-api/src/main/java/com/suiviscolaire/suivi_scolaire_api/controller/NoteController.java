@@ -58,6 +58,12 @@ public class NoteController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /suivi-scolaire/note/list ───────────────────────────────
+
+    /**
+     * Lister les notes.
+     */
+
     @Operation(summary = "Lister les notes",
             description = "Groupées par matière ; avec ?page=&size=&sort=valeur,desc : page de notes (F5, F10)")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,11 +79,23 @@ public class NoteController {
                 sort == null ? "idNote,asc" : sort);
     }
 
+    // ── get() — GET /suivi-scolaire/note/get/{id} ────────────────────────────
+
+    /**
+     * Lire une note.
+     */
+
     @Operation(summary = "Lire une note")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public NoteResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /suivi-scolaire/note/create ──────────────────────────
+
+    /**
+     * Créer une note.
+     */
 
     @Operation(summary = "Créer une note",
             description = "Valeur entre 0 et 20, trimestre ouvert, élève et matière résolus en service (F5)")
@@ -88,12 +106,24 @@ public class NoteController {
         return ResponseEntity.created(service.location(created.idNote())).body(created);
     }
 
+    // ── update() — PUT /suivi-scolaire/note/update/{id} ──────────────────────
+
+    /**
+     * Modifier une note.
+     */
+
     @Operation(summary = "Modifier une note", description = "Seule la valeur est modifiable ; trimestre ouvert (F5)")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public NoteResponse update(@PathVariable Integer id, @Valid @RequestBody UpdateNoteRequest request) {
         return service.update(id, request);
     }
+
+    // ── delete() — DELETE /suivi-scolaire/note/delete/{id} ───────────────────
+
+    /**
+     * Supprimer une note.
+     */
 
     @Operation(summary = "Supprimer une note", description = "Possible seulement si le trimestre est ouvert (F5)")
     @DeleteMapping(path = "/delete/{id}")

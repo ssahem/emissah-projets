@@ -67,12 +67,12 @@ public class Reservation {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Reservation() ────────────────────────────────────────────────────
+    // ── Reservation() ────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Reservation() {}
 
-    // ── Reservation(LocalDateTime dateCreation, Client client, Evenement evenement) ─
+    // ── Reservation(LocalDateTime dateCreation, Client client, Evenement ev… ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Reservation(LocalDateTime dateCreation, Client client, Evenement evenement) {
@@ -86,69 +86,69 @@ public class Reservation {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdReservation() ───────────────────────────────────────────────
+    // ── getIdReservation() ───────────────────────────────────────────────────
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }
 
-    // ── getDateCreation() ────────────────────────────────────────────────
+    // ── getDateCreation() ────────────────────────────────────────────────────
 
     /** Retourne dateCreation. */
     public LocalDateTime getDateCreation() { return dateCreation; }
 
-    // ── getDateExpiration() ──────────────────────────────────────────────
+    // ── getDateExpiration() ──────────────────────────────────────────────────
 
     /** Retourne dateExpiration. */
     public LocalDateTime getDateExpiration() { return dateExpiration; }
 
-    // ── getDatePaiement() ────────────────────────────────────────────────
+    // ── getDatePaiement() ────────────────────────────────────────────────────
 
     /** Retourne datePaiement. */
     public LocalDateTime getDatePaiement() { return datePaiement; }
 
-    // ── getMontantRembourse() ────────────────────────────────────────────
+    // ── getMontantRembourse() ────────────────────────────────────────────────
 
     /** Retourne montantRembourse. */
     public BigDecimal getMontantRembourse() { return montantRembourse; }
 
-    // ── getClient() ──────────────────────────────────────────────────────
+    // ── getClient() ──────────────────────────────────────────────────────────
 
     /** Retourne client. */
     public Client getClient() { return client; }
 
-    // ── getEvenement() ───────────────────────────────────────────────────
+    // ── getEvenement() ───────────────────────────────────────────────────────
 
     /** Retourne evenement. */
     public Evenement getEvenement() { return evenement; }
 
-    // ── getPlaces() ──────────────────────────────────────────────────────
+    // ── getPlaces() ──────────────────────────────────────────────────────────
 
     /** Retourne places. */
     public List<ReservationPlace> getPlaces() { return places; }
 
-    // ── getHistorique() ──────────────────────────────────────────────────
+    // ── getHistorique() ──────────────────────────────────────────────────────
 
     /** Retourne historique. */
     public List<HistoriqueStatut> getHistorique() { return historique; }
 
-    // ── ajouterPlace() ─────────────────────────────────────────────────────
+    // ── ajouterPlace() ───────────────────────────────────────────────────────
 
     /** Ajoute une place réservée en maintenant la relation. */
     public void ajouterPlace(ReservationPlace place) { places.add(place); }
 
-    // ── ajouterHistorique() ────────────────────────────────────────────────
+    // ── ajouterHistorique() ──────────────────────────────────────────────────
 
     /** Ajoute une entrée à l'historique des statuts. */
     public void ajouterHistorique(HistoriqueStatut entree) { historique.add(entree); }
 
-    // ── enregistrerPaiement() ──────────────────────────────────────────────
+    // ── enregistrerPaiement() ────────────────────────────────────────────────
 
     /** Enregistre la date de paiement de la réservation. */
     public void enregistrerPaiement(LocalDateTime datePaiement) {
         this.datePaiement = Objects.requireNonNull(datePaiement, "datePaiement");
     }
 
-    // ── setMontantRembourse() ──────────────────────────────────────────────
+    // ── setMontantRembourse() ────────────────────────────────────────────────
 
     /** Enregistre le montant remboursé. */
     public void setMontantRembourse(BigDecimal montantRembourse) {

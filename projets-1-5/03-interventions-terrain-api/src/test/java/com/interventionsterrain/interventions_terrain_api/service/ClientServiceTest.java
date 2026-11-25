@@ -28,9 +28,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F4 (adresse texte obligatoire, email unique). */
+/**
+ * Règles métier F4 (adresse texte obligatoire, email unique).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F4 (adresse texte obligatoire, email unique).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ClientServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private ClientRepository clientRepository;
     @Mock private InterventionRepository interventionRepository;
@@ -41,11 +51,19 @@ class ClientServiceTest {
 
     private ClientService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ClientService(clientRepository, interventionRepository, affectationRepository,
                 technicienRepository, historiqueRepository, statutRepository, new ClientMapper());
     }
+
+    // ── createRefuseEmailDuplique() ──────────────────────────────────────────
 
     @Test
     @DisplayName("Un email déjà utilisé est refusé à la création")
@@ -59,6 +77,8 @@ class ClientServiceTest {
                 .hasMessageContaining("email");
         verify(clientRepository, never()).save(any());
     }
+
+    // ── createConserveAdresse() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("La création conserve l'adresse et la commune textuelles")
@@ -78,6 +98,8 @@ class ClientServiceTest {
         assertThat(response.telephone()).isEqualTo("0102030407");
     }
 
+    // ── updateAccepteEmailInchange() ─────────────────────────────────────────
+
     @Test
     @DisplayName("Une modification peut conserver le même email")
     void updateAccepteEmailInchange() {
@@ -91,6 +113,8 @@ class ClientServiceTest {
         assertThat(response.email()).isEqualTo("marie@example.test");
         assertThat(response.adresse()).isEqualTo("6 rue Neuve");
     }
+
+    // ── deleteRefuseSiInterventions() ────────────────────────────────────────
 
     @Test
     @DisplayName("Un client avec des interventions ne peut pas être supprimé")
@@ -106,6 +130,13 @@ class ClientServiceTest {
     }
 
     /** Construit un client avec son identifiant. */
+
+    // ── client() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour client().
+     */
+
     private Client client(Integer id, String email) {
         Client client = new Client("Dupont", "Marie", email, "0102030407", "5 avenue du parc", "Paris");
         ReflectionTestUtils.setField(client, "idClient", id);

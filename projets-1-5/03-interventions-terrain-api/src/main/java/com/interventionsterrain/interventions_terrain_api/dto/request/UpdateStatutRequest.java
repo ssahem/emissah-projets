@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
  * Nouveau statut demandé pour une intervention (F14).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Nouveau statut demandé pour une intervention (F14).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : StatutController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

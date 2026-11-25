@@ -90,27 +90,62 @@ public class Affectation {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Indique si l'affectation a commencé à la date donnée. */
+
+    // ── estCommencee() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute estCommencee().
+     */
+
     public boolean estCommencee(LocalDate date) {
         return !date.isBefore(dateDebut);
     }
 
     /** Indique si l'affectation est en cours à la date donnée. */
+
+    // ── estEnCours() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute estEnCours().
+     */
+
     public boolean estEnCours(LocalDate date) {
         return estCommencee(date) && (dateFin == null || !date.isAfter(dateFin));
     }
 
     /** Clôture l'affectation avec une date de fin et un relevé kilométrique (F13). */
+
+    // ── clore() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute clore().
+     */
+
     public void clore(LocalDate fin, Integer km) {
         this.dateFin = Objects.requireNonNull(fin, "dateFin");
         this.kmRestitution = Objects.requireNonNull(km, "kmRestitution");
     }
 
     /** Modifie uniquement la date de fin (F4). */
+
+    // ── modifierDateFin() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierDateFin().
+     */
+
     public void modifierDateFin(LocalDate fin) {
         this.dateFin = fin;
     }
 
     /** Modifie véhicule et salarié tant que l'affectation n'a pas commencé (F4). */
+
+    // ── modifierParties() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierParties().
+     */
+
     public void modifierParties(Integer vehicule, Integer salarie) {
         this.idVehicule = Objects.requireNonNull(vehicule, "idVehicule");
         this.idSalarie = Objects.requireNonNull(salarie, "idSalarie");

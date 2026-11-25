@@ -32,81 +32,101 @@ import org.springframework.test.web.servlet.MockMvc;
 /**
  * Tests de la couche web : validation JSON, formats de paramètres et traduction des erreurs.
  *
- * TYPE       : Web (@WebMvcTest, sans contexte JPA ni base de données)
- * STRATÉGIE  : les services sont simulés ; le GlobalExceptionHandler réel est chargé.
+ * COUCHE       : Service
+ * RÔLE         : Tests de la couche web : validation JSON, formats de paramètres et traduction des erreurs.
+ * TYPE         : Web (@WebMvcTest, sans contexte JPA ni base de données)
+ * STRATÉGIE    : les services sont simulés ; le GlobalExceptionHandler réel est chargé.
  * CAS COUVERTS : 400 de validation, 400 d'id invalide, 404 métier, 204, 400 de date, 400 métier, corps d'annulation.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @WebMvcTest
 class ControllerWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Autowired private MockMvc mockMvc;
 
     @MockitoBean private SalleService salleService;
     @MockitoBean private PlaceService placeService;
     @MockitoBean private EvenementService evenementService;
+
+    // ── createSalle_capaciteInvalide() ───────────────────────────────────────
+
     @MockitoBean private ReservationService reservationService;
 
     @Test
     @DisplayName("Une capacité nulle est refusée avec un 400 de validation")
     void createSalle_capaciteInvalide() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         String corps = """
                 {"nom":"Grand Hall","adresse":"12 rue des Arts","ville":"Abidjan","capacite":0}
                 """;
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/billetterie/salle/create")
                         .contentType(MediaType.APPLICATION_JSON).content(corps))
                 .andExpect(status().isBadRequest());
     }
 
+    // ── getSalle_introuvable() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("Une salle introuvable produit un Problem Detail 404")
     void getSalle_introuvable() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleService.findById(999)).thenThrow(new SalleNotFoundException(999));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/billetterie/salle/get/{id}", 999))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title").value("Salle introuvable"))
                 .andExpect(jsonPath("$.idSalle").value(999));
     }
 
+    // ── getSalle_idInvalide() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("Un identifiant non positif est refusé avant d'atteindre le service")
     void getSalle_idInvalide() throws Exception {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/billetterie/salle/get/{id}", 0))
                 .andExpect(status().isBadRequest());
     }
 
+    // ── deletePlace_noContent() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("La suppression d'une place vide renvoie 204")
     void deletePlace_noContent() throws Exception {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(delete("/billetterie/place/delete/{id}", 5))
                 .andExpect(status().isNoContent());
         verify(placeService).delete(5);
     }
 
+    // ── listEvenements_dateInvalide() ────────────────────────────────────────
+
     @Test
     @DisplayName("Une borne de date au format invalide est refusée avec 400")
     void listEvenements_dateInvalide() throws Exception {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/billetterie/evenement/list").param("du", "2026-12-01"))
                 .andExpect(status().isBadRequest());
     }
 
+    // ── listEvenements_periodeInversee() ─────────────────────────────────────
+
     @Test
     @DisplayName("Une période inversée remonte le titre métier")
     void listEvenements_periodeInversee() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(evenementService.findBetween(any(), any()))
                 .thenThrow(new PeriodeInvalideException("2026-12-31T00:00:00"));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/billetterie/evenement/list")
                         .param("du", "2026-12-31T00:00:00")
                         .param("au", "2026-12-01T00:00:00"))
@@ -114,29 +134,33 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.title").value("Période invalide"));
     }
 
+    // ── annulerReservation_ok() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("L'annulation renvoie le montant remboursé")
     void annulerReservation_ok() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(reservationService.annuler(12)).thenReturn(new AnnulationResponse(
                 12, "ANNULEE", new BigDecimal("12.50"), LocalDateTime.of(2026, 12, 1, 20, 0)));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/billetterie/reservation/annulation/{id}", 12))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.statut").value("ANNULEE"))
                 .andExpect(jsonPath("$.montantRembourse").value(12.50));
     }
 
+    // ── updatePlace_corpsInvalide() ──────────────────────────────────────────
+
     @Test
     @DisplayName("La modification d'une place valide le corps JSON")
     void updatePlace_corpsInvalide() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         String corps = """
                 {"idSalle":1,"rang":"","numero":13,"categorie":"ORCHESTRE"}
                 """;
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
                         .put("/billetterie/place/update/{id}", 5)
                         .contentType(MediaType.APPLICATION_JSON).content(corps))

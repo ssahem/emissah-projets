@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  * Corps de création d'un appartement (F3).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'un appartement (F3).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : AppartementController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

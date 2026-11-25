@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
  * Nouveau créneau d'une intervention de reprise (F15).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Nouveau créneau d'une intervention de reprise (F15).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : RepriseController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

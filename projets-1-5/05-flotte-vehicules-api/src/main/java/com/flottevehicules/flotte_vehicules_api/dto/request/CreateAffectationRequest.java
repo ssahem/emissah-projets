@@ -7,9 +7,10 @@ import java.time.LocalDate;
 /**
  * Corps de création d'une affectation (F4).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de contrôle de chevauchement (rôle du service).
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une affectation (F4).
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de contrôle de chevauchement (rôle du service).
  */
 @Schema(description = "Création d'une affectation : véhicule, salarié et date de début requis")
 public record CreateAffectationRequest(
@@ -28,4 +29,9 @@ public record CreateAffectationRequest(
 
         @Schema(description = "Date de fin prévue, facultative", example = "2026-11-30")
         LocalDate dateFin) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

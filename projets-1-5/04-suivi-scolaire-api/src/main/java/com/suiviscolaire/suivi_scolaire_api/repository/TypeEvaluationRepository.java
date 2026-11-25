@@ -14,6 +14,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TypeEvaluationRepository extends JpaRepository<TypeEvaluation, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Cherche un type par son libellé exact. */
     Optional<TypeEvaluation> findByLibelle(String libelle);
 

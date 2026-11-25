@@ -15,6 +15,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface AdresseRepository extends JpaRepository<Adresse, Integer> {
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  REQUÊTES DÉDUITES (héritées de JpaRepository)
+    //  REQUÊTES DÉDUITES (HÉRITÉES DE JPAREPOSITORY)
     // ═════════════════════════════════════════════════════════════════════════
 }

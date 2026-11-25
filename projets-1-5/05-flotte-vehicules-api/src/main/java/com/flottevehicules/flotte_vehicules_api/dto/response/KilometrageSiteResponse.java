@@ -3,7 +3,13 @@ package com.flottevehicules.flotte_vehicules_api.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
-/** Kilométrage mensuel d'un site (F19). */
+/**
+ * Kilométrage mensuel d'un site (F19).
+ *
+ * COUCHE       : DTO
+ * RÔLE         : Kilométrage mensuel d'un site (F19).
+ * NE FAIT PAS  : de logique métier ni d’accès base.
+ */
 @Schema(description = "Total mensuel et détail par véhicule")
 public record KilometrageSiteResponse(
 
@@ -21,4 +27,9 @@ public record KilometrageSiteResponse(
 
         @Schema(description = "Détail par véhicule")
         List<DetailKilometrageResponse> vehicules) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

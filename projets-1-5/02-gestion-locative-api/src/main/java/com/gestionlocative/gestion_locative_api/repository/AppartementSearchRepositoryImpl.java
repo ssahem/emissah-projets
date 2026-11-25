@@ -26,19 +26,26 @@ public class AppartementSearchRepositoryImpl implements AppartementSearchReposit
     private EntityManager entityManager;
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  search()
+    //  SEARCH()
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit la requête à partir des seuls critères renseignés. */
+
+    // ── search() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute search().
+     */
+
     @Override
     public List<Appartement> search(BigDecimal surfaceMin, BigDecimal surfaceMax, Integer nbPieces) {
-        // ── Étape 1/3 : préparer la requête criteria ──
+        // ── Étape 1/3 : préparer la requête criteria ─────────────────────────
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Appartement> requete = builder.createQuery(Appartement.class);
         Root<Appartement> appartement = requete.from(Appartement.class);
         List<Predicate> criteres = new ArrayList<>();
 
-        // ── Étape 2/3 : n'ajouter que les critères fournis ──
+        // ── Étape 2/3 : n'ajouter que les critères fournis ───────────────────
         if (surfaceMin != null) {
             criteres.add(builder.greaterThanOrEqualTo(appartement.get("surface"), surfaceMin));
         }
@@ -49,7 +56,7 @@ public class AppartementSearchRepositoryImpl implements AppartementSearchReposit
             criteres.add(builder.equal(appartement.get("nbPieces"), nbPieces));
         }
 
-        // ── Étape 3/3 : trier et exécuter ──
+        // ── Étape 3/3 : trier et exécuter ────────────────────────────────────
         requete.select(appartement)
                 .where(criteres.toArray(Predicate[]::new))
                 .orderBy(builder.asc(appartement.get("etage")), builder.asc(appartement.get("surface")));

@@ -9,6 +9,7 @@ import java.time.LocalDate;
  * Bail renvoyé par l'API (F5).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Bail renvoyé par l'API (F5).
  * IMMUABLE     : record Java.
  * Le locataire exposé est le principal (E-08), même si la table de liaison
  * autorise plusieurs locataires.

@@ -101,12 +101,12 @@ public class EvenementService {
      * @throws PeriodeInvalideException si la borne de début est postérieure à la borne de fin.
      */
     public List<EvenementResponse> findBetween(LocalDateTime du, LocalDateTime au) {
-        // ── Étape 1/2 : valider la période ──
+        // ── Étape 1/2 : valider la période ───────────────────────────────────
         if (du != null && au != null && du.isAfter(au)) {
             throw new PeriodeInvalideException(du.toString());
         }
 
-        // ── Étape 2/2 : choisir la requête et convertir ──
+        // ── Étape 2/2 : choisir la requête et convertir ──────────────────────
         List<Evenement> evenements;
         if (du == null && au == null) {
             evenements = evenementRepository.findAllByOrderByDateHeureAsc();
@@ -142,12 +142,12 @@ public class EvenementService {
      */
     @Transactional
     public EvenementResponse create(CreateEvenementRequest request) {
-        // ── Étape 1/3 : résoudre les références et contrôler les règles ──
+        // ── Étape 1/3 : résoudre les références et contrôler les règles ──────
         Salle salle = requireSalle(request.idSalle());
         requireFutur(request.dateHeure());
         requireSalleAvecPlace(salle);
 
-        // ── Étape 2/3 : réutiliser ou créer le spectacle, puis enregistrer ──
+        // ── Étape 2/3 : réutiliser ou créer le spectacle, puis enregistrer ───
         Spectacle spectacle = spectacleRepository
                 .findFirstByTitreIgnoreCaseAndType(request.titre(), request.type())
                 .orElseGet(() -> spectacleRepository.saveAndFlush(new Spectacle(
@@ -155,7 +155,7 @@ public class EvenementService {
         Evenement evenement = evenementRepository.saveAndFlush(
                 new Evenement(request.dateHeure(), spectacle, salle));
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return evenementMapper.toResponse(evenement);
     }
 
@@ -170,7 +170,7 @@ public class EvenementService {
      */
     @Transactional
     public EvenementResponse update(Integer idEvenement, UpdateEvenementRequest request) {
-        // ── Étape 1/3 : charger et contrôler ──
+        // ── Étape 1/3 : charger et contrôler ─────────────────────────────────
         Evenement evenement = requireEvenement(idEvenement);
         requireFutur(request.dateHeure());
         Salle salle = requireSalle(request.idSalle());
@@ -180,7 +180,7 @@ public class EvenementService {
             throw new SalleEvenementFigeeException(idEvenement);
         }
 
-        // ── Étape 2/3 : réutiliser ou créer le spectacle, puis appliquer ──
+        // ── Étape 2/3 : réutiliser ou créer le spectacle, puis appliquer ─────
         Spectacle spectacle = spectacleRepository
                 .findFirstByTitreIgnoreCaseAndType(request.titre(), request.type())
                 .orElseGet(() -> spectacleRepository.saveAndFlush(new Spectacle(
@@ -189,7 +189,7 @@ public class EvenementService {
         evenement.setSalle(salle);
         evenement.setSpectacle(spectacle);
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return evenementMapper.toResponse(evenement);
     }
 
@@ -212,7 +212,7 @@ public class EvenementService {
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  CAS D'USAGE — F17 et F19
+    //  CAS D'USAGE — F17 ET F19
     // ═════════════════════════════════════════════════════════════════════════
 
     // ── findPlacesLibres() ───────────────────────────────────────────────────
@@ -225,12 +225,12 @@ public class EvenementService {
      * @throws SalleSansPlaceException si la salle ne contient aucune place.
      */
     public PlacesLibresResponse findPlacesLibres(Integer idEvenement) {
-        // ── Étape 1/3 : charger l'événement et les places de sa salle ──
+        // ── Étape 1/3 : charger l'événement et les places de sa salle ────────
         Evenement evenement = requireEvenement(idEvenement);
         List<Place> places = placeRepository
                 .findAllBySalle_IdSalleOrderByRangAscNumeroAsc(evenement.getSalle().getIdSalle());
 
-        // ── Étape 2/3 : déduire les places actives ──
+        // ── Étape 2/3 : déduire les places actives ───────────────────────────
         Map<String, Long> occupees = new LinkedHashMap<>();
         for (ReservationPlace rp : reservationPlaceRepository.findPlacesActivesByEvenement(idEvenement)) {
             String categorie = placeRepository
@@ -241,7 +241,7 @@ public class EvenementService {
             occupees.merge(categorie, 1L, Long::sum);
         }
 
-        // ── Étape 3/3 : grouper les places libres par catégorie ──
+        // ── Étape 3/3 : grouper les places libres par catégorie ──────────────
         Map<String, long[]> cumuls = new LinkedHashMap<>();
         for (Place place : places) {
             String categorie = place.getCategorie().getLibelle();
@@ -265,7 +265,7 @@ public class EvenementService {
      * @throws SalleSansPlaceException si la salle ne contient aucune place.
      */
     public RemplissageResponse findRemplissage(Integer idEvenement) {
-        // ── Étape 1/4 : charger l'événement et vérifier les places de la salle ──
+        // ── Étape 1/4 : charger l'événement et vérifier les places de la sa… ─
         Evenement evenement = requireEvenement(idEvenement);
         Integer idSalle = evenement.getSalle().getIdSalle();
         List<Place> places = placeRepository.findAllBySalle_IdSalleOrderByRangAscNumeroAsc(idSalle);
@@ -273,18 +273,18 @@ public class EvenementService {
             throw new SalleSansPlaceException(idSalle);
         }
 
-        // ── Étape 2/4 : initialiser les cumuls par catégorie ──
+        // ── Étape 2/4 : initialiser les cumuls par catégorie ─────────────────
         // Chaque tableau contient : [total, provisoires, payees].
         Map<String, long[]> cumuls = new LinkedHashMap<>();
         for (Place place : places) {
             cumuls.computeIfAbsent(place.getCategorie().getLibelle(), c -> new long[3])[0]++;
         }
 
-        // ── Étape 3/4 : compter les réservations actives, ANNULEE exclue ──
+        // ── Étape 3/4 : compter les réservations actives, ANNULEE exclue ─────
         long provisoires = compterParStatut(idSalle, idEvenement, "PROVISOIRE", cumuls, 1);
         long payees = compterParStatut(idSalle, idEvenement, "PAYEE", cumuls, 2);
 
-        // ── Étape 4/4 : assembler la réponse ──
+        // ── Étape 4/4 : assembler la réponse ─────────────────────────────────
         List<RemplissageParCategorieResponse> detail = new ArrayList<>();
         cumuls.forEach((categorie, t) -> detail.add(new RemplissageParCategorieResponse(
                 categorie, t[0], t[1], t[2], pourcentage(t[1] + t[2], t[0]))));

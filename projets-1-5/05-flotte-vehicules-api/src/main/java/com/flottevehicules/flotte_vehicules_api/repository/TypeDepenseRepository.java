@@ -12,4 +12,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * NE FAIT PAS  : de règle métier.
  */
 public interface TypeDepenseRepository extends JpaRepository<TypeDepense, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

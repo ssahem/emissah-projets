@@ -53,29 +53,57 @@ public class ClasseService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Liste les classes triées par niveau puis par nom, avec leur effectif courant. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<ClasseResponse> findAll() {
         return classeRepository.findAllByOrderByIdNiveauAscNomAsc().stream().map(mapper::toResponse).toList();
     }
 
     /** Consulte une classe par identifiant (404 si inconnue). */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public ClasseResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** Crée une classe ; le nom doit être unique dans le niveau (409). */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public ClasseResponse create(CreateClasseRequest request) {
-        // ── Étape 1/2 : refuser un doublon de nom dans le même niveau ──
+        // ── Étape 1/2 : refuser un doublon de nom dans le même niveau ────────
         if (classeRepository.findByNomAndIdNiveau(request.nom(), request.idNiveau()).isPresent()) {
             throw new ConflitMetierException("classe-nom-deja-utilise",
                     "Une classe nommée « " + request.nom() + " » existe déjà dans ce niveau");
         }
-        // ── Étape 2/2 : persister la classe ──
+        // ── Étape 2/2 : persister la classe ──────────────────────────────────
         return mapper.toResponse(classeRepository.save(new Classe(
                 request.nom(), request.idAnnee(), request.idNiveau(), request.effectifMax())));
     }
 
     /** Modifie l'effectif maximal sans jamais descendre sous l'effectif actuel (F1). */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public ClasseResponse update(Integer id, UpdateClasseRequest request) {
         Classe classe = required(id);
@@ -90,6 +118,13 @@ public class ClasseService {
     }
 
     /** Supprime une classe vide ; une classe avec élèves est refusée (409). */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Classe classe = required(id);
@@ -105,6 +140,13 @@ public class ClasseService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Retourne la classe ou lève une erreur métier 404. */
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     public Classe required(Integer id) {
         return classeRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Classe", id));

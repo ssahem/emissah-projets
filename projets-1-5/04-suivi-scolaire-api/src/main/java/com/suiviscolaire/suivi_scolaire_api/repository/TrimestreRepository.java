@@ -16,6 +16,10 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface TrimestreRepository extends JpaRepository<Trimestre, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les trimestres triés par numéro. */
     List<Trimestre> findAllByOrderByNumeroAsc();
 

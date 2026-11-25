@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Place déjà existante — erreur métier traduite en HTTP conflict. */
+/**
+ * Place déjà existante — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Place déjà existante — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class PlaceDejaExistanteException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final String rang;
 
-    // ── PlaceDejaExistanteException() ─────────────────────────────────────────────────────────────
+    // ── PlaceDejaExistanteException() ────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public PlaceDejaExistanteException(String rang) {
@@ -17,7 +27,7 @@ public class PlaceDejaExistanteException extends ApiException {
         addProperty("rang", rang);
     }
 
-    // ── getRang() ───────────────────────────────────────
+    // ── getRang() ────────────────────────────────────────────────────────────
 
     /** Retourne rang. */
     public String getRang() { return rang; }

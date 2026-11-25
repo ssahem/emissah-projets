@@ -52,17 +52,35 @@ public class CompetenceController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /interventions-terrain/competence/list ──────────────────
+
+    /**
+     * Lister les compétences.
+     */
+
     @Operation(summary = "Lister les compétences", description = "Triées par libellé")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CompetenceResponse> list() {
         return service.findAll();
     }
 
+    // ── get() — GET /interventions-terrain/competence/get/{id} ───────────────
+
+    /**
+     * Lire une compétence.
+     */
+
     @Operation(summary = "Lire une compétence")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public CompetenceResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /interventions-terrain/competence/create ─────────────
+
+    /**
+     * Créer une compétence.
+     */
 
     @Operation(summary = "Créer une compétence")
     @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -73,12 +91,24 @@ public class CompetenceController {
                 .body(created);
     }
 
+    // ── update() — PUT /interventions-terrain/competence/update/{id} ─────────
+
+    /**
+     * Modifier une compétence.
+     */
+
     @Operation(summary = "Modifier une compétence")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public CompetenceResponse update(@PathVariable Integer id, @Valid @RequestBody UpdateCompetenceRequest request) {
         return service.update(id, request);
     }
+
+    // ── delete() — DELETE /interventions-terrain/competence/delete/{id} ──────
+
+    /**
+     * Supprimer une compétence.
+     */
 
     @Operation(summary = "Supprimer une compétence")
     @DeleteMapping(path = "/delete/{id}")

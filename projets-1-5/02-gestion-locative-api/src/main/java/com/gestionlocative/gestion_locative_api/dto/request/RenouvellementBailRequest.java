@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * Corps d'un renouvellement de bail (F14).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps d'un renouvellement de bail (F14).
  * IMMUABLE     : record Java.
  * La nouvelle date de fin doit être postérieure à l'échéance courante et ne
  * pas chevaucher un autre bail ; ces règles sont vérifiées par le service.

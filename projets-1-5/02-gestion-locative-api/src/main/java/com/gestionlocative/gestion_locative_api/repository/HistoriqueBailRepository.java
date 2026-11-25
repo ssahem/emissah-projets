@@ -18,12 +18,12 @@ public interface HistoriqueBailRepository extends JpaRepository<HistoriqueBail, 
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByIdBailOrderByDateEvenementDesc() ──────────────────────────────
+    // ── findByIdBailOrderByDateEvenementDesc() ───────────────────────────────
 
     /** Retourne les événements d'un bail du plus récent au plus ancien. */
     List<HistoriqueBail> findByIdBailOrderByDateEvenementDesc(Integer idBail);
 
-    // ── deleteByIdBail() ────────────────────────────────────────────────────
+    // ── deleteByIdBail() ─────────────────────────────────────────────────────
 
     /** Supprime les événements d'un bail avant sa suppression (F5). */
     void deleteByIdBail(Integer idBail);

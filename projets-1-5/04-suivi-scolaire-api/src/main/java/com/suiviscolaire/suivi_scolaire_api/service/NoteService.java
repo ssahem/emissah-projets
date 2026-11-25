@@ -42,6 +42,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class NoteService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final NoteRepository noteRepository;
     private final InscriptionRepository inscriptionRepository;
     private final EnseignementRepository enseignementRepository;
@@ -68,6 +72,13 @@ public class NoteService {
     }
 
     /** Liste les notes groupées par matière (F5 : forme par défaut de GET /note/list). */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<NotesMatiereResponse> findAll() {
         Map<Integer, List<NoteResponse>> groupes = new LinkedHashMap<>();
         noteRepository.findAllByOrderByIdEnseignementAscNumeroTrimestreAsc()
@@ -85,22 +96,36 @@ public class NoteService {
     }
 
     /** Consulte une note par identifiant (404 si inconnue). */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public NoteResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** Crée une note : l'élève, la matière, le type et le trimestre ouvert sont vérifiés. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public NoteResponse create(CreateNoteRequest request) {
-        // ── Étape 1/4 : le trimestre doit exister et rester ouvert ──
+        // ── Étape 1/4 : le trimestre doit exister et rester ouvert ───────────
         trimestreLookup.exigible(request.trimestre(), "La saisie de note");
-        // ── Étape 2/4 : résoudre l'élève via son numéro d'inscription unique (A-01) ──
+        // ── Étape 2/4 : résoudre l'élève via son numéro d'inscription uniqu… ─
         Eleve eleve = eleveRepository.findById(request.idEleve())
                 .orElseThrow(() -> new RessourceIntrouvableException("Eleve", request.idEleve()));
         Inscription inscription = inscriptionRepository.findByIdEleveAndDateFinIsNull(request.idEleve())
                 .orElseThrow(() -> new DonneeInvalideException("inscription-manquante",
                         "L'élève " + eleve.getNom() + " n'a aucune inscription courante"));
-        // ── Étape 3/4 : retrouver l'enseignement de la matière dans la classe de l'élève ──
+        // ── Étape 3/4 : retrouver l'enseignement de la matière dans la clas… ─
         Enseignement enseignement = enseignementRepository
                 .findByIdClasseAndIdMatiere(inscription.getIdClasse(), request.idMatiere())
                 .orElseThrow(() -> new DonneeInvalideException("matiere-non-enseignee",
@@ -109,13 +134,20 @@ public class NoteService {
             throw new DonneeInvalideException("type-evaluation-inconnu",
                     "Le type d'évaluation " + request.idTypeEval() + " est inconnu");
         }
-        // ── Étape 4/4 : persister la note ──
+        // ── Étape 4/4 : persister la note ────────────────────────────────────
         Note note = noteRepository.save(new Note(request.valeur(), request.trimestre(),
                 request.idTypeEval(), enseignement.getIdEnseignement(), inscription.getNumeroInscription()));
         return mapper.toResponse(note);
     }
 
     /** Modifie la valeur d'une note tant que le trimestre n'est pas clôturé. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public NoteResponse update(Integer id, UpdateNoteRequest request) {
         Note note = required(id);
@@ -125,6 +157,13 @@ public class NoteService {
     }
 
     /** Supprime une note tant que le trimestre n'est pas clôturé. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Note note = required(id);
@@ -133,16 +172,37 @@ public class NoteService {
     }
 
     /** Retourne la note ou lève une erreur métier 404. */
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     public Note required(Integer id) {
         return noteRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Note", id));
     }
 
     /** Construit l'en-tête Location d'une note créée. */
+
+    // ── location() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute location().
+     */
+
     public URI location(Integer id) {
         return URI.create("/suivi-scolaire/note/get/" + id);
     }
 
     /** Valeur minimale autorisée pour une note (0). */
+
+    // ── valeurMinimale() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute valeurMinimale().
+     */
+
     public BigDecimal valeurMinimale() { return BigDecimal.ZERO; }
 }

@@ -35,12 +35,12 @@ public class Statut {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Statut() ─────────────────────────────────────────────────────────
+    // ── Statut() ─────────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Statut() {}
 
-    // ── Statut(String libelle) ───────────────────────────────────────────
+    // ── Statut(String libelle) ───────────────────────────────────────────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Statut(String libelle) { this.libelle = Objects.requireNonNull(libelle, "libelle"); }
@@ -49,12 +49,12 @@ public class Statut {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdStatut() ────────────────────────────────────────────────────
+    // ── getIdStatut() ────────────────────────────────────────────────────────
 
     /** Retourne idStatut. */
     public Integer getIdStatut() { return idStatut; }
 
-    // ── getLibelle() ─────────────────────────────────────────────────────
+    // ── getLibelle() ─────────────────────────────────────────────────────────
 
     /** Retourne libelle. */
     public String getLibelle() { return libelle; }

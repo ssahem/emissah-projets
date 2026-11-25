@@ -47,9 +47,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F5 : type résolu en service, adresse créée, responsable unique, statut initial (A-02, A-03, E-21). */
+/**
+ * Règles métier F5 : type résolu en service, adresse créée, responsable unique, statut initial (A-02, A-03, E-21).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F5 : type résolu en service, adresse créée, responsable unique, statut initial (A-02, A-03, E-21).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class InterventionServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDateTime DEMANDE = LocalDateTime.of(2026, 11, 24, 9, 0);
     private static final LocalDateTime DEBUT = LocalDateTime.of(2026, 12, 1, 9, 0);
@@ -69,6 +79,12 @@ class InterventionServiceTest {
 
     private InterventionService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock clock = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -77,6 +93,8 @@ class InterventionServiceTest {
                 historiqueRepository, exigenceRepository, obtentionRepository, competenceRepository,
                 new InterventionMapper(), new AffectationMapper(), clock);
     }
+
+    // ── createRefuseTypeInconnu() ────────────────────────────────────────────
 
     @Test
     @DisplayName("Un code de type inconnu est refusé avec un 400")
@@ -91,6 +109,8 @@ class InterventionServiceTest {
                 .hasMessageContaining("inconnu");
         verify(adresseRepository, never()).save(any());
     }
+
+    // ── createPersisteAdresseEtResponsable() ─────────────────────────────────
 
     @Test
     @DisplayName("La création persiste l'adresse, le responsable et le statut PLANIFIEE")
@@ -110,6 +130,8 @@ class InterventionServiceTest {
         assertThat(historique.getValue().getDateHeure()).isEqualTo(
                 LocalDateTime.of(2026, 11, 24, 10, 0));
     }
+
+    // ── updateChangementResponsableRecopieStatut() ───────────────────────────
 
     @Test
     @DisplayName("Le changement de responsable recopie le statut courant et libère l'ancien")
@@ -146,6 +168,8 @@ class InterventionServiceTest {
         assertThat(historique.getValue().getIdStatut()).isEqualTo(1);
     }
 
+    // ── updateRefuseSiStatutNonPlanifie() ────────────────────────────────────
+
     @Test
     @DisplayName("Une intervention commencée n'est plus modifiable")
     void updateRefuseSiStatutNonPlanifie() {
@@ -164,6 +188,8 @@ class InterventionServiceTest {
                 .hasMessageContaining("PLANIFIEE");
     }
 
+    // ── createRefuseCreneauPasse() ───────────────────────────────────────────
+
     @Test
     @DisplayName("Un créneau passé est refusé")
     void createRefuseCreneauPasse() {
@@ -179,6 +205,8 @@ class InterventionServiceTest {
                 .hasMessageContaining("futur");
     }
 
+    // ── addAffectationRefuseDoublon() ────────────────────────────────────────
+
     @Test
     @DisplayName("Un technicien déjà affecté ne peut pas être ajouté deux fois")
     void addAffectationRefuseDoublon() {
@@ -192,6 +220,8 @@ class InterventionServiceTest {
                 .hasMessageContaining("déjà affecté");
         verify(affectationRepository, never()).save(any());
     }
+
+    // ── addAffectationRefuseSecondResponsable() ──────────────────────────────
 
     @Test
     @DisplayName("Un second responsable est refusé avec un 409")
@@ -209,6 +239,8 @@ class InterventionServiceTest {
         verify(affectationRepository, never()).save(any());
     }
 
+    // ── deleteNettoieLesEnfants() ────────────────────────────────────────────
+
     @Test
     @DisplayName("La suppression nettoie historiques et affectations avant l'intervention")
     void deleteNettoieLesEnfants() {
@@ -225,6 +257,13 @@ class InterventionServiceTest {
     }
 
     /** Prépare les mocks nécessaires à une création nominale. */
+
+    // ── prepareCreate() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour prepareCreate().
+     */
+
     private void prepareCreate() {
         TypeIntervention type = mock(TypeIntervention.class);
         when(type.getCode()).thenReturn("RACCORDEMENT_FIBRE");
@@ -251,12 +290,26 @@ class InterventionServiceTest {
     }
 
     /** Corps de création nominal. */
+
+    // ── requeteCreate() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour requeteCreate().
+     */
+
     private CreateInterventionRequest requeteCreate() {
         return new CreateInterventionRequest(1, "RACCORDEMENT_FIBRE", 3,
                 DEMANDE, DEBUT, FIN, "12 rue de la Paix", "Paris");
     }
 
     /** Intervention avec son identifiant. */
+
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
+
     private Intervention intervention() {
         Intervention intervention = new Intervention(DEMANDE, DEBUT, FIN, 1, 5, "RACCORDEMENT_FIBRE");
         ReflectionTestUtils.setField(intervention, "idIntervention", 20);
@@ -264,6 +317,13 @@ class InterventionServiceTest {
     }
 
     /** Affectation avec son identifiant. */
+
+    // ── affectation() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour affectation().
+     */
+
     private Affectation affectation(Integer id, Integer idTechnicien, boolean responsable) {
         Affectation affectation = new Affectation(20, idTechnicien, responsable);
         ReflectionTestUtils.setField(affectation, "idAffectation", id);
@@ -271,6 +331,13 @@ class InterventionServiceTest {
     }
 
     /** Statut simulé. */
+
+    // ── statut() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour statut().
+     */
+
     private Statut statut(String libelle) {
         Statut statut = mock(Statut.class);
         lenient().when(statut.getLibelle()).thenReturn(libelle);

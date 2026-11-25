@@ -4,7 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.List;
 
-/** Coût total d'entretien d'un véhicule (F18, décision D-03). */
+/**
+ * Coût total d'entretien d'un véhicule (F18, décision D-03).
+ *
+ * COUCHE       : DTO
+ * RÔLE         : Coût total d'entretien d'un véhicule (F18, décision D-03).
+ * NE FAIT PAS  : de logique métier ni d’accès base.
+ */
 @Schema(description = "Coût des entretiens et coût au kilomètre")
 public record CoutVehiculeResponse(
 
@@ -28,4 +34,9 @@ public record CoutVehiculeResponse(
 
         @Schema(description = "Répartition par type d'entretien")
         List<RepartitionTypeResponse> repartition) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Immeuble d'un propriétaire avec ses compteurs (F7).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Immeuble d'un propriétaire avec ses compteurs (F7).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ImmeubleMapper, alimenté par ProprietaireService.
  * NE FAIT PAS  : d'accès base ni de logique métier.

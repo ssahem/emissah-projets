@@ -11,6 +11,7 @@ import java.time.LocalDate;
  * Corps de création d'un bail (F5).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'un bail (F5).
  * IMMUABLE     : record Java.
  * La provision et le dépôt sont facultatifs : l'énoncé ne les rend pas
  * obligatoires, la base les impose NOT NULL (le service applique 0 par défaut).

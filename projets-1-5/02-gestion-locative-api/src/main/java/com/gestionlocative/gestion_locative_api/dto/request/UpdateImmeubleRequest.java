@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
  * Corps de modification d'un immeuble (F2).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'un immeuble (F2).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : ImmeubleController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

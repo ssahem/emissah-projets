@@ -18,20 +18,33 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 /**
  * Test de smoke du socle (P0).
  *
- * TYPE       : Intégration (Testcontainers PostgreSQL)
- * STRATÉGIE  : schéma issu des migrations Flyway V1 à V8, sur une base vierge.
+ * COUCHE       : Service
+ * RÔLE         : Test de smoke du socle (P0).
+ * TYPE         : Intégration (Testcontainers PostgreSQL)
+ * STRATÉGIE    : schéma issu des migrations Flyway V1 à V8, sur une base vierge.
  * CAS COUVERTS : démarrage du contexte, séquence Flyway, bean Clock, vues SQL lisibles.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
 class SocleIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("gestion_locative")
             .withUsername("root")
             .withPassword("root");
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
@@ -42,47 +55,56 @@ class SocleIntegrationTest {
     }
 
     @Autowired private JdbcTemplate jdbcTemplate;
+
+    // ── migrationsSequence() ─────────────────────────────────────────────────
+
     @Autowired private Clock clock;
 
     @Test
     @DisplayName("Les migrations V1 à V8 sont appliquées dans l'ordre")
     void migrationsSequence() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<String> versions = jdbcTemplate.queryForList(
                 "SELECT version FROM flyway_schema_history WHERE success = true ORDER BY installed_rank",
                 String.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(versions).containsExactly("1", "2", "3", "4", "5", "6", "7", "8");
     }
+
+    // ── colonnesArbitrees() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("Le schéma final porte les colonnes issues des arbitrages")
     void colonnesArbitrees() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<String> colonnes = jdbcTemplate.queryForList(
                 "SELECT column_name FROM information_schema.columns "
                         + "WHERE table_schema = 'public' AND table_name = 'immeuble'",
                 String.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(colonnes).contains("id_proprietaire", "nb_etages").doesNotContain("ancienne_colonne");
     }
+
+    // ── vuesLisibles() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Les deux vues sont interrogeables sans entité JPA")
     void vuesLisibles() {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThat(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM v_solde_quittance", Integer.class))
                 .isZero();
         assertThat(jdbcTemplate.queryForObject("SELECT COUNT(*) FROM v_restitution_depot", Integer.class))
                 .isZero();
     }
 
+    // ── horlogeExposee() ─────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Une horloge applicative est exposée pour les règles temporelles")
     void horlogeExposee() {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThat(clock).isNotNull();
     }
 }

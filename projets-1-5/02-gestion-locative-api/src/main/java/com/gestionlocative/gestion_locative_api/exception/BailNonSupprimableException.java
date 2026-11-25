@@ -6,11 +6,17 @@ import org.springframework.http.HttpStatus;
  * Exception métier : bail déjà commencé, donc non supprimable (F5).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : bail déjà commencé, donc non supprimable (F5).
  * LANCÉE PAR   : BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 409.
  * POURQUOI     : un bail en cours se résilie (F13), il ne se supprime pas.
+ * NE FAIT PAS  : de logique métier.
  */
 public class BailNonSupprimableException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur pour un identifiant donné. */
     public BailNonSupprimableException(Integer idBail) {

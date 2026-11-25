@@ -6,11 +6,17 @@ import org.springframework.http.HttpStatus;
  * Exception métier : étage supérieur au nombre d'étages de l'immeuble (F3).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : étage supérieur au nombre d'étages de l'immeuble (F3).
  * LANCÉE PAR   : AppartementService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 400.
  * POURQUOI     : la cohérence étage/immeuble est vérifiée avant l'insertion.
+ * NE FAIT PAS  : de logique métier.
  */
 public class AppartementEtageHorsImmeubleException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec l'étage demandé et le nombre d'étages disponible. */
     public AppartementEtageHorsImmeubleException(Integer etage, Integer nbEtages) {

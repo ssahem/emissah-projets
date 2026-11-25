@@ -7,6 +7,7 @@ import java.util.List;
  * Restitution des places libres d'un événement (F17).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Restitution des places libres d'un événement (F17).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : PlacesLibresMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

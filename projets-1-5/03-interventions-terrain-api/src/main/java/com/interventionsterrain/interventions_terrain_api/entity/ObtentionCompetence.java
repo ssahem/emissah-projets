@@ -74,5 +74,12 @@ public class ObtentionCompetence {
     public LocalDate getDateAlerte() { return dateAlerte; }
 
     /** Positionne la date de signalement pour ne jamais alerter deux fois (S-06, F16). */
+
+    // ── signaler() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute signaler().
+     */
+
     public void signaler(LocalDate date) { this.dateAlerte = date; }
 }

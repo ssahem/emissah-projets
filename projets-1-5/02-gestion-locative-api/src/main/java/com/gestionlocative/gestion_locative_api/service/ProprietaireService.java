@@ -70,7 +70,7 @@ public class ProprietaireService {
     //  CAS D'USAGE — F1
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAll() ───────────────────────────────────────────────────────────
+    // ── findAll() ────────────────────────────────────────────────────────────
 
     /** Retourne les propriétaires triés par nom (F1). */
     public List<ProprietaireResponse> findAll() {
@@ -79,14 +79,14 @@ public class ProprietaireService {
                 .toList();
     }
 
-    // ── findById() ──────────────────────────────────────────────────────────
+    // ── findById() ───────────────────────────────────────────────────────────
 
     /** Retourne un propriétaire par identifiant. */
     public ProprietaireResponse findById(Integer idProprietaire) {
         return proprietaireMapper.toResponse(requireProprietaire(idProprietaire));
     }
 
-    // ── findImmeubles() ─────────────────────────────────────────────────────
+    // ── findImmeubles() ──────────────────────────────────────────────────────
 
     /**
      * Retourne les immeubles d'un propriétaire avec leurs compteurs (F7).
@@ -95,17 +95,17 @@ public class ProprietaireService {
      * @throws ProprietaireNotFoundException si le propriétaire n'existe pas
      */
     public List<ImmeubleProprietaireResponse> findImmeubles(Integer idProprietaire) {
-        // ── Étape 1/3 : vérifier l'existence du propriétaire ──
+        // ── Étape 1/3 : vérifier l'existence du propriétaire ─────────────────
         requireProprietaire(idProprietaire);
 
-        // ── Étape 2/3 : enrichir chaque immeuble ──
+        // ── Étape 2/3 : enrichir chaque immeuble ─────────────────────────────
         return immeubleRepository.findAllByIdProprietaireOrderByAdresseAsc(idProprietaire)
                 .stream()
                 .map(immeuble -> toResponse(immeuble))
                 .toList();
     }
 
-    // ── create() ────────────────────────────────────────────────────────────
+    // ── create() ─────────────────────────────────────────────────────────────
 
     /**
      * Crée un propriétaire après contrôle de l'unicité de l'email. Modifie la base.
@@ -114,20 +114,20 @@ public class ProprietaireService {
      */
     @Transactional
     public ProprietaireResponse create(CreateProprietaireRequest request) {
-        // ── Étape 1/3 : vérifier l'unicité de l'email ──
+        // ── Étape 1/3 : vérifier l'unicité de l'email ────────────────────────
         verifierEmailLibre(request.email(), null);
 
-        // ── Étape 2/3 : construire et enregistrer ──
+        // ── Étape 2/3 : construire et enregistrer ────────────────────────────
         Proprietaire proprietaire = new Proprietaire(
                 request.nom().trim(), valeur(request.prenom()),
                 request.email().trim(), request.telephone().trim());
         Proprietaire enregistre = proprietaireRepository.saveAndFlush(proprietaire);
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return proprietaireMapper.toResponse(enregistre);
     }
 
-    // ── update() ────────────────────────────────────────────────────────────
+    // ── update() ─────────────────────────────────────────────────────────────
 
     /**
      * Modifie les coordonnées d'un propriétaire. Modifie la base.
@@ -138,19 +138,19 @@ public class ProprietaireService {
      */
     @Transactional
     public ProprietaireResponse update(Integer idProprietaire, UpdateProprietaireRequest request) {
-        // ── Étape 1/3 : charger et contrôler l'unicité ──
+        // ── Étape 1/3 : charger et contrôler l'unicité ───────────────────────
         Proprietaire proprietaire = requireProprietaire(idProprietaire);
         verifierEmailLibre(request.email(), idProprietaire);
 
-        // ── Étape 2/3 : appliquer les changements ──
+        // ── Étape 2/3 : appliquer les changements ────────────────────────────
         proprietaire.modifier(request.nom().trim(), valeur(request.prenom()),
                 request.email().trim(), request.telephone().trim());
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return proprietaireMapper.toResponse(proprietaire);
     }
 
-    // ── delete() ────────────────────────────────────────────────────────────
+    // ── delete() ─────────────────────────────────────────────────────────────
 
     /**
      * Supprime un propriétaire sans immeuble. Modifie la base.
@@ -170,7 +170,7 @@ public class ProprietaireService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── requireProprietaire() ───────────────────────────────────────────────
+    // ── requireProprietaire() ────────────────────────────────────────────────
 
     /** Charge un propriétaire ou lève l'erreur métier 404. */
     private Proprietaire requireProprietaire(Integer idProprietaire) {
@@ -178,7 +178,7 @@ public class ProprietaireService {
                 .orElseThrow(() -> new ProprietaireNotFoundException(idProprietaire));
     }
 
-    // ── toResponse() ────────────────────────────────────────────────────────
+    // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Enrichit un immeuble avec ses deux compteurs pour F7. */
     private ImmeubleProprietaireResponse toResponse(Immeuble immeuble) {
@@ -188,7 +188,7 @@ public class ProprietaireService {
         return immeubleMapper.toProprietaireResponse(immeuble, nbAppartements, nbBauxEnCours);
     }
 
-    // ── verifierEmailLibre() ────────────────────────────────────────────────
+    // ── verifierEmailLibre() ─────────────────────────────────────────────────
 
     /** Vérifie qu'aucun autre propriétaire n'utilise cet email. */
     private void verifierEmailLibre(String email, Integer idProprietaireExclu) {
@@ -199,7 +199,7 @@ public class ProprietaireService {
         }
     }
 
-    // ── valeur() ────────────────────────────────────────────────────────────
+    // ── valeur() ─────────────────────────────────────────────────────────────
 
     /** Normalise un champ facultatif : la base impose NOT NULL sur prenom. */
     private String valeur(String valeur) {

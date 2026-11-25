@@ -15,6 +15,10 @@ import org.springframework.http.HttpStatus;
  */
 public class RessourceIntrouvableException extends ApiException {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     public RessourceIntrouvableException(String ressource, Object identifiant) {
         super(HttpStatus.NOT_FOUND, "Ressource introuvable", "ressource-introuvable",
                 ressource + " " + identifiant + " introuvable");

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * COUCHE       : Controller (interface HTTP)
  * URL          : /flotte-vehicules/salarie/...
+ * RÔLE         : Endpoints des fiches salarié (F3) et de leurs affectations (F7).
  * SÉCURITÉ     : aucune.
  * NE FAIT PAS  : de logique métier.
  */
@@ -34,6 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Salarié", description = "CRUD des salariés et historique de leurs affectations (F7)")
 public class SalarieController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final SalarieService service;
 
     public SalarieController(SalarieService service) {
@@ -41,6 +46,13 @@ public class SalarieController {
     }
 
     /** F3 : crée une fiche salarié. */
+
+    // ── create() — POST /flotte-vehicules/salarie/create ─────────────────────
+
+    /**
+     * Créer un salarié.
+     */
+
     @PostMapping("/create")
     @Operation(summary = "Créer un salarié", description = "Nom, matricule et service obligatoires")
     @ApiResponse(responseCode = "201", description = "Salarié créé")
@@ -53,6 +65,13 @@ public class SalarieController {
     }
 
     /** F3 : liste triée par nom. */
+
+    // ── list() — GET /flotte-vehicules/salarie/list ──────────────────────────
+
+    /**
+     * Lister les salariés.
+     */
+
     @GetMapping("/list")
     @Operation(summary = "Lister les salariés", description = "Tri par nom croissant")
     @ApiResponse(responseCode = "200", description = "Liste des salariés")
@@ -61,6 +80,13 @@ public class SalarieController {
     }
 
     /** F3 : détail d'un salarié. */
+
+    // ── get() — GET /flotte-vehicules/salarie/{id} ───────────────────────────
+
+    /**
+     * Consulter un salarié.
+     */
+
     @GetMapping("/{id}")
     @Operation(summary = "Consulter un salarié")
     @ApiResponse(responseCode = "200", description = "Salarié trouvé")
@@ -70,6 +96,13 @@ public class SalarieController {
     }
 
     /** F3 : modifie les champs autorisés ; matricule figé. */
+
+    // ── update() — PUT /flotte-vehicules/salarie/{id}/update ─────────────────
+
+    /**
+     * Modifier un salarié.
+     */
+
     @PutMapping("/{id}/update")
     @Operation(summary = "Modifier un salarié", description = "Le matricule n'est pas modifiable")
     @ApiResponse(responseCode = "200", description = "Salarié modifié")
@@ -80,6 +113,13 @@ public class SalarieController {
     }
 
     /** F3 : suppression refusée si une affectation est en cours. */
+
+    // ── delete() — DELETE /flotte-vehicules/salarie/{id}/delete ──────────────
+
+    /**
+     * Supprimer un salarié.
+     */
+
     @DeleteMapping("/{id}/delete")
     @Operation(summary = "Supprimer un salarié")
     @ApiResponse(responseCode = "204", description = "Salarié supprimé")
@@ -90,6 +130,13 @@ public class SalarieController {
     }
 
     /** F7 : affectations du salarié, de la plus récente à la plus ancienne. */
+
+    // ── affectations() — GET /flotte-vehicules/salarie/{id}/affectations ─────
+
+    /**
+     * Affectations d'un salarié.
+     */
+
     @GetMapping("/{id}/affectations")
     @Operation(summary = "Affectations d'un salarié", description = "F7 — l'affectation en cours est signalée")
     @ApiResponse(responseCode = "200", description = "Historique des affectations")

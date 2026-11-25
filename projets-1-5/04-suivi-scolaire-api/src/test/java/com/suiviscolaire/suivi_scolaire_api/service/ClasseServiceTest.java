@@ -25,20 +25,38 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F1 (classes). */
+/**
+ * Règles métier F1 (classes).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F1 (classes).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ClasseServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private ClasseRepository classeRepository;
     @Mock private InscriptionRepository inscriptionRepository;
 
     private ClasseService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ClasseService(classeRepository, inscriptionRepository,
                 new ClasseMapper(inscriptionRepository));
     }
+
+    // ── findAllAvecEffectif() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("La liste renvoie les classes avec leur effectif courant")
@@ -53,6 +71,8 @@ class ClasseServiceTest {
                 });
     }
 
+    // ── findByIdIntrouvable() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("Un identifiant inconnu renvoie une erreur 404 métier")
     void findByIdIntrouvable() {
@@ -62,6 +82,8 @@ class ClasseServiceTest {
                 .isInstanceOf(RessourceIntrouvableException.class)
                 .hasMessageContaining("99");
     }
+
+    // ── createRefuseDoublon() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("La création refuse un nom déjà utilisé dans le même niveau")
@@ -73,6 +95,8 @@ class ClasseServiceTest {
                 .hasMessageContaining("existe déjà");
         verify(classeRepository, never()).save(any());
     }
+
+    // ── createNominal() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("La création persiste une classe valide")
@@ -88,6 +112,8 @@ class ClasseServiceTest {
         assertThat(service.create(new CreateClasseRequest("5B", 2, 2, 28)).idClasse()).isEqualTo(8);
     }
 
+    // ── updateRefuseEffectifInsuffisant() ────────────────────────────────────
+
     @Test
     @DisplayName("L'effectif maximal ne peut pas descendre sous l'effectif actuel")
     void updateRefuseEffectifInsuffisant() {
@@ -98,6 +124,8 @@ class ClasseServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("effectif actuel");
     }
+
+    // ── deleteRefuseClasseOccupee() ──────────────────────────────────────────
 
     @Test
     @DisplayName("La suppression est refusée si des élèves sont inscrits")
@@ -110,6 +138,8 @@ class ClasseServiceTest {
                 .hasMessageContaining("élèves");
         verify(classeRepository, never()).delete(any());
     }
+
+    // ── deleteClasseVide() ───────────────────────────────────────────────────
 
     @Test
     @DisplayName("Une classe vide peut être supprimée")
@@ -124,6 +154,13 @@ class ClasseServiceTest {
     }
 
     /** Construit une classe avec son identifiant. */
+
+    // ── classe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour classe().
+     */
+
     private Classe classe(Integer id, String nom) {
         Classe classe = new Classe(nom, 2, 1, 30);
         ReflectionTestUtils.setField(classe, "idClasse", id);

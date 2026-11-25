@@ -19,7 +19,7 @@ public interface SpectacleRepository extends JpaRepository<Spectacle, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findFirstByTitreIgnoreCaseAndType() ──────────────────────────────
+    // ── findFirstByTitreIgnoreCaseAndType() ──────────────────────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.

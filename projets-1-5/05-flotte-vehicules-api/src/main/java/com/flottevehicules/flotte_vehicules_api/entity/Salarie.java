@@ -89,6 +89,13 @@ public class Salarie {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Modifie les champs autorisés ; le matricule est figé (F3). */
+
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String nom, String prenom, String email, String service) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.prenom = Objects.requireNonNull(prenom, "prenom");

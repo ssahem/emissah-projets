@@ -2,10 +2,20 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Date d’événement passée — erreur métier traduite en HTTP 400. */
+/**
+ * Date d’événement passée — erreur métier traduite en HTTP 400.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Date d’événement passée — erreur métier traduite en HTTP 400.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class DateEvenementPasseeException extends ApiException {
 
-    // ── DateEvenementPasseeException() ─────────────────────────────────────────────────────────────
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── DateEvenementPasseeException() ───────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public DateEvenementPasseeException() {

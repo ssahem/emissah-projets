@@ -81,21 +81,46 @@ public class ClientService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<ClientResponse> findAll() {
         return clientRepository.findAllByOrderByNomAsc().stream().map(mapper::toResponse).toList();
     }
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
 
     public ClientResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F8 : interventions du plus récent au plus ancien, avec responsable, type et statut. */
+
+    // ── findHistorique() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute findHistorique().
+     */
+
     public List<HistoriqueClientResponse> findHistorique(Integer id) {
         required(id);
         return interventionRepository.findAllByIdClientOrderByDateDemandeDesc(id).stream()
                 .map(this::toHistorique)
                 .toList();
     }
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
 
     @Transactional
     public ClientResponse create(CreateClientRequest request) {
@@ -112,6 +137,12 @@ public class ClientService {
         return mapper.toResponse(client);
     }
 
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public ClientResponse update(Integer id, UpdateClientRequest request) {
         Client client = required(id);
@@ -121,6 +152,12 @@ public class ClientService {
                 request.email(), request.telephone(), request.adresse(), request.commune());
         return mapper.toResponse(client);
     }
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
 
     @Transactional
     public void delete(Integer id) {
@@ -135,6 +172,12 @@ public class ClientService {
     // ═════════════════════════════════════════════════════════════════════════
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
+
+    // ── toHistorique() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute toHistorique().
+     */
 
     private HistoriqueClientResponse toHistorique(Intervention intervention) {
         Affectation responsable = affectationRepository
@@ -152,6 +195,12 @@ public class ClientService {
                 statut != null ? statut.name() : null);
     }
 
+    // ── statutCourant() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute statutCourant().
+     */
+
     private StatutIntervention statutCourant(Affectation responsable) {
         if (responsable == null) {
             return null;
@@ -163,6 +212,12 @@ public class ClientService {
                 .filter(Objects::nonNull)
                 .orElse(StatutIntervention.PLANIFIEE);
     }
+
+    // ── checkEmail() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute checkEmail().
+     */
 
     private void checkEmail(String email, Integer idCourant) {
         if (email == null || email.isBlank()) {
@@ -176,6 +231,12 @@ public class ClientService {
             }
         }
     }
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Client required(Integer id) {
         return clientRepository.findById(id)

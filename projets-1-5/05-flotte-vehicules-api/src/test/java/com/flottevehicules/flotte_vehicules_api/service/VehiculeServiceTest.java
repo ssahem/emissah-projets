@@ -39,9 +39,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Tests unitaires de F2, F9, F15, F17 et F18. */
+/**
+ * Tests unitaires de F2, F9, F15, F17 et F18.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de F2, F9, F15, F17 et F18.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class VehiculeServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.parse("2026-11-24");
 
@@ -54,6 +64,12 @@ class VehiculeServiceTest {
 
     private VehiculeService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock clock = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -62,6 +78,12 @@ class VehiculeServiceTest {
                 new VehiculeMapper(siteRepository, vueRepository), clock);
     }
 
+    // ── vehicule() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour vehicule().
+     */
+
     private Vehicule vehicule(Integer id, String immatriculation, Integer idSite) {
         Vehicule vehicule = new Vehicule(immatriculation, "Peugeot", "308",
                 LocalDate.parse("2024-01-15"), idSite, "PROPRIETE", false, BigDecimal.TEN);
@@ -69,11 +91,19 @@ class VehiculeServiceTest {
         return vehicule;
     }
 
+    // ── request() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour request().
+     */
+
     private CreateVehiculeRequest request(String immatriculation, LocalDate date, Integer idSite,
                                           String mode, BigDecimal prix) {
         return new CreateVehiculeRequest(immatriculation, "Peugeot", "308", date, idSite,
                 mode, false, prix);
     }
+
+    // ── findAllTriee() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F2 : la liste est triée par immatriculation")
@@ -85,6 +115,8 @@ class VehiculeServiceTest {
                 .containsExactly("AB-123-CD", "CD-456-EF");
     }
 
+    // ── findAllRecherche() ───────────────────────────────────────────────────
+
     @Test
     @DisplayName("F9 : la recherche partielle est déléguée au repository")
     void findAllRecherche() {
@@ -95,6 +127,8 @@ class VehiculeServiceTest {
         verify(vehiculeRepository, never()).findAllByOrderByImmatriculationAsc();
     }
 
+    // ── findByIdPresent() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : un véhicule existant est retourné")
     void findByIdPresent() {
@@ -102,6 +136,8 @@ class VehiculeServiceTest {
 
         assertThat(service.findById(1).immatriculation()).isEqualTo("AB-123-CD");
     }
+
+    // ── findByIdAbsent() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F2 : un identifiant inconnu renvoie 404")
@@ -111,6 +147,8 @@ class VehiculeServiceTest {
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── createOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F2 : la création accepte un véhicule en propriété")
@@ -126,6 +164,8 @@ class VehiculeServiceTest {
         assertThat(resultat.modeAcquisition()).isEqualTo("PROPRIETE");
     }
 
+    // ── createDoublon() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : une immatriculation déjà utilisée est refusée")
     void createDoublon() {
@@ -137,6 +177,8 @@ class VehiculeServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
     }
 
+    // ── createDateFuture() ───────────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : une mise en service future est refusée")
     void createDateFuture() {
@@ -146,6 +188,8 @@ class VehiculeServiceTest {
                 LocalDate.parse("2027-01-01"), 1, "PROPRIETE", BigDecimal.TEN)))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── createModeInvalide() ─────────────────────────────────────────────────
 
     @Test
     @DisplayName("F2 : un mode d'acquisition inconnu est refusé")
@@ -158,6 +202,8 @@ class VehiculeServiceTest {
                 .isInstanceOf(DonneeInvalideException.class);
     }
 
+    // ── createSiteInconnu() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : un site inconnu est refusé")
     void createSiteInconnu() {
@@ -169,6 +215,8 @@ class VehiculeServiceTest {
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
 
+    // ── createPrixAchatInterdit() ────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : un prix d'achat est refusé en location")
     void createPrixAchatInterdit() {
@@ -179,6 +227,8 @@ class VehiculeServiceTest {
                 LocalDate.parse("2024-01-15"), 1, "LEASING", BigDecimal.TEN)))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── updateTransfert() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F2 : le transfert de site est autorisé")
@@ -194,6 +244,8 @@ class VehiculeServiceTest {
         assertThat(resultat.immatriculation()).isEqualTo("AB-123-CD");
     }
 
+    // ── deleteAvecAffectation() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : suppression refusée en cas d'affectation")
     void deleteAvecAffectation() {
@@ -204,6 +256,8 @@ class VehiculeServiceTest {
         verify(vehiculeRepository, never()).delete(any());
     }
 
+    // ── deleteAvecEntretien() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : suppression refusée en cas d'entretien")
     void deleteAvecEntretien() {
@@ -212,6 +266,8 @@ class VehiculeServiceTest {
 
         assertThatThrownBy(() -> service.delete(1)).isInstanceOf(ConflitMetierException.class);
     }
+
+    // ── prochainEntretien() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F15 : le seuil déclenchant est calculé depuis la vue d'échéance")
@@ -227,6 +283,8 @@ class VehiculeServiceTest {
         assertThat(resultat.seuilDeclencheur()).isEqualTo("DUREE");
         assertThat(resultat.enRetard()).isTrue();
     }
+
+    // ── coutEntretiens() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F18 : le coût total est celui des entretiens, réparti par type")
@@ -252,6 +310,8 @@ class VehiculeServiceTest {
         assertThat(resultat.repartition().get(0).cout()).isEqualByComparingTo("600");
     }
 
+    // ── disponiblesPeriodeInvalide() ─────────────────────────────────────────
+
     @Test
     @DisplayName("F17 : une période inversée est refusée")
     void disponiblesPeriodeInvalide() {
@@ -259,6 +319,8 @@ class VehiculeServiceTest {
                 LocalDate.parse("2026-11-30"), LocalDate.parse("2026-11-01")))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── disponiblesGroupesParSite() ──────────────────────────────────────────
 
     @Test
     @DisplayName("F17 : les véhicules occupés sont exclus et les libres groupés par site")

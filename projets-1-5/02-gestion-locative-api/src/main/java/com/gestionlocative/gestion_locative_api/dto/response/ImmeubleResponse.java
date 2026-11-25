@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Immeuble renvoyé par l'API (F2).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Immeuble renvoyé par l'API (F2).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ImmeubleMapper.
  * NE FAIT PAS  : d'accès base ni de logique métier.

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * COUCHE       : Controller (interface HTTP)
  * URL          : /flotte-vehicules/vehicule/{id}/entretiens, pour coller à l'énoncé.
+ * RÔLE         : Historique d'entretien d'un véhicule (F8).
  * SÉCURITÉ     : aucune.
  * NE FAIT PAS  : de logique métier.
  */
@@ -23,6 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Historique entretien", description = "Historique d'entretien d'un véhicule (F8)")
 public class HistoriqueEntretienController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final EntretienService service;
 
     public HistoriqueEntretienController(EntretienService service) {
@@ -30,6 +35,13 @@ public class HistoriqueEntretienController {
     }
 
     /** F8 : entretiens triés par date décroissante et coût cumulé. */
+
+    // ── historique() — GET /flotte-vehicules/vehicule/{id}/entretiens ────────
+
+    /**
+     * Historique d'entretien d'un véhicule.
+     */
+
     @GetMapping("/{id}/entretiens")
     @Operation(summary = "Historique d'entretien d'un véhicule", description = "F8 — tri décroissant et cumul")
     @ApiResponse(responseCode = "200", description = "Historique et cumul")

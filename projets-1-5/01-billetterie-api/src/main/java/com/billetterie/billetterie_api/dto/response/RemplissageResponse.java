@@ -8,6 +8,7 @@ import java.util.List;
  * Taux de remplissage d'un événement (F18).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Taux de remplissage d'un événement (F18).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : RemplissageMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

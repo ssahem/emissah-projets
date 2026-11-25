@@ -4,7 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.util.List;
 
-/** Véhicules disponibles regroupés par site (F17). */
+/**
+ * Véhicules disponibles regroupés par site (F17).
+ *
+ * COUCHE       : DTO
+ * RÔLE         : Véhicules disponibles regroupés par site (F17).
+ * NE FAIT PAS  : de logique métier ni d’accès base.
+ */
 @Schema(description = "Disponibilités d'un site sur une période")
 public record DisponibilitesParSiteResponse(
 
@@ -22,4 +28,9 @@ public record DisponibilitesParSiteResponse(
 
         @Schema(description = "Véhicules disponibles")
         List<DisponibleVehiculeResponse> vehicules) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

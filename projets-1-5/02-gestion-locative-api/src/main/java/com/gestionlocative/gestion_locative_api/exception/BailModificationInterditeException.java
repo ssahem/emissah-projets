@@ -6,12 +6,18 @@ import org.springframework.http.HttpStatus;
  * Exception métier : tentative de modifier le loyer d'un bail commencé (F5).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : tentative de modifier le loyer d'un bail commencé (F5).
  * LANCÉE PAR   : BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 409.
  * POURQUOI     : après le début, seule la date de fin reste modifiable ; le loyer
  *                suit la procédure de révision (F15).
+ * NE FAIT PAS  : de logique métier.
  */
 public class BailModificationInterditeException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur pour un identifiant donné. */
     public BailModificationInterditeException(Integer idBail) {

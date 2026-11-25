@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
  * Corps de modification d'une intervention (F5) : créneau et technicien responsable.
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une intervention (F5) : créneau et technicien responsable.
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : InterventionController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

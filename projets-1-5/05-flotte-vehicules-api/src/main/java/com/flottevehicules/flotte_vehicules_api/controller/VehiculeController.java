@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  * COUCHE       : Controller (interface HTTP)
  * URL          : /flotte-vehicules/vehicule/... — ressource au singulier, action dans le
  *                chemin.
+ * RÔLE         : Endpoints des véhicules : CRUD (F2), recherche (F9), disponibilité (F17), prochain entretien (F15) et coût (F18).
  * SÉCURITÉ     : aucune.
  * NE FAIT PAS  : de logique métier.
  */
@@ -40,6 +41,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Véhicule", description = "CRUD, recherche, disponibilité, échéance et coût")
 public class VehiculeController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final VehiculeService service;
 
     public VehiculeController(VehiculeService service) {
@@ -47,6 +52,13 @@ public class VehiculeController {
     }
 
     /** F2 : crée un véhicule. */
+
+    // ── create() — POST /flotte-vehicules/vehicule/create ────────────────────
+
+    /**
+     * Créer un véhicule.
+     */
+
     @PostMapping("/create")
     @Operation(summary = "Créer un véhicule", description = "Immatriculation unique et date de mise en service non future")
     @ApiResponse(responseCode = "201", description = "Véhicule créé")
@@ -59,6 +71,13 @@ public class VehiculeController {
     }
 
     /** F2 et F9 : liste ou recherche combinée. */
+
+    // ── list() — GET /flotte-vehicules/vehicule/list ─────────────────────────
+
+    /**
+     * Lister ou rechercher des véhicules.
+     */
+
     @GetMapping("/list")
     @Operation(summary = "Lister ou rechercher des véhicules",
             description = "F2 et F9 — critères optionnels : immatriculation partielle et marque exacte")
@@ -69,6 +88,13 @@ public class VehiculeController {
     }
 
     /** F2 : détail d'un véhicule. */
+
+    // ── get() — GET /flotte-vehicules/vehicule/{id} ──────────────────────────
+
+    /**
+     * Consulter un véhicule.
+     */
+
     @GetMapping("/{id}")
     @Operation(summary = "Consulter un véhicule")
     @ApiResponse(responseCode = "200", description = "Véhicule trouvé")
@@ -78,6 +104,13 @@ public class VehiculeController {
     }
 
     /** F2 : transfert de site, marque et modèle modifiables. */
+
+    // ── update() — PUT /flotte-vehicules/vehicule/{id}/update ────────────────
+
+    /**
+     * Modifier un véhicule.
+     */
+
     @PutMapping("/{id}/update")
     @Operation(summary = "Modifier un véhicule", description = "Transfert de site possible ; immatriculation et date figées")
     @ApiResponse(responseCode = "200", description = "Véhicule modifié")
@@ -88,6 +121,13 @@ public class VehiculeController {
     }
 
     /** F2 : suppression refusée en cas d'affectations ou d'entretiens. */
+
+    // ── delete() — DELETE /flotte-vehicules/vehicule/{id}/delete ─────────────
+
+    /**
+     * Supprimer un véhicule.
+     */
+
     @DeleteMapping("/{id}/delete")
     @Operation(summary = "Supprimer un véhicule")
     @ApiResponse(responseCode = "204", description = "Véhicule supprimé")
@@ -98,6 +138,13 @@ public class VehiculeController {
     }
 
     /** F17 : véhicules disponibles sur une période, regroupés par site. */
+
+    // ── disponibles() — GET /flotte-vehicules/vehicule/disponibles ───────────
+
+    /**
+     * Véhicules disponibles.
+     */
+
     @GetMapping("/disponibles")
     @Operation(summary = "Véhicules disponibles", description = "F17 — sans paramètre, semaine en cours")
     @ApiResponse(responseCode = "200", description = "Disponibilités par site")
@@ -109,6 +156,13 @@ public class VehiculeController {
     }
 
     /** F15 : prochaine échéance périodique. */
+
+    // ── prochainEntretien() — GET …ehicules/vehicule/{id}/prochain-entretien ─
+
+    /**
+     * Prochain entretien.
+     */
+
     @GetMapping("/{id}/prochain-entretien")
     @Operation(summary = "Prochain entretien", description = "F15 — premier seuil atteint parmi km et durée")
     @ApiResponse(responseCode = "200", description = "Échéance calculée")
@@ -118,6 +172,13 @@ public class VehiculeController {
     }
 
     /** F18 : coût total des entretiens et répartition par type. */
+
+    // ── cout() — GET /flotte-vehicules/vehicule/{id}/cout ────────────────────
+
+    /**
+     * Coût total d'un véhicule.
+     */
+
     @GetMapping("/{id}/cout")
     @Operation(summary = "Coût total d'un véhicule", description = "F18 — entretiens uniquement (D-03)")
     @ApiResponse(responseCode = "200", description = "Coût et répartition")

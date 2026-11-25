@@ -64,17 +64,35 @@ public class ClasseController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /suivi-scolaire/classe/list ─────────────────────────────
+
+    /**
+     * Lister les classes.
+     */
+
     @Operation(summary = "Lister les classes", description = "Triées par niveau puis par nom, avec effectif actuel (F1)")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ClasseResponse> list() {
         return service.findAll();
     }
 
+    // ── get() — GET /suivi-scolaire/classe/get/{id} ──────────────────────────
+
+    /**
+     * Lire une classe.
+     */
+
     @Operation(summary = "Lire une classe")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ClasseResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /suivi-scolaire/classe/create ────────────────────────
+
+    /**
+     * Créer une classe.
+     */
 
     @Operation(summary = "Créer une classe", description = "Nom unique dans le niveau, effectif positif (F1)")
     @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -85,6 +103,12 @@ public class ClasseController {
                 .body(created);
     }
 
+    // ── update() — PUT /suivi-scolaire/classe/update/{id} ────────────────────
+
+    /**
+     * Modifier une classe.
+     */
+
     @Operation(summary = "Modifier une classe", description = "Effectif maximal jamais sous l'effectif actuel (F1)")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -93,6 +117,12 @@ public class ClasseController {
         return service.update(id, request);
     }
 
+    // ── delete() — DELETE /suivi-scolaire/classe/delete/{id} ─────────────────
+
+    /**
+     * Supprimer une classe.
+     */
+
     @Operation(summary = "Supprimer une classe", description = "Refusée si des élèves y sont inscrits (F1)")
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
@@ -100,11 +130,23 @@ public class ClasseController {
         return ResponseEntity.noContent().build();
     }
 
+    // ── eleves() — GET /suivi-scolaire/classe/eleves/{id} ────────────────────
+
+    /**
+     * Élèves d'une classe.
+     */
+
     @Operation(summary = "Élèves d'une classe", description = "Triés par nom puis prénom, avec effectifs (F6)")
     @GetMapping(path = "/eleves/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EffectifClasseResponse eleves(@PathVariable Integer id) {
         return consultationService.elevesDeClasse(id);
     }
+
+    // ── notes() — GET /suivi-scolaire/classe/notes/{id} ──────────────────────
+
+    /**
+     * Notes d'une matière dans une classe.
+     */
 
     @Operation(summary = "Notes d'une matière dans une classe",
             description = "Groupées par élève avec moyenne de classe ; 400 si matière non enseignée (F8)")
@@ -114,6 +156,12 @@ public class ClasseController {
                                      @RequestParam Integer trimestre) {
         return consultationService.notesMatiereClasse(id, matiere, trimestre);
     }
+
+    // ── classement() — GET /suivi-scolaire/classe/classement/{id} ────────────
+
+    /**
+     * Classement d'une classe.
+     */
 
     @Operation(summary = "Classement d'une classe",
             description = "Rangs avec ex æquo ; élèves sans note en fin de liste sans rang (F19)")

@@ -34,6 +34,13 @@ public class TrimestreLookup {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Retourne le trimestre de numéro donné, ou 400/404 si le numéro est invalide/inconnu. */
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     public Trimestre required(Integer numero) {
         if (numero == null || numero < 1 || numero > 3) {
             throw new DonneeInvalideException("trimestre-numero-invalide",
@@ -45,6 +52,13 @@ public class TrimestreLookup {
     }
 
     /** Retourne le trimestre en interdisant toute écriture de notes après clôture. */
+
+    // ── exigible() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute exigible().
+     */
+
     public Trimestre exigible(Integer numero, String operation) {
         Trimestre trimestre = required(numero);
         if (trimestre.isEstCloture()) {

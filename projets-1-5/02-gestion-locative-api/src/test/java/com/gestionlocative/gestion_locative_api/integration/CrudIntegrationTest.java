@@ -37,19 +37,26 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Tests d'intégration HTTP des fonctionnalités F1 à F19.
  *
- * TYPE       : Intégration (Testcontainers PostgreSQL)
- * STRATÉGIE  : migrations V1 à V8 sur base vierge, horloge fixe au 15 juin 2026,
+ * COUCHE       : Service
+ * RÔLE         : Tests d'intégration HTTP des fonctionnalités F1 à F19.
+ * TYPE         : Intégration (Testcontainers PostgreSQL)
+ * STRATÉGIE    : migrations V1 à V8 sur base vierge, horloge fixe au 15 juin 2026,
  *              parcours complets via MockMvc.
  * CAS COUVERTS : création et enchaînement des cinq ressources, consultation (F6–F10),
  *                cycle de vie (F13–F16), restitution (F17–F18), revenus (F19)
  *                et traçabilité dans historique_bail.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(CrudIntegrationTest.HorlogeFixe.class)
 class CrudIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
@@ -69,6 +76,12 @@ class CrudIntegrationTest {
         }
     }
 
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
+
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
@@ -80,6 +93,13 @@ class CrudIntegrationTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private JsonMapper objectMapper;
     @Autowired private JdbcTemplate jdbcTemplate;
+
+    // ── nettoyer() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour nettoyer().
+     */
+
     @Autowired private BailClotureService bailClotureService;
 
     @BeforeEach
@@ -92,19 +112,21 @@ class CrudIntegrationTest {
 
     // ── Parcours nominal ─────────────────────────────────────────────────────
 
+    // ── parcoursComplet_renvoie201Puis200() ──────────────────────────────────
+
     @Test
     @DisplayName("Le parcours complet crée les cinq ressources et les consulte")
     void parcoursComplet_renvoie201Puis200() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idAppartement = creerAppartement(idImmeuble, "1A");
         Integer idLocataire = creerLocataire("kofi");
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         MvcResult bail = creerBail(idAppartement, idLocataire, "2026-07-01", "2027-06-30");
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(bail.getResponse().getStatus()).isEqualTo(201);
         Integer idBail = id(bail, "idBail");
         assertThat(id(bail, "idLocataire")).isEqualTo(idLocataire);
@@ -126,16 +148,18 @@ class CrudIntegrationTest {
                 .isEqualTo(1);
     }
 
+    // ── creerBail_renvoie409QuandChevauchement() ─────────────────────────────
+
     @Test
     @DisplayName("Un bail chevauchant est refusé avec un 409")
     void creerBail_renvoie409QuandChevauchement() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartementLibre();
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         creerBail(idAppartement, 1, "2026-07-01", "2027-06-30");
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         mockMvc.perform(post("/gestion-locative/bail/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of(
@@ -147,13 +171,15 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$.idBailBloquant").isNumber());
     }
 
+    // ── creerBail_renvoie400QuandDateFinInvalide() ───────────────────────────
+
     @Test
     @DisplayName("Une date de fin trop proche est refusée avec un 400")
     void creerBail_renvoie400QuandDateFinInvalide() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartementLibre();
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/gestion-locative/bail/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of(
@@ -164,37 +190,43 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Date de fin invalide"));
     }
 
+    // ── getById_renvoie404QuandInconnu() ─────────────────────────────────────
+
     @Test
     @DisplayName("Un identifiant inconnu renvoie 404")
     void getById_renvoie404QuandInconnu() throws Exception {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/bail/get/999"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.title").value("Bail introuvable"));
     }
 
+    // ── supprimerProprietaire_renvoie409QuandImmeuble() ──────────────────────
+
     @Test
     @DisplayName("Un propriétaire avec immeuble ne peut pas être supprimé")
     void supprimerProprietaire_renvoie409QuandImmeuble() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         creerImmeuble(idProprietaire);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(delete("/gestion-locative/proprietaire/delete/" + idProprietaire))
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.title").value("Propriétaire non supprimable"));
     }
 
+    // ── modifierBail_renvoie409QuandLoyerApresDebut() ────────────────────────
+
     @Test
     @DisplayName("Le loyer d'un bail commencé ne peut plus être modifié")
     void modifierBail_renvoie409QuandLoyerApresDebut() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartementLibre();
         MvcResult bail = creerBail(idAppartement, 1, "2026-06-01", "2027-05-31");
         Integer idBail = id(bail, "idBail");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(put("/gestion-locative/bail/update/" + idBail)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"loyerMensuel\":900.00}"))
@@ -202,30 +234,34 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Modification interdite"));
     }
 
+    // ── supprimerBailFutur_puisRecreer() ─────────────────────────────────────
+
     @Test
     @DisplayName("Un bail futur peut être supprimé puis l'appartement se libère")
     void supprimerBailFutur_puisRecreer() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartementLibre();
         Integer idBail = id(creerBail(idAppartement, 1, "2026-07-01", "2027-06-30"), "idBail");
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         mockMvc.perform(delete("/gestion-locative/bail/delete/" + idBail))
                 .andExpect(status().isNoContent());
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         creerBail(idAppartement, 1, "2026-07-01", "2027-06-30");
         assertThat(jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM bail WHERE id_appartement = " + idAppartement, Integer.class))
                 .isEqualTo(1);
     }
 
-    // ── Consultation et recherche (F6–F10) ──────────────────────────────────
+    // ── Consultation et recherche (F6–F10) ───────────────────────────────────
+
+    // ── listerAppartements_renvoieOccupation() ───────────────────────────────
 
     @Test
     @DisplayName("F6 — les appartements portent leur état d'occupation")
     void listerAppartements_renvoieOccupation() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idApp1 = creerAppartement(idImmeuble, "1A", 45.50, 1);
@@ -233,7 +269,7 @@ class CrudIntegrationTest {
         Integer idLocataire = creerLocataire("kofi");
         creerBail(idApp1, idLocataire, "2026-06-01", "2027-05-31");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/immeuble/appartements/" + idImmeuble))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].statutOccupation").value("LOUE"))
@@ -241,34 +277,38 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$[1].statutOccupation").value("LIBRE"));
     }
 
+    // ── listerImmeubles_renvoieCompteurs() ───────────────────────────────────
+
     @Test
     @DisplayName("F7 — les immeubles d'un propriétaire portent leurs compteurs")
     void listerImmeubles_renvoieCompteurs() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idAppartement = creerAppartement(idImmeuble, "1A");
         Integer idLocataire = creerLocataire("kofi");
         creerBail(idAppartement, idLocataire, "2026-06-01", "2027-05-31");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/proprietaire/immeubles/" + idProprietaire))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nbAppartements").value(1))
                 .andExpect(jsonPath("$[0].nbBauxEnCours").value(1));
     }
 
+    // ── historiqueBaux_renvoieBailEnCours() ──────────────────────────────────
+
     @Test
     @DisplayName("F8 — l'historique d'un appartement signale le bail en cours")
     void historiqueBaux_renvoieBailEnCours() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idAppartement = creerAppartement(idImmeuble, "1A");
         Integer idLocataire = creerLocataire("kofi");
         creerBail(idAppartement, idLocataire, "2026-06-01", "2027-05-31");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/appartement/baux/" + idAppartement))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nomLocataire").value("Traore"))
@@ -276,16 +316,18 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$[0].loyersPasses").isEmpty());
     }
 
+    // ── rechercherAppartements_filtreBornes() ────────────────────────────────
+
     @Test
     @DisplayName("F9 — la recherche filtre les appartements et refuse des bornes inversées")
     void rechercherAppartements_filtreBornes() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         creerAppartement(idImmeuble, "1A", 40.00, 1);
         creerAppartement(idImmeuble, "2A", 60.00, 2);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/appartement/list").param("surfaceMin", "50"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
@@ -299,10 +341,12 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$.title").value("Bornes de surface invalides"));
     }
 
+    // ── listerBaux_renvoiePageResponse() ─────────────────────────────────────
+
     @Test
     @DisplayName("F10 — la liste des baux est paginée et la taille plafonnée à 100")
     void listerBaux_renvoiePageResponse() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idApp1 = creerAppartement(idImmeuble, "1A");
@@ -311,7 +355,7 @@ class CrudIntegrationTest {
         creerBail(idApp1, idLocataire, "2026-06-01", "2027-05-31");
         creerBail(idApp2, idLocataire, "2026-07-01", "2027-06-30");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/bail/list")
                         .param("page", "0").param("size", "1"))
                 .andExpect(status().isOk())
@@ -325,18 +369,20 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$.size").value(100));
     }
 
-    // ── Cycle de vie du bail (F13–F16) ──────────────────────────────────────
+    // ── Cycle de vie du bail (F13–F16) ───────────────────────────────────────
+
+    // ── resilierBail_metAJourEtTrace() ───────────────────────────────────────
 
     @Test
     @DisplayName("F13 — la résiliation raccourcit le bail et alimente l'historique")
     void resilierBail_metAJourEtTrace() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartement();
         Integer idLocataire = creerLocataire("kofi");
         Integer idBail = id(creerBail(idAppartement, idLocataire, "2026-06-01", "2027-05-31"),
                 "idBail");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/gestion-locative/bail/resiliation/" + idBail)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
@@ -349,16 +395,18 @@ class CrudIntegrationTest {
         assertThat(nombreEvenements(idBail, "RESILIATION")).isEqualTo(1);
     }
 
+    // ── renouvelerBail_prolongeEtTrace() ─────────────────────────────────────
+
     @Test
     @DisplayName("F14 — le renouvellement prolonge le bail et conserve l'ancienne fin")
     void renouvelerBail_prolongeEtTrace() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartement();
         Integer idLocataire = creerLocataire("kofi");
         Integer idBail = id(creerBail(idAppartement, idLocataire, "2026-06-01", "2026-12-31"),
                 "idBail");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/gestion-locative/bail/renouvellement/" + idBail)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(
@@ -370,16 +418,18 @@ class CrudIntegrationTest {
         assertThat(nombreEvenements(idBail, "RENOUVELLEMENT")).isEqualTo(1);
     }
 
+    // ── reviserLoyer_conserveHistorique() ────────────────────────────────────
+
     @Test
     @DisplayName("F15 — la révision conserve l'ancien loyer et met à jour le courant")
     void reviserLoyer_conserveHistorique() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartement();
         Integer idLocataire = creerLocataire("kofi");
         Integer idBail = id(creerBail(idAppartement, idLocataire, "2026-06-01", "2027-05-31"),
                 "idBail");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(post("/gestion-locative/bail/revision/" + idBail)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of(
@@ -392,19 +442,21 @@ class CrudIntegrationTest {
                 Integer.class, idBail)).isEqualTo(2);
     }
 
+    // ── cloturerBauxEchus_metATermeEtTrace() ─────────────────────────────────
+
     @Test
     @DisplayName("F16 — la tâche clôture un bail échu et trace l'événement")
     void cloturerBauxEchus_metATermeEtTrace() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartement();
         Integer idLocataire = creerLocataire("kofi");
         Integer idBail = id(creerBail(idAppartement, idLocataire, "2026-05-01", "2026-06-01"),
                 "idBail");
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         int nombre = bailClotureService.cloturerBauxEchus();
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(nombre).isEqualTo(1);
         mockMvc.perform(get("/gestion-locative/bail/get/" + idBail))
                 .andExpect(status().isOk())
@@ -413,12 +465,14 @@ class CrudIntegrationTest {
         assertThat(nombreEvenements(idBail, "CLOTURE")).isEqualTo(1);
     }
 
-    // ── Restitution et revenus (F17–F19) ────────────────────────────────────
+    // ── Restitution et revenus (F17–F19) ─────────────────────────────────────
+
+    // ── listerAppartementsLibres_groupeParImmeuble() ─────────────────────────
 
     @Test
     @DisplayName("F17 — les appartements libres sont groupés par immeuble")
     void listerAppartementsLibres_groupeParImmeuble() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idOccupee = creerAppartement(idImmeuble, "1A");
@@ -426,7 +480,7 @@ class CrudIntegrationTest {
         Integer idLocataire = creerLocataire("kofi");
         creerBail(idOccupee, idLocataire, "2026-07-01", "2027-06-30");
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/appartement/libres")
                         .param("date", "2026-12-01"))
                 .andExpect(status().isOk())
@@ -441,10 +495,12 @@ class CrudIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    // ── reconstituerOccupation_decoupePaliersEtVacances() ────────────────────
+
     @Test
     @DisplayName("F18 — l'occupation alterne paliers de loyer et vacance")
     void reconstituerOccupation_decoupePaliersEtVacances() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idAppartement = preparerAppartement();
         jdbcTemplate.update("UPDATE appartement SET date_creation = DATE '2026-01-01' "
                 + "WHERE id_appartement = ?", idAppartement);
@@ -457,7 +513,7 @@ class CrudIntegrationTest {
                                 "montant", 920.00, "dateEffet", "2026-02-01"))))
                 .andExpect(status().isOk());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/appartement/occupation/" + idAppartement))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(3))
@@ -474,17 +530,19 @@ class CrudIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    // ── reconstituerOccupation_jamaisLoue_depuisCreation() ───────────────────
+
     @Test
     @DisplayName("F18 — un logement jamais loué est vacant depuis sa création (V8)")
     void reconstituerOccupation_jamaisLoue_depuisCreation() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idAppartement = creerAppartement(idImmeuble, "1A");
         jdbcTemplate.update("UPDATE appartement SET date_creation = DATE '2026-03-01' "
                 + "WHERE id_appartement = ?", idAppartement);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/gestion-locative/appartement/occupation/" + idAppartement))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
@@ -493,10 +551,12 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$[0].fin").doesNotExist());
     }
 
+    // ── calculerRevenu_prorataEtRevisions() ──────────────────────────────────
+
     @Test
     @DisplayName("F19 — le revenu mensuel applique le prorata et les révisions")
     void calculerRevenu_prorataEtRevisions() throws Exception {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
         Integer idAppartement = creerAppartement(idImmeuble, "1A");
@@ -509,7 +569,7 @@ class CrudIntegrationTest {
                                 "montant", 1000.00, "dateEffet", "2026-11-10"))))
                 .andExpect(status().isOk());
 
-        // ── Action + Vérification : 9 j à 850 + 6 j à 1000 = 455 sur 30 j ──
+        // ── Action + Vérification : 9 j à 850 + 6 j à 1000 = 455 sur 30 j ────
         mockMvc.perform(get("/gestion-locative/immeuble/revenu/" + idImmeuble)
                         .param("mois", "2026-11"))
                 .andExpect(status().isOk())
@@ -530,6 +590,13 @@ class CrudIntegrationTest {
     // ── Outils de préparation ────────────────────────────────────────────────
 
     /** Crée un propriétaire, un immeuble et un appartement pour les tests de cycle de vie. */
+
+    // ── preparerAppartement() ────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparerAppartement().
+     */
+
     private Integer preparerAppartement() throws Exception {
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
@@ -537,6 +604,13 @@ class CrudIntegrationTest {
     }
 
     /** Compte les événements d'un motif donné pour un bail. */
+
+    // ── nombreEvenements() ───────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour nombreEvenements().
+     */
+
     private int nombreEvenements(Integer idBail, String motif) {
         return jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM historique_bail WHERE id_bail = ? AND motif = ?",
@@ -544,6 +618,13 @@ class CrudIntegrationTest {
     }
 
     /** Crée un propriétaire et retourne son identifiant. */
+
+    // ── creerProprietaire() ──────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerProprietaire().
+     */
+
     private Integer creerProprietaire(String prefixe) throws Exception {
         MvcResult resultat = mockMvc.perform(post("/gestion-locative/proprietaire/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -556,6 +637,13 @@ class CrudIntegrationTest {
     }
 
     /** Crée un immeuble et retourne son identifiant. */
+
+    // ── creerImmeuble() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerImmeuble().
+     */
+
     private Integer creerImmeuble(Integer idProprietaire) throws Exception {
         MvcResult resultat = mockMvc.perform(post("/gestion-locative/immeuble/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -568,11 +656,25 @@ class CrudIntegrationTest {
     }
 
     /** Crée un appartement et retourne son identifiant. */
+
+    // ── creerAppartement() ───────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerAppartement().
+     */
+
     private Integer creerAppartement(Integer idImmeuble, String numero) throws Exception {
         return creerAppartement(idImmeuble, numero, 45.50, 1);
     }
 
     /** Crée un appartement avec une surface et un étage choisis. */
+
+    // ── creerAppartement() ───────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerAppartement().
+     */
+
     private Integer creerAppartement(Integer idImmeuble, String numero,
                                      double surface, int etage) throws Exception {
         MvcResult resultat = mockMvc.perform(post("/gestion-locative/appartement/create")
@@ -586,6 +688,13 @@ class CrudIntegrationTest {
     }
 
     /** Crée un locataire et retourne son identifiant. */
+
+    // ── creerLocataire() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerLocataire().
+     */
+
     private Integer creerLocataire(String prefixe) throws Exception {
         MvcResult resultat = mockMvc.perform(post("/gestion-locative/locataire/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -598,6 +707,13 @@ class CrudIntegrationTest {
     }
 
     /** Prépare un appartement libre avec son locataire (identifiant 1). */
+
+    // ── preparerAppartementLibre() ───────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparerAppartementLibre().
+     */
+
     private Integer preparerAppartementLibre() throws Exception {
         Integer idProprietaire = creerProprietaire("awa");
         Integer idImmeuble = creerImmeuble(idProprietaire);
@@ -606,6 +722,13 @@ class CrudIntegrationTest {
     }
 
     /** Crée un bail et retourne la réponse HTTP. */
+
+    // ── creerBail() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerBail().
+     */
+
     private MvcResult creerBail(Integer idAppartement, Integer idLocataire,
                                 String debut, String fin) throws Exception {
         return mockMvc.perform(post("/gestion-locative/bail/create")
@@ -619,11 +742,25 @@ class CrudIntegrationTest {
     }
 
     /** Lit un identifiant dans une réponse JSON. */
+
+    // ── id() ─────────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour id().
+     */
+
     private Integer id(MvcResult resultat, String champ) throws Exception {
         return Integer.valueOf(lire(resultat, champ));
     }
 
     /** Lit un champ texte dans une réponse JSON. */
+
+    // ── lire() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour lire().
+     */
+
     private String lire(MvcResult resultat, String champ) throws Exception {
         return objectMapper.readTree(resultat.getResponse().getContentAsString()).get(champ).asText();
     }

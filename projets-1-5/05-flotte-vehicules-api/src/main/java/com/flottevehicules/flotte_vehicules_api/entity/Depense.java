@@ -22,6 +22,10 @@ import java.time.LocalDate;
 @Table(name = "depense")
 public class Depense {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_depense")

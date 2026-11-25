@@ -14,7 +14,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class SiteMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Convertit une entité en réponse. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public SiteResponse toResponse(Site site) {
         return new SiteResponse(site.getIdSite(), site.getNom(), site.getVille(), site.getAdresse());
     }

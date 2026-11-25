@@ -53,11 +53,23 @@ public class ExigenceCompetenceId implements Serializable {
     //  IDENTITÉ ET AFFICHAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── equals() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute equals().
+     */
+
     public boolean equals(Object other) {
         if (this == other) { return true; }
         if (!(other instanceof ExigenceCompetenceId that)) { return false; }
         return Objects.equals(idType, that.idType) && Objects.equals(idCompetence, that.idCompetence);
     }
+
+    // ── hashCode() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute hashCode().
+     */
 
     @Override
     public int hashCode() {

@@ -21,47 +21,47 @@ public interface EvenementRepository extends JpaRepository<Evenement, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByDateHeureAsc() ───────────────────────────────────
+    // ── findAllByOrderByDateHeureAsc() ───────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Evenement> findAllByOrderByDateHeureAsc();
 
-    // ── findAllByDateHeureGreaterThanEqualOrderByDateHeureAsc() ──────────
+    // ── findAllByDateHeureGreaterThanEqualOrderByDateHeureAsc() ──────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Evenement> findAllByDateHeureGreaterThanEqualOrderByDateHeureAsc(LocalDateTime du);
 
-    // ── findAllByDateHeureLessThanEqualOrderByDateHeureAsc() ─────────────
+    // ── findAllByDateHeureLessThanEqualOrderByDateHeureAsc() ─────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Evenement> findAllByDateHeureLessThanEqualOrderByDateHeureAsc(LocalDateTime au);
 
-    // ── findAllByDateHeureBetweenOrderByDateHeureAsc() ───────────────────
+    // ── findAllByDateHeureBetweenOrderByDateHeureAsc() ───────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Evenement> findAllByDateHeureBetweenOrderByDateHeureAsc(LocalDateTime du, LocalDateTime au);
 
-    // ── findAllBySalle_IdSalleOrderByDateHeureAsc() ──────────────────────
+    // ── findAllBySalle_IdSalleOrderByDateHeureAsc() ──────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Evenement> findAllBySalle_IdSalleOrderByDateHeureAsc(Integer idSalle);
 
-    // ── existsBySalle_IdSalle() ──────────────────────────────────────────
+    // ── existsBySalle_IdSalle() ──────────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsBySalle_IdSalle(Integer idSalle);
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  REQUÊTES @Query
+    //  REQUÊTES @QUERY
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── countReservationsByIdEvenement() ─────────────────────────────────
+    // ── countReservationsByIdEvenement() ─────────────────────────────────────
 
     /** Compte les réservations d'un événement. */
     @Query("select count(r) from Reservation r where r.evenement.idEvenement = :idEvenement")
     long countReservationsByIdEvenement(@Param("idEvenement") Integer idEvenement);
 
-    // ── countPlacesByIdSalle() ───────────────────────────────────────────
+    // ── countPlacesByIdSalle() ───────────────────────────────────────────────
 
     /** Compte les places d'une salle. */
     @Query("select count(p) from Place p where p.salle.idSalle = :idSalle")

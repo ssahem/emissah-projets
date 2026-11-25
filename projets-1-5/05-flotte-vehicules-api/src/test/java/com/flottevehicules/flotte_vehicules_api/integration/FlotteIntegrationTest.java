@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -32,9 +33,12 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Parcours métier complets sur une vraie base PostgreSQL.
  *
+ * COUCHE       : Service
+ * RÔLE         : Parcours métier complets sur une vraie base PostgreSQL.
  * TYPE         : Intégration (Testcontainers PostgreSQL 16, horloge fixe).
- * STRATÉGIE    : migrations V1 à V3, données de référence insérées en SQL, appels HTTP via MockMvc.
+ * STRATÉGIE    : migrations V1 à V4, données de référence insérées en SQL, appels HTTP via MockMvc.
  * CAS COUVERTS : F1 à F19 hors tâche planifiée réelle, D-01 à D-03 et arbitrages A-01/A-02.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
@@ -46,6 +50,12 @@ class FlotteIntegrationTest {
             .withDatabaseName("flotte_vehicules")
             .withUsername("root")
             .withPassword("root");
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
@@ -73,6 +83,12 @@ class FlotteIntegrationTest {
     private Integer idSalarie;
     private Integer idTypeEntretien;
     private Integer idPrestataire;
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
 
     @BeforeEach
     void setUp() throws Exception {
@@ -106,6 +122,25 @@ class FlotteIntegrationTest {
                 "SELECT id_prestataire FROM prestataire WHERE nom = ?",
                 Integer.class, "Garage Central");
     }
+
+    // ── champsObligatoires() ─────────────────────────────────────────────────
+
+    @Test
+    @DisplayName("La migration V4 rend obligatoires ville, matricule et service")
+    void champsObligatoires() {
+        List<String> obligatoires = jdbcTemplate.queryForList(
+                "SELECT table_name || '.' || column_name FROM information_schema.columns "
+                        + "WHERE table_schema = 'public' AND is_nullable = 'NO' AND ("
+                        + "(table_name = 'site' AND column_name = 'ville') OR "
+                        + "(table_name = 'salarie' AND column_name = 'matricule') OR "
+                        + "(table_name = 'salarie' AND column_name = 'service'))",
+                String.class);
+
+        assertThat(obligatoires).containsExactlyInAnyOrder(
+                "site.ville", "salarie.matricule", "salarie.service");
+    }
+
+    // ── parcoursComplet() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Le parcours complet couvre la création, l'affectation, la restitution et le coût")
@@ -146,6 +181,8 @@ class FlotteIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.kmTotal").value(19000));
     }
+
+    // ── reglesMetierAffectationEntretien() ───────────────────────────────────
 
     @Test
     @DisplayName("F11, F12 et F14 : chevauchement, conflit et compteur décroissant sont refusés")
@@ -192,6 +229,8 @@ class FlotteIntegrationTest {
                 Integer.class, idVehicule)).isEqualTo(1);
     }
 
+    // ── generationAlertesNonDupliquees() ─────────────────────────────────────
+
     @Test
     @DisplayName("F16 : les alertes sont générées une seule fois et regroupées par site")
     void generationAlertesNonDupliquees() throws Exception {
@@ -226,6 +265,8 @@ class FlotteIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    // ── disponibilitesSurPeriode() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F17 : un véhicule affecté sur la période est exclu des disponibilités")
     void disponibilitesSurPeriode() throws Exception {
@@ -245,6 +286,8 @@ class FlotteIntegrationTest {
                 .andExpect(jsonPath("$[0].vehicules.length()").value(1))
                 .andExpect(jsonPath("$[0].vehicules[0].idVehicule").value(idLibre));
     }
+
+    // ── rechercheEtEcheance() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F9 et F15 : la recherche combinée et la prochaine échéance sont opérationnelles")
@@ -267,11 +310,18 @@ class FlotteIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  OUTILS INTERNES
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Crée une ressource via l'API et retourne son identifiant. */
+
+    // ── creer() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creer().
+     */
+
     private Integer creer(String ressource, Map<String, Object> corps) throws Exception {
         String contenu = mockMvc.perform(post("/flotte-vehicules/" + ressource + "/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -290,6 +340,13 @@ class FlotteIntegrationTest {
     }
 
     /** Crée un véhicule de référence, en propriété, sur le site de Paris. */
+
+    // ── creerVehicule() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour creerVehicule().
+     */
+
     private Integer creerVehicule(String immatriculation) throws Exception {
         return creer("vehicule", Map.of(
                 "immatriculation", immatriculation, "marque", "Peugeot", "modele", "308",
@@ -298,6 +355,13 @@ class FlotteIntegrationTest {
     }
 
     /** Sérialise un corps de requête en JSON. */
+
+    // ── json() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour json().
+     */
+
     private String json(Object valeur) throws Exception {
         return jsonMapper.writeValueAsString(valeur);
     }

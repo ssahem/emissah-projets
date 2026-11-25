@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Réservation introuvable — erreur métier traduite en HTTP not. */
+/**
+ * Réservation introuvable — erreur métier traduite en HTTP not.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Réservation introuvable — erreur métier traduite en HTTP not.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class ReservationNotFoundException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idReservation;
 
-    // ── ReservationNotFoundException() ─────────────────────────────────────────────────────────────
+    // ── ReservationNotFoundException() ───────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public ReservationNotFoundException(Integer idReservation) {
@@ -17,7 +27,7 @@ public class ReservationNotFoundException extends ApiException {
         addProperty("idReservation", idReservation);
     }
 
-    // ── getIdReservation() ───────────────────────────────────────
+    // ── getIdReservation() ───────────────────────────────────────────────────
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }

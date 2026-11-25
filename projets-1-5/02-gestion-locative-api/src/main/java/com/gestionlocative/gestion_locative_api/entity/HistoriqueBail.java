@@ -61,13 +61,13 @@ public class HistoriqueBail {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── HistoriqueBail() ────────────────────────────────────────────────────
+    // ── HistoriqueBail() ─────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected HistoriqueBail() {
     }
 
-    // ── HistoriqueBail(Integer, MotifHistoriqueBail, LocalDate, LocalDate, LocalDate) ──
+    // ── HistoriqueBail(Integer, MotifHistoriqueBail, LocalDate, LocalDate,… ──
 
     /** Crée un événement de cycle de vie. */
     public HistoriqueBail(Integer idBail, MotifHistoriqueBail motif, LocalDate dateEvenement,

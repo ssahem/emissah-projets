@@ -59,9 +59,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles des consultations F6 à F10. */
+/**
+ * Règles des consultations F6 à F10.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles des consultations F6 à F10.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ConsultationServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.of(2026, 11, 24);
 
@@ -86,6 +96,12 @@ class ConsultationServiceTest {
     private ClientService clientService;
     private InterventionService interventionService;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         AgenceMapper agenceMapper = new AgenceMapper();
@@ -104,7 +120,9 @@ class ConsultationServiceTest {
                 competenceRepository, new InterventionMapper(), new AffectationMapper(), clock);
     }
 
-    // ── F6 ─────────────────────────────────────────────────────────────────────
+    // ── F6 ───────────────────────────────────────────────────────────────────
+
+    // ── f6EffectifAgence() ───────────────────────────────────────────────────
 
     @Test
     @DisplayName("F6 : l'effectif d'une agence est trié et compte les compétences valides")
@@ -129,6 +147,8 @@ class ConsultationServiceTest {
                 .containsExactly(2L, 0L);
     }
 
+    // ── f6AgenceInconnueEtSansEquipe() ───────────────────────────────────────
+
     @Test
     @DisplayName("F6 : une agence inconnue renvoie 404 et une agence sans équipe une liste vide")
     void f6AgenceInconnueEtSansEquipe() {
@@ -141,7 +161,9 @@ class ConsultationServiceTest {
         assertThat(agenceService.findTechniciens(1)).isEmpty();
     }
 
-    // ── F7 ─────────────────────────────────────────────────────────────────────
+    // ── F7 ───────────────────────────────────────────────────────────────────
+
+    // ── f7CompetencesExpireesSignalees() ─────────────────────────────────────
 
     @Test
     @DisplayName("F7 : les compétences expirées sont signalées et jamais masquées")
@@ -167,7 +189,9 @@ class ConsultationServiceTest {
         assertThat(resultat.get(1).libelle()).isEqualTo("Cuivre");
     }
 
-    // ── F8 ─────────────────────────────────────────────────────────────────────
+    // ── F8 ───────────────────────────────────────────────────────────────────
+
+    // ── f8HistoriqueClient() ─────────────────────────────────────────────────
 
     @Test
     @DisplayName("F8 : l'historique client est trié du plus récent au plus ancien avec statut et responsable")
@@ -198,7 +222,9 @@ class ConsultationServiceTest {
         assertThat(resultat.get(1).idTechnicienResponsable()).isNull();
     }
 
-    // ── F9 ─────────────────────────────────────────────────────────────────────
+    // ── F9 ───────────────────────────────────────────────────────────────────
+
+    // ── f9FiltresCombinables() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("F9 : les filtres sont combinables et délégués à la requête native")
@@ -215,6 +241,8 @@ class ConsultationServiceTest {
                 LocalDateTime.of(2026, 12, 1, 0, 0), LocalDateTime.of(2026, 12, 8, 0, 0));
     }
 
+    // ── f9FiltresInvalides() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("F9 : un statut inconnu ou une période inversée sont refusés")
     void f9FiltresInvalides() {
@@ -227,7 +255,9 @@ class ConsultationServiceTest {
                 .hasMessageContaining("postérieure");
     }
 
-    // ── F10 ────────────────────────────────────────────────────────────────────
+    // ── F10 ──────────────────────────────────────────────────────────────────
+
+    // ── f10PlanningDefaut() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F10 : le planning défaut couvre la semaine courante et signale les annulations")
@@ -263,6 +293,8 @@ class ConsultationServiceTest {
         assertThat(resultat.get(0).voie()).isEqualTo("12 rue de la Paix");
     }
 
+    // ── f10PeriodeTropLongue() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("F10 : une période de plus de trois mois est refusée")
     void f10PeriodeTropLongue() {
@@ -274,7 +306,13 @@ class ConsultationServiceTest {
                 .hasMessageContaining("trois mois");
     }
 
-    // ── Fabriques ──────────────────────────────────────────────────────────────
+    // ── Fabriques ────────────────────────────────────────────────────────────
+
+    // ── agence() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour agence().
+     */
 
     private Agence agence(Integer id, String nom) {
         Agence agence = new Agence(nom, nom, "Paris", null);
@@ -282,11 +320,23 @@ class ConsultationServiceTest {
         return agence;
     }
 
+    // ── equipe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour equipe().
+     */
+
     private Equipe equipe(Integer id, Integer idAgence) {
         Equipe equipe = new Equipe("Équipe " + id, idAgence);
         ReflectionTestUtils.setField(equipe, "idEquipe", id);
         return equipe;
     }
+
+    // ── technicien() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour technicien().
+     */
 
     private Technicien technicien(Integer id, String nom, Integer idEquipe) {
         Technicien technicien = new Technicien(nom, "Prenom", nom.toLowerCase() + "@example.test",
@@ -295,11 +345,23 @@ class ConsultationServiceTest {
         return technicien;
     }
 
+    // ── competence() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour competence().
+     */
+
     private Competence competence(Integer id, String libelle) {
         Competence competence = new Competence(libelle, null);
         ReflectionTestUtils.setField(competence, "idCompetence", id);
         return competence;
     }
+
+    // ── obtention() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour obtention().
+     */
 
     private ObtentionCompetence obtention(Integer idTechnicien, Integer idCompetence,
                                           LocalDate obtention, LocalDate expiration) {
@@ -311,11 +373,23 @@ class ConsultationServiceTest {
         return resultat;
     }
 
+    // ── client() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour client().
+     */
+
     private Client client(Integer id, String nom) {
         Client client = new Client(nom, "Marie", "client@example.test", "0102030405", "5 avenue du parc", "Paris");
         ReflectionTestUtils.setField(client, "idClient", id);
         return client;
     }
+
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
 
     private Intervention intervention(Integer id, Integer idClient, LocalDateTime dateDemande) {
         Intervention intervention = new Intervention(dateDemande, dateDemande.plusDays(5),
@@ -324,9 +398,21 @@ class ConsultationServiceTest {
         return intervention;
     }
 
+    // ── affectation() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour affectation().
+     */
+
     private Affectation affectation(Integer id, Integer idTechnicien, boolean responsable) {
         return affectationSur(id, 20, idTechnicien, responsable);
     }
+
+    // ── affectationSur() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour affectationSur().
+     */
 
     private Affectation affectationSur(Integer id, Integer idIntervention, Integer idTechnicien,
                                        boolean responsable) {
@@ -334,6 +420,12 @@ class ConsultationServiceTest {
         ReflectionTestUtils.setField(affectation, "idAffectation", id);
         return affectation;
     }
+
+    // ── statut() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour statut().
+     */
 
     private Statut statut(String libelle) {
         Statut statut = mock(Statut.class);

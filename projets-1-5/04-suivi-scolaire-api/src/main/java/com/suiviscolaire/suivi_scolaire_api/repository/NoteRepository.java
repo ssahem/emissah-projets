@@ -19,6 +19,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface NoteRepository extends JpaRepository<Note, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Notes d'une inscription, triées par trimestre puis matière. */
     @Query("select n from Note n where n.numeroInscription = :numero "
             + "and (:trimestre is null or n.numeroTrimestre = :trimestre) "

@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * Une période de l'occupation reconstituée d'un appartement (F18).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Une période de l'occupation reconstituée d'un appartement (F18).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : AppartementService, qui découpe les baux selon les révisions.
  * BORNES       : inclusives ; {@code fin} vaut null pour une période encore ouverte.

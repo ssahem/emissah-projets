@@ -136,6 +136,12 @@ public class InterventionService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<InterventionResponse> findAll(String statut, LocalDate du, LocalDate au) {
         String libelle = null;
         if (statut != null && !statut.isBlank()) {
@@ -155,9 +161,21 @@ public class InterventionService {
                 .map(this::toResponse).toList();
     }
 
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public InterventionResponse findById(Integer id) {
         return toResponse(required(id));
     }
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
 
     @Transactional
     public InterventionResponse create(CreateInterventionRequest request) {
@@ -182,6 +200,12 @@ public class InterventionService {
         addHistorique(responsable, StatutIntervention.PLANIFIEE);
         return toResponse(intervention);
     }
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
 
     @Transactional
     public InterventionResponse update(Integer id, UpdateInterventionRequest request) {
@@ -213,6 +237,12 @@ public class InterventionService {
         return toResponse(intervention);
     }
 
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Intervention intervention = required(id);
@@ -224,6 +254,12 @@ public class InterventionService {
         affectationRepository.deleteByIdIntervention(id);
         interventionRepository.delete(intervention);
     }
+
+    // ── addAffectation() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute addAffectation().
+     */
 
     @Transactional
     public AffectationResponse addAffectation(Integer id, AddAffectationRequest request) {
@@ -251,6 +287,12 @@ public class InterventionService {
         return affectationMapper.toResponse(affectation);
     }
 
+    // ── removeAffectation() ──────────────────────────────────────────────────
+
+    /**
+     * Exécute removeAffectation().
+     */
+
     @Transactional
     public void removeAffectation(Integer id, Integer idTechnicien) {
         required(id);
@@ -264,6 +306,12 @@ public class InterventionService {
         affectationRepository.delete(affectation);
     }
 
+    // ── findAffectations() ───────────────────────────────────────────────────
+
+    /**
+     * Exécute findAffectations().
+     */
+
     public List<AffectationResponse> findAffectations(Integer id) {
         required(id);
         return affectationRepository.findAllByIdIntervention(id).stream()
@@ -271,6 +319,13 @@ public class InterventionService {
     }
 
     /** F14 : transition du statut courant, horodatée sur l'affectation responsable. */
+
+    // ── changerStatut() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute changerStatut().
+     */
+
     @Transactional
     public InterventionResponse changerStatut(Integer id, UpdateStatutRequest request) {
         Intervention intervention = required(id);
@@ -293,6 +348,13 @@ public class InterventionService {
     }
 
     /** F15 : reprogramme une intervention ECHOUEE non encore reprise. */
+
+    // ── creerReprise() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute creerReprise().
+     */
+
     @Transactional
     public InterventionResponse creerReprise(Integer id, CreateRepriseRequest request) {
         Intervention origine = required(id);
@@ -325,6 +387,12 @@ public class InterventionService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     private InterventionResponse toResponse(Intervention intervention) {
         Adresse adresse = adresseRepository.findById(intervention.getIdAdresse()).orElse(null);
         Affectation responsable = affectationRepository
@@ -333,12 +401,24 @@ public class InterventionService {
         return mapper.toResponse(intervention, adresse, responsable);
     }
 
+    // ── addHistorique() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute addHistorique().
+     */
+
     private void addHistorique(Affectation affectation, StatutIntervention statut) {
         Statut ligne = statutRepository.findByLibelle(statut.name())
                 .orElseThrow(() -> new RessourceIntrouvableException("Statut", statut.name()));
         historiqueRepository.save(new HistoriqueStatut(
                 LocalDateTime.now(clock), ligne.getIdStatut(), affectation.getIdAffectation()));
     }
+
+    // ── statutCourant() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute statutCourant().
+     */
 
     private StatutIntervention statutCourant(Affectation affectation) {
         if (affectation == null) {
@@ -352,6 +432,13 @@ public class InterventionService {
     }
 
     /** Vérifie l'antériorité du créneau et son caractère futur (F5). */
+
+    // ── verifierCreneau() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute verifierCreneau().
+     */
+
     private void verifierCreneau(LocalDateTime debut, LocalDateTime fin) {
         if (!fin.isAfter(debut)) {
             throw new DonneeInvalideException("creneau-invalide",
@@ -364,6 +451,13 @@ public class InterventionService {
     }
 
     /** Une intervention n'est modifiable ou supprimable que tant qu'elle est PLANIFIEE (F5). */
+
+    // ── verifierModifiable() ─────────────────────────────────────────────────
+
+    /**
+     * Exécute verifierModifiable().
+     */
+
     private void verifierModifiable(Affectation responsable) {
         if (statutCourant(responsable) != StatutIntervention.PLANIFIEE) {
             throw new ConflitMetierException("intervention-non-modifiable",
@@ -372,6 +466,13 @@ public class InterventionService {
     }
 
     /** F12 : verrou pessimiste sur le technicien, puis recherche des chevauchements actifs. */
+
+    // ── verifierDisponibilite() ──────────────────────────────────────────────
+
+    /**
+     * Exécute verifierDisponibilite().
+     */
+
     private void verifierDisponibilite(Integer idTechnicien, LocalDateTime debut, LocalDateTime fin,
                                        Integer idInterventionExclu) {
         // Le verrou est pris même si le résultat n'est pas utilisé : il sérialise ce contrôle.
@@ -394,6 +495,13 @@ public class InterventionService {
     }
 
     /** F13 : toutes les compétences exigées doivent être détenues et valides à la date prévue. */
+
+    // ── verifierCompetences() ────────────────────────────────────────────────
+
+    /**
+     * Exécute verifierCompetences().
+     */
+
     private void verifierCompetences(Integer idTechnicien, Integer idType, LocalDateTime debutPrevu) {
         List<ExigenceCompetence> exigences = exigenceRepository.findAllByIdIdType(idType);
         if (exigences.isEmpty()) {
@@ -421,6 +529,12 @@ public class InterventionService {
         }
     }
 
+    // ── typeDe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute typeDe().
+     */
+
     private TypeIntervention typeDe(Intervention intervention) {
         return typeRepository.findByCode(intervention.getCodeTypeIntervention())
                 .orElseThrow(() -> new DonneeInvalideException("type-intervention-inconnu",
@@ -428,17 +542,35 @@ public class InterventionService {
                                 + intervention.getCodeTypeIntervention() + " » est inconnu"));
     }
 
+    // ── requiredResponsable() ────────────────────────────────────────────────
+
+    /**
+     * Exécute requiredResponsable().
+     */
+
     private Affectation requiredResponsable(Integer idIntervention) {
         return affectationRepository.findByIdInterventionAndEstResponsableTrue(idIntervention)
                 .orElseThrow(() -> new ConflitMetierException("responsable-absent",
                         "Cette intervention n'a pas de technicien responsable"));
     }
 
+    // ── requiredTechnicien() ─────────────────────────────────────────────────
+
+    /**
+     * Exécute requiredTechnicien().
+     */
+
     private void requiredTechnicien(Integer id) {
         if (!technicienRepository.existsById(id)) {
             throw new RessourceIntrouvableException("Technicien", id);
         }
     }
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Intervention required(Integer id) {
         return interventionRepository.findById(id)

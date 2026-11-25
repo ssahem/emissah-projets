@@ -6,8 +6,9 @@ import java.math.BigDecimal;
  * Charge d'un technicien sur la période demandée (F18).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Charge d'un technicien sur la période demandée (F18).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : ChargeTechnicienService puis renvoyé par ChargeTechnicienController.
+ * PRODUIT PAR  : ChargeTechnicienService puis renvoyé par ChargeTechnicienController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record ChargeTechnicienResponse(

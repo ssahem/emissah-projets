@@ -16,6 +16,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class StatutValidator implements ApplicationRunner {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final List<String> REQUIRED = List.of("PROVISOIRE", "PAYEE", "ANNULEE");
 
     private final StatutRepository statutRepository;

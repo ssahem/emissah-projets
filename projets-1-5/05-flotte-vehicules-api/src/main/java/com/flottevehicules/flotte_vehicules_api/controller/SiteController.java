@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * COUCHE       : Controller (interface HTTP)
  * URL          : /flotte-vehicules/site/... — ressource au singulier, action dans le chemin.
+ * RÔLE         : Endpoints des sites, du parc d'un site (F6) et du kilométrage mensuel (F19).
  * SÉCURITÉ     : aucune ; l'énoncé ne prévoit aucun utilisateur.
  * NE FAIT PAS  : de logique métier.
  */
@@ -36,6 +37,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Site", description = "CRUD des sites, véhicules d'un site (F6) et kilométrage (F19)")
 public class SiteController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final SiteService service;
 
     public SiteController(SiteService service) {
@@ -43,6 +48,13 @@ public class SiteController {
     }
 
     /** F1 : crée un site. */
+
+    // ── create() — POST /flotte-vehicules/site/create ────────────────────────
+
+    /**
+     * Créer un site.
+     */
+
     @PostMapping("/create")
     @Operation(summary = "Créer un site", description = "Nom, ville et adresse obligatoires ; nom unique")
     @ApiResponse(responseCode = "201", description = "Site créé")
@@ -54,6 +66,13 @@ public class SiteController {
     }
 
     /** F1 : liste triée par ville puis nom. */
+
+    // ── list() — GET /flotte-vehicules/site/list ─────────────────────────────
+
+    /**
+     * Lister les sites.
+     */
+
     @GetMapping("/list")
     @Operation(summary = "Lister les sites", description = "Tri par ville puis par nom")
     @ApiResponse(responseCode = "200", description = "Liste des sites")
@@ -62,6 +81,13 @@ public class SiteController {
     }
 
     /** F1 : détail d'un site. */
+
+    // ── get() — GET /flotte-vehicules/site/{id} ──────────────────────────────
+
+    /**
+     * Consulter un site.
+     */
+
     @GetMapping("/{id}")
     @Operation(summary = "Consulter un site")
     @ApiResponse(responseCode = "200", description = "Site trouvé")
@@ -71,6 +97,13 @@ public class SiteController {
     }
 
     /** F1 : modifie adresse et ville. */
+
+    // ── update() — PUT /flotte-vehicules/site/{id}/update ────────────────────
+
+    /**
+     * Modifier un site.
+     */
+
     @PutMapping("/{id}/update")
     @Operation(summary = "Modifier un site", description = "Seuls l'adresse et la ville sont modifiables")
     @ApiResponse(responseCode = "200", description = "Site modifié")
@@ -80,6 +113,13 @@ public class SiteController {
     }
 
     /** F1 : supprime un site sans véhicule. */
+
+    // ── delete() — DELETE /flotte-vehicules/site/{id}/delete ─────────────────
+
+    /**
+     * Supprimer un site.
+     */
+
     @DeleteMapping("/{id}/delete")
     @Operation(summary = "Supprimer un site", description = "Refusé si le site possède des véhicules")
     @ApiResponse(responseCode = "204", description = "Site supprimé")
@@ -90,6 +130,13 @@ public class SiteController {
     }
 
     /** F6 : véhicules d'un site et leur état courant. */
+
+    // ── vehicules() — GET /flotte-vehicules/site/{id}/vehicules ──────────────
+
+    /**
+     * Véhicules d'un site.
+     */
+
     @GetMapping("/{id}/vehicules")
     @Operation(summary = "Véhicules d'un site", description = "F6 — tri par immatriculation et état d'affectation")
     @ApiResponse(responseCode = "200", description = "Parc du site")
@@ -99,6 +146,13 @@ public class SiteController {
     }
 
     /** F19 : kilométrage mensuel d'un site. */
+
+    // ── kilometrage() — GET /flotte-vehicules/site/{id}/kilometrage ──────────
+
+    /**
+     * Kilométrage mensuel d'un site.
+     */
+
     @GetMapping("/{id}/kilometrage")
     @Operation(summary = "Kilométrage mensuel d'un site", description = "F19 — mois au format yyyy-MM")
     @ApiResponse(responseCode = "200", description = "Total et détail par véhicule")

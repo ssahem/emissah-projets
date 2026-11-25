@@ -18,6 +18,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface InscriptionRepository extends JpaRepository<Inscription, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Inscription courante d'un élève (date_fin null). */
     Optional<Inscription> findByIdEleveAndDateFinIsNull(Integer idEleve);
 

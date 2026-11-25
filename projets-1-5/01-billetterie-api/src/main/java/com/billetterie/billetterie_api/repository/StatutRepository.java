@@ -18,7 +18,7 @@ public interface StatutRepository extends Repository<Statut, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByLibelleIgnoreCase() ────────────────────────────────────────
+    // ── findByLibelleIgnoreCase() ────────────────────────────────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.

@@ -44,6 +44,12 @@ public class AlerteController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /suivi-scolaire/alerte/list ─────────────────────────────
+
+    /**
+     * Alertes d'un trimestre.
+     */
+
     @Operation(summary = "Alertes d'un trimestre",
             description = "Endpoint facultatif de consultation : la détection reste une tâche planifiée (F16)")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)

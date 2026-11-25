@@ -11,9 +11,10 @@ import java.time.LocalDate;
  * Corps de création d'un entretien (F5). D-02 : « la date » est `date`, mappée sur
  *   date_debut.
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de contrôle de kilométrage (rôle du service, D-01).
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'un entretien (F5). D-02 : « la date » est `date`, mappée sur date_debut.
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de contrôle de kilométrage (rôle du service, D-01).
  */
 @Schema(description = "Création d'un entretien : véhicule, date, type et coût positif requis")
 public record CreateEntretienRequest(
@@ -46,4 +47,9 @@ public record CreateEntretienRequest(
         @NotNull(message = "Le kilométrage est obligatoire")
         @PositiveOrZero(message = "Le kilométrage ne peut pas être négatif")
         Integer km) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

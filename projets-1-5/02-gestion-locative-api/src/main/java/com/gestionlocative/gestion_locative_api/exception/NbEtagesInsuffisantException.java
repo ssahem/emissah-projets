@@ -6,11 +6,17 @@ import org.springframework.http.HttpStatus;
  * Exception métier : nombre d'étages inférieur à l'étage maximum occupé (F2).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : nombre d'étages inférieur à l'étage maximum occupé (F2).
  * LANCÉE PAR   : ImmeubleService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 400.
  * POURQUOI     : réduire le nombre d'étages rendrait des appartements incohérents.
+ * NE FAIT PAS  : de logique métier.
  */
 public class NbEtagesInsuffisantException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec l'étage maximum encore enregistré. */
     public NbEtagesInsuffisantException(Integer idImmeuble, Integer etageMax) {

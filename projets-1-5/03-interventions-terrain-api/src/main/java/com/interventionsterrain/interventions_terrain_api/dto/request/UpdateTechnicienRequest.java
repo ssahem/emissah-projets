@@ -11,6 +11,7 @@ import jakarta.validation.constraints.Size;
  * Corps de modification d'un technicien (F2). Le matricule est figé.
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'un technicien (F2). Le matricule est figé.
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : TechnicienController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

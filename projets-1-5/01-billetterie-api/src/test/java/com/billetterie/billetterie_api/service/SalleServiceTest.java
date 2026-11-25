@@ -30,13 +30,20 @@ import org.mockito.junit.jupiter.MockitoExtension;
 /**
  * Tests unitaires du service des salles.
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : repositories simulés, mappers réels.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires du service des salles.
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : repositories simulés, mappers réels.
  * CAS COUVERTS : doublon, capacité, suppression, catégorie, identifiant inconnu.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class SalleServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private SalleRepository salleRepository;
     @Mock private PlaceRepository placeRepository;
@@ -45,6 +52,12 @@ class SalleServiceTest {
 
     private SalleService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new SalleService(salleRepository, placeRepository, evenementRepository,
@@ -52,69 +65,79 @@ class SalleServiceTest {
                 new EvenementMapper(Clock.systemUTC()));
     }
 
+    // ── create_throwsWhenDuplicate() ─────────────────────────────────────────
+
     @Test
     @DisplayName("La création refuse un couple nom/ville déjà utilisé")
     void create_throwsWhenDuplicate() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.existsByNomIgnoreCaseAndVilleIgnoreCase("Grand Hall", "Abidjan"))
                 .thenReturn(true);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(
                 new CreateSalleRequest("Grand Hall", "12 rue des Arts", "Abidjan", 120)))
                 .isInstanceOf(SalleDejaExistanteException.class);
     }
 
+    // ── update_throwsWhenCapacityTooLow() ────────────────────────────────────
+
     @Test
     @DisplayName("La modification refuse une capacité inférieure aux places existantes")
     void update_throwsWhenCapacityTooLow() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.of(
                 new com.billetterie.billetterie_api.entity.Salle(
                         "Grand Hall", "12 rue des Arts", "Abidjan", 120)));
         when(placeRepository.countBySalle_IdSalle(1)).thenReturn(50L);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.update(1,
                 new UpdateSalleRequest("Grand Hall", "12 rue des Arts", "Abidjan", 10)))
                 .isInstanceOf(CapaciteInsuffisanteException.class);
     }
 
+    // ── delete_throwsWhenPlacesExist() ───────────────────────────────────────
+
     @Test
     @DisplayName("La suppression refuse une salle qui possède des places")
     void delete_throwsWhenPlacesExist() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.of(
                 new com.billetterie.billetterie_api.entity.Salle(
                         "Grand Hall", "12 rue des Arts", "Abidjan", 120)));
         when(salleRepository.countPlacesByIdSalle(1)).thenReturn(1L);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.delete(1))
                 .isInstanceOf(SalleNonSupprimableException.class);
     }
 
+    // ── findById_throwsWhenMissing() ─────────────────────────────────────────
+
     @Test
     @DisplayName("Une salle inconnue renvoie l'erreur métier 404")
     void findById_throwsWhenMissing() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(99)).thenReturn(Optional.empty());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(SalleNotFoundException.class);
     }
 
+    // ── findPlaces_throwsWhenCategorieUnknown() ──────────────────────────────
+
     @Test
     @DisplayName("Une catégorie inconnue est refusée pour le filtre des places")
     void findPlaces_throwsWhenCategorieUnknown() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(salleRepository.findById(1)).thenReturn(Optional.of(
                 new com.billetterie.billetterie_api.entity.Salle(
                         "Grand Hall", "12 rue des Arts", "Abidjan", 120)));
         when(categorieRepository.findByLibelleIgnoreCase("INCONNUE")).thenReturn(Optional.empty());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.findPlaces(1, "INCONNUE"))
                 .isInstanceOf(CategorieInconnueException.class);
     }

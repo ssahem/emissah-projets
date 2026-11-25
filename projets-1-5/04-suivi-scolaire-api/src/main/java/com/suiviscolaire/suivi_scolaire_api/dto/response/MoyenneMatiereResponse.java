@@ -6,11 +6,17 @@ import java.math.BigDecimal;
  * Moyenne d'un élève dans une matière (F17).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Moyenne d'un élève dans une matière (F17).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : RestitutionService.
+ * PRODUIT PAR  : RestitutionService.
  * NE FAIT PAS  : de calcul SQL direct (les vues sont lues par VueRepository).
  */
 public record MoyenneMatiereResponse(
         Integer idMatiere, String libelleMatiere, BigDecimal coefficient,
         BigDecimal moyenne, int nombreNotes, boolean evaluee) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

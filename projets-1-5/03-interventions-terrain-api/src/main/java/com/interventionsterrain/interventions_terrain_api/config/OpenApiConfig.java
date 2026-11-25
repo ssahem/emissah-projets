@@ -15,7 +15,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Construit la documentation. */
+
+    // ── openAPI() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute openAPI().
+     */
+
     @Bean
     public OpenAPI openAPI() {
         Info info = new Info()

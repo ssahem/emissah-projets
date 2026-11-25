@@ -7,6 +7,7 @@ import java.util.List;
  * Page générique renvoyée par l'API (F10).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Page générique renvoyée par l'API (F10).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : BailService.
  * NE FAIT PAS  : d'accès base ni de logique métier.

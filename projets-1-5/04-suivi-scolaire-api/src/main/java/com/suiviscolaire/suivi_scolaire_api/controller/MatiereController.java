@@ -53,17 +53,35 @@ public class MatiereController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /suivi-scolaire/matiere/list ────────────────────────────
+
+    /**
+     * Lister les matières.
+     */
+
     @Operation(summary = "Lister les matières", description = "Triées par libellé (F3)")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<MatiereResponse> list() {
         return service.findAll();
     }
 
+    // ── get() — GET /suivi-scolaire/matiere/get/{id} ─────────────────────────
+
+    /**
+     * Lire une matière.
+     */
+
     @Operation(summary = "Lire une matière")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MatiereResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /suivi-scolaire/matiere/create ───────────────────────
+
+    /**
+     * Créer une matière.
+     */
 
     @Operation(summary = "Créer une matière", description = "Libellé unique et coefficient positif (F3)")
     @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -74,6 +92,12 @@ public class MatiereController {
                 .body(created);
     }
 
+    // ── update() — PUT /suivi-scolaire/matiere/update/{id} ───────────────────
+
+    /**
+     * Modifier une matière.
+     */
+
     @Operation(summary = "Modifier une matière", description = "Coefficient figé après clôture d'un trimestre (F3)")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -81,6 +105,12 @@ public class MatiereController {
                                   @Valid @RequestBody UpdateMatiereRequest request) {
         return service.update(id, request);
     }
+
+    // ── delete() — DELETE /suivi-scolaire/matiere/delete/{id} ────────────────
+
+    /**
+     * Supprimer une matière.
+     */
 
     @Operation(summary = "Supprimer une matière", description = "Refusée si affectée ou notée (F3)")
     @DeleteMapping(path = "/delete/{id}")

@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SiteRepository extends JpaRepository<Site, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les sites triés par ville puis par nom (F1). */
     List<Site> findAllByOrderByVilleAscNomAsc();
 

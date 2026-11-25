@@ -38,9 +38,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F13 à F15 (poids, clôture et réouverture). */
+/**
+ * Règles métier F13 à F15 (poids, clôture et réouverture).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F13 à F15 (poids, clôture et réouverture).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ReglesMetierServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Clock CLOCK =
             Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -56,12 +66,20 @@ class ReglesMetierServiceTest {
 
     private ReglesMetierService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ReglesMetierService(typeEvaluationRepository, trimestreRepository,
                 enseignementRepository, noteRepository, classeRepository, matiereRepository,
                 historiqueRepository, new TrimestreLookup(trimestreRepository), CLOCK);
     }
+
+    // ── modifierPoidsParAlias() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("F13 : un alias DEV résout le type Devoir et met à jour son poids")
@@ -77,6 +95,8 @@ class ReglesMetierServiceTest {
         assertThat(response.poids()).isEqualByComparingTo("2.5");
     }
 
+    // ── modifierPoidsParLibelle() ────────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : le libellé est accepté quelle que soit la casse")
     void modifierPoidsParLibelle() {
@@ -88,6 +108,8 @@ class ReglesMetierServiceTest {
                 .isEqualTo("Interrogation");
     }
 
+    // ── modifierPoidsNull() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : un poids nul est refusé avant toute écriture")
     void modifierPoidsNull() {
@@ -96,6 +118,8 @@ class ReglesMetierServiceTest {
                 .hasMessageContaining("strictement positif");
         verify(typeEvaluationRepository, never()).findByLibelle(any());
     }
+
+    // ── modifierPoidsApresCloture() ──────────────────────────────────────────
 
     @Test
     @DisplayName("F13 : un trimestre clôturé fige tous les poids")
@@ -107,6 +131,8 @@ class ReglesMetierServiceTest {
                 .hasMessageContaining("plus modifiable");
     }
 
+    // ── modifierPoidsCodeInconnu() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : un code inconnu est refusé")
     void modifierPoidsCodeInconnu() {
@@ -116,6 +142,8 @@ class ReglesMetierServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("inconnu");
     }
+
+    // ── cloturerComplet() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F14 : la clôture est acceptée si chaque enseignement a une note")
@@ -131,6 +159,8 @@ class ReglesMetierServiceTest {
         assertThat(response.nombreEnseignementsVerifies()).isEqualTo(1);
         assertThat(trimestre.isEstCloture()).isTrue();
     }
+
+    // ── cloturerIncomplet() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F14 : la clôture incomplète renvoie 409 avec les classes et matières manquantes")
@@ -150,6 +180,8 @@ class ReglesMetierServiceTest {
                 });
     }
 
+    // ── cloturerDejaCloture() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F14 : un trimestre déjà clôturé ne peut pas l'être de nouveau")
     void cloturerDejaCloture() {
@@ -161,6 +193,8 @@ class ReglesMetierServiceTest {
         verify(enseignementRepository, never()).findAll();
     }
 
+    // ── reouvrirMotifCourt() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("F15 : un motif trop court est refusé")
     void reouvrirMotifCourt() {
@@ -168,6 +202,8 @@ class ReglesMetierServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("20 caractères");
     }
+
+    // ── reouvrirDernier() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F15 : le dernier trimestre clôturé est rouvert et tracé")
@@ -192,6 +228,8 @@ class ReglesMetierServiceTest {
         assertThat(trimestre.isEstCloture()).isFalse();
     }
 
+    // ── reouvrirNonDernier() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("F15 : seul le plus récent des trimestres clôturés peut être rouvert")
     void reouvrirNonDernier() {
@@ -205,6 +243,8 @@ class ReglesMetierServiceTest {
                 .hasMessageContaining("dernier trimestre clôturé");
     }
 
+    // ── reouvrirTrimestreOuvert() ────────────────────────────────────────────
+
     @Test
     @DisplayName("F15 : un trimestre ouvert ne peut pas être rouvert")
     void reouvrirTrimestreOuvert() {
@@ -214,6 +254,8 @@ class ReglesMetierServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("n'est pas clôturé");
     }
+
+    // ── reouvrirDejaTrace() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F15 : une réouverture déjà tracée est refusée")
@@ -233,6 +275,13 @@ class ReglesMetierServiceTest {
     }
 
     /** Construit un trimestre avec son identifiant. */
+
+    // ── trimestre() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour trimestre().
+     */
+
     private Trimestre trimestre(Integer numero, boolean cloture) {
         Trimestre t = new Trimestre(numero, LocalDate.of(2026, 11, 1),
                 LocalDate.of(2027, 2, 28), 2);
@@ -244,6 +293,13 @@ class ReglesMetierServiceTest {
     }
 
     /** Construit un enseignement avec son identifiant. */
+
+    // ── enseignement() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour enseignement().
+     */
+
     private Enseignement enseignement(Integer id) {
         Enseignement e = new Enseignement(1, 1, 1);
         ReflectionTestUtils.setField(e, "idEnseignement", id);
@@ -251,6 +307,13 @@ class ReglesMetierServiceTest {
     }
 
     /** Construit un type d'évaluation avec son identifiant. */
+
+    // ── type() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour type().
+     */
+
     private TypeEvaluation type(String libelle, Integer id) {
         TypeEvaluation t = new TypeEvaluation(libelle, BigDecimal.ONE);
         ReflectionTestUtils.setField(t, "idTypeEval", id);
@@ -258,6 +321,13 @@ class ReglesMetierServiceTest {
     }
 
     /** Construit une classe avec son identifiant. */
+
+    // ── classe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour classe().
+     */
+
     private Classe classe(Integer id, String nom) {
         Classe c = new Classe(nom, 2, 1, 30);
         ReflectionTestUtils.setField(c, "idClasse", id);
@@ -265,6 +335,13 @@ class ReglesMetierServiceTest {
     }
 
     /** Construit une matière avec son identifiant. */
+
+    // ── matiere() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour matiere().
+     */
+
     private Matiere matiere(Integer id, String libelle) {
         Matiere m = new Matiere(libelle, "MAT", BigDecimal.ONE);
         ReflectionTestUtils.setField(m, "idMatiere", id);

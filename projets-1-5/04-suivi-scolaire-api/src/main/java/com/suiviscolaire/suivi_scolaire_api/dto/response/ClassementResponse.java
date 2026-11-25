@@ -7,12 +7,18 @@ import java.util.List;
  * Classement d'une classe (F19).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Classement d'une classe (F19).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : RestitutionService.
+ * PRODUIT PAR  : RestitutionService.
  * NE FAIT PAS  : de calcul SQL direct.
  */
 public record ClassementResponse(
         Integer idClasse, Integer trimestre, BigDecimal moyenneClasse,
         BigDecimal meilleureMoyenne, BigDecimal plusFaibleMoyenne,
         List<LigneClassementResponse> eleves) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

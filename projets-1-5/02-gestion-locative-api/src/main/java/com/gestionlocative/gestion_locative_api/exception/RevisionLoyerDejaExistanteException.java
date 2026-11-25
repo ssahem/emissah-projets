@@ -7,12 +7,18 @@ import org.springframework.http.HttpStatus;
  * Exception métier : une révision existe déjà à cette date (F15).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : une révision existe déjà à cette date (F15).
  * LANCÉE PAR   : BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 409.
  * POURQUOI     : uq_revision_loyer_bail_date sanctionne un conflit avec une
  *                donnée existante ; le client reçoit un message lisible.
+ * NE FAIT PAS  : de logique métier.
  */
 public class RevisionLoyerDejaExistanteException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec le bail et la date déjà occupée. */
     public RevisionLoyerDejaExistanteException(Integer idBail, LocalDate dateEffet) {

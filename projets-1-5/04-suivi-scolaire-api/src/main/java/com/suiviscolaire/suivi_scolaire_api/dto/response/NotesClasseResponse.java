@@ -7,11 +7,17 @@ import java.util.List;
  * Notes d'une matière dans une classe, groupées par élève (F8).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Notes d'une matière dans une classe, groupées par élève (F8).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : ConsultationService.
+ * PRODUIT PAR  : ConsultationService.
  * NE FAIT PAS  : de calcul métier.
  */
 public record NotesClasseResponse(
         Integer idClasse, Integer idMatiere, Integer trimestre, BigDecimal moyenneClasse,
         List<NotesEleveResponse> eleves) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

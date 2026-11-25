@@ -61,6 +61,12 @@ public class InterventionController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /interventions-terrain/intervention/list ────────────────
+
+    /**
+     * Filtrer les interventions.
+     */
+
     @Operation(summary = "Filtrer les interventions",
             description = "Statut et période optionnels et combinables (F9), triées par début prévu")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -71,11 +77,23 @@ public class InterventionController {
         return service.findAll(statut, du, au);
     }
 
+    // ── get() — GET /interventions-terrain/intervention/get/{id} ─────────────
+
+    /**
+     * Lire une intervention.
+     */
+
     @Operation(summary = "Lire une intervention")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public InterventionResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /interventions-terrain/intervention/create ───────────
+
+    /**
+     * Créer une intervention.
+     */
 
     @Operation(summary = "Créer une intervention",
             description = "Crée l'adresse, l'affectation responsable et le statut PLANIFIEE (A-03, E-21)")
@@ -88,6 +106,12 @@ public class InterventionController {
                 .body(created);
     }
 
+    // ── update() — PUT /interventions-terrain/intervention/update/{id} ───────
+
+    /**
+     * Modifier une intervention.
+     */
+
     @Operation(summary = "Modifier une intervention",
             description = "Créneau et responsable ; le statut courant est recopié en cas de changement")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -97,12 +121,24 @@ public class InterventionController {
         return service.update(id, request);
     }
 
+    // ── delete() — DELETE /interventions-terrain/intervention/delete/{id} ────
+
+    /**
+     * Supprimer une intervention.
+     */
+
     @Operation(summary = "Supprimer une intervention")
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ── addAffectation() — POST …tions-terrain/intervention/affectation/{id} ─
+
+    /**
+     * Ajouter un technicien à une intervention.
+     */
 
     @Operation(summary = "Ajouter un technicien à une intervention",
             description = "estResponsable=true promu le technicien ; un second responsable renvoie 409 (A-02)")
@@ -113,11 +149,23 @@ public class InterventionController {
         return ResponseEntity.status(201).body(service.addAffectation(id, request));
     }
 
+    // ── affectations() — GET …ventions-terrain/intervention/affectation/{id} ─
+
+    /**
+     * Lister les affectations d'une intervention.
+     */
+
     @Operation(summary = "Lister les affectations d'une intervention")
     @GetMapping(path = "/affectation/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<AffectationResponse> affectations(@PathVariable Integer id) {
         return service.findAffectations(id);
     }
+
+    // ── removeAffectation() — DELETE …ention/affectation/{id}/{idTechnicien} ─
+
+    /**
+     * Retirer un technicien non responsable.
+     */
 
     @Operation(summary = "Retirer un technicien non responsable",
             description = "Le responsable se remplace via PUT update/{id}")
@@ -128,6 +176,12 @@ public class InterventionController {
         return ResponseEntity.noContent().build();
     }
 
+    // ── changerStatut() — POST …terventions-terrain/intervention/statut/{id} ─
+
+    /**
+     * Faire évoluer le statut.
+     */
+
     @Operation(summary = "Faire évoluer le statut",
             description = "Transitions autorisées uniquement, horodatées sur le responsable (F14)")
     @PostMapping(path = "/statut/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -136,6 +190,12 @@ public class InterventionController {
                                               @Valid @RequestBody UpdateStatutRequest request) {
         return service.changerStatut(id, request);
     }
+
+    // ── creerReprise() — POST …terventions-terrain/intervention/reprise/{id} ─
+
+    /**
+     * Reprogrammer une intervention échouée.
+     */
 
     @Operation(summary = "Reprogrammer une intervention échouée",
             description = "Crée une nouvelle intervention PLANIFIEE liée à l'originale (F15)")

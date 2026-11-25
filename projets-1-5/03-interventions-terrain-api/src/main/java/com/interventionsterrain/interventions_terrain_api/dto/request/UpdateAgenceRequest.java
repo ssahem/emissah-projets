@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
  * Corps de modification d'une agence (F1). La ville est figée dès qu'une équipe est rattachée.
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une agence (F1). La ville est figée dès qu'une équipe est rattachée.
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : AgenceController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

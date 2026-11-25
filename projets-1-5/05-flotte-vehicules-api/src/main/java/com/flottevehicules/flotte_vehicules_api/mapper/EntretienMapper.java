@@ -12,11 +12,16 @@ import org.springframework.stereotype.Component;
  * Conversion Entretien → EntretienResponse, avec libellé du type et nom du prestataire.
  *
  * COUCHE       : Mapper (interface HTTP)
+ * RÔLE         : Conversion Entretien → EntretienResponse, avec libellé du type et nom du prestataire.
  * DÉPEND DE    : TypeEntretienRepository, PrestataireRepository.
  * NE FAIT PAS  : de calcul de cumul (rôle du service).
  */
 @Component
 public class EntretienMapper {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final TypeEntretienRepository typeEntretienRepository;
     private final PrestataireRepository prestataireRepository;
@@ -28,6 +33,13 @@ public class EntretienMapper {
     }
 
     /** Convertit une entité en réponse ; alerteCreee est renseignée par le service. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public EntretienResponse toResponse(Entretien entretien, boolean alerteCreee) {
         String libelle = typeEntretienRepository.findById(entretien.getIdTypeEntretien())
                 .map(TypeEntretien::getLibelle).orElse(null);

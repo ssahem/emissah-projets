@@ -40,10 +40,20 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Codes de réponse HTTP des cinq CRUD (F1 à F5). */
+/**
+ * Codes de réponse HTTP des cinq CRUD (F1 à F5).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Codes de réponse HTTP des cinq CRUD (F1 à F5).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @WebMvcTest
 @Import(GlobalExceptionHandler.class)
 class ControllerWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Autowired private MockMvc mockMvc;
     @Autowired private JsonMapper objectMapper;
@@ -53,6 +63,9 @@ class ControllerWebTest {
     @MockitoBean private CompetenceService competenceService;
     @MockitoBean private ClientService clientService;
     @MockitoBean private InterventionService interventionService;
+
+    // ── createAgenceReturns201() ─────────────────────────────────────────────
+
     @MockitoBean private RestitutionService restitutionService;
 
     @Test
@@ -70,6 +83,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.ville").value("Paris"));
     }
 
+    // ── listAgencesReturns200() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("GET agence/list renvoie la liste triée")
     void listAgencesReturns200() throws Exception {
@@ -83,6 +98,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[1].ville").value("Paris"));
     }
 
+    // ── createTechnicienInvalidReturns400() ──────────────────────────────────
+
     @Test
     @DisplayName("Un corps invalide renvoie 400 avec les champs en erreur")
     void createTechnicienInvalidReturns400() throws Exception {
@@ -93,6 +110,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.title").value("Corps invalide"))
                 .andExpect(jsonPath("$.champs").isArray());
     }
+
+    // ── getClientIntrouvableReturns404() ─────────────────────────────────────
 
     @Test
     @DisplayName("Une ressource absente renvoie 404 en Problem Details")
@@ -105,6 +124,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.type").value(
                         "https://api.interventions-terrain.local/problems/ressource-introuvable"));
     }
+
+    // ── createCompetenceConflitReturns409() ──────────────────────────────────
 
     @Test
     @DisplayName("Un conflit métier renvoie 409 avec le type de problème")
@@ -120,6 +141,8 @@ class ControllerWebTest {
                         "https://api.interventions-terrain.local/problems/competence-libelle-deja-utilise"));
     }
 
+    // ── deleteInterventionReturns204() ───────────────────────────────────────
+
     @Test
     @DisplayName("DELETE intervention/delete/{id} renvoie 204")
     void deleteInterventionReturns204() throws Exception {
@@ -128,6 +151,8 @@ class ControllerWebTest {
         mockMvc.perform(delete("/interventions-terrain/intervention/delete/4"))
                 .andExpect(status().isNoContent());
     }
+
+    // ── updateInterventionReturns200() ───────────────────────────────────────
 
     @Test
     @DisplayName("PUT intervention/update/{id} renvoie le créneau modifié")
@@ -146,6 +171,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.voie").value("12 rue de la Paix"));
     }
 
+    // ── addAffectationReturns201() ───────────────────────────────────────────
+
     @Test
     @DisplayName("POST intervention/{id}/affecter renvoie 201")
     void addAffectationReturns201() throws Exception {
@@ -161,6 +188,13 @@ class ControllerWebTest {
     }
 
     /** Réponse d'intervention nominative. */
+
+    // ── interventionResponse() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour interventionResponse().
+     */
+
     private InterventionResponse interventionResponse() {
         return new InterventionResponse(4, 1, "RACCORDEMENT_FIBRE",
                 LocalDateTime.of(2026, 11, 24, 9, 0),

@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
  * RÔLE         : produire une alerte par agence et marquer chaque compétence signalée via
  *                {@code date_alerte}, sans créer de table d'alerte (E-07).
  * FRÉQUENCE    : 01:00 UTC, via la propriété {@code interventions-terrain.alertes-competences.cron}.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Service
 @Transactional(readOnly = true)
@@ -80,6 +81,12 @@ public class AlerteCompetenceService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── genererAlertesPlanifiees() ───────────────────────────────────────────
+
+    /**
+     * Exécute genererAlertesPlanifiees().
+     */
+
     public void genererAlertesPlanifiees() {
         List<AlerteAgenceResponse> alertes = genererAlertes();
         if (alertes.isEmpty()) {
@@ -92,6 +99,13 @@ public class AlerteCompetenceService {
     }
 
     /** Construit les alertes et marque les compétences traitées pour ne jamais les signaler deux fois. */
+
+    // ── genererAlertes() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute genererAlertes().
+     */
+
     @Transactional
     public List<AlerteAgenceResponse> genererAlertes() {
         LocalDate aujourdHui = LocalDate.now(clock);

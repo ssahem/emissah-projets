@@ -6,10 +6,11 @@ import java.time.LocalDate;
 /**
  * Véhicule disponible sur une période (F17).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : VehiculeService.
- * NE FAIT PAS : d'accès base.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Véhicule disponible sur une période (F17).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : VehiculeService.
+ * NE FAIT PAS  : d'accès base.
  */
 @Schema(description = "Véhicule libre avec compteur et prochaine échéance")
 public record DisponibleVehiculeResponse(
@@ -25,4 +26,9 @@ public record DisponibleVehiculeResponse(
 
         @Schema(description = "Prochaine échéance d'entretien", example = "2027-10-15")
         LocalDate prochaineEcheance) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

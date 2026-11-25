@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Salle figée — erreur métier traduite en HTTP conflict. */
+/**
+ * Salle figée — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Salle figée — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class SalleEvenementFigeeException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idEvenement;
 
-    // ── SalleEvenementFigeeException() ─────────────────────────────────────────────────────────────
+    // ── SalleEvenementFigeeException() ───────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public SalleEvenementFigeeException(Integer idEvenement) {
@@ -17,7 +27,7 @@ public class SalleEvenementFigeeException extends ApiException {
         addProperty("idEvenement", idEvenement);
     }
 
-    // ── getIdEvenement() ───────────────────────────────────────
+    // ── getIdEvenement() ─────────────────────────────────────────────────────
 
     /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }

@@ -51,13 +51,13 @@ public class Proprietaire {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Proprietaire() ───────────────────────────────────────────────────
+    // ── Proprietaire() ───────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Proprietaire() {
     }
 
-    // ── Proprietaire(String, String, String, String) ─────────────────────
+    // ── Proprietaire(String, String, String, String) ─────────────────────────
 
     /** Crée un propriétaire valide. */
     public Proprietaire(String nom, String prenom, String email, String telephone) {
@@ -86,7 +86,7 @@ public class Proprietaire {
     /** Retourne le téléphone. */
     public String getTelephone() { return telephone; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Met à jour les coordonnées, modifiables à tout moment (F1). */
     public void modifier(String nom, String prenom, String email, String telephone) {

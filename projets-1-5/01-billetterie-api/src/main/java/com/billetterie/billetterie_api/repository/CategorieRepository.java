@@ -18,7 +18,7 @@ public interface CategorieRepository extends Repository<Categorie, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByLibelleIgnoreCase() ────────────────────────────────────────
+    // ── findByLibelleIgnoreCase() ────────────────────────────────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.
@@ -26,7 +26,7 @@ public interface CategorieRepository extends Repository<Categorie, Integer> {
      */
     Optional<Categorie> findByLibelleIgnoreCase(String libelle);
 
-    // ── existsByLibelleIgnoreCase() ──────────────────────────────────────
+    // ── existsByLibelleIgnoreCase() ──────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByLibelleIgnoreCase(String libelle);

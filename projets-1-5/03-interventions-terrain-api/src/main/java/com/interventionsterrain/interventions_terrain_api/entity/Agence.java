@@ -68,6 +68,12 @@ public class Agence {
     public String getVille() { return ville; }
     public String getResponsable() { return responsable; }
 
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String nom, String responsable, String ville) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.responsable = responsable;

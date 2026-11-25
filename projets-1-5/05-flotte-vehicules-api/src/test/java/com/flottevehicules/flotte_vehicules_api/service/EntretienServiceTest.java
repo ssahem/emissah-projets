@@ -45,9 +45,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Tests unitaires de F5, F8, F10, F12 et F14. */
+/**
+ * Tests unitaires de F5, F8, F10, F12 et F14.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de F5, F8, F10, F12 et F14.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class EntretienServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.parse("2026-11-24");
 
@@ -61,6 +71,12 @@ class EntretienServiceTest {
 
     private EntretienService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock clock = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
@@ -70,6 +86,12 @@ class EntretienServiceTest {
                 new EntretienMapper(typeEntretienRepository, prestataireRepository), clock);
     }
 
+    // ── vehicule() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour vehicule().
+     */
+
     private Vehicule vehicule(Integer id) {
         Vehicule vehicule = new Vehicule("AB-123-CD", "Peugeot", "308",
                 LocalDate.parse("2024-01-15"), 1, "PROPRIETE", false, BigDecimal.TEN);
@@ -77,11 +99,23 @@ class EntretienServiceTest {
         return vehicule;
     }
 
+    // ── entretien() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour entretien().
+     */
+
     private Entretien entretien(Integer id, LocalDate date, BigDecimal cout, Integer km) {
         Entretien entretien = new Entretien(date, null, cout, km, 1, 1, 1);
         ReflectionTestUtils.setField(entretien, "idEntretien", id);
         return entretien;
     }
+
+    // ── references() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour references().
+     */
 
     private void references() {
         lenient().when(vehiculeRepository.findById(1)).thenReturn(Optional.of(vehicule(1)));
@@ -95,9 +129,17 @@ class EntretienServiceTest {
         when(prestataireRepository.findById(1)).thenReturn(Optional.of(prestataire));
     }
 
+    // ── request() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour request().
+     */
+
     private CreateEntretienRequest request(LocalDate date, Integer km) {
         return new CreateEntretienRequest(date, null, 1, 1, 1, BigDecimal.valueOf(320), km);
     }
+
+    // ── findAllPage() ────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F10 : la pagination retourne les métadonnées")
@@ -113,6 +155,8 @@ class EntretienServiceTest {
         assertThat(resultat.totalPages()).isEqualTo(6);
     }
 
+    // ── findAllTaillePlafonnee() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("F10 : une taille supérieure à 100 est ramenée à 100")
     void findAllTaillePlafonnee() {
@@ -125,6 +169,8 @@ class EntretienServiceTest {
         assertThat(captor.getValue().getPageSize()).isEqualTo(100);
     }
 
+    // ── findAllTriInvalide() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("F10 : un tri inconnu est refusé")
     void findAllTriInvalide() {
@@ -132,12 +178,16 @@ class EntretienServiceTest {
                 .isInstanceOf(DonneeInvalideException.class);
     }
 
+    // ── findAllPageNegative() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F10 : un index de page négatif est refusé")
     void findAllPageNegative() {
         assertThatThrownBy(() -> service.findAll(-1, 20, null))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── findByIdPresent() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F5 : un entretien existant est retourné")
@@ -148,6 +198,8 @@ class EntretienServiceTest {
         assertThat(service.findById(1).idEntretien()).isEqualTo(1);
     }
 
+    // ── findByIdAbsent() ─────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F5 : un identifiant inconnu renvoie 404")
     void findByIdAbsent() {
@@ -156,6 +208,8 @@ class EntretienServiceTest {
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── createOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F5 : la création enregistre un entretien valide")
@@ -174,6 +228,8 @@ class EntretienServiceTest {
         assertThat(resultat.alerteCreee()).isFalse();
     }
 
+    // ── createAvecConflit() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F12 : un entretien saisi après une affectation crée une alerte")
     void createAvecConflit() {
@@ -190,6 +246,8 @@ class EntretienServiceTest {
         assertThat(captor.getValue().getMotif()).isEqualTo("CONFLIT_AFFECTATION_ENTRETIEN");
     }
 
+    // ── createConflitAlerteExistante() ───────────────────────────────────────
+
     @Test
     @DisplayName("F12 : une alerte déjà émise n'est pas dupliquée")
     void createConflitAlerteExistante() {
@@ -204,6 +262,8 @@ class EntretienServiceTest {
         verify(alerteRepository, never()).save(any());
     }
 
+    // ── createKmDecroissant() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("F14 : un kilométrage inférieur au dernier relevé est refusé")
     void createKmDecroissant() {
@@ -216,6 +276,8 @@ class EntretienServiceTest {
         verify(entretienRepository, never()).save(any());
     }
 
+    // ── createAvantMiseEnService() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F5 : une date avant la mise en service est refusée")
     void createAvantMiseEnService() {
@@ -224,6 +286,8 @@ class EntretienServiceTest {
         assertThatThrownBy(() -> service.create(request(LocalDate.parse("2023-01-01"), 19000)))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── createDatesInversees() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("F5 : des dates inversées sont refusées")
@@ -234,6 +298,8 @@ class EntretienServiceTest {
                 AUJOURD_HUI, LocalDate.parse("2026-11-20"), 1, 1, 1, BigDecimal.TEN, 19000)))
                 .isInstanceOf(DonneeInvalideException.class);
     }
+
+    // ── updateOk() ───────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F5 : coût et prestataire sont modifiables")
@@ -249,6 +315,8 @@ class EntretienServiceTest {
         assertThat(resultat.cout()).isEqualByComparingTo("350");
     }
 
+    // ── updateDateFigee() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F5 : la date est figée")
     void updateDateFigee() {
@@ -259,6 +327,8 @@ class EntretienServiceTest {
                 BigDecimal.TEN, 1, LocalDate.parse("2026-11-25"), 19000)))
                 .isInstanceOf(ConflitMetierException.class);
     }
+
+    // ── updateKmFige() ───────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F5 : le kilométrage est figé")
@@ -271,6 +341,8 @@ class EntretienServiceTest {
                 .isInstanceOf(ConflitMetierException.class);
     }
 
+    // ── deleteFutur() ────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F5 : un entretien futur peut être supprimé")
     void deleteFutur() {
@@ -282,6 +354,8 @@ class EntretienServiceTest {
         verify(entretienRepository).delete(futur);
     }
 
+    // ── deleteCommence() ─────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F5 : un entretien commencé ne peut pas être supprimé")
     void deleteCommence() {
@@ -291,6 +365,8 @@ class EntretienServiceTest {
         assertThatThrownBy(() -> service.delete(1)).isInstanceOf(ConflitMetierException.class);
         verify(entretienRepository, never()).delete(any());
     }
+
+    // ── historiqueVide() ─────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F8 : un véhicule sans entretien renvoie un cumul nul")
@@ -303,6 +379,8 @@ class EntretienServiceTest {
         assertThat(resultat.coutCumule()).isEqualByComparingTo("0");
         assertThat(resultat.entretiens()).isEmpty();
     }
+
+    // ── historiqueRenseigne() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F8 : l'historique est trié et le cumul vient de la vue")

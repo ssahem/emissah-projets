@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
  * Corps de création d'une agence (F1).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une agence (F1).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : AgenceController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

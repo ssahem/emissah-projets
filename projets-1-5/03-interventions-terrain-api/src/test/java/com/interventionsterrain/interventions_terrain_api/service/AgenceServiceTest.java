@@ -27,9 +27,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F1. */
+/**
+ * Règles métier F1.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F1.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class AgenceServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private AgenceRepository agenceRepository;
     @Mock private EquipeRepository equipeRepository;
@@ -39,11 +49,19 @@ class AgenceServiceTest {
 
     private AgenceService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new AgenceService(agenceRepository, equipeRepository, technicienRepository,
                 obtentionRepository, new AgenceMapper(), clock);
     }
+
+    // ── createRefuseNomDuplique() ────────────────────────────────────────────
 
     @Test
     @DisplayName("La création refuse un nom déjà utilisé avec un 409")
@@ -57,6 +75,8 @@ class AgenceServiceTest {
                 .hasMessageContaining("déjà utilisé");
         verify(agenceRepository, never()).save(any());
     }
+
+    // ── createAvecAdresseParDefaut() ─────────────────────────────────────────
 
     @Test
     @DisplayName("La création utilise la ville comme adresse par défaut")
@@ -74,6 +94,8 @@ class AgenceServiceTest {
         assertThat(response.adresse()).isEqualTo("Lyon");
     }
 
+    // ── updateRefuseChangementDeVilleSiEquipe() ──────────────────────────────
+
     @Test
     @DisplayName("La ville est figée dès qu'une équipe est rattachée")
     void updateRefuseChangementDeVilleSiEquipe() {
@@ -85,6 +107,8 @@ class AgenceServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("ne peut plus changer");
     }
+
+    // ── updateResponsableAutorise() ──────────────────────────────────────────
 
     @Test
     @DisplayName("Le responsable reste modifiable même si la ville est figée")
@@ -98,6 +122,8 @@ class AgenceServiceTest {
 
         assertThat(response.responsable()).isEqualTo("Mme Durand");
     }
+
+    // ── deleteRefuseSiEquipes() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("La suppression est refusée si des équipes existent")
@@ -113,6 +139,13 @@ class AgenceServiceTest {
     }
 
     /** Construit une agence avec son identifiant. */
+
+    // ── agence() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour agence().
+     */
+
     private Agence agence(Integer id, String nom, String ville) {
         Agence agence = new Agence(nom, ville, ville, null);
         ReflectionTestUtils.setField(agence, "idAgence", id);

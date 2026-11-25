@@ -6,11 +6,17 @@ import org.springframework.http.HttpStatus;
  * Exception métier : appartement déjà loué (F3).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : appartement déjà loué (F3).
  * LANCÉE PAR   : AppartementService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 409.
  * POURQUOI     : supprimer l'appartement casserait l'historique des baux.
+ * NE FAIT PAS  : de logique métier.
  */
 public class AppartementNonSupprimableException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur pour un identifiant donné. */
     public AppartementNonSupprimableException(Integer idAppartement) {

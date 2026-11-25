@@ -7,9 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * Corps de modification d'une fiche salarié (F3) ; le matricule est figé.
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une fiche salarié (F3) ; le matricule est figé.
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de logique métier.
  */
 @Schema(description = "Modification d'un salarié ; le matricule n'est pas modifiable")
 public record UpdateSalarieRequest(
@@ -30,4 +31,9 @@ public record UpdateSalarieRequest(
         @Schema(description = "Nouveau service", example = "Technique")
         @NotBlank(message = "Le service est obligatoire")
         String service) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

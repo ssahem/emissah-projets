@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
  * Corps de création d'un propriétaire (F1).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'un propriétaire (F1).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : ProprietaireController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

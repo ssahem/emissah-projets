@@ -44,7 +44,7 @@ public class Place {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Place() ──────────────────────────────────────────────────────────
+    // ── Place() ──────────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Place() {}
@@ -63,32 +63,32 @@ public class Place {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdPlace() ─────────────────────────────────────────────────────
+    // ── getIdPlace() ─────────────────────────────────────────────────────────
 
     /** Retourne idPlace. */
     public Integer getIdPlace() { return idPlace; }
 
-    // ── getRang() ────────────────────────────────────────────────────────
+    // ── getRang() ────────────────────────────────────────────────────────────
 
     /** Retourne rang. */
     public String getRang() { return rang; }
 
-    // ── getNumero() ──────────────────────────────────────────────────────
+    // ── getNumero() ──────────────────────────────────────────────────────────
 
     /** Retourne numero. */
     public Integer getNumero() { return numero; }
 
-    // ── getSalle() ───────────────────────────────────────────────────────
+    // ── getSalle() ───────────────────────────────────────────────────────────
 
     /** Retourne salle. */
     public Salle getSalle() { return salle; }
 
-    // ── getCategorie() ───────────────────────────────────────────────────
+    // ── getCategorie() ───────────────────────────────────────────────────────
 
     /** Retourne categorie. */
     public Categorie getCategorie() { return categorie; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Applique une modification complète de la place (F2). */
     public void modifier(String rang, Integer numero, Salle salle, Categorie categorie) {

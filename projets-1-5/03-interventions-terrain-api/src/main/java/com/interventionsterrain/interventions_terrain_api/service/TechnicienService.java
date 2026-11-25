@@ -123,15 +123,34 @@ public class TechnicienService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<TechnicienResponse> findAll() {
         return technicienRepository.findAllByOrderByNomAsc().stream().map(mapper::toResponse).toList();
     }
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
 
     public TechnicienResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F7 : toutes les compétences obtenues, expirées comprises mais signalées comme telles. */
+
+    // ── findCompetences() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute findCompetences().
+     */
+
     public List<CompetenceTechnicienResponse> findCompetences(Integer id) {
         required(id);
         LocalDate aujourdHui = LocalDate.now(clock);
@@ -149,6 +168,13 @@ public class TechnicienService {
     }
 
     /** F10 : planning sur une période, semaine courante par défaut, 3 mois maximum. */
+
+    // ── findPlanning() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute findPlanning().
+     */
+
     public List<PlanningInterventionResponse> findPlanning(Integer id, LocalDate du, LocalDate au) {
         required(id);
         LocalDate debut = du != null ? du : LocalDate.now(clock).with(DayOfWeek.MONDAY);
@@ -185,6 +211,13 @@ public class TechnicienService {
     }
 
     /** F11 : certifier une compétence, en refusant les dates incohérentes et les doublons actifs. */
+
+    // ── associerCompetence() ─────────────────────────────────────────────────
+
+    /**
+     * Exécute associerCompetence().
+     */
+
     @Transactional
     public CompetenceTechnicienResponse associerCompetence(
             Integer idTechnicien, CreateObtentionCompetenceRequest request) {
@@ -208,6 +241,12 @@ public class TechnicienService {
                 obtention.getDateExpiration() != null && obtention.getDateExpiration().isBefore(aujourdHui));
     }
 
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public TechnicienResponse create(CreateTechnicienRequest request) {
         if (technicienRepository.existsByMatricule(request.matricule())) {
@@ -227,6 +266,12 @@ public class TechnicienService {
         return mapper.toResponse(technicien);
     }
 
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public TechnicienResponse update(Integer id, UpdateTechnicienRequest request) {
         Technicien technicien = required(id);
@@ -240,6 +285,12 @@ public class TechnicienService {
                 request.email(), request.telephone(), idEquipe);
         return mapper.toResponse(technicien);
     }
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
 
     @Transactional
     public void delete(Integer id) {
@@ -255,15 +306,33 @@ public class TechnicienService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── client() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute client().
+     */
+
     private Client client(Intervention intervention) {
         return clientRepository.findById(intervention.getIdClient())
                 .orElseThrow(() -> new RessourceIntrouvableException("Client", intervention.getIdClient()));
     }
 
+    // ── adresse() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute adresse().
+     */
+
     private Adresse adresse(Intervention intervention) {
         return adresseRepository.findById(intervention.getIdAdresse())
                 .orElseThrow(() -> new RessourceIntrouvableException("Adresse", intervention.getIdAdresse()));
     }
+
+    // ── statutCourant() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute statutCourant().
+     */
 
     private StatutIntervention statutCourant(Intervention intervention) {
         return affectationRepository.findByIdInterventionAndEstResponsableTrue(intervention.getIdIntervention())
@@ -274,6 +343,12 @@ public class TechnicienService {
                 .filter(Objects::nonNull)
                 .orElse(StatutIntervention.PLANIFIEE);
     }
+
+    // ── resolveEquipe() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute resolveEquipe().
+     */
 
     private Integer resolveEquipe(Integer idAgence, Integer idEquipe) {
         Agence agence = agenceRepository.findById(idAgence)
@@ -289,6 +364,12 @@ public class TechnicienService {
                 .orElseGet(() -> equipeRepository.save(new Equipe("Équipe " + agence.getNom(), idAgence)))
                 .getIdEquipe();
     }
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Technicien required(Integer id) {
         return technicienRepository.findById(id)

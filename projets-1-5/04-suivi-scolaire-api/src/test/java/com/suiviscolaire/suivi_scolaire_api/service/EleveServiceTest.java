@@ -33,9 +33,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F2 et F11 (élèves et changement de classe). */
+/**
+ * Règles métier F2 et F11 (élèves et changement de classe).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F2 et F11 (élèves et changement de classe).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class EleveServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-11-24T10:00:00Z"), ZoneOffset.UTC);
 
@@ -45,11 +55,19 @@ class EleveServiceTest {
 
     private EleveService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new EleveService(eleveRepository, inscriptionRepository, classeRepository,
                 new EleveMapper(inscriptionRepository, classeRepository), CLOCK);
     }
+
+    // ── findAllAvecClasse() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("La liste des élèves est triée et indique leur classe")
@@ -66,6 +84,8 @@ class EleveServiceTest {
         });
     }
 
+    // ── createRefuseDateFuture() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("La création refuse une date de naissance dans le futur")
     void createRefuseDateFuture() {
@@ -75,6 +95,8 @@ class EleveServiceTest {
                 .hasMessageContaining("passé");
         verify(eleveRepository, never()).save(any());
     }
+
+    // ── createRefuseClassePleine() ───────────────────────────────────────────
 
     @Test
     @DisplayName("La création refuse une classe pleine")
@@ -87,6 +109,8 @@ class EleveServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("effectif maximal");
     }
+
+    // ── createNominal() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("La création enregistre la fiche et l'inscription courante")
@@ -105,6 +129,8 @@ class EleveServiceTest {
         verify(inscriptionRepository).save(any(Inscription.class));
     }
 
+    // ── deleteRefuseEleveAvecNotes() ─────────────────────────────────────────
+
     @Test
     @DisplayName("La suppression est refusée si l'élève a des notes")
     void deleteRefuseEleveAvecNotes() {
@@ -120,6 +146,8 @@ class EleveServiceTest {
         verify(eleveRepository, never()).delete(any());
     }
 
+    // ── changerClasseRefuseNiveauDifferent() ─────────────────────────────────
+
     @Test
     @DisplayName("Le changement de classe refuse un niveau différent")
     void changerClasseRefuseNiveauDifferent() {
@@ -133,6 +161,8 @@ class EleveServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("même niveau");
     }
+
+    // ── changerClasseNominal() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("Le changement de classe conserve l'ancienne inscription")
@@ -156,6 +186,13 @@ class EleveServiceTest {
     }
 
     /** Construit un élève avec son identifiant. */
+
+    // ── eleve() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour eleve().
+     */
+
     private Eleve eleve(Integer id) {
         Eleve e = new Eleve("Kouassi", "Aya", LocalDate.of(2011, 2, 14));
         ReflectionTestUtils.setField(e, "idEleve", id);
@@ -163,6 +200,13 @@ class EleveServiceTest {
     }
 
     /** Construit une classe avec son identifiant et son niveau. */
+
+    // ── classe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour classe().
+     */
+
     private Classe classe(Integer id, String nom, Integer niveau) {
         Classe c = new Classe(nom, 2, niveau, 3);
         ReflectionTestUtils.setField(c, "idClasse", id);
@@ -170,6 +214,13 @@ class EleveServiceTest {
     }
 
     /** Construit une inscription courante. */
+
+    // ── inscription() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour inscription().
+     */
+
     private Inscription inscription(Integer id, Integer idClasse) {
         Inscription i = new Inscription(LocalDate.of(2026, 9, 2), 1, idClasse, "INS-2026-00" + id);
         ReflectionTestUtils.setField(i, "idInscription", id);

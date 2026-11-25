@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
  * Événement d'une programmation (F7).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Événement d'une programmation (F7).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ProgrammationMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

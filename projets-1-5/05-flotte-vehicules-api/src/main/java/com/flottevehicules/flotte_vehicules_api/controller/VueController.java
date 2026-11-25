@@ -25,6 +25,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Vue SQL", description = "Lecture seule des dix vues du schéma")
 public class VueController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final VueRepository repository;
 
     public VueController(VueRepository repository) {

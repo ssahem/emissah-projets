@@ -10,6 +10,7 @@ import java.util.List;
  * Un bail dans l'historique d'un appartement (F8).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Un bail dans l'historique d'un appartement (F8).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : BailMapper, alimenté par AppartementService.
  * LE LOCATAIRE : principal (E-08), comme pour la consultation d'un bail.

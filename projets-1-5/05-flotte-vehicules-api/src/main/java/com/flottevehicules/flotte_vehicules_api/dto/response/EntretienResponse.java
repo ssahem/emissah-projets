@@ -7,10 +7,11 @@ import java.time.LocalDate;
 /**
  * DTO de sortie d'un entretien (F5, F8, F10).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : EntretienMapper.
- * NE FAIT PAS : d'accès base ni de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : DTO de sortie d'un entretien (F5, F8, F10).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : EntretienMapper.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 @Schema(description = "Entretien d'un véhicule avec son coût")
 public record EntretienResponse(
@@ -47,4 +48,9 @@ public record EntretienResponse(
 
         @Schema(description = "Une alerte de conflit a été créée (F12)", example = "false")
         Boolean alerteCreee) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

@@ -19,7 +19,7 @@ public interface HistoriqueStatutRepository extends JpaRepository<HistoriqueStat
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findTopByReservation_IdReservationOrderByDateStatutDesc() ────────
+    // ── findTopByReservation_IdReservationOrderByDateStatutDesc() ────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.
@@ -28,7 +28,7 @@ public interface HistoriqueStatutRepository extends JpaRepository<HistoriqueStat
     Optional<HistoriqueStatut> findTopByReservation_IdReservationOrderByDateStatutDesc(
             Integer idReservation);
 
-    // ── existsByReservation_IdReservationAndStatut_LibelleIgnoreCase() ───
+    // ── existsByReservation_IdReservationAndStatut_LibelleIgnoreCase() ───────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByReservation_IdReservationAndStatut_LibelleIgnoreCase(

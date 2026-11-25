@@ -19,6 +19,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class EquipeLookup implements EquipeSupport {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final EquipeRepository equipeRepository;
     private final AgenceRepository agenceRepository;
 
@@ -27,11 +31,23 @@ public class EquipeLookup implements EquipeSupport {
         this.agenceRepository = agenceRepository;
     }
 
+    // ── findRequired() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute findRequired().
+     */
+
     @Override
     public Equipe findRequired(Integer idEquipe) {
         return equipeRepository.findById(idEquipe)
                 .orElseThrow(() -> new RessourceIntrouvableException("Équipe", idEquipe));
     }
+
+    // ── nomAgence() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute nomAgence().
+     */
 
     @Override
     public String nomAgence(Integer idAgence) {

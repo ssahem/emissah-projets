@@ -86,6 +86,8 @@ public class RestitutionService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── moyennesParMatiere() ─────────────────────────────────────────────────
+
     /**
  * F17 — Moyenne de l'élève dans chaque matière enseignée dans sa classe. Une matière sans
  *   note
@@ -122,6 +124,8 @@ public class RestitutionService {
         return new MoyennesResponse(idEleve, trimestre, matieres);
     }
 
+    // ── moyenneGenerale() ────────────────────────────────────────────────────
+
     /**
  * F18 — Moyenne générale pondérée par les coefficients des matières (vue
  *   v_moyenne_generale),
@@ -145,6 +149,8 @@ public class RestitutionService {
         }
         return new MoyenneGeneraleResponse(idEleve, trimestre, moyenne, detail);
     }
+
+    // ── classement() ─────────────────────────────────────────────────────────
 
     /**
  * F19 — Classement d'une classe : rangs densifiés de la vue pour les élèves évalués, élèves
@@ -196,6 +202,13 @@ public class RestitutionService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Retourne l'inscription courante d'un élève ou une erreur 400 explicite. */
+
+    // ── inscriptionCourante() ────────────────────────────────────────────────
+
+    /**
+     * Exécute inscriptionCourante().
+     */
+
     private Inscription inscriptionCourante(Integer idEleve) {
         return inscriptionRepository.findByIdEleveAndDateFinIsNull(idEleve)
                 .orElseThrow(() -> new DonneeInvalideException("inscription-manquante",

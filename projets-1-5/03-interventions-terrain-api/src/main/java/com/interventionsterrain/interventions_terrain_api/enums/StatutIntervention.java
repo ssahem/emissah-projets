@@ -8,8 +8,13 @@ package com.interventionsterrain.interventions_terrain_api.enums;
  * DÉCISION     : EN_ROUTE et REPORTEE existent dans la base source mais ne font pas partie
  *                des transitions de l'énoncé ; ils restent lisibles (legacy, E-22).
  * CONTRAINTES  : jamais de ORDINAL, toujours une conversion via statut.libelle (E-14).
+ * NE FAIT PAS  : de logique métier.
  */
 public enum StatutIntervention {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
 
     PLANIFIEE(false),
     EN_ROUTE(true),
@@ -31,6 +36,13 @@ public enum StatutIntervention {
     }
 
     /** Convertit un libellé de la base en enum, ou renvoie null si le libellé est inconnu. */
+
+    // ── fromLibelle() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute fromLibelle().
+     */
+
     public static StatutIntervention fromLibelle(String libelle) {
         if (libelle == null) {
             return null;

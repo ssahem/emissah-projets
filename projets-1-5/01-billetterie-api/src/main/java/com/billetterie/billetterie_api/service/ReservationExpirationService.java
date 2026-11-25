@@ -39,7 +39,7 @@ public class ReservationExpirationService {
     private final Clock clock;
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  CONSTRUCTEUR  (injection de dépendances)
+    //  CONSTRUCTEUR  (INJECTION DE DÉPENDANCES)
     // ═════════════════════════════════════════════════════════════════════════
 
     public ReservationExpirationService(ReservationRepository reservationRepository,

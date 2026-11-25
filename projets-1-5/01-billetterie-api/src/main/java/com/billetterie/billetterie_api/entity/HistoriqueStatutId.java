@@ -30,12 +30,12 @@ public class HistoriqueStatutId implements Serializable {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── HistoriqueStatutId() ─────────────────────────────────────────────
+    // ── HistoriqueStatutId() ─────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected HistoriqueStatutId() {}
 
-    // ── HistoriqueStatutId(Integer idReservation, Integer idStatut) ──────
+    // ── HistoriqueStatutId(Integer idReservation, Integer idStatut) ──────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public HistoriqueStatutId(Integer idReservation, Integer idStatut) {
@@ -47,12 +47,12 @@ public class HistoriqueStatutId implements Serializable {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdReservation() ───────────────────────────────────────────────
+    // ── getIdReservation() ───────────────────────────────────────────────────
 
     /** Retourne idReservation. */
     public Integer getIdReservation() { return idReservation; }
 
-    // ── getIdStatut() ────────────────────────────────────────────────────
+    // ── getIdStatut() ────────────────────────────────────────────────────────
 
     /** Retourne idStatut. */
     public Integer getIdStatut() { return idStatut; }
@@ -61,7 +61,7 @@ public class HistoriqueStatutId implements Serializable {
     //  IDENTITÉ ET AFFICHAGE
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── equals() ─────────────────────────────────────────────────────────
+    // ── equals() ─────────────────────────────────────────────────────────────
 
     /** Égalité sur la clé composite (idReservation, idStatut). */
     @Override
@@ -71,7 +71,7 @@ public class HistoriqueStatutId implements Serializable {
         return Objects.equals(idReservation, other.idReservation) && Objects.equals(idStatut, other.idStatut);
     }
 
-    // ── hashCode() ───────────────────────────────────────────────────────
+    // ── hashCode() ───────────────────────────────────────────────────────────
 
     /** Cohérent avec equals() : calculé sur la clé composite. */
     @Override

@@ -59,7 +59,7 @@ public class AppartementController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /gestion-locative/appartement/list ─────────────────────
+    // ── list() — GET /gestion-locative/appartement/list ──────────────────────
 
     /**
      * Liste les appartements, avec recherche optionnelle par critères (F3, F9).
@@ -80,7 +80,7 @@ public class AppartementController {
         return appartementService.search(surfaceMin, surfaceMax, nbPieces);
     }
 
-    // ── getById() — GET /gestion-locative/appartement/get/{id} ──────────────
+    // ── getById() — GET /gestion-locative/appartement/get/{id} ───────────────
 
     /** Consulte un appartement. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Consulter un appartement")
@@ -93,7 +93,7 @@ public class AppartementController {
         return appartementService.findById(id);
     }
 
-    // ── baux() — GET /gestion-locative/appartement/baux/{id} ────────────────
+    // ── baux() — GET /gestion-locative/appartement/baux/{id} ─────────────────
 
     /** Consulte l'historique des baux. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Consulter l'historique des baux d'un appartement")
@@ -106,7 +106,7 @@ public class AppartementController {
         return appartementService.findBaux(id);
     }
 
-    // ── libres() — GET /gestion-locative/appartement/libres ─────────────────
+    // ── libres() — GET /gestion-locative/appartement/libres ──────────────────
 
     /** Liste les appartements disponibles. Réponses : 200 | 400 | 500. */
     @Operation(summary = "Lister les appartements libres à une date")
@@ -120,7 +120,7 @@ public class AppartementController {
         return appartementService.findLibres(date);
     }
 
-    // ── occupation() — GET /gestion-locative/appartement/occupation/{id} ────
+    // ── occupation() — GET /gestion-locative/appartement/occupation/{id} ─────
 
     /** Reconstitue l'occupation. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Reconstituer l'occupation d'un appartement")
@@ -133,7 +133,7 @@ public class AppartementController {
         return appartementService.findOccupation(id);
     }
 
-    // ── create() — POST /gestion-locative/appartement/create ────────────────
+    // ── create() — POST /gestion-locative/appartement/create ─────────────────
 
     /** Crée un appartement. Réponses : 201 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Créer un appartement")
@@ -151,7 +151,7 @@ public class AppartementController {
                 .body(created);
     }
 
-    // ── update() — PUT /gestion-locative/appartement/update/{id} ────────────
+    // ── update() — PUT /gestion-locative/appartement/update/{id} ─────────────
 
     /** Modifie un appartement. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Modifier un appartement")
@@ -165,7 +165,7 @@ public class AppartementController {
         return appartementService.update(id, request);
     }
 
-    // ── delete() — DELETE /gestion-locative/appartement/delete/{id} ─────────
+    // ── delete() — DELETE /gestion-locative/appartement/delete/{id} ──────────
 
     /** Supprime un appartement jamais loué. Réponses : 204 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Supprimer un appartement")

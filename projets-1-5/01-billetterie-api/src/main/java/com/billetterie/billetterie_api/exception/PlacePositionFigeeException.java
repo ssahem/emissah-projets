@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Position de place figée — erreur métier traduite en HTTP conflict. */
+/**
+ * Position de place figée — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Position de place figée — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class PlacePositionFigeeException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idPlace;
 
-    // ── PlacePositionFigeeException() ─────────────────────────────────────────────────────────────
+    // ── PlacePositionFigeeException() ────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public PlacePositionFigeeException(Integer idPlace) {
@@ -18,7 +28,7 @@ public class PlacePositionFigeeException extends ApiException {
         addProperty("idPlace", idPlace);
     }
 
-    // ── getIdPlace() ───────────────────────────────────────
+    // ── getIdPlace() ─────────────────────────────────────────────────────────
 
     /** Retourne idPlace. */
     public Integer getIdPlace() { return idPlace; }

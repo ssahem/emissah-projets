@@ -83,12 +83,26 @@ public class Trimestre {
     public LocalDate getDateCloture() { return dateCloture; }
 
     /** Clôture le trimestre à la date donnée (F14). */
+
+    // ── cloturer() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute cloturer().
+     */
+
     public void cloturer(LocalDate dateCloture) {
         this.estCloture = true;
         this.dateCloture = Objects.requireNonNull(dateCloture, "dateCloture");
     }
 
     /** Rouvre le trimestre (F15) ; la date de clôture est effacée mais l'historique subsiste. */
+
+    // ── reouvrir() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute reouvrir().
+     */
+
     public void reouvrir() {
         this.estCloture = false;
         this.dateCloture = null;

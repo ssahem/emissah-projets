@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Appartement disponible à une date, avec son dernier loyer connu (F17).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Appartement disponible à une date, avec son dernier loyer connu (F17).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : AppartementMapper, alimenté par AppartementService.
  * NE FAIT PAS  : d'accès base ni de logique métier.

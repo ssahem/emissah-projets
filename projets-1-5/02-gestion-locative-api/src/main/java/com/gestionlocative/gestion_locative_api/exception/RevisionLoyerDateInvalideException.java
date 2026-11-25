@@ -7,12 +7,18 @@ import org.springframework.http.HttpStatus;
  * Exception métier : la date d'effet d'une révision est invalide (F15).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : la date d'effet d'une révision est invalide (F15).
  * LANCÉE PAR   : BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 400.
  * POURQUOI     : la date doit être postérieure à la dernière révision et
  *                comprise dans la période du bail.
+ * NE FAIT PAS  : de logique métier.
  */
 public class RevisionLoyerDateInvalideException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec la date proposée et la dernière révision connue. */
     public RevisionLoyerDateInvalideException(Integer idBail, LocalDate dateEffet,

@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ClasseRepository extends JpaRepository<Classe, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les classes triées par niveau puis par nom. */
     List<Classe> findAllByOrderByIdNiveauAscNomAsc();
 

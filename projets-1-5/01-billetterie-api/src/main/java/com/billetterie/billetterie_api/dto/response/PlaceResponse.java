@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Place complète (F2).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Place complète (F2).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : PlaceMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

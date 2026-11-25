@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Place d'une salle (F5, F6).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Place d'une salle (F5, F6).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : PlaceSalleMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

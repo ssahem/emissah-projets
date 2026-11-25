@@ -14,6 +14,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface HistoriqueReouvertureRepository extends JpaRepository<HistoriqueReouverture, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Trace éventuelle d'une réouverture du trimestre. */
     Optional<HistoriqueReouverture> findByIdTrimestre(Integer idTrimestre);
 }

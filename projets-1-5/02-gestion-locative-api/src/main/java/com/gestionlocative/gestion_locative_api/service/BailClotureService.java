@@ -29,6 +29,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class BailClotureService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final Logger log = LoggerFactory.getLogger(BailClotureService.class);
 
     private final BailRepository bailRepository;
@@ -44,7 +48,7 @@ public class BailClotureService {
         this.clock = clock;
     }
 
-    // ── cloturerBauxEchus() ─────────────────────────────────────────────────
+    // ── cloturerBauxEchus() ──────────────────────────────────────────────────
 
     /**
      * Clôture les baux échus et retourne leur nombre.
@@ -55,12 +59,12 @@ public class BailClotureService {
     @Scheduled(cron = "0 0 1 * * *", zone = "UTC")
     @Transactional
     public int cloturerBauxEchus() {
-        // ── Étape 1/3 : déterminer les baux concernés avec l'horloge applicative ──
+        // ── Étape 1/3 : déterminer les baux concernés avec l'horloge applic… ─
         LocalDate aujourdHui = LocalDate.now(clock);
         List<Bail> echus = bailRepository.findByStatutAndDateFinBefore(
                 StatutBail.EN_COURS, aujourdHui);
 
-        // ── Étape 2/3 : clôturer et tracer chaque bail ──
+        // ── Étape 2/3 : clôturer et tracer chaque bail ───────────────────────
         for (Bail bail : echus) {
             Integer idBail = bail.getIdBail();
             LocalDate fin = bail.getDateFin();
@@ -70,7 +74,7 @@ public class BailClotureService {
             log.info("Bail n°{} clôturé automatiquement (échéance du {})", idBail, fin);
         }
 
-        // ── Étape 3/3 : rendre le compte pour la journalisation et les tests ──
+        // ── Étape 3/3 : rendre le compte pour la journalisation et les tests ─
         return echus.size();
     }
 }

@@ -46,13 +46,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires du service des appartements (F3).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : repositories simulés, mapper réel.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires du service des appartements (F3).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : repositories simulés, mapper réel.
  * CAS COUVERTS : étage hors immeuble, numéro en doublon, suppression louée.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class AppartementServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private AppartementRepository appartementRepository;
     @Mock private ImmeubleRepository immeubleRepository;
@@ -63,6 +70,12 @@ class AppartementServiceTest {
 
     private AppartementService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock horlogeFixe = Clock.fixed(Instant.parse("2026-06-15T00:00:00Z"), ZoneOffset.UTC);
@@ -71,63 +84,79 @@ class AppartementServiceTest {
                 new AppartementMapper(), new BailMapper(), new ImmeubleMapper(), horlogeFixe);
     }
 
+    // ── request() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour request().
+     */
+
     private CreateAppartementRequest request(int etage) {
         return new CreateAppartementRequest(
                 "1A", new BigDecimal("45.50"), 2, etage, 1);
     }
 
+    // ── create_throwsWhenEtageHorsImmeuble() ─────────────────────────────────
+
     @Test
     @DisplayName("La création refuse un étage supérieur au nombre d'étages")
     void create_throwsWhenEtageHorsImmeuble() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(immeubleRepository.findById(1)).thenReturn(Optional.of(
                 new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 2)));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(request(3)))
                 .isInstanceOf(AppartementEtageHorsImmeubleException.class);
     }
 
+    // ── create_throwsWhenNumeroDejaUtilise() ─────────────────────────────────
+
     @Test
     @DisplayName("La création refuse un numéro déjà utilisé dans l'immeuble")
     void create_throwsWhenNumeroDejaUtilise() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(immeubleRepository.findById(1)).thenReturn(Optional.of(
                 new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3)));
         when(appartementRepository.findByNumeroAndIdImmeuble("1A", 1))
                 .thenReturn(Optional.of(new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1)));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(request(1)))
                 .isInstanceOf(AppartementNumeroDejaUtiliseException.class);
     }
 
+    // ── delete_throwsWhenBailExists() ────────────────────────────────────────
+
     @Test
     @DisplayName("La suppression refuse un appartement déjà loué")
     void delete_throwsWhenBailExists() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(appartementRepository.findById(1)).thenReturn(Optional.of(
                 new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1)));
         when(bailRepository.countByIdAppartement(1)).thenReturn(1L);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.delete(1))
                 .isInstanceOf(AppartementNonSupprimableException.class);
     }
 
+    // ── search_throwsWhenBornesInversees() ───────────────────────────────────
+
     @Test
     @DisplayName("F9 — une surface minimale supérieure à la maximale est refusée")
     void search_throwsWhenBornesInversees() {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.search(
                 new BigDecimal("90"), new BigDecimal("50"), null))
                 .isInstanceOf(SurfaceRechercheInvalideException.class);
     }
 
+    // ── findBaux_renvoieHistoriqueEnCours() ──────────────────────────────────
+
     @Test
     @DisplayName("F8 — l'historique signale le bail en cours avec son locataire")
     void findBaux_renvoieHistoriqueEnCours() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Appartement appartement = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1);
         ReflectionTestUtils.setField(appartement, "idAppartement", 2);
         Bail bail = new Bail(LocalDate.of(2026, 6, 1), null, BigDecimal.ZERO,
@@ -145,20 +174,22 @@ class AppartementServiceTest {
                 .thenReturn(List.of(new RevisionLoyer(3, LocalDate.of(2026, 6, 1),
                         new BigDecimal("850.00"))));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<HistoriqueBailResponse> resultat = service.findBaux(2);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).hasSize(1);
         assertThat(resultat.getFirst().enCours()).isTrue();
         assertThat(resultat.getFirst().nomLocataire()).isEqualTo("Traore");
         assertThat(resultat.getFirst().loyersPasses()).isEmpty();
     }
 
+    // ── findLibres_groupeParImmeubleEtPorteDernierLoyer() ────────────────────
+
     @Test
     @DisplayName("F17 — les appartements libres sont groupés par immeuble avec leur dernier loyer")
     void findLibres_groupeParImmeubleEtPorteDernierLoyer() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Immeuble immeuble = new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3);
         ReflectionTestUtils.setField(immeuble, "idImmeuble", 1);
         Appartement loue = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1);
@@ -178,11 +209,11 @@ class AppartementServiceTest {
                         new BigDecimal("850.00"))));
         when(immeubleRepository.findAllById(Set.of(1))).thenReturn(List.of(immeuble));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<ImmeubleAppartementsLibresResponse> resultat =
                 service.findLibres(LocalDate.of(2026, 12, 1));
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).hasSize(1);
         assertThat(resultat.getFirst().idImmeuble()).isEqualTo(1);
         assertThat(resultat.getFirst().appartements()).hasSize(1);
@@ -191,10 +222,12 @@ class AppartementServiceTest {
                 .isEqualByComparingTo("850.00");
     }
 
+    // ── findOccupation_decoupePaliersEtVacances() ────────────────────────────
+
     @Test
     @DisplayName("F18 — l'occupation alterne baux, paliers de loyer et vacances")
     void findOccupation_decoupePaliersEtVacances() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Appartement appartement = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1,
                 LocalDate.of(2026, 1, 1));
         ReflectionTestUtils.setField(appartement, "idAppartement", 2);
@@ -220,10 +253,10 @@ class AppartementServiceTest {
         when(revisionLoyerRepository.findByIdBailOrderByDateEffetAsc(4)).thenReturn(List.of(
                 new RevisionLoyer(4, LocalDate.of(2026, 5, 1), new BigDecimal("900.00"))));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<PeriodeOccupationResponse> resultat = service.findOccupation(2);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).hasSize(4);
         assertThat(resultat.get(0).type()).isEqualTo("LOUE");
         assertThat(resultat.get(0).fin()).isEqualTo(LocalDate.of(2026, 1, 31));
@@ -235,20 +268,22 @@ class AppartementServiceTest {
         assertThat(resultat.get(3).nomLocataire()).isEqualTo("Traore");
     }
 
+    // ── findOccupation_sansBailRenvoieUneVacance() ───────────────────────────
+
     @Test
     @DisplayName("F18 — un appartement jamais loué renvoie une seule vacance ouverte")
     void findOccupation_sansBailRenvoieUneVacance() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Appartement appartement = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1,
                 LocalDate.of(2026, 3, 1));
         ReflectionTestUtils.setField(appartement, "idAppartement", 2);
         when(appartementRepository.findById(2)).thenReturn(Optional.of(appartement));
         when(bailRepository.findAllByIdAppartementOrderByDateDebutAsc(2)).thenReturn(List.of());
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<PeriodeOccupationResponse> resultat = service.findOccupation(2);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).hasSize(1);
         assertThat(resultat.getFirst().type()).isEqualTo("VACANT");
         assertThat(resultat.getFirst().debut()).isEqualTo(LocalDate.of(2026, 3, 1));

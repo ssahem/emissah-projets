@@ -58,13 +58,20 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Codes de réponse HTTP, validation et Problem Details de tous les endpoints.
  *
- * TYPE         : WebMvcTest (couche web seule, services simulés).
+ * COUCHE       : Service
+ * RÔLE         : Codes de réponse HTTP, validation et Problem Details de tous les endpoints.
  * SÉCURITÉ     : aucune ; aucun jeton n'est transmis dans les requêtes.
  * IMPORT       : GlobalExceptionHandler pour vérifier les RFC 9457.
+ * TYPE         : WebMvcTest (couche web seule, services simulés).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @WebMvcTest
 @Import(GlobalExceptionHandler.class)
 class ControllerWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Autowired private MockMvc mockMvc;
     @Autowired private JsonMapper jsonMapper;
@@ -75,6 +82,13 @@ class ControllerWebTest {
     @MockitoBean private AffectationService affectationService;
     @MockitoBean private EntretienService entretienService;
     @MockitoBean private AlerteService alerteService;
+
+    // ── json() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour json().
+     */
+
     @MockitoBean private VueRepository vueRepository;
 
     private String json(Object value) throws Exception {
@@ -82,6 +96,8 @@ class ControllerWebTest {
     }
 
     // ── Sites ────────────────────────────────────────────────────────────────
+
+    // ── createSiteReturns201() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("POST site/create renvoie 201 et un en-tête Location")
@@ -97,6 +113,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.ville").value("Paris"));
     }
 
+    // ── listSitesReturns200() ────────────────────────────────────────────────
+
     @Test
     @DisplayName("GET site/list renvoie la liste triée")
     void listSitesReturns200() throws Exception {
@@ -109,6 +127,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[0].ville").value("Lyon"));
     }
 
+    // ── getSiteIntrouvableReturns404() ───────────────────────────────────────
+
     @Test
     @DisplayName("GET site/{id} inconnu renvoie 404 en Problem Details")
     void getSiteIntrouvableReturns404() throws Exception {
@@ -120,6 +140,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.type").value(
                         "https://api.flotte-vehicules.local/problems/ressource-introuvable"));
     }
+
+    // ── updateSiteReturns200() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("PUT site/{id}/update renvoie le site modifié")
@@ -134,6 +156,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.ville").value("Lyon"));
     }
 
+    // ── deleteSiteReturns204() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("DELETE site/{id}/delete renvoie 204")
     void deleteSiteReturns204() throws Exception {
@@ -142,6 +166,8 @@ class ControllerWebTest {
         mockMvc.perform(delete("/flotte-vehicules/site/1/delete"))
                 .andExpect(status().isNoContent());
     }
+
+    // ── vehiculesSiteReturns200() ────────────────────────────────────────────
 
     @Test
     @DisplayName("GET site/{id}/vehicules renvoie le parc du site")
@@ -153,6 +179,8 @@ class ControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].etatAffectation").value("LIBRE"));
     }
+
+    // ── kilometrageSiteReturns200() ──────────────────────────────────────────
 
     @Test
     @DisplayName("GET site/{id}/kilometrage renvoie le total et le détail")
@@ -166,6 +194,8 @@ class ControllerWebTest {
     }
 
     // ── Véhicules ────────────────────────────────────────────────────────────
+
+    // ── createVehiculeReturns201() ───────────────────────────────────────────
 
     @Test
     @DisplayName("POST vehicule/create renvoie 201")
@@ -184,6 +214,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.nomSite").value("Paris Centre"));
     }
 
+    // ── listVehiculesReturns200() ────────────────────────────────────────────
+
     @Test
     @DisplayName("GET vehicule/list transmet les critères de recherche")
     void listVehiculesReturns200() throws Exception {
@@ -194,6 +226,8 @@ class ControllerWebTest {
                 .andExpect(status().isOk());
         verify(vehiculeService).findAll("AB-123", "Peugeot");
     }
+
+    // ── coutVehiculeReturns200() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("GET vehicule/{id}/cout renvoie le coût et la répartition")
@@ -207,6 +241,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.coutTotal").value(600));
     }
 
+    // ── disponiblesReturns200() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("GET vehicule/disponibles renvoie les groupes par site")
     void disponiblesReturns200() throws Exception {
@@ -218,6 +254,8 @@ class ControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nomSite").value("Paris Centre"));
     }
+
+    // ── historiqueReturns200() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("GET vehicule/{id}/entretiens renvoie l'historique F8")
@@ -231,6 +269,8 @@ class ControllerWebTest {
     }
 
     // ── Salariés et affectations ─────────────────────────────────────────────
+
+    // ── createSalarieConflictReturns409() ────────────────────────────────────
 
     @Test
     @DisplayName("POST salarie/create avec un matricule pris renvoie 409")
@@ -247,6 +287,8 @@ class ControllerWebTest {
                         "https://api.flotte-vehicules.local/problems/salarie-matricule-deja-utilise"));
     }
 
+    // ── affectationsSalarieReturns200() ──────────────────────────────────────
+
     @Test
     @DisplayName("GET salarie/{id}/affectations renvoie l'historique F7")
     void affectationsSalarieReturns200() throws Exception {
@@ -255,6 +297,8 @@ class ControllerWebTest {
         mockMvc.perform(get("/flotte-vehicules/salarie/1/affectations"))
                 .andExpect(status().isOk());
     }
+
+    // ── createAffectationReturns201() ────────────────────────────────────────
 
     @Test
     @DisplayName("POST affectation/create renvoie 201")
@@ -269,6 +313,8 @@ class ControllerWebTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.enCours").value(true));
     }
+
+    // ── restitutionInvalideReturns400() ──────────────────────────────────────
 
     @Test
     @DisplayName("POST affectation/{id}/restitution avec une date invalide renvoie 400")
@@ -285,6 +331,8 @@ class ControllerWebTest {
 
     // ── Entretiens ───────────────────────────────────────────────────────────
 
+    // ── listEntretiensReturns200() ───────────────────────────────────────────
+
     @Test
     @DisplayName("GET entretien/list renvoie une page")
     void listEntretiensReturns200() throws Exception {
@@ -296,6 +344,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.size").value(20));
     }
 
+    // ── getEntretienIntrouvableReturns404() ──────────────────────────────────
+
     @Test
     @DisplayName("GET entretien/{id} inconnu renvoie 404")
     void getEntretienIntrouvableReturns404() throws Exception {
@@ -305,6 +355,8 @@ class ControllerWebTest {
         mockMvc.perform(get("/flotte-vehicules/entretien/99"))
                 .andExpect(status().isNotFound());
     }
+
+    // ── createEntretienInvalideReturns400() ──────────────────────────────────
 
     @Test
     @DisplayName("POST entretien/create avec un coût nul renvoie 400 et les champs")
@@ -320,6 +372,8 @@ class ControllerWebTest {
 
     // ── Alertes, vues et validation générique ────────────────────────────────
 
+    // ── listAlertesReturns200() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("GET alerte/list renvoie les alertes persistées")
     void listAlertesReturns200() throws Exception {
@@ -333,6 +387,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[0].motif").value("ECHEANCE_ENTRETIEN"));
     }
 
+    // ── genererAlertesReturns200() ───────────────────────────────────────────
+
     @Test
     @DisplayName("POST alerte/generer renvoie les alertes par site")
     void genererAlertesReturns200() throws Exception {
@@ -344,6 +400,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[0].nomSite").value("Paris Centre"));
     }
 
+    // ── lireVueReturns200() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("GET vue/{nom} lit une vue autorisée")
     void lireVueReturns200() throws Exception {
@@ -354,6 +412,8 @@ class ControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id_vehicule").value(1));
     }
+
+    // ── lireVueInconnueReturns400() ──────────────────────────────────────────
 
     @Test
     @DisplayName("GET vue/{nom} avec un nom inconnu renvoie 400")
@@ -373,6 +433,9 @@ class ControllerWebTest {
             "/flotte-vehicules/affectation/create",
             "/flotte-vehicules/entretien/create"
     })
+
+    // ── emptyBodyReturns400() ────────────────────────────────────────────────
+
     @DisplayName("Un corps vide est refusé en 400 sur toutes les créations")
     void emptyBodyReturns400(String url) throws Exception {
         mockMvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content("{}"))

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
  * Réservation renvoyée par l'API, avec événement et place (F10).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Réservation renvoyée par l'API, avec événement et place (F10).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ReservationMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

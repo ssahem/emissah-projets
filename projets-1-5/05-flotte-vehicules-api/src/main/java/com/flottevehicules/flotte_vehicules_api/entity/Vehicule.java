@@ -126,6 +126,13 @@ public class Vehicule {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Modifie le site lors d'un transfert ; immatriculation et date sont figées (F2). */
+
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(Integer idSite, String marque, String modele) {
         this.idSite = Objects.requireNonNull(idSite, "idSite");
         this.marque = Objects.requireNonNull(marque, "marque");

@@ -39,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
  *   (F17).
  *
  * COUCHE       : Service
+ * RÔLE         : CRUD des véhicules (F2), recherche (F9), échéance (F15), coût (F18) et disponibilité (F17).
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories métier, VueRepository (vues en lecture seule), Clock,
  *                VehiculeMapper.
@@ -76,6 +77,13 @@ public class VehiculeService {
     }
 
     /** F2 et F9 : liste triée, avec recherche optionnelle et combinable. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<VehiculeResponse> findAll(String immatriculation, String marque) {
         List<Vehicule> vehicules = (immatriculation == null && marque == null)
                 ? vehiculeRepository.findAllByOrderByImmatriculationAsc()
@@ -84,11 +92,25 @@ public class VehiculeService {
     }
 
     /** F2 : un véhicule par identifiant ; 404 si inconnu. */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public VehiculeResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F2 : crée un véhicule avec contrôle de la date, du site et du mode d'acquisition. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public VehiculeResponse create(CreateVehiculeRequest request) {
         if (vehiculeRepository.findByImmatriculation(request.immatriculation()).isPresent()) {
@@ -123,6 +145,13 @@ public class VehiculeService {
     }
 
     /** F2 : transfert de site possible ; immatriculation et date de mise en service figées. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public VehiculeResponse update(Integer id, UpdateVehiculeRequest request) {
         Vehicule vehicule = required(id);
@@ -133,6 +162,13 @@ public class VehiculeService {
     }
 
     /** F2 : suppression refusée s'il existe des affectations ou des entretiens. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Vehicule vehicule = required(id);
@@ -148,6 +184,13 @@ public class VehiculeService {
     }
 
     /** F15 : première échéance périodique, avec le seuil qui la déclenchera. */
+
+    // ── prochainEntretien() ──────────────────────────────────────────────────
+
+    /**
+     * Exécute prochainEntretien().
+     */
+
     public ProchainEntretienResponse prochainEntretien(Integer id) {
         Vehicule vehicule = required(id);
         List<VueRepository.EcheanceRow> echeances = vueRepository.echeancesVehicule(id);
@@ -174,6 +217,13 @@ public class VehiculeService {
     }
 
     /** F18 : coût des entretiens uniquement (D-03) et répartition par type. */
+
+    // ── cout() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute cout().
+     */
+
     public CoutVehiculeResponse cout(Integer id) {
         Vehicule vehicule = required(id);
         VueRepository.BilanRow bilan = vueRepository.bilanVehicule(id).orElse(
@@ -200,6 +250,13 @@ public class VehiculeService {
     }
 
     /** F17 : véhicules libres sur la période, regroupés par site ; semaine courante par défaut. */
+
+    // ── disponibles() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute disponibles().
+     */
+
     public List<DisponibilitesParSiteResponse> disponibles(LocalDate du, LocalDate au) {
         LocalDate debut = du == null ? LocalDate.now(clock).with(DayOfWeek.MONDAY) : du;
         LocalDate fin = au == null ? debut.plusDays(6) : au;
@@ -236,6 +293,12 @@ public class VehiculeService {
     // ═════════════════════════════════════════════════════════════════════════
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Vehicule required(Integer id) {
         return vehiculeRepository.findById(id)

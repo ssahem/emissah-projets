@@ -53,10 +53,20 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Contrat HTTP de l'API publique : URLs, codes, Problem Details et absence d'authentification. */
+/**
+ * Contrat HTTP de l'API publique : URLs, codes, Problem Details et absence d'authentification.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Contrat HTTP de l'API publique : URLs, codes, Problem Details et absence d'authentification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @WebMvcTest
 @Import(GlobalExceptionHandler.class)
 class ControllerWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Autowired private MockMvc mockMvc;
     @Autowired private JsonMapper objectMapper;
@@ -69,6 +79,9 @@ class ControllerWebTest {
     @MockitoBean private ConsultationService consultationService;
     @MockitoBean private ReglesMetierService reglesMetierService;
     @MockitoBean private AlertesDifficulteService alertesService;
+
+    // ── createClasseReturns201() ─────────────────────────────────────────────
+
     @MockitoBean private RestitutionService restitutionService;
 
     @Test
@@ -86,6 +99,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.nom").value("6A"));
     }
 
+    // ── listClassesReturns200() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("GET classe/list renvoie les classes")
     void listClassesReturns200() throws Exception {
@@ -95,6 +110,8 @@ class ControllerWebTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].effectifActuel").value(4));
     }
+
+    // ── elevesClasseReturns200() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("GET classe/eleves/{id} renvoie l'effectif détaillé")
@@ -108,6 +125,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.eleves[0].nom").value("Kouassi"));
     }
 
+    // ── deleteClasseReturns204() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("DELETE classe/delete/{id} renvoie 204")
     void deleteClasseReturns204() throws Exception {
@@ -115,6 +134,8 @@ class ControllerWebTest {
                 .andExpect(status().isNoContent());
         verify(classeService).delete(1);
     }
+
+    // ── createEleveReturns201() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("POST eleve/create renvoie 201")
@@ -130,6 +151,8 @@ class ControllerWebTest {
                 .andExpect(header().string("Location", "/suivi-scolaire/eleve/get/1"));
     }
 
+    // ── listElevesReturns200() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("GET eleve/list sans paramètre appelle la liste complète")
     void listElevesReturns200() throws Exception {
@@ -141,6 +164,8 @@ class ControllerWebTest {
         verify(eleveService).findAll();
     }
 
+    // ── searchElevesReturns200() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("GET eleve/list?nom= appelle la recherche partielle")
     void searchElevesReturns200() throws Exception {
@@ -151,6 +176,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[0].nom").value("Kouassi"));
         verify(consultationService).rechercher("kou");
     }
+
+    // ── changerClasseReturns201() ────────────────────────────────────────────
 
     @Test
     @DisplayName("POST eleve/affectation/{id} renvoie 201")
@@ -167,6 +194,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.nouvelleClasse").value(2));
     }
 
+    // ── affecterProfesseurReturns201() ───────────────────────────────────────
+
     @Test
     @DisplayName("POST professeur/affectations/{id} renvoie 201")
     void affecterProfesseurReturns201() throws Exception {
@@ -180,6 +209,8 @@ class ControllerWebTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.idEnseignement").value(9));
     }
+
+    // ── createNoteReturns201() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("POST note/create renvoie 201")
@@ -198,6 +229,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.valeur").value(14.5));
     }
 
+    // ── listNotesGroupeesReturns200() ────────────────────────────────────────
+
     @Test
     @DisplayName("GET note/list sans paramètre renvoie les notes groupées par matière")
     void listNotesGroupeesReturns200() throws Exception {
@@ -211,6 +244,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[0].notes[0].idNote").value(20));
     }
 
+    // ── listNotesPagineesReturns200() ────────────────────────────────────────
+
     @Test
     @DisplayName("GET note/list?page=... renvoie une page")
     void listNotesPagineesReturns200() throws Exception {
@@ -223,6 +258,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.totalElements").value(15))
                 .andExpect(jsonPath("$.content[0].idNote").value(20));
     }
+
+    // ── modifierPoidsReturns200() ────────────────────────────────────────────
 
     @Test
     @DisplayName("PUT type-evaluation/poids/DEV renvoie le nouveau poids")
@@ -238,6 +275,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.poids").value(2.5));
     }
 
+    // ── cloturerTrimestreReturns200() ────────────────────────────────────────
+
     @Test
     @DisplayName("POST trimestre/{numero}/cloture renvoie la date de clôture")
     void cloturerTrimestreReturns200() throws Exception {
@@ -249,6 +288,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.dateCloture").value("2026-11-24"))
                 .andExpect(jsonPath("$.nombreEnseignementsVerifies").value(12));
     }
+
+    // ── reouvrirTrimestreReturns200() ────────────────────────────────────────
 
     @Test
     @DisplayName("POST trimestre/{numero}/reouverture journalise motif et auteur")
@@ -265,6 +306,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.auteur").value("Secrétariat"));
     }
 
+    // ── listAlertesReturns200() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("GET alerte/list?trimestre= renvoie les alertes")
     void listAlertesReturns200() throws Exception {
@@ -277,6 +320,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$[0].nomEleve").value("Kouassi"))
                 .andExpect(jsonPath("$[0].trimestre").value(2));
     }
+
+    // ── restitutionMoyennesReturns200() ──────────────────────────────────────
 
     @Test
     @DisplayName("GET eleve/moyennes et moyenne-generale renvoient les restitutions F17/F18")
@@ -293,6 +338,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.moyenneGenerale").value(13.20));
     }
 
+    // ── invalidBodyReturns400() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("Un corps invalide renvoie 400 avec la liste des champs")
     void invalidBodyReturns400() throws Exception {
@@ -303,6 +350,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.title").value("Corps invalide"))
                 .andExpect(jsonPath("$.champs").isArray());
     }
+
+    // ── introuvableReturns404() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("Une ressource absente renvoie 404 en Problem Details")
@@ -315,6 +364,8 @@ class ControllerWebTest {
                 .andExpect(jsonPath("$.type").value(
                         "https://api.suivi-scolaire.local/problems/ressource-introuvable"));
     }
+
+    // ── conflitReturns409() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("Un conflit métier renvoie 409 avec son type de problème")
@@ -334,11 +385,25 @@ class ControllerWebTest {
     private static final String MOTIF = "Correction d'une erreur de saisie avérée";
 
     /** Réponse élève nominative. */
+
+    // ── eleve() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour eleve().
+     */
+
     private EleveResponse eleve() {
         return new EleveResponse(1, "Kouassi", "Aya", LocalDate.of(2011, 2, 14), 1, "6A");
     }
 
     /** Réponse note nominative. */
+
+    // ── note() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour note().
+     */
+
     private NoteResponse note() {
         return new NoteResponse(20, 1, "Kouassi", 1, "Mathematiques", 1, "6A",
                 new BigDecimal("14.5"), 2, 1, "Devoir", BigDecimal.ONE,

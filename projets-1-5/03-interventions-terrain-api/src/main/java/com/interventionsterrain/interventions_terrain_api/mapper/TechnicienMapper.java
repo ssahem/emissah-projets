@@ -17,11 +17,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class TechnicienMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final EquipeSupport equipeSupport;
 
     public TechnicienMapper(EquipeSupport equipeSupport) {
         this.equipeSupport = equipeSupport;
     }
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
 
     public TechnicienResponse toResponse(Technicien technicien) {
         Equipe equipe = equipeSupport.findRequired(technicien.getIdEquipe());

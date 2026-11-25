@@ -30,6 +30,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
     private static final String BASE = "https://api.gestion-locative.local/problems/";
 
@@ -38,14 +42,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /** Traduit une erreur métier typée en Problem Detail. */
     @ExceptionHandler(ApiException.class)
     public ProblemDetail handleApiException(ApiException ex) {
-        // ── Étape 1/3 : créer le problème avec le statut et le détail ──
+        // ── Étape 1/3 : créer le problème avec le statut et le détail ────────
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(ex.getStatus(), ex.getMessage());
 
-        // ── Étape 2/3 : renseigner le titre et le type d'erreur ──
+        // ── Étape 2/3 : renseigner le titre et le type d'erreur ──────────────
         problem.setTitle(ex.getTitle());
         problem.setType(ex.getType());
 
-        // ── Étape 3/3 : ajouter les données métier utiles et tracer sans pile ──
+        // ── Étape 3/3 : ajouter les données métier utiles et tracer sans pi… ─
         ex.getProperties().forEach(problem::setProperty);
         log.warn("Refus métier {} : {}", ex.getType(), ex.getMessage());
         return problem;
@@ -56,15 +60,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /** Traduit une contrainte violée sur un paramètre de requête en 400 lisible. */
     @ExceptionHandler(ConstraintViolationException.class)
     public ProblemDetail handleConstraintViolation(ConstraintViolationException ex) {
-        // ── Étape 1/3 : créer le problème avec le statut et le détail ──
+        // ── Étape 1/3 : créer le problème avec le statut et le détail ────────
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST, "Paramètre de requête invalide");
 
-        // ── Étape 2/3 : titrer et typer ──
+        // ── Étape 2/3 : titrer et typer ──────────────────────────────────────
         problem.setTitle("Paramètre invalide");
         problem.setType(URI.create(BASE + "parametre-invalide"));
 
-        // ── Étape 3/3 : indiquer le paramètre fautif, sans exposer la pile ──
+        // ── Étape 3/3 : indiquer le paramètre fautif, sans exposer la pile ───
         String parametre = ex.getConstraintViolations().stream()
                 .findFirst()
                 .map(v -> v.getPropertyPath().toString())
@@ -74,22 +78,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problem;
     }
 
-    // ── handleMethodArgumentNotValid() — corps invalide → 400 avec les champs ─
+    // ── handleMethodArgumentNotValid() — corps invalide → 400 avec les cham… ─
 
     /** Traduit un corps invalide en 400 en indiquant les champs en erreur. */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex, HttpHeaders headers,
             HttpStatusCode status, WebRequest request) {
-        // ── Étape 1/3 : créer le problème avec le statut et le détail ──
+        // ── Étape 1/3 : créer le problème avec le statut et le détail ────────
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST, "Le corps de la requête est invalide");
 
-        // ── Étape 2/3 : titrer et typer ──
+        // ── Étape 2/3 : titrer et typer ──────────────────────────────────────
         problem.setTitle("Corps invalide");
         problem.setType(URI.create(BASE + "corps-invalide"));
 
-        // ── Étape 3/3 : lister les champs fautifs, sans exposer la pile ──
+        // ── Étape 3/3 : lister les champs fautifs, sans exposer la pile ──────
         List<Map<String, String>> champs = ex.getBindingResult().getFieldErrors().stream()
                 .map(e -> Map.of(
                         "champ", e.getField(),
@@ -105,7 +109,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /** Traduit une violation de contrainte sans jamais exposer le message SQL. */
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleIntegrityViolation(DataIntegrityViolationException ex) {
-        // ── Étape 1/3 : distinguer une contrainte de forme d'un conflit de données ──
+        // ── Étape 1/3 : distinguer une contrainte de forme d'un conflit de… ──
         // Un CHECK sanctionne une valeur invalide (400). Une contrainte d'exclusion,
         // d'unicité ou de clé étrangère sanctionne un conflit avec une donnée existante (409).
         String cause = String.valueOf(ex.getMostSpecificCause().getMessage()).toLowerCase(Locale.ROOT);
@@ -116,11 +120,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                         ? "La valeur ne respecte pas une règle de données"
                         : "Cette opération viole une contrainte de données");
 
-        // ── Étape 2/3 : titrer et typer selon le cas ──
+        // ── Étape 2/3 : titrer et typer selon le cas ─────────────────────────
         problem.setTitle(contrainteDeForme ? "Donnée invalide" : "Conflit de données");
         problem.setType(URI.create(BASE + (contrainteDeForme ? "donnee-invalide" : "conflit-donnees")));
 
-        // ── Étape 3/3 : journaliser la cause côté serveur uniquement ──
+        // ── Étape 3/3 : journaliser la cause côté serveur uniquement ─────────
         log.warn("Violation de contrainte base ({} ) : {}", statut, cause);
         return problem;
     }
@@ -130,15 +134,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     /** Cache les détails techniques au client et les conserve dans les logs serveur. */
     @ExceptionHandler(Exception.class)
     public ProblemDetail handleUnexpected(Exception ex) {
-        // ── Étape 1/3 : créer un problème générique ──
+        // ── Étape 1/3 : créer un problème générique ──────────────────────────
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR, "Une erreur inattendue est survenue");
 
-        // ── Étape 2/3 : titrer et typer sans détail interne ──
+        // ── Étape 2/3 : titrer et typer sans détail interne ──────────────────
         problem.setTitle("Erreur interne");
         problem.setType(URI.create(BASE + "erreur-interne"));
 
-        // ── Étape 3/3 : tracer la cause côté serveur seulement ──
+        // ── Étape 3/3 : tracer la cause côté serveur seulement ───────────────
         log.error("Erreur inattendue", ex);
         return problem;
     }

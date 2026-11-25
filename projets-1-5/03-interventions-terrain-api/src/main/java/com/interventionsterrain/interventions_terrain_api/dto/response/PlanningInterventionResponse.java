@@ -6,8 +6,9 @@ import java.time.LocalDateTime;
  * Créneau d'un technicien, avec client et adresse de l'intervention (F10).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Créneau d'un technicien, avec client et adresse de l'intervention (F10).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : PlanningInterventionService puis renvoyé par PlanningInterventionController.
+ * PRODUIT PAR  : PlanningInterventionService puis renvoyé par PlanningInterventionController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record PlanningInterventionResponse(

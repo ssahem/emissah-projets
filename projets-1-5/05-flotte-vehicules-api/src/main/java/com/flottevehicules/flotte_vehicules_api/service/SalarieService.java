@@ -19,12 +19,17 @@ import org.springframework.transaction.annotation.Transactional;
  * CRUD des salariés (F3) et consultations de leurs affectations (F7).
  *
  * COUCHE       : Service
+ * RÔLE         : CRUD des salariés (F3) et consultations de leurs affectations (F7).
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * NE FAIT PAS  : de HTTP ni de SQL direct.
  */
 @Service
 @Transactional(readOnly = true)
 public class SalarieService {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final SalarieRepository salarieRepository;
     private final AffectationRepository affectationRepository;
@@ -41,16 +46,37 @@ public class SalarieService {
     }
 
     /** F3 : salariés triés par nom. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<SalarieResponse> findAll() {
         return salarieRepository.findAllByOrderByNomAsc().stream().map(mapper::toResponse).toList();
     }
 
     /** F3 : un salarié par identifiant ; 404 si inconnu. */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public SalarieResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F3 : crée un salarié ; matricule et email doivent être uniques. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public SalarieResponse create(CreateSalarieRequest request) {
         if (salarieRepository.findByMatricule(request.matricule()).isPresent()) {
@@ -67,6 +93,13 @@ public class SalarieService {
     }
 
     /** F3 : nom, prénom, email et service modifiables ; matricule figé. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public SalarieResponse update(Integer id, UpdateSalarieRequest request) {
         Salarie salarie = required(id);
@@ -81,6 +114,13 @@ public class SalarieService {
     }
 
     /** F3 : suppression refusée si le salarié a une affectation en cours. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Salarie salarie = required(id);
@@ -92,12 +132,25 @@ public class SalarieService {
     }
 
     /** F7 : affectations d'un salarié, de la plus récente à la plus ancienne. */
+
+    // ── affectations() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute affectations().
+     */
+
     public List<AffectationSalarieResponse> affectations(Integer id) {
         required(id);
         return affectationRepository.findAllByIdSalarieOrderByDateDebutDesc(id).stream()
                 .map(affectationMapper::toSalarieResponse)
                 .toList();
     }
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Salarie required(Integer id) {
         return salarieRepository.findById(id)

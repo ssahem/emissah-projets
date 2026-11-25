@@ -21,31 +21,31 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByDateCreationDesc() ───────────────────────────────
+    // ── findAllByOrderByDateCreationDesc() ───────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findAllByOrderByDateCreationDesc();
 
-    // ── findAllByClient_EmailIgnoreCaseOrderByDateCreationDesc() ─────────
+    // ── findAllByClient_EmailIgnoreCaseOrderByDateCreationDesc() ─────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findAllByClient_EmailIgnoreCaseOrderByDateCreationDesc(String email);
 
-    // ── findAllByEvenement_IdEvenementOrderByDateCreationDesc() ──────────
+    // ── findAllByEvenement_IdEvenementOrderByDateCreationDesc() ──────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Reservation> findAllByEvenement_IdEvenementOrderByDateCreationDesc(Integer idEvenement);
 
-    // ── existsByEvenement_IdEvenement() ──────────────────────────────────
+    // ── existsByEvenement_IdEvenement() ──────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByEvenement_IdEvenement(Integer idEvenement);
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  REQUÊTES @Query
+    //  REQUÊTES @QUERY
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findProvisoiresExpirees() ────────────────────────────────────────
+    // ── findProvisoiresExpirees() ────────────────────────────────────────────
 
     /** Réservations PROVISOIRE créées avant la limite, pour la tâche d'expiration (F16). */
     @Query(value = """
@@ -55,7 +55,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
             """, nativeQuery = true)
     List<Reservation> findProvisoiresExpirees(@Param("limite") LocalDateTime limite);
 
-    // ── findLignesExport() ───────────────────────────────────────────────
+    // ── findLignesExport() ───────────────────────────────────────────────────
 
     /** Lignes d'export CSV : rang, numero, categorie, nom, prenom, email, statut, date_creation. */
     @Query(value = """

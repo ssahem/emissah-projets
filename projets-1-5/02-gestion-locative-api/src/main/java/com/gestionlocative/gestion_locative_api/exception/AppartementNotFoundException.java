@@ -6,11 +6,17 @@ import org.springframework.http.HttpStatus;
  * Exception métier : appartement introuvable.
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : appartement introuvable.
  * LANCÉE PAR   : AppartementService, BailService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 404.
  * POURQUOI     : un identifiant inconnu ne peut pas être confondu avec une donnée vide.
+ * NE FAIT PAS  : de logique métier.
  */
 public class AppartementNotFoundException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur pour un identifiant donné. */
     public AppartementNotFoundException(Integer idAppartement) {

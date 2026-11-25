@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
  * Corps de modification d'un élève ; la date de naissance est figée (F2).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'un élève ; la date de naissance est figée (F2).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : EleveController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -18,4 +19,9 @@ public record UpdateEleveRequest(
         @Schema(description = "Prénom", example = "Aya") @NotBlank String prenom,
         @Schema(description = "Identifiant de la classe de destination", example = "1")
         @NotNull Integer idClasse) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

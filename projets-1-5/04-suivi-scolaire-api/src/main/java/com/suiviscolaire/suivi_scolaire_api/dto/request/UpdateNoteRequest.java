@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * Corps de modification d'une note : seule la valeur est modifiable (F5).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une note : seule la valeur est modifiable (F5).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : NoteController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -18,4 +19,9 @@ import java.math.BigDecimal;
 public record UpdateNoteRequest(
         @Schema(description = "Nouvelle valeur entre 0 et 20", example = "16")
         @NotNull @DecimalMin("0") @DecimalMax("20") BigDecimal valeur) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

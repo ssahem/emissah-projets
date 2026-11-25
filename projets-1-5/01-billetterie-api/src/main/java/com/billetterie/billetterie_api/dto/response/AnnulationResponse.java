@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
  * Résultat d'une annulation avec remboursement (F15).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Résultat d'une annulation avec remboursement (F15).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ReservationService.
  * NE FAIT PAS  : d’accès base ni de logique métier.

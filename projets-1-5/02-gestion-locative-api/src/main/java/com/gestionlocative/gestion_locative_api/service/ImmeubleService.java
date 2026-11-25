@@ -94,7 +94,7 @@ public class ImmeubleService {
     //  CAS D'USAGE — F2
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAll() ───────────────────────────────────────────────────────────
+    // ── findAll() ────────────────────────────────────────────────────────────
 
     /** Retourne les immeubles triés par adresse, avec leur nombre d'appartements. */
     public List<ImmeubleResponse> findAll() {
@@ -104,7 +104,7 @@ public class ImmeubleService {
                 .toList();
     }
 
-    // ── findById() ──────────────────────────────────────────────────────────
+    // ── findById() ───────────────────────────────────────────────────────────
 
     /** Retourne un immeuble par identifiant. */
     public ImmeubleResponse findById(Integer idImmeuble) {
@@ -113,7 +113,7 @@ public class ImmeubleService {
                 immeuble, appartementRepository.countByIdImmeuble(idImmeuble));
     }
 
-    // ── findAppartements() ──────────────────────────────────────────────────
+    // ── findAppartements() ───────────────────────────────────────────────────
 
     /**
      * Retourne les appartements d'un immeuble avec leur état d'occupation (F6).
@@ -123,10 +123,10 @@ public class ImmeubleService {
      * @throws ImmeubleNotFoundException si l'immeuble n'existe pas
      */
     public List<AppartementOccupationResponse> findAppartements(Integer idImmeuble) {
-        // ── Étape 1/3 : vérifier l'existence de l'immeuble ──
+        // ── Étape 1/3 : vérifier l'existence de l'immeuble ───────────────────
         requireImmeuble(idImmeuble);
 
-        // ── Étape 2/3 : calculer l'occupation à la date courante ──
+        // ── Étape 2/3 : calculer l'occupation à la date courante ─────────────
         LocalDate aujourdHui = LocalDate.now(clock);
         return appartementRepository.findAllByIdImmeubleOrderByEtageAscSurfaceAsc(idImmeuble)
                 .stream()
@@ -134,7 +134,7 @@ public class ImmeubleService {
                 .toList();
     }
 
-    // ── calculerRevenu() ────────────────────────────────────────────────────
+    // ── calculerRevenu() ─────────────────────────────────────────────────────
 
     /**
      * Calcule le revenu locatif d'un immeuble sur un mois (F19).
@@ -145,21 +145,21 @@ public class ImmeubleService {
      * @throws ImmeubleNotFoundException si l'immeuble n'existe pas
      */
     public RevenuImmeubleResponse calculerRevenu(Integer idImmeuble, String mois) {
-        // ── Étape 1/4 : vérifier l'immeuble et le format du mois ──
+        // ── Étape 1/4 : vérifier l'immeuble et le format du mois ─────────────
         requireImmeuble(idImmeuble);
         YearMonth periode = parseMois(mois);
         LocalDate debutMois = periode.atDay(1);
         LocalDate finMois = periode.atEndOfMonth();
         int nbJours = periode.lengthOfMonth();
 
-        // ── Étape 2/4 : charger les baux actifs sur le mois, groupés par logement ──
+        // ── Étape 2/4 : charger les baux actifs sur le mois, groupés par lo… ─
         List<Appartement> appartements = appartementRepository
                 .findAllByIdImmeubleOrderByEtageAscSurfaceAsc(idImmeuble);
         Map<Integer, List<Bail>> bauxParAppartement = bailRepository
                 .findActifsByIdImmeubleEntre(idImmeuble, debutMois, finMois).stream()
                 .collect(Collectors.groupingBy(Bail::getIdAppartement));
 
-        // ── Étape 3/4 : calculer le revenu et l'occupation de chaque logement ──
+        // ── Étape 3/4 : calculer le revenu et l'occupation de chaque logeme… ─
         List<RevenuAppartementResponse> detail = new ArrayList<>();
         long totalJoursOccupes = 0;
         for (Appartement appartement : appartements) {
@@ -185,7 +185,7 @@ public class ImmeubleService {
                     pourcentage(joursOccupes, nbJours)));
         }
 
-        // ── Étape 4/4 : consolider les totaux ──
+        // ── Étape 4/4 : consolider les totaux ────────────────────────────────
         BigDecimal revenuTotal = detail.stream()
                 .map(RevenuAppartementResponse::revenu)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -196,7 +196,7 @@ public class ImmeubleService {
                 idImmeuble, periode.toString(), revenuTotal, tauxOccupation, detail);
     }
 
-    // ── create() ────────────────────────────────────────────────────────────
+    // ── create() ─────────────────────────────────────────────────────────────
 
     /**
      * Crée un immeuble après vérification du propriétaire. Modifie la base.
@@ -205,22 +205,22 @@ public class ImmeubleService {
      */
     @Transactional
     public ImmeubleResponse create(CreateImmeubleRequest request) {
-        // ── Étape 1/3 : vérifier que le propriétaire existe ──
+        // ── Étape 1/3 : vérifier que le propriétaire existe ──────────────────
         if (!proprietaireRepository.existsById(request.idProprietaire())) {
             throw new ProprietaireNotFoundException(request.idProprietaire());
         }
 
-        // ── Étape 2/3 : construire et enregistrer ──
+        // ── Étape 2/3 : construire et enregistrer ────────────────────────────
         Immeuble immeuble = new Immeuble(
                 request.adresse().trim(), request.codePostal().trim(), request.ville().trim(),
                 request.idProprietaire(), request.nbEtages());
         Immeuble enregistre = immeubleRepository.saveAndFlush(immeuble);
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return immeubleMapper.toResponse(enregistre, 0L);
     }
 
-    // ── update() ────────────────────────────────────────────────────────────
+    // ── update() ─────────────────────────────────────────────────────────────
 
     /**
      * Modifie un immeuble en vérifiant le mandat et l'étage maximal. Modifie la base.
@@ -229,7 +229,7 @@ public class ImmeubleService {
      */
     @Transactional
     public ImmeubleResponse update(Integer idImmeuble, UpdateImmeubleRequest request) {
-        // ── Étape 1/3 : charger, vérifier le propriétaire et l'étage maximal ──
+        // ── Étape 1/3 : charger, vérifier le propriétaire et l'étage maximal ─
         Immeuble immeuble = requireImmeuble(idImmeuble);
         if (!proprietaireRepository.existsById(request.idProprietaire())) {
             throw new ProprietaireNotFoundException(request.idProprietaire());
@@ -239,16 +239,16 @@ public class ImmeubleService {
             throw new NbEtagesInsuffisantException(idImmeuble, etageMax);
         }
 
-        // ── Étape 2/3 : appliquer les changements ──
+        // ── Étape 2/3 : appliquer les changements ────────────────────────────
         immeuble.modifier(request.adresse().trim(), request.codePostal().trim(),
                 request.ville().trim(), request.idProprietaire(), request.nbEtages());
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return immeubleMapper.toResponse(
                 immeuble, appartementRepository.countByIdImmeuble(idImmeuble));
     }
 
-    // ── delete() ────────────────────────────────────────────────────────────
+    // ── delete() ─────────────────────────────────────────────────────────────
 
     /** Supprime un immeuble vide. Modifie la base. */
     @Transactional
@@ -264,7 +264,7 @@ public class ImmeubleService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── requireImmeuble() ───────────────────────────────────────────────────
+    // ── requireImmeuble() ────────────────────────────────────────────────────
 
     /** Charge un immeuble ou lève l'erreur métier 404. */
     private Immeuble requireImmeuble(Integer idImmeuble) {
@@ -272,7 +272,7 @@ public class ImmeubleService {
                 .orElseThrow(() -> new ImmeubleNotFoundException(idImmeuble));
     }
 
-    // ── toOccupationResponse() ──────────────────────────────────────────────
+    // ── toOccupationResponse() ───────────────────────────────────────────────
 
     /** Détermine l'état d'occupation d'un appartement à une date donnée (F6). */
     private AppartementOccupationResponse toOccupationResponse(
@@ -291,7 +291,7 @@ public class ImmeubleService {
         return appartementMapper.toOccupationResponse(appartement, occupe, statut);
     }
 
-    // ── parseMois() ─────────────────────────────────────────────────────────
+    // ── parseMois() ──────────────────────────────────────────────────────────
 
     /** Convertit un mois AAAA-MM strictement, sans laisser java.time le corriger. */
     private YearMonth parseMois(String mois) {
@@ -306,7 +306,7 @@ public class ImmeubleService {
         }
     }
 
-    // ── loyersPonderes() ────────────────────────────────────────────────────
+    // ── loyersPonderes() ─────────────────────────────────────────────────────
 
     /**
      * Somme des loyers multipliés par leur nombre de jours, sur la période demandée.
@@ -351,7 +351,7 @@ public class ImmeubleService {
         return cumul;
     }
 
-    // ── ponderer() ──────────────────────────────────────────────────────────
+    // ── ponderer() ───────────────────────────────────────────────────────────
 
     /** Multiplie un montant par le nombre de jours de la période inclusive. */
     private BigDecimal ponderer(BigDecimal montant, LocalDate debut, LocalDate fin) {
@@ -359,7 +359,7 @@ public class ImmeubleService {
         return montant.multiply(BigDecimal.valueOf(jours));
     }
 
-    // ── pourcentage() ───────────────────────────────────────────────────────
+    // ── pourcentage() ────────────────────────────────────────────────────────
 
     /** Retourne un pourcentage arrondi à deux décimales. */
     private BigDecimal pourcentage(long joursOccupes, long capacite) {

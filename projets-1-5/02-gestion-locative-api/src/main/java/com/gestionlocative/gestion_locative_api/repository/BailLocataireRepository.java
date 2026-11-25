@@ -19,12 +19,12 @@ public interface BailLocataireRepository extends JpaRepository<BailLocataire, Ba
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByIdIdBail() ───────────────────────────────────────────────────
+    // ── findByIdIdBail() ─────────────────────────────────────────────────────
 
     /** Retourne les liaisons d'un bail, la première étant le locataire principal. */
     List<BailLocataire> findByIdIdBail(Integer idBail);
 
-    // ── deleteByIdIdBail() ─────────────────────────────────────────────────
+    // ── deleteByIdIdBail() ───────────────────────────────────────────────────
 
     /** Supprime les liaisons d'un bail avant la suppression du bail lui-même (F5). */
     void deleteByIdIdBail(Integer idBail);

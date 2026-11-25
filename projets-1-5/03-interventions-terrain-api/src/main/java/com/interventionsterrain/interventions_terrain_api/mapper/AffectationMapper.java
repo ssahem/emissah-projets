@@ -16,6 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class AffectationMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public AffectationResponse toResponse(Affectation affectation) {
         return new AffectationResponse(
                 affectation.getIdAffectation(),

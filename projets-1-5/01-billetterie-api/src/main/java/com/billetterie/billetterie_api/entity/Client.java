@@ -39,12 +39,12 @@ public class Client {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Client() ─────────────────────────────────────────────────────────
+    // ── Client() ─────────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Client() {}
 
-    // ── Client(String nom, String prenom, String email) ──────────────────
+    // ── Client(String nom, String prenom, String email) ──────────────────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Client(String nom, String prenom, String email) {
@@ -57,27 +57,27 @@ public class Client {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdClient() ────────────────────────────────────────────────────
+    // ── getIdClient() ────────────────────────────────────────────────────────
 
     /** Retourne idClient. */
     public Integer getIdClient() { return idClient; }
 
-    // ── getNom() ─────────────────────────────────────────────────────────
+    // ── getNom() ─────────────────────────────────────────────────────────────
 
     /** Retourne nom. */
     public String getNom() { return nom; }
 
-    // ── getPrenom() ──────────────────────────────────────────────────────
+    // ── getPrenom() ──────────────────────────────────────────────────────────
 
     /** Retourne prenom. */
     public String getPrenom() { return prenom; }
 
-    // ── getEmail() ───────────────────────────────────────────────────────
+    // ── getEmail() ───────────────────────────────────────────────────────────
 
     /** Retourne email. */
     public String getEmail() { return email; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Met à jour les informations modifiables du client. */
     public void modifier(String nom, String prenom, String email) {

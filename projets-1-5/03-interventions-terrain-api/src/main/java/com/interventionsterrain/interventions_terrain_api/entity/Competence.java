@@ -58,6 +58,12 @@ public class Competence {
     public String getLibelle() { return libelle; }
     public String getDescription() { return description; }
 
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String libelle, String description) {
         this.libelle = Objects.requireNonNull(libelle, "libelle");
         this.description = description;

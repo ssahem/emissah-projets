@@ -15,7 +15,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ClockConfig {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Fournit l'horloge système UTC. */
+
+    // ── clock() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute clock().
+     */
+
     @Bean
     public Clock clock() {
         return Clock.systemUTC();

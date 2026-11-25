@@ -60,5 +60,12 @@ public class TypeEvaluation {
     public BigDecimal getPoids() { return poids; }
 
     /** Change le poids (F13) ; la validité est vérifiée par le service. */
+
+    // ── modifierPoids() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifierPoids().
+     */
+
     public void modifierPoids(BigDecimal poids) { this.poids = Objects.requireNonNull(poids, "poids"); }
 }

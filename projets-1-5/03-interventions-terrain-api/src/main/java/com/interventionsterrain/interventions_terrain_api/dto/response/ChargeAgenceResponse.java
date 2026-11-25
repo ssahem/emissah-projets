@@ -7,8 +7,9 @@ import java.util.List;
  * Charge d'une agence : détail par technicien et totaux (F18).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Charge d'une agence : détail par technicien et totaux (F18).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : ChargeAgenceService puis renvoyé par ChargeAgenceController.
+ * PRODUIT PAR  : ChargeAgenceService puis renvoyé par ChargeAgenceController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record ChargeAgenceResponse(

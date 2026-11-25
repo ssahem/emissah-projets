@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Size;
  * Corps de modification d'une salle.
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'une salle.
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : le controller, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d’accès base ni de logique métier.

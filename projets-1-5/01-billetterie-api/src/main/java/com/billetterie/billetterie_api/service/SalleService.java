@@ -91,17 +91,17 @@ public class SalleService {
      */
     @Transactional
     public SalleResponse create(CreateSalleRequest request) {
-        // ── Étape 1/3 : vérifier la clé métier ──
+        // ── Étape 1/3 : vérifier la clé métier ───────────────────────────────
         if (salleRepository.existsByNomIgnoreCaseAndVilleIgnoreCase(request.nom(), request.ville())) {
             throw new SalleDejaExistanteException(request.nom());
         }
 
-        // ── Étape 2/3 : construire et enregistrer ──
+        // ── Étape 2/3 : construire et enregistrer ────────────────────────────
         Salle salle = new Salle(request.nom().trim(), request.adresse().trim(),
                 request.ville().trim(), request.capacite());
         Salle enregistree = salleRepository.saveAndFlush(salle);
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return salleMapper.toResponse(enregistree);
     }
 
@@ -116,7 +116,7 @@ public class SalleService {
      */
     @Transactional
     public SalleResponse update(Integer idSalle, UpdateSalleRequest request) {
-        // ── Étape 1/3 : charger et contrôler les contraintes ──
+        // ── Étape 1/3 : charger et contrôler les contraintes ─────────────────
         Salle salle = requireSalle(idSalle);
         if (salleRepository.existsByNomIgnoreCaseAndVilleIgnoreCaseAndIdSalleNot(
                 request.nom(), request.ville(), idSalle)) {
@@ -127,11 +127,11 @@ public class SalleService {
             throw new CapaciteInsuffisanteException(idSalle);
         }
 
-        // ── Étape 2/3 : appliquer les changements ──
+        // ── Étape 2/3 : appliquer les changements ────────────────────────────
         salle.modifier(request.nom().trim(), request.adresse().trim(),
                 request.ville().trim(), request.capacite());
 
-        // ── Étape 3/3 : convertir en DTO ──
+        // ── Étape 3/3 : convertir en DTO ─────────────────────────────────────
         return salleMapper.toResponse(salle);
     }
 

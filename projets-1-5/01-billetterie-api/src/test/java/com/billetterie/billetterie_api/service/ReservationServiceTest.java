@@ -39,13 +39,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires des règles métier de réservation.
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : horloge fixée au 20/11/2026, repositories simulés.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires des règles métier de réservation.
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : horloge fixée au 20/11/2026, repositories simulés.
  * CAS COUVERTS : F11, F12, F13.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Clock CLOCK = Clock.fixed(
             Instant.parse("2026-11-20T10:00:00Z"), ZoneOffset.UTC);
@@ -61,6 +68,12 @@ class ReservationServiceTest {
 
     private ReservationService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ReservationService(reservationRepository, reservationPlaceRepository,
@@ -68,9 +81,21 @@ class ReservationServiceTest {
                 historiqueStatutRepository, tarifRepository, new ReservationMapper(), CLOCK);
     }
 
+    // ── request() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour request().
+     */
+
     private CreateReservationRequest request() {
         return new CreateReservationRequest("Dupont", "Jean", "jean@example.com", 1, "A", 12);
     }
+
+    // ── evenement() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour evenement().
+     */
 
     private Evenement evenement(LocalDateTime date) {
         Salle salle = new Salle("Grand Hall", "12 rue des Arts", "Abidjan", 120);
@@ -81,28 +106,38 @@ class ReservationServiceTest {
         return evenement;
     }
 
+    // ── place() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour place().
+     */
+
     private Place place(Salle salle) {
         return new Place("A", 12, salle, new Categorie("ORCHESTRE"));
     }
 
+    // ── create_throwsWhenEvenementPasse() ────────────────────────────────────
+
     @Test
     @DisplayName("Un événement passé ne peut plus être réservé")
     void create_throwsWhenEvenementPasse() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(evenementRepository.findById(1)).thenReturn(Optional.of(
                 evenement(LocalDateTime.of(2026, 11, 19, 20, 0))));
         when(placeRepository.findFirstByRangAndNumero("A", 12)).thenReturn(Optional.of(
                 place(new Salle("Grand Hall", "12 rue des Arts", "Abidjan", 120))));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(request()))
                 .isInstanceOf(EvenementPasseException.class);
     }
 
+    // ── create_throwsWhenPlaceHorsSalle() ────────────────────────────────────
+
     @Test
     @DisplayName("Une place appartenant à une autre salle est refusée")
     void create_throwsWhenPlaceHorsSalle() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(evenementRepository.findById(1)).thenReturn(Optional.of(
                 evenement(LocalDateTime.of(2026, 12, 20, 20, 0))));
         Salle autreSalle = new Salle("Petit Hall", "8 avenue des Arts", "Bouaké", 40);
@@ -110,15 +145,17 @@ class ReservationServiceTest {
         when(placeRepository.findFirstByRangAndNumero("A", 12))
                 .thenReturn(Optional.of(place(autreSalle)));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(request()))
                 .isInstanceOf(PlaceHorsSalleException.class);
     }
 
+    // ── create_throwsWhenPlaceDejaReservee() ─────────────────────────────────
+
     @Test
     @DisplayName("Une place déjà réservée pour l'événement est refusée")
     void create_throwsWhenPlaceDejaReservee() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Salle salle = new Salle("Grand Hall", "12 rue des Arts", "Abidjan", 120);
         ReflectionTestUtils.setField(salle, "idSalle", 1);
         when(evenementRepository.findById(1)).thenReturn(Optional.of(
@@ -129,7 +166,7 @@ class ReservationServiceTest {
                 .existsByReservation_Evenement_IdEvenementAndRangAndNumero(1, "A", 12))
                 .thenReturn(true);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(request()))
                 .isInstanceOf(PlaceDejaReserveeException.class);
     }

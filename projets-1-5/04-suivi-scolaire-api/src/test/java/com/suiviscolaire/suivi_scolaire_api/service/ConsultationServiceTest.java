@@ -43,9 +43,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Consultations, recherche et pagination (F6 à F10). */
+/**
+ * Consultations, recherche et pagination (F6 à F10).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Consultations, recherche et pagination (F6 à F10).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ConsultationServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private ClasseRepository classeRepository;
     @Mock private EleveRepository eleveRepository;
@@ -58,6 +68,12 @@ class ConsultationServiceTest {
 
     private ConsultationService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         EleveMapper eleveMapper = new EleveMapper(inscriptionRepository, classeRepository);
@@ -67,6 +83,8 @@ class ConsultationServiceTest {
                 enseignementRepository, matiereRepository, noteRepository, eleveMapper, noteMapper,
                 new TrimestreLookup(trimestreRepository));
     }
+
+    // ── elevesDeClasseTries() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F6 : les élèves d'une classe sont triés par nom avec l'effectif courant")
@@ -86,6 +104,8 @@ class ConsultationServiceTest {
         assertThat(response.effectifActuel()).isEqualTo(2);
         assertThat(response.eleves()).extracting("nom").containsExactly("Aya", "Zozo");
     }
+
+    // ── notesEleveGroupees() ─────────────────────────────────────────────────
 
     @Test
     @DisplayName("F7 : les notes d'un élève sont groupées par matière")
@@ -107,6 +127,8 @@ class ConsultationServiceTest {
         assertThat(groupes.get(1).libelleMatiere()).isEqualTo("Francais");
     }
 
+    // ── notesEleveInconnu() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F7 : un élève inconnu renvoie 404")
     void notesEleveInconnu() {
@@ -115,6 +137,8 @@ class ConsultationServiceTest {
         assertThatThrownBy(() -> service.notesEleve(9, null))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── notesMatiereClasseAvecMoyenne() ──────────────────────────────────────
 
     @Test
     @DisplayName("F8 : les notes d'une matière sont groupées avec la moyenne de classe")
@@ -143,6 +167,8 @@ class ConsultationServiceTest {
         });
     }
 
+    // ── notesMatiereNonEnseignee() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F8 : une matière non enseignée dans la classe est refusée")
     void notesMatiereNonEnseignee() {
@@ -157,6 +183,8 @@ class ConsultationServiceTest {
                 .hasMessageContaining("pas enseignée");
     }
 
+    // ── rechercheVide() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F9 : une recherche vide est refusée")
     void rechercheVide() {
@@ -164,6 +192,8 @@ class ConsultationServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("vide");
     }
+
+    // ── recherchePartielle() ─────────────────────────────────────────────────
 
     @Test
     @DisplayName("F9 : la recherche partielle est insensible à la casse")
@@ -177,6 +207,8 @@ class ConsultationServiceTest {
                 .satisfies(e -> assertThat(e.nom()).isEqualTo("Kouassi"));
         verify(eleveRepository).searchByNom("kOU");
     }
+
+    // ── notesPagineesTriees() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F10 : la pagination trie par valeur décroissante quand demandé")
@@ -199,6 +231,13 @@ class ConsultationServiceTest {
     }
 
     /** Prépare les références nécessaires à NoteMapper. */
+
+    // ── prepNoteMapper() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour prepNoteMapper().
+     */
+
     private void prepNoteMapper() {
         when(inscriptionRepository.findByNumeroInscription("INS-10"))
                 .thenReturn(Optional.of(inscription(10, 1)));
@@ -212,6 +251,13 @@ class ConsultationServiceTest {
     }
 
     /** Construit une classe. */
+
+    // ── classe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour classe().
+     */
+
     private Classe classe() {
         Classe c = new Classe("6A", 2, 1, 30);
         ReflectionTestUtils.setField(c, "idClasse", 1);
@@ -219,6 +265,13 @@ class ConsultationServiceTest {
     }
 
     /** Construit un élève. */
+
+    // ── eleve() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour eleve().
+     */
+
     private Eleve eleve(Integer id, String nom) {
         Eleve e = new Eleve(nom, "Aya", LocalDate.of(2011, 2, 14));
         ReflectionTestUtils.setField(e, "idEleve", id);
@@ -226,6 +279,13 @@ class ConsultationServiceTest {
     }
 
     /** Construit une inscription courante. */
+
+    // ── inscription() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour inscription().
+     */
+
     private Inscription inscription(Integer id, Integer idEleve) {
         Inscription i = new Inscription(LocalDate.of(2026, 9, 2), idEleve, 1, "INS-10");
         ReflectionTestUtils.setField(i, "idInscription", id);
@@ -233,6 +293,13 @@ class ConsultationServiceTest {
     }
 
     /** Construit un enseignement. */
+
+    // ── enseignement() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour enseignement().
+     */
+
     private Enseignement enseignement(Integer id) {
         Enseignement e = new Enseignement(1, id == 6 ? 2 : 1, 1);
         ReflectionTestUtils.setField(e, "idEnseignement", id);
@@ -240,6 +307,13 @@ class ConsultationServiceTest {
     }
 
     /** Construit une matière. */
+
+    // ── matiere() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour matiere().
+     */
+
     private Matiere matiere(Integer id, String libelle) {
         Matiere m = new Matiere(libelle, "MAT", BigDecimal.ONE);
         ReflectionTestUtils.setField(m, "idMatiere", id);
@@ -247,6 +321,13 @@ class ConsultationServiceTest {
     }
 
     /** Construit un trimestre. */
+
+    // ── trimestre() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour trimestre().
+     */
+
     private Trimestre trimestre() {
         Trimestre t = new Trimestre(2, LocalDate.of(2026, 11, 1),
                 LocalDate.of(2027, 2, 28), 2);
@@ -255,11 +336,25 @@ class ConsultationServiceTest {
     }
 
     /** Construit une note de valeur 12. */
+
+    // ── note() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour note().
+     */
+
     private Note note(Integer id, Integer idEnseignement) {
         return noteAvecValeur(id, idEnseignement, "12.00");
     }
 
     /** Construit une note avec une valeur explicite. */
+
+    // ── noteAvecValeur() ─────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour noteAvecValeur().
+     */
+
     private Note noteAvecValeur(Integer id, Integer idEnseignement, String valeur) {
         Note n = new Note(new BigDecimal(valeur), 2, 1, idEnseignement, "INS-10");
         ReflectionTestUtils.setField(n, "idNote", id);

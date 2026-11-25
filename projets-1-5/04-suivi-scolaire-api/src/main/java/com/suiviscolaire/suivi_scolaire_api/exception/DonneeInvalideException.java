@@ -14,6 +14,10 @@ import org.springframework.http.HttpStatus;
  */
 public class DonneeInvalideException extends ApiException {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     public DonneeInvalideException(String type, String detail) {
         super(HttpStatus.BAD_REQUEST, "Donnée invalide", type, detail);
     }

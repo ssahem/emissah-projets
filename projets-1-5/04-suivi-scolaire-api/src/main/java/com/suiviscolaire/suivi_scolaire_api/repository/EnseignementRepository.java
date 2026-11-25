@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface EnseignementRepository extends JpaRepository<Enseignement, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Enseignements d'une classe, triés par identifiant. */
     List<Enseignement> findAllByIdClasseOrderByIdEnseignementAsc(Integer idClasse);
 

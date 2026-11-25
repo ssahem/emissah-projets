@@ -32,13 +32,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires du service des propriétaires (F1).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : repositories simulés, mapper réel.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires du service des propriétaires (F1).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : repositories simulés, mapper réel.
  * CAS COUVERTS : email en doublon, suppression avec immeubles, identifiant inconnu.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class ProprietaireServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private ProprietaireRepository proprietaireRepository;
     @Mock private ImmeubleRepository immeubleRepository;
@@ -47,6 +54,12 @@ class ProprietaireServiceTest {
 
     private ProprietaireService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ProprietaireService(proprietaireRepository, immeubleRepository,
@@ -54,49 +67,57 @@ class ProprietaireServiceTest {
                 new ImmeubleMapper());
     }
 
+    // ── create_throwsWhenEmailDejaUtilise() ──────────────────────────────────
+
     @Test
     @DisplayName("La création refuse un email déjà utilisé")
     void create_throwsWhenEmailDejaUtilise() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Proprietaire existant = new Proprietaire("Diallo", "Awa", "awa@example.test", "0102");
         ReflectionTestUtils.setField(existant, "idProprietaire", 1);
         when(proprietaireRepository.findByEmail("awa@example.test"))
                 .thenReturn(Optional.of(existant));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.create(
                 new CreateProprietaireRequest("Konate", "Aminata", "awa@example.test", "0103")))
                 .isInstanceOf(ProprietaireEmailDejaUtiliseException.class);
     }
 
+    // ── delete_throwsWhenImmeublesExist() ────────────────────────────────────
+
     @Test
     @DisplayName("La suppression refuse un propriétaire qui possède des immeubles")
     void delete_throwsWhenImmeublesExist() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(proprietaireRepository.findById(1)).thenReturn(Optional.of(
                 new Proprietaire("Diallo", "Awa", "awa@example.test", "0102")));
         when(immeubleRepository.countByIdProprietaire(1)).thenReturn(2L);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.delete(1))
                 .isInstanceOf(ProprietaireNonSupprimableException.class);
     }
 
+    // ── findById_throwsWhenMissing() ─────────────────────────────────────────
+
     @Test
     @DisplayName("Un identifiant inconnu renvoie l'erreur métier 404")
     void findById_throwsWhenMissing() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(proprietaireRepository.findById(99)).thenReturn(Optional.empty());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.findById(99))
                 .isInstanceOf(ProprietaireNotFoundException.class);
     }
 
+    // ── findImmeubles_renvoieCompteurs() ─────────────────────────────────────
+
     @Test
     @DisplayName("F7 — les immeubles d'un propriétaire portent leurs compteurs")
     void findImmeubles_renvoieCompteurs() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Proprietaire proprietaire = new Proprietaire("Diallo", "Awa", "awa@example.test", "0102");
         ReflectionTestUtils.setField(proprietaire, "idProprietaire", 1);
         Immeuble immeuble = new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3);
@@ -107,10 +128,10 @@ class ProprietaireServiceTest {
         when(appartementRepository.countByIdImmeuble(2)).thenReturn(6L);
         when(bailRepository.countEnCoursByIdImmeuble(2, StatutBail.EN_COURS)).thenReturn(4L);
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<ImmeubleProprietaireResponse> resultat = service.findImmeubles(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).hasSize(1);
         assertThat(resultat.getFirst().nbAppartements()).isEqualTo(6L);
         assertThat(resultat.getFirst().nbBauxEnCours()).isEqualTo(4L);

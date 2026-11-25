@@ -14,6 +14,10 @@ import org.springframework.http.HttpStatus;
  */
 public class ConflitMetierException extends ApiException {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     public ConflitMetierException(String type, String detail) {
         super(HttpStatus.CONFLICT, "Conflit métier", type, detail);
     }

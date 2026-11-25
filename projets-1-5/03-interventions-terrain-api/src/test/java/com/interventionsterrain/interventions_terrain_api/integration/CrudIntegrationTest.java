@@ -33,21 +33,34 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Parcours nominal P1 sur une vraie base PostgreSQL.
  *
+ * COUCHE       : Service
+ * RÔLE         : Parcours nominal P1 sur une vraie base PostgreSQL.
  * TYPE         : Intégration (Testcontainers PostgreSQL)
  * STRATÉGIE    : migrations V1 à V7, horloge fixe, appels HTTP réels via MockMvc.
  * CAS COUVERTS : création agence → technicien → client → intervention, adresse créée dans la
  *                même transaction, responsable unique, recopie du statut au changement de responsable.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 class CrudIntegrationTest {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("interventions_terrain")
             .withUsername("root")
             .withPassword("root");
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
@@ -76,6 +89,12 @@ class CrudIntegrationTest {
     private Integer idTechnicien2;
     private Integer idClient;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() throws Exception {
         jdbcTemplate.update("DELETE FROM historique_statut");
@@ -102,13 +121,15 @@ class CrudIntegrationTest {
                 "telephone", "0102030407", "adresse", "5 avenue du parc", "commune", "Paris"));
     }
 
+    // ── parcoursComplet() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Le parcours complet crée une intervention exploitable")
     void parcoursComplet() throws Exception {
-        // ── Action : création de l'intervention ──
+        // ── Action : création de l'intervention ──────────────────────────────
         Integer idIntervention = createIntervention();
 
-        // ── Vérification : réponse, adresse, responsable et statut ──
+        // ── Vérification : réponse, adresse, responsable et statut ───────────
         mockMvc.perform(get("/interventions-terrain/intervention/get/" + idIntervention))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.codeType").value("RACCORDEMENT_FIBRE"))
@@ -128,7 +149,7 @@ class CrudIntegrationTest {
                         + "WHERE a.id_intervention = ?", String.class, idIntervention))
                 .isEqualTo("PLANIFIEE");
 
-        // ── Action : ajout d'un second technicien non responsable ──
+        // ── Action : ajout d'un second technicien non responsable ────────────
         mockMvc.perform(post("/interventions-terrain/intervention/affectation/" + idIntervention)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of("idTechnicien", idTechnicien2))))
@@ -139,6 +160,8 @@ class CrudIntegrationTest {
                 "SELECT COUNT(*) FROM affectation WHERE id_intervention = ?", Integer.class, idIntervention))
                 .isEqualTo(2);
     }
+
+    // ── filtreStatutSurResponsable() ─────────────────────────────────────────
 
     @Test
     @DisplayName("F9 : le filtre de statut lit le dernier historique du responsable")
@@ -168,6 +191,8 @@ class CrudIntegrationTest {
                 .andExpect(jsonPath("$").isEmpty());
     }
 
+    // ── changementResponsablePreserveStatut() ────────────────────────────────
+
     @Test
     @DisplayName("Le changement de responsable reste unique et recopie le statut")
     void changementResponsablePreserveStatut() throws Exception {
@@ -193,6 +218,8 @@ class CrudIntegrationTest {
                 String.class, idIntervention)).isEqualTo("PLANIFIEE");
     }
 
+    // ── interventionCommenceeFigee() ─────────────────────────────────────────
+
     @Test
     @DisplayName("Une intervention commencée n'est plus modifiable ni supprimable")
     void interventionCommenceeFigee() throws Exception {
@@ -217,6 +244,13 @@ class CrudIntegrationTest {
     }
 
     /** Crée une ressource via l'API et renvoie son identifiant. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour create().
+     */
+
     private Integer create(String ressource, Map<String, Object> body) throws Exception {
         String json = mockMvc.perform(post("/interventions-terrain/" + ressource + "/create")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -227,6 +261,13 @@ class CrudIntegrationTest {
     }
 
     /** Crée l'intervention de référence. */
+
+    // ── createIntervention() ─────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour createIntervention().
+     */
+
     private Integer createIntervention() throws Exception {
         return create("intervention", Map.of(
                 "idClient", idClient,
@@ -240,6 +281,13 @@ class CrudIntegrationTest {
     }
 
     /** Première lettre en majuscule pour reconstruire le nom du champ d'identifiant. */
+
+    // ── capitalize() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour capitalize().
+     */
+
     private String capitalize(String value) {
         return Character.toUpperCase(value.charAt(0)) + value.substring(1);
     }

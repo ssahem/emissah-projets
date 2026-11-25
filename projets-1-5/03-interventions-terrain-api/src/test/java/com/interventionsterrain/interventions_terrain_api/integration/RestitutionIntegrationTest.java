@@ -28,17 +28,33 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import tools.jackson.databind.json.JsonMapper;
 
-/** Parcours de restitution F17 à F19 sur une vraie base PostgreSQL. */
+/**
+ * Parcours de restitution F17 à F19 sur une vraie base PostgreSQL.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Parcours de restitution F17 à F19 sur une vraie base PostgreSQL.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 class RestitutionIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("interventions_terrain")
             .withUsername("root")
             .withPassword("root");
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
 
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
@@ -64,6 +80,12 @@ class RestitutionIntegrationTest {
     private Integer idAgence;
     private Integer idTechnicien;
     private Integer idClient;
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
 
     @BeforeEach
     void setUp() throws Exception {
@@ -118,6 +140,8 @@ class RestitutionIntegrationTest {
         // Bob n'a pas la compétence exigée : il ne doit jamais apparaître dans F17.
     }
 
+    // ── f17Disponibles() ─────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F17 : le technicien compétent est proposé, l'agence sans candidat est absente")
     void f17Disponibles() throws Exception {
@@ -132,6 +156,8 @@ class RestitutionIntegrationTest {
                 .andExpect(jsonPath("$.agences[0].techniciens[0].chargeHeuresJour").value(3.00));
     }
 
+    // ── f17AucunDisponible() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("F17 : aucun technicien libre sur le créneau renvoie une raison de filtrage")
     void f17AucunDisponible() throws Exception {
@@ -145,6 +171,8 @@ class RestitutionIntegrationTest {
                 .andExpect(jsonPath("$.agences").isEmpty())
                 .andExpect(jsonPath("$.raisonFiltrage").isNotEmpty());
     }
+
+    // ── f18Charge() ──────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F18 : la charge d'agence exclut l'intervention annulée et totalise les heures")
@@ -161,6 +189,8 @@ class RestitutionIntegrationTest {
                 .andExpect(jsonPath("$.heuresOccupeesTotales").value(3.00));
     }
 
+    // ── f19Taux() ────────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F19 : le taux mensuel retient seulement TERMINEE et ECHOUEE")
     void f19Taux() throws Exception {
@@ -173,6 +203,8 @@ class RestitutionIntegrationTest {
                 .andExpect(jsonPath("$.parType[0].codeType").value("RACCORDEMENT_FIBRE"))
                 .andExpect(jsonPath("$.parType[0].taux").value(50.00));
     }
+
+    // ── f19Erreurs() ─────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : un mois invalide renvoie 400 et une agence inconnue renvoie 404")
@@ -187,12 +219,24 @@ class RestitutionIntegrationTest {
                 .andExpect(status().isNotFound());
     }
 
+    // ── changerStatut() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour changerStatut().
+     */
+
     private void changerStatut(Integer idIntervention, String statut) throws Exception {
         mockMvc.perform(post("/interventions-terrain/intervention/statut/" + idIntervention)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(Map.of("statut", statut))))
                 .andExpect(status().isOk());
     }
+
+    // ── createIntervention() ─────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour createIntervention().
+     */
 
     private Integer createIntervention(Integer idClient, String debut, String fin) throws Exception {
         return create("intervention", Map.of(
@@ -205,6 +249,12 @@ class RestitutionIntegrationTest {
                 "voie", "12 rue de la Paix",
                 "commune", "Paris"));
     }
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour create().
+     */
 
     private Integer create(String ressource, Map<String, Object> body) throws Exception {
         String json = mockMvc.perform(post("/interventions-terrain/" + ressource + "/create")

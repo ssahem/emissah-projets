@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Catégorie inconnue — erreur métier traduite en HTTP bad. */
+/**
+ * Catégorie inconnue — erreur métier traduite en HTTP bad.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Catégorie inconnue — erreur métier traduite en HTTP bad.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class CategorieInconnueException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final String categorie;
 
-    // ── CategorieInconnueException() ─────────────────────────────────────────────────────────────
+    // ── CategorieInconnueException() ─────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public CategorieInconnueException(String categorie) {
@@ -17,7 +27,7 @@ public class CategorieInconnueException extends ApiException {
         addProperty("categorie", categorie);
     }
 
-    // ── getCategorie() ───────────────────────────────────────
+    // ── getCategorie() ───────────────────────────────────────────────────────
 
     /** Retourne categorie. */
     public String getCategorie() { return categorie; }

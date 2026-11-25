@@ -46,10 +46,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires de la recherche par période (F8) et du taux de remplissage (F18).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : horloge fixée au 20/11/2026, repositories simulés, mappers réels.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de la recherche par période (F8) et du taux de remplissage (F18).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : horloge fixée au 20/11/2026, repositories simulés, mappers réels.
  * CAS COUVERTS : F8 (4 cas de bornes + période inversée) et F18 (0 %, 100 %, mixte, salle vide).
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class EvenementServiceTest {
@@ -66,6 +69,12 @@ class EvenementServiceTest {
 
     private EvenementService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new EvenementService(evenementRepository, salleRepository, spectacleRepository,
@@ -74,8 +83,14 @@ class EvenementServiceTest {
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  F8 — recherche par période
+    //  F8 — RECHERCHE PAR PÉRIODE
     // ═════════════════════════════════════════════════════════════════════════
+
+    // ── evenement() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour evenement().
+     */
 
     private Evenement evenement(int id, LocalDateTime date) {
         Salle salle = new Salle("Grand Hall", "12 rue des Arts", "Abidjan", 120);
@@ -86,83 +101,99 @@ class EvenementServiceTest {
         return evenement;
     }
 
+    // ── findBetween_sansBorne() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("Sans borne, la liste complète est renvoyée")
     void findBetween_sansBorne() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(evenementRepository.findAllByOrderByDateHeureAsc())
                 .thenReturn(List.of(evenement(1, LocalDateTime.of(2026, 12, 1, 20, 0))));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<EvenementResponse> resultat = service.findBetween(null, null);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).extracting(EvenementResponse::idEvenement).containsExactly(1);
         verify(evenementRepository).findAllByOrderByDateHeureAsc();
     }
 
+    // ── findBetween_debutSeul() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("Une borne de début suffit")
     void findBetween_debutSeul() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         LocalDateTime du = LocalDateTime.of(2026, 12, 1, 0, 0);
         when(evenementRepository.findAllByDateHeureGreaterThanEqualOrderByDateHeureAsc(du))
                 .thenReturn(List.of(evenement(1, du)));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<EvenementResponse> resultat = service.findBetween(du, null);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).extracting(EvenementResponse::idEvenement).containsExactly(1);
     }
+
+    // ── findBetween_finSeule() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("Une borne de fin suffit")
     void findBetween_finSeule() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         LocalDateTime au = LocalDateTime.of(2026, 12, 31, 0, 0);
         when(evenementRepository.findAllByDateHeureLessThanEqualOrderByDateHeureAsc(au))
                 .thenReturn(List.of(evenement(2, au)));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<EvenementResponse> resultat = service.findBetween(null, au);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).extracting(EvenementResponse::idEvenement).containsExactly(2);
     }
+
+    // ── findBetween_deuxBornesInclusives() ───────────────────────────────────
 
     @Test
     @DisplayName("Les deux bornes sont inclusives")
     void findBetween_deuxBornesInclusives() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         LocalDateTime du = LocalDateTime.of(2026, 12, 1, 0, 0);
         LocalDateTime au = LocalDateTime.of(2026, 12, 31, 0, 0);
         when(evenementRepository.findAllByDateHeureBetweenOrderByDateHeureAsc(du, au))
                 .thenReturn(List.of(evenement(1, du), evenement(2, au)));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<EvenementResponse> resultat = service.findBetween(du, au);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).extracting(EvenementResponse::idEvenement).containsExactly(1, 2);
     }
+
+    // ── findBetween_throwsWhenPeriodeInversee() ──────────────────────────────
 
     @Test
     @DisplayName("Une période inversée est refusée")
     void findBetween_throwsWhenPeriodeInversee() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         LocalDateTime du = LocalDateTime.of(2026, 12, 31, 0, 0);
         LocalDateTime au = LocalDateTime.of(2026, 12, 1, 0, 0);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.findBetween(du, au))
                 .isInstanceOf(PeriodeInvalideException.class);
         verify(evenementRepository, never()).findAllByDateHeureBetweenOrderByDateHeureAsc(du, au);
     }
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  F18 — taux de remplissage
+    //  F18 — TAUX DE REMPLISSAGE
     // ═════════════════════════════════════════════════════════════════════════
+
+    // ── salleAvecId() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour salleAvecId().
+     */
 
     private Salle salleAvecId() {
         Salle salle = new Salle("Grand Hall", "12 rue des Arts", "Abidjan", 120);
@@ -170,11 +201,23 @@ class EvenementServiceTest {
         return salle;
     }
 
+    // ── place() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour place().
+     */
+
     private Place place(Salle salle, String categorie, int numero) {
         Place place = new Place("A", numero, salle, new Categorie(categorie));
         ReflectionTestUtils.setField(place, "idPlace", numero);
         return place;
     }
+
+    // ── placeReservee() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour placeReservee().
+     */
 
     private ReservationPlace placeReservee(int numero) {
         Reservation reservation = new Reservation(LocalDateTime.now(CLOCK),
@@ -185,36 +228,46 @@ class EvenementServiceTest {
         return new ReservationPlace(reservation, "A", numero, 1);
     }
 
+    // ── preparerEvenementEtPlaces() ──────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparerEvenementEtPlaces().
+     */
+
     private void preparerEvenementEtPlaces(List<Place> places) {
         when(evenementRepository.findById(1))
                 .thenReturn(Optional.of(evenement(1, LocalDateTime.of(2026, 12, 20, 20, 0))));
         when(placeRepository.findAllBySalle_IdSalleOrderByRangAscNumeroAsc(1)).thenReturn(places);
     }
 
+    // ── remplissage_sansReservation() ────────────────────────────────────────
+
     @Test
     @DisplayName("Un événement sans réservation affiche 0 %")
     void remplissage_sansReservation() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         preparerEvenementEtPlaces(List.of(place(salleAvecId(), "ORCHESTRE", 1)));
         when(reservationPlaceRepository.findPlacesByEvenementAndStatut(1, "PROVISOIRE"))
                 .thenReturn(List.of());
         when(reservationPlaceRepository.findPlacesByEvenementAndStatut(1, "PAYEE"))
                 .thenReturn(List.of());
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         RemplissageResponse resultat = service.findRemplissage(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.placesTotales()).isEqualTo(1);
         assertThat(resultat.taux()).isEqualByComparingTo("0.00");
         assertThat(resultat.parCategorie()).singleElement()
                 .satisfies(d -> assertThat(d.taux()).isEqualByComparingTo("0.00"));
     }
 
+    // ── remplissage_centPourCent() ───────────────────────────────────────────
+
     @Test
     @DisplayName("Une place réservée affiche 100 %")
     void remplissage_centPourCent() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Salle salle = salleAvecId();
         preparerEvenementEtPlaces(List.of(place(salle, "ORCHESTRE", 1)));
         when(reservationPlaceRepository.findPlacesByEvenementAndStatut(1, "PROVISOIRE"))
@@ -225,18 +278,20 @@ class EvenementServiceTest {
         when(placeRepository.findBySalle_IdSalleAndRangAndNumero(1, "A", 1))
                 .thenReturn(Optional.of(place(salle, "ORCHESTRE", 1)));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         RemplissageResponse resultat = service.findRemplissage(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.payees()).isEqualTo(1);
         assertThat(resultat.taux()).isEqualByComparingTo("100.00");
     }
 
+    // ── remplissage_statutsMelanges() ────────────────────────────────────────
+
     @Test
     @DisplayName("Les statuts provisoire et payé sont comptés séparément")
     void remplissage_statutsMelanges() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Salle salle = salleAvecId();
         preparerEvenementEtPlaces(List.of(
                 place(salle, "ORCHESTRE", 1), place(salle, "ORCHESTRE", 2),
@@ -252,23 +307,25 @@ class EvenementServiceTest {
         when(placeRepository.findBySalle_IdSalleAndRangAndNumero(1, "A", 3))
                 .thenReturn(Optional.of(place(salle, "BALCON", 3)));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         RemplissageResponse resultat = service.findRemplissage(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.provisoires()).isEqualTo(1);
         assertThat(resultat.payees()).isEqualTo(1);
         assertThat(resultat.taux()).isEqualByComparingTo("50.00");
         assertThat(resultat.parCategorie()).hasSize(2);
     }
 
+    // ── remplissage_throwsWhenSalleSansPlace() ───────────────────────────────
+
     @Test
     @DisplayName("Une salle sans place est refusée avec un 409")
     void remplissage_throwsWhenSalleSansPlace() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         preparerEvenementEtPlaces(List.of());
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.findRemplissage(1))
                 .isInstanceOf(SalleSansPlaceException.class);
         verify(reservationPlaceRepository, never()).findPlacesByEvenementAndStatut(eq(1), anyString());

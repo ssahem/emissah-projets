@@ -64,9 +64,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier du niveau 3 : F11 à F16. */
+/**
+ * Règles métier du niveau 3 : F11 à F16.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier du niveau 3 : F11 à F16.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ReglesMetierServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDate AUJOURD_HUI = LocalDate.of(2026, 11, 24);
     private static final LocalDateTime DEBUT = LocalDateTime.of(2026, 12, 10, 9, 0);
@@ -92,6 +102,12 @@ class ReglesMetierServiceTest {
     private InterventionService interventionService;
     private AlerteCompetenceService alerteService;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         technicienService = new TechnicienService(technicienRepository, equipeRepository, agenceRepository,
@@ -106,7 +122,9 @@ class ReglesMetierServiceTest {
                 equipeRepository, agenceRepository, competenceRepository, clock);
     }
 
-    // ── F11 ─────────────────────────────────────────────────────────────────────
+    // ── F11 ──────────────────────────────────────────────────────────────────
+
+    // ── f11DatesIncoherentes() ───────────────────────────────────────────────
 
     @Test
     @DisplayName("F11 : une expiration antérieure à l'obtention est refusée")
@@ -121,6 +139,8 @@ class ReglesMetierServiceTest {
                 .hasMessageContaining("postérieure");
     }
 
+    // ── f11DoublonActif() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F11 : un doublon de compétence active est refusé avec un 409")
     void f11DoublonActif() {
@@ -133,6 +153,8 @@ class ReglesMetierServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("déjà");
     }
+
+    // ── f11AssociationReussie() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("F11 : une compétence expirée peut être redemandée et est persistée")
@@ -157,7 +179,9 @@ class ReglesMetierServiceTest {
         assertThat(captor.getValue().getIdCompetence()).isEqualTo(5);
     }
 
-    // ── F12 ─────────────────────────────────────────────────────────────────────
+    // ── F12 ──────────────────────────────────────────────────────────────────
+
+    // ── f12ChevauchementRefuse() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("F12 : un chevauchement renvoie 409 avec l'intervention bloquante")
@@ -179,6 +203,8 @@ class ReglesMetierServiceTest {
                         .containsEntry("debut", bloquante.getDebutPrevu())
                         .containsEntry("fin", bloquante.getFinPrevue()));
     }
+
+    // ── f12AnnuleeIgnoree() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F12 : une intervention ANNULEE ne bloque pas le créneau")
@@ -202,7 +228,9 @@ class ReglesMetierServiceTest {
         verify(interventionRepository).save(any(Intervention.class));
     }
 
-    // ── F13 ─────────────────────────────────────────────────────────────────────
+    // ── F13 ──────────────────────────────────────────────────────────────────
+
+    // ── f13CompetencesManquantes() ───────────────────────────────────────────
 
     @Test
     @DisplayName("F13 : les compétences exigées manquantes ou expirées sont listées dans le 400")
@@ -228,6 +256,8 @@ class ReglesMetierServiceTest {
                         .containsEntry("competences", List.of("Fibre", "Cuivre")));
     }
 
+    // ── f13SansExigence() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : un type sans exigence accepte tout technicien")
     void f13SansExigence() {
@@ -239,7 +269,9 @@ class ReglesMetierServiceTest {
         verify(interventionRepository).save(any(Intervention.class));
     }
 
-    // ── F14 ─────────────────────────────────────────────────────────────────────
+    // ── F14 ──────────────────────────────────────────────────────────────────
+
+    // ── f14TransitionAutorisée() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("F14 : PLANIFIEE → EN_COURS est horodaté sur l'affectation responsable")
@@ -259,6 +291,8 @@ class ReglesMetierServiceTest {
         assertThat(captor.getValue().getIdAffectation()).isEqualTo(10);
         assertThat(captor.getValue().getDateHeure()).isEqualTo(LocalDateTime.of(2026, 11, 24, 10, 0));
     }
+
+    // ── f14TransitionInterdite() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("F14 : une transition interdite indique les statuts atteignables")
@@ -280,6 +314,8 @@ class ReglesMetierServiceTest {
                         .containsEntry("atteignables", List.of("ECHOUEE", "TERMINEE")));
     }
 
+    // ── f14StatutsHeritesEtInconnus() ────────────────────────────────────────
+
     @Test
     @DisplayName("F14 : les statuts hérités et inconnus ne sont pas acceptés en écriture")
     void f14StatutsHeritesEtInconnus() {
@@ -295,7 +331,9 @@ class ReglesMetierServiceTest {
                 .isInstanceOf(DonneeInvalideException.class);
     }
 
-    // ── F15 ─────────────────────────────────────────────────────────────────────
+    // ── F15 ──────────────────────────────────────────────────────────────────
+
+    // ── f15RepriseReussie() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F15 : une reprise reprend client, type et responsable et référence l'origine")
@@ -335,6 +373,8 @@ class ReglesMetierServiceTest {
         verify(affectationRepository).save(any(Affectation.class));
     }
 
+    // ── f15RefusReprise() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F15 : une intervention non échouée ou déjà reprise ne peut pas être reprise")
     void f15RefusReprise() {
@@ -353,7 +393,9 @@ class ReglesMetierServiceTest {
                 .hasMessageContaining("ECHOUEE");
     }
 
-    // ── F16 ─────────────────────────────────────────────────────────────────────
+    // ── F16 ──────────────────────────────────────────────────────────────────
+
+    // ── f16AlertesParAgence() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : les alertes sont regroupées par agence et marquent date_alerte")
@@ -382,6 +424,8 @@ class ReglesMetierServiceTest {
         assertThat(cuivre.getDateAlerte()).isEqualTo(AUJOURD_HUI);
     }
 
+    // ── f16PasDeDoublon() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : une compétence déjà signalée n'est pas alertée deux fois")
     void f16PasDeDoublon() {
@@ -391,7 +435,13 @@ class ReglesMetierServiceTest {
         assertThat(alerteService.genererAlertes()).isEmpty();
     }
 
-    // ── Fabriques ──────────────────────────────────────────────────────────────
+    // ── Fabriques ────────────────────────────────────────────────────────────
+
+    // ── prepareCreate() ──────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour prepareCreate().
+     */
 
     private void prepareCreate() {
         Client client = client(7, "Dupont");
@@ -420,17 +470,35 @@ class ReglesMetierServiceTest {
         when(statutRepository.findByLibelle("PLANIFIEE")).thenReturn(Optional.of(planifiee));
     }
 
+    // ── agence() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour agence().
+     */
+
     private Agence agence(Integer id, String nom) {
         Agence agence = new Agence(nom, nom, "Paris", null);
         ReflectionTestUtils.setField(agence, "idAgence", id);
         return agence;
     }
 
+    // ── equipe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour equipe().
+     */
+
     private Equipe equipe(Integer id, Integer idAgence) {
         Equipe equipe = new Equipe("Équipe " + id, idAgence);
         ReflectionTestUtils.setField(equipe, "idEquipe", id);
         return equipe;
     }
+
+    // ── technicien() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour technicien().
+     */
 
     private Technicien technicien(Integer id, String nom, Integer idEquipe) {
         Technicien technicien = new Technicien(nom, "Prenom", nom.toLowerCase() + "@example.test",
@@ -439,11 +507,23 @@ class ReglesMetierServiceTest {
         return technicien;
     }
 
+    // ── competence() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour competence().
+     */
+
     private Competence competence(Integer id, String libelle) {
         Competence competence = new Competence(libelle, null);
         ReflectionTestUtils.setField(competence, "idCompetence", id);
         return competence;
     }
+
+    // ── type() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour type().
+     */
 
     private TypeIntervention type(Integer id, String code) {
         TypeIntervention type = mock(TypeIntervention.class);
@@ -452,12 +532,24 @@ class ReglesMetierServiceTest {
         return type;
     }
 
+    // ── client() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour client().
+     */
+
     private Client client(Integer id, String nom) {
         Client client = new Client(nom, "Marie", "client@example.test", "0102030405",
                 "5 avenue du parc", "Paris");
         ReflectionTestUtils.setField(client, "idClient", id);
         return client;
     }
+
+    // ── intervention() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour intervention().
+     */
 
     private Intervention intervention(Integer id, LocalDateTime debut, LocalDateTime fin) {
         Intervention intervention = new Intervention(LocalDateTime.of(2026, 11, 24, 9, 0),
@@ -466,11 +558,23 @@ class ReglesMetierServiceTest {
         return intervention;
     }
 
+    // ── affectation() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour affectation().
+     */
+
     private Affectation affectation(Integer id, Integer idIntervention, Integer idTechnicien) {
         Affectation affectation = new Affectation(idIntervention, idTechnicien, true);
         ReflectionTestUtils.setField(affectation, "idAffectation", id);
         return affectation;
     }
+
+    // ── statut() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour statut().
+     */
 
     private Statut statut(String libelle) {
         Statut statut = mock(Statut.class);

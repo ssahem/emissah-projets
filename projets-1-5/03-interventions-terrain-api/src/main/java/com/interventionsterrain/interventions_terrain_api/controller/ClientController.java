@@ -53,11 +53,23 @@ public class ClientController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /interventions-terrain/client/list ──────────────────────
+
+    /**
+     * Lister les clients.
+     */
+
     @Operation(summary = "Lister les clients", description = "Triés par nom")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ClientResponse> list() {
         return service.findAll();
     }
+
+    // ── get() — GET /interventions-terrain/client/get/{id} ───────────────────
+
+    /**
+     * Lire un client.
+     */
 
     @Operation(summary = "Lire un client")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,12 +77,24 @@ public class ClientController {
         return service.findById(id);
     }
 
+    // ── historique() — GET /interventions-terrain/client/interventions/{id} ──
+
+    /**
+     * Consulter l'historique d'un client.
+     */
+
     @Operation(summary = "Consulter l'historique d'un client",
             description = "Interventions du plus récent au plus ancien (F8)")
     @GetMapping(path = "/interventions/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<HistoriqueClientResponse> historique(@PathVariable Integer id) {
         return service.findHistorique(id);
     }
+
+    // ── create() — POST /interventions-terrain/client/create ─────────────────
+
+    /**
+     * Créer un client.
+     */
 
     @Operation(summary = "Créer un client")
     @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -81,12 +105,24 @@ public class ClientController {
                 .body(created);
     }
 
+    // ── update() — PUT /interventions-terrain/client/update/{id} ─────────────
+
+    /**
+     * Modifier un client.
+     */
+
     @Operation(summary = "Modifier un client")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ClientResponse update(@PathVariable Integer id, @Valid @RequestBody UpdateClientRequest request) {
         return service.update(id, request);
     }
+
+    // ── delete() — DELETE /interventions-terrain/client/delete/{id} ──────────
+
+    /**
+     * Supprimer un client.
+     */
 
     @Operation(summary = "Supprimer un client")
     @DeleteMapping(path = "/delete/{id}")

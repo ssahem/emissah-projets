@@ -7,11 +7,17 @@ import java.util.List;
  * Moyenne générale d'un élève et détail du calcul (F18).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Moyenne générale d'un élève et détail du calcul (F18).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : RestitutionService.
+ * PRODUIT PAR  : RestitutionService.
  * NE FAIT PAS  : de logique métier. Une moyenne absente est null, jamais zéro.
  */
 public record MoyenneGeneraleResponse(
         Integer idEleve, Integer trimestre, BigDecimal moyenneGenerale,
         List<DetailCoefficientResponse> detail) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

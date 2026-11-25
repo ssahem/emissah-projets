@@ -9,6 +9,7 @@ import java.math.BigDecimal;
  * Corps de modification du poids d'un type d'évaluation (F13).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification du poids d'un type d'évaluation (F13).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : TypeEvaluationController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -17,4 +18,9 @@ import java.math.BigDecimal;
 public record UpdatePoidsRequest(
         @Schema(description = "Poids strictement positif", example = "2.5")
         @NotNull @DecimalMin(value = "0.01") BigDecimal poids) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

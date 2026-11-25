@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AlerteDifficulteRepository extends JpaRepository<AlerteDifficulte, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Vérifie qu'un élève n'a pas déjà été signalé pour ce trimestre. */
     Optional<AlerteDifficulte> findByIdInscriptionAndNumeroTrimestre(Integer idInscription,
                                                                      Integer numeroTrimestre);

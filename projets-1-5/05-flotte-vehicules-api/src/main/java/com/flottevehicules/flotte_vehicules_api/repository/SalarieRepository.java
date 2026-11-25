@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface SalarieRepository extends JpaRepository<Salarie, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les salariés triés par nom (F3). */
     List<Salarie> findAllByOrderByNomAsc();
 

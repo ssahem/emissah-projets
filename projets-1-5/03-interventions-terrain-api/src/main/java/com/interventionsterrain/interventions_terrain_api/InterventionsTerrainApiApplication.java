@@ -15,7 +15,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class InterventionsTerrainApiApplication {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Lance l'application. */
+
+    // ── main() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute main().
+     */
+
     public static void main(String[] args) {
         SpringApplication.run(InterventionsTerrainApiApplication.class, args);
     }

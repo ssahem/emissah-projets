@@ -51,7 +51,7 @@ public class LocataireController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /gestion-locative/locataire/list ───────────────────────
+    // ── list() — GET /gestion-locative/locataire/list ────────────────────────
 
     /** Liste les locataires triés par nom. Réponses : 200 | 500. */
     @Operation(summary = "Lister les locataires")
@@ -62,7 +62,7 @@ public class LocataireController {
         return locataireService.findAll();
     }
 
-    // ── getById() — GET /gestion-locative/locataire/get/{id} ────────────────
+    // ── getById() — GET /gestion-locative/locataire/get/{id} ─────────────────
 
     /** Consulte un locataire. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Consulter un locataire")
@@ -75,7 +75,7 @@ public class LocataireController {
         return locataireService.findById(id);
     }
 
-    // ── create() — POST /gestion-locative/locataire/create ──────────────────
+    // ── create() — POST /gestion-locative/locataire/create ───────────────────
 
     /** Crée un locataire. Réponses : 201 | 400 | 409 | 500. */
     @Operation(summary = "Créer un locataire")
@@ -91,7 +91,7 @@ public class LocataireController {
                 .body(created);
     }
 
-    // ── update() — PUT /gestion-locative/locataire/update/{id} ──────────────
+    // ── update() — PUT /gestion-locative/locataire/update/{id} ───────────────
 
     /** Modifie un locataire. Réponses : 200 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Modifier un locataire")
@@ -106,7 +106,7 @@ public class LocataireController {
         return locataireService.update(id, request);
     }
 
-    // ── delete() — DELETE /gestion-locative/locataire/delete/{id} ───────────
+    // ── delete() — DELETE /gestion-locative/locataire/delete/{id} ────────────
 
     /** Supprime un locataire sans bail en cours. Réponses : 204 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Supprimer un locataire")

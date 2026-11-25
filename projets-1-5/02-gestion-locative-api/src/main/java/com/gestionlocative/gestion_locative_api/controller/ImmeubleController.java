@@ -55,7 +55,7 @@ public class ImmeubleController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /gestion-locative/immeuble/list ────────────────────────
+    // ── list() — GET /gestion-locative/immeuble/list ─────────────────────────
 
     /** Liste les immeubles triés par adresse. Réponses : 200 | 500. */
     @Operation(summary = "Lister les immeubles")
@@ -66,7 +66,7 @@ public class ImmeubleController {
         return immeubleService.findAll();
     }
 
-    // ── getById() — GET /gestion-locative/immeuble/get/{id} ─────────────────
+    // ── getById() — GET /gestion-locative/immeuble/get/{id} ──────────────────
 
     /** Consulte un immeuble. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Consulter un immeuble")
@@ -79,7 +79,7 @@ public class ImmeubleController {
         return immeubleService.findById(id);
     }
 
-    // ── appartements() — GET /gestion-locative/immeuble/appartements/{id} ───
+    // ── appartements() — GET /gestion-locative/immeuble/appartements/{id} ────
 
     /** Liste les appartements avec leur occupation. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Lister les appartements d'un immeuble")
@@ -92,7 +92,7 @@ public class ImmeubleController {
         return immeubleService.findAppartements(id);
     }
 
-    // ── revenu() — GET /gestion-locative/immeuble/revenu/{id} ───────────────
+    // ── revenu() — GET /gestion-locative/immeuble/revenu/{id} ────────────────
 
     /** Calcule le revenu du mois. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Calculer le revenu locatif d'un immeuble sur un mois")
@@ -106,7 +106,7 @@ public class ImmeubleController {
         return immeubleService.calculerRevenu(id, mois);
     }
 
-    // ── create() — POST /gestion-locative/immeuble/create ───────────────────
+    // ── create() — POST /gestion-locative/immeuble/create ────────────────────
 
     /** Crée un immeuble. Réponses : 201 | 400 | 404 | 500. */
     @Operation(summary = "Créer un immeuble")
@@ -121,7 +121,7 @@ public class ImmeubleController {
                 .body(created);
     }
 
-    // ── update() — PUT /gestion-locative/immeuble/update/{id} ───────────────
+    // ── update() — PUT /gestion-locative/immeuble/update/{id} ────────────────
 
     /** Modifie un immeuble. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Modifier un immeuble")
@@ -135,7 +135,7 @@ public class ImmeubleController {
         return immeubleService.update(id, request);
     }
 
-    // ── delete() — DELETE /gestion-locative/immeuble/delete/{id} ────────────
+    // ── delete() — DELETE /gestion-locative/immeuble/delete/{id} ─────────────
 
     /** Supprime un immeuble vide. Réponses : 204 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Supprimer un immeuble")

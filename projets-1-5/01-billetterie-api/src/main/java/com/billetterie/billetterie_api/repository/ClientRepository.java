@@ -18,7 +18,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByEmailIgnoreCase() ──────────────────────────────────────────
+    // ── findByEmailIgnoreCase() ──────────────────────────────────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.
@@ -26,7 +26,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
      */
     Optional<Client> findByEmailIgnoreCase(String email);
 
-    // ── existsByEmailIgnoreCase() ────────────────────────────────────────
+    // ── existsByEmailIgnoreCase() ────────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsByEmailIgnoreCase(String email);

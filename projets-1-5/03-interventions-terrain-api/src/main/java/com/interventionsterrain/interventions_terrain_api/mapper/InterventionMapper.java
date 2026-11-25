@@ -18,6 +18,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class InterventionMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public InterventionResponse toResponse(Intervention intervention, Adresse adresse,
                                            Affectation responsable) {
         return new InterventionResponse(

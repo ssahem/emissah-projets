@@ -140,13 +140,13 @@ public class ReservationService {
      */
     @Transactional
     public ReservationResponse create(CreateReservationRequest request) {
-        // ── Étape 1/5 : résoudre l'événement et la place ──
+        // ── Étape 1/5 : résoudre l'événement et la place ─────────────────────
         Evenement evenement = evenementRepository.findById(request.idEvenement())
                 .orElseThrow(() -> new EvenementNotFoundException(request.idEvenement()));
         Place place = placeRepository.findFirstByRangAndNumero(request.rang(), request.numero())
                 .orElseThrow(() -> new PlaceNotFoundException(request.rang()));
 
-        // ── Étape 2/5 : appliquer les règles métier ──
+        // ── Étape 2/5 : appliquer les règles métier ──────────────────────────
         if (!evenement.getDateHeure().isAfter(LocalDateTime.now(clock))) {
             throw new EvenementPasseException(request.idEvenement());
         }
@@ -158,7 +158,7 @@ public class ReservationService {
             throw new PlaceDejaReserveeException(request.numero());
         }
 
-        // ── Étape 3/5 : enregistrer le client, la réservation et son historique ──
+        // ── Étape 3/5 : enregistrer le client, la réservation et son histor… ─
         Client client = clientRepository.findByEmailIgnoreCase(request.email())
                 .orElseGet(() -> clientRepository.saveAndFlush(new Client(
                         request.nom().trim(), request.prenom().trim(), request.email().trim())));
@@ -226,20 +226,20 @@ public class ReservationService {
      */
     @Transactional
     public ReservationResponse payer(Integer idReservation) {
-        // ── Étape 1/4 : charger la réservation et son statut ──
+        // ── Étape 1/4 : charger la réservation et son statut ─────────────────
         Reservation reservation = requireReservation(idReservation);
         String statut = statutCourant(reservation);
         if (!"PROVISOIRE".equalsIgnoreCase(statut)) {
             throw new StatutReservationIncompatibleException(idReservation);
         }
 
-        // ── Étape 2/4 : contrôler le délai ──
+        // ── Étape 2/4 : contrôler le délai ───────────────────────────────────
         LocalDateTime maintenant = LocalDateTime.now(clock);
         if (maintenant.isAfter(reservation.getDateCreation().plusMinutes(15))) {
             throw new ReservationExpireeException(idReservation);
         }
 
-        // ── Étape 3/4 : appliquer le tarif et tracer le paiement ──
+        // ── Étape 3/4 : appliquer le tarif et tracer le paiement ─────────────
         String categorie = categorieDe(reservation);
         Tarif tarif = tarifRepository.findByEvenement_IdEvenementAndCategorieIgnoreCase(
                         reservation.getEvenement().getIdEvenement(), categorie)
@@ -251,7 +251,7 @@ public class ReservationService {
         reservation.ajouterHistorique(new HistoriqueStatut(
                 reservation, statut("PAYEE"), maintenant.plusNanos(1_000_000)));
 
-        // ── Étape 4/4 : convertir en réponse ──
+        // ── Étape 4/4 : convertir en réponse ─────────────────────────────────
         return toResponse(reservation);
     }
 
@@ -270,7 +270,7 @@ public class ReservationService {
      */
     @Transactional
     public AnnulationResponse annuler(Integer idReservation) {
-        // ── Étape 1/4 : charger et contrôler le statut ──
+        // ── Étape 1/4 : charger et contrôler le statut ───────────────────────
         Reservation reservation = requireReservation(idReservation);
         String statut = statutCourant(reservation);
         boolean statutAcceptable = "PAYEE".equalsIgnoreCase(statut) || "PROVISOIRE".equalsIgnoreCase(statut);
@@ -280,14 +280,14 @@ public class ReservationService {
             throw new ReservationAnnulationImpossibleException(idReservation);
         }
 
-        // ── Étape 2/4 : choisir le taux de remboursement ──
+        // ── Étape 2/4 : choisir le taux de remboursement ─────────────────────
         LocalDateTime maintenant = LocalDateTime.now(clock);
         long heures = ChronoUnit.HOURS.between(
                 maintenant, reservation.getEvenement().getDateHeure());
         BigDecimal taux = heures > 48 ? BigDecimal.ONE
                 : heures > 24 ? new BigDecimal("0.5") : BigDecimal.ZERO;
 
-        // ── Étape 3/4 : calculer, tracer et libérer la place ──
+        // ── Étape 3/4 : calculer, tracer et libérer la place ─────────────────
         BigDecimal total = reservation.getPlaces().stream()
                 .map(place -> place.getPrixApplique() == null ? BigDecimal.ZERO : place.getPrixApplique())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -304,7 +304,7 @@ public class ReservationService {
         reservation.ajouterHistorique(new HistoriqueStatut(
                 reservation, statut("ANNULEE"), dateAnnulation));
 
-        // ── Étape 4/4 : convertir en réponse ──
+        // ── Étape 4/4 : convertir en réponse ─────────────────────────────────
         return new AnnulationResponse(idReservation, "ANNULEE", montant, dateAnnulation);
     }
 

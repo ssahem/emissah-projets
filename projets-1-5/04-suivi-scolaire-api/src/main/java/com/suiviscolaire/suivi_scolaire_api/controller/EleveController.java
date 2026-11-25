@@ -68,6 +68,12 @@ public class EleveController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /suivi-scolaire/eleve/list ──────────────────────────────
+
+    /**
+     * Lister les élèves.
+     */
+
     @Operation(summary = "Lister les élèves",
             description = "Triés par nom puis prénom ; ?nom=… déclenche la recherche partielle (F2, F9)")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -75,11 +81,23 @@ public class EleveController {
         return nom == null || nom.isBlank() ? service.findAll() : consultationService.rechercher(nom);
     }
 
+    // ── get() — GET /suivi-scolaire/eleve/get/{id} ───────────────────────────
+
+    /**
+     * Lire un élève.
+     */
+
     @Operation(summary = "Lire un élève")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public EleveResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /suivi-scolaire/eleve/create ─────────────────────────
+
+    /**
+     * Créer un élève.
+     */
 
     @Operation(summary = "Créer un élève",
             description = "Date de naissance passée et classe non pleine (F2)")
@@ -91,6 +109,12 @@ public class EleveController {
                 .body(created);
     }
 
+    // ── update() — PUT /suivi-scolaire/eleve/update/{id} ─────────────────────
+
+    /**
+     * Modifier un élève.
+     */
+
     @Operation(summary = "Modifier un élève", description = "Date de naissance figée ; classe modifiable (F2)")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -99,12 +123,24 @@ public class EleveController {
         return service.update(id, request);
     }
 
+    // ── delete() — DELETE /suivi-scolaire/eleve/delete/{id} ──────────────────
+
+    /**
+     * Supprimer un élève.
+     */
+
     @Operation(summary = "Supprimer un élève", description = "Refusée s'il possède des notes (F2)")
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ── notes() — GET /suivi-scolaire/eleve/notes/{id} ───────────────────────
+
+    /**
+     * Notes d'un élève.
+     */
 
     @Operation(summary = "Notes d'un élève",
             description = "Groupées par matière ; sans trimestre, toutes les notes (F7)")
@@ -113,6 +149,12 @@ public class EleveController {
                                             @RequestParam(required = false) Integer trimestre) {
         return consultationService.notesEleve(id, trimestre);
     }
+
+    // ── changerClasse() — POST /suivi-scolaire/eleve/affectation/{id} ────────
+
+    /**
+     * Changer un élève de classe.
+     */
 
     @Operation(summary = "Changer un élève de classe",
             description = "Même niveau, classe non pleine, ancienne affectation conservée (F11)")
@@ -123,12 +165,24 @@ public class EleveController {
         return ResponseEntity.status(201).body(service.changerClasse(id, request));
     }
 
+    // ── moyennes() — GET /suivi-scolaire/eleve/moyennes/{id} ─────────────────
+
+    /**
+     * Moyennes par matière.
+     */
+
     @Operation(summary = "Moyennes par matière",
             description = "Pondérées par le poids du type, avec nombre de notes et non-évaluées (F17)")
     @GetMapping(path = "/moyennes/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public MoyennesResponse moyennes(@PathVariable Integer id, @RequestParam Integer trimestre) {
         return restitutionService.moyennesParMatiere(id, trimestre);
     }
+
+    // ── moyenneGenerale() — GET /suivi-scolaire/eleve/moyenne-generale/{id} ──
+
+    /**
+     * Moyenne générale.
+     */
 
     @Operation(summary = "Moyenne générale",
             description = "Pondérée par les coefficients avec détail ; absente si aucune note (F18)")

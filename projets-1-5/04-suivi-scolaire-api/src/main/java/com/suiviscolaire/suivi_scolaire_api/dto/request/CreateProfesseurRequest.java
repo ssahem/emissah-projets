@@ -10,6 +10,7 @@ import jakarta.validation.constraints.Positive;
  * Corps de création d'un professeur (F4, arbitrage A-02).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'un professeur (F4, arbitrage A-02).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : ProfesseurController avec @Valid.
  * NE FAIT PAS  : de logique métier ; la matière est enregistrée comme enseignement.
@@ -23,4 +24,9 @@ public record CreateProfesseurRequest(
         @Schema(description = "Téléphone", example = "0102030401") String telephone,
         @Schema(description = "Identifiant de la matière principale", example = "1")
         @NotNull @Positive Integer idMatierePrincipale) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

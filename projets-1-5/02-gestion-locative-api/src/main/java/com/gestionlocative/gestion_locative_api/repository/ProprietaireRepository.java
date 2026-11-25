@@ -19,12 +19,12 @@ public interface ProprietaireRepository extends JpaRepository<Proprietaire, Inte
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByNomAsc() ────────────────────────────────────────────
+    // ── findAllByOrderByNomAsc() ─────────────────────────────────────────────
 
     /** Retourne les propriétaires triés par nom, puis par prénom. */
     List<Proprietaire> findAllByOrderByNomAscPrenomAsc();
 
-    // ── findByEmail() ───────────────────────────────────────────────────────
+    // ── findByEmail() ────────────────────────────────────────────────────────
 
     /** Cherche un propriétaire par email (unicité métier). */
     Optional<Proprietaire> findByEmail(String email);

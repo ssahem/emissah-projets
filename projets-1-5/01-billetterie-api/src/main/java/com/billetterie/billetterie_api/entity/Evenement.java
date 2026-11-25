@@ -43,7 +43,7 @@ public class Evenement {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Evenement() ──────────────────────────────────────────────────────
+    // ── Evenement() ──────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Evenement() {}
@@ -61,41 +61,41 @@ public class Evenement {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdEvenement() ─────────────────────────────────────────────────
+    // ── getIdEvenement() ─────────────────────────────────────────────────────
 
     /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }
 
-    // ── getDateHeure() ───────────────────────────────────────────────────
+    // ── getDateHeure() ───────────────────────────────────────────────────────
 
     /** Retourne dateHeure. */
     public LocalDateTime getDateHeure() { return dateHeure; }
 
-    // ── getSpectacle() ───────────────────────────────────────────────────
+    // ── getSpectacle() ───────────────────────────────────────────────────────
 
     /** Retourne spectacle. */
     public Spectacle getSpectacle() { return spectacle; }
 
-    // ── getSalle() ───────────────────────────────────────────────────────
+    // ── getSalle() ───────────────────────────────────────────────────────────
 
     /** Retourne salle. */
     public Salle getSalle() { return salle; }
 
-    // ── setDateHeure() ─────────────────────────────────────────────────────
+    // ── setDateHeure() ───────────────────────────────────────────────────────
 
     /** Modifie la date et l'heure de l'événement. */
     public void setDateHeure(LocalDateTime dateHeure) {
         this.dateHeure = Objects.requireNonNull(dateHeure, "dateHeure");
     }
 
-    // ── setSpectacle() ─────────────────────────────────────────────────────
+    // ── setSpectacle() ───────────────────────────────────────────────────────
 
     /** Remplace le spectacle de l'événement. */
     public void setSpectacle(Spectacle spectacle) {
         this.spectacle = Objects.requireNonNull(spectacle, "spectacle");
     }
 
-    // ── setSalle() ─────────────────────────────────────────────────────────
+    // ── setSalle() ───────────────────────────────────────────────────────────
 
     /** Remplace la salle de l'événement. */
     public void setSalle(Salle salle) { this.salle = Objects.requireNonNull(salle, "salle"); }

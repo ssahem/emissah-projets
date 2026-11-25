@@ -6,11 +6,17 @@ import java.util.List;
  * Effectif et élèves d'une classe (F6).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Effectif et élèves d'une classe (F6).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : ConsultationService.
+ * PRODUIT PAR  : ConsultationService.
  * NE FAIT PAS  : de calcul métier.
  */
 public record EffectifClasseResponse(
         Integer idClasse, String nomClasse, long effectifActuel, Integer effectifMax,
         List<EleveResponse> eleves) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

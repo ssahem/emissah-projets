@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Détail du revenu d'un appartement sur un mois (F19).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Détail du revenu d'un appartement sur un mois (F19).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ImmeubleService, à partir des baux et de revision_loyer.
  * NE FAIT PAS  : d'accès base ni de logique métier.

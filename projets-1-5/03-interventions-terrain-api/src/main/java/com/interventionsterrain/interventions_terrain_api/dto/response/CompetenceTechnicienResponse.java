@@ -6,8 +6,9 @@ import java.time.LocalDate;
  * Compétence obtenue par un technicien, expirée ou non (F7).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Compétence obtenue par un technicien, expirée ou non (F7).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : CompetenceTechnicienService puis renvoyé par CompetenceTechnicienController.
+ * PRODUIT PAR  : CompetenceTechnicienService puis renvoyé par CompetenceTechnicienController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record CompetenceTechnicienResponse(

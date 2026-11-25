@@ -6,12 +6,18 @@ import org.springframework.http.HttpStatus;
  * Exception métier : le mois demandé n'est pas au format AAAA-MM (F19).
  *
  * COUCHE       : Exception (erreur métier)
+ * RÔLE         : Exception métier : le mois demandé n'est pas au format AAAA-MM (F19).
  * LANCÉE PAR   : ImmeubleService.
  * INTERCEPTÉE  : par GlobalExceptionHandler → HTTP 400.
  * POURQUOI     : un mois mal formé ne peut pas être converti en période ; le
  *                refuser ici évite une erreur 500 brute de java.time.
+ * NE FAIT PAS  : de logique métier.
  */
 public class MoisInvalideException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit l'erreur avec la valeur reçue. */
     public MoisInvalideException(String mois) {

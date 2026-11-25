@@ -65,6 +65,13 @@ public class Matiere {
     public BigDecimal getCoefficient() { return coefficient; }
 
     /** Modifie le libellé et le coefficient (F3). */
+
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String libelle, BigDecimal coefficient) {
         this.libelle = Objects.requireNonNull(libelle, "libelle");
         this.coefficient = Objects.requireNonNull(coefficient, "coefficient");

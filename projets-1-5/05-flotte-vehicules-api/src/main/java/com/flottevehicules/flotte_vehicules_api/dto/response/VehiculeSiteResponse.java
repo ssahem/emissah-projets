@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Véhicule d'un site avec son état d'affectation (F6).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : SiteService.
- * NE FAIT PAS : d'accès base.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Véhicule d'un site avec son état d'affectation (F6).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : SiteService.
+ * NE FAIT PAS  : d'accès base.
  */
 @Schema(description = "Véhicule rattaché à un site et son état courant")
 public record VehiculeSiteResponse(
@@ -30,4 +31,9 @@ public record VehiculeSiteResponse(
 
         @Schema(description = "Kilométrage courant", example = "19000")
         Integer kmActuel) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

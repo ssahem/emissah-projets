@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Place déjà réservée — erreur métier traduite en HTTP conflict. */
+/**
+ * Place déjà réservée — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Place déjà réservée — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class PlaceDejaReserveeException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer numero;
 
-    // ── PlaceDejaReserveeException() ─────────────────────────────────────────────────────────────
+    // ── PlaceDejaReserveeException() ─────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public PlaceDejaReserveeException(Integer numero) {
@@ -17,7 +27,7 @@ public class PlaceDejaReserveeException extends ApiException {
         addProperty("numero", numero);
     }
 
-    // ── getNumero() ───────────────────────────────────────
+    // ── getNumero() ──────────────────────────────────────────────────────────
 
     /** Retourne numero. */
     public Integer getNumero() { return numero; }

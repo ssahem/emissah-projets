@@ -79,6 +79,12 @@ public class Technicien {
     public Integer getIdEquipe() { return idEquipe; }
     public String getMatricule() { return matricule; }
 
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String nom, String prenom, String email, String telephone, Integer idEquipe) {
         this.nom = Objects.requireNonNull(nom, "nom");
         this.prenom = Objects.requireNonNull(prenom, "prenom");

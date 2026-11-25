@@ -50,13 +50,13 @@ public class RevisionLoyer {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── RevisionLoyer() ────────────────────────────────────────────────────
+    // ── RevisionLoyer() ──────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected RevisionLoyer() {
     }
 
-    // ── RevisionLoyer(Integer, LocalDate, BigDecimal) ──────────────────────
+    // ── RevisionLoyer(Integer, LocalDate, BigDecimal) ────────────────────────
 
     /** Crée la révision initiale d'un bail. */
     public RevisionLoyer(Integer idBail, LocalDate dateEffet, BigDecimal montant) {
@@ -81,7 +81,7 @@ public class RevisionLoyer {
     /** Retourne le montant. */
     public BigDecimal getMontant() { return montant; }
 
-    // ── modifierMontant() ──────────────────────────────────────────────────
+    // ── modifierMontant() ────────────────────────────────────────────────────
 
     /** Ajuste la révision initiale quand le loyer change avant le début du bail. */
     public void modifierMontant(BigDecimal montant) {

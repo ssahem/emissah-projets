@@ -6,8 +6,9 @@ import java.time.LocalDateTime;
  * Intervention renvoyée par l'API (F5).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Intervention renvoyée par l'API (F5).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : InterventionService puis renvoyé par InterventionController.
+ * PRODUIT PAR  : InterventionService puis renvoyé par InterventionController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record InterventionResponse(

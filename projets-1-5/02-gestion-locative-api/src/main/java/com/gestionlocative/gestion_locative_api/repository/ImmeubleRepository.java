@@ -18,17 +18,17 @@ public interface ImmeubleRepository extends JpaRepository<Immeuble, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByAdresseAsc() ────────────────────────────────────────
+    // ── findAllByOrderByAdresseAsc() ─────────────────────────────────────────
 
     /** Retourne les immeubles triés par adresse. */
     List<Immeuble> findAllByOrderByAdresseAsc();
 
-    // ── findAllByIdProprietaireOrderByAdresseAsc() ──────────────────────────
+    // ── findAllByIdProprietaireOrderByAdresseAsc() ───────────────────────────
 
     /** Retourne les immeubles d'un propriétaire pour la consultation F7. */
     List<Immeuble> findAllByIdProprietaireOrderByAdresseAsc(Integer idProprietaire);
 
-    // ── countByIdProprietaire() ─────────────────────────────────────────────
+    // ── countByIdProprietaire() ──────────────────────────────────────────────
 
     /** Compte les immeubles d'un propriétaire, pour refuser sa suppression (F1). */
     long countByIdProprietaire(Integer idProprietaire);

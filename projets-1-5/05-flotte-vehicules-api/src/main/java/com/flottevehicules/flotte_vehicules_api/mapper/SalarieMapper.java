@@ -8,12 +8,24 @@ import org.springframework.stereotype.Component;
  * Conversion Salarie → SalarieResponse.
  *
  * COUCHE       : Mapper (interface HTTP)
+ * RÔLE         : Conversion Salarie → SalarieResponse.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 @Component
 public class SalarieMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Convertit une entité en réponse. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public SalarieResponse toResponse(Salarie salarie) {
         return new SalarieResponse(
                 salarie.getIdSalarie(), salarie.getNom(), salarie.getPrenom(),

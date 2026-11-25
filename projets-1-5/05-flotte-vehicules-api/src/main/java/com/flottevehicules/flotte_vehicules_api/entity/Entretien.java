@@ -106,12 +106,26 @@ public class Entretien {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Modifie le coût et le prestataire ; la date et le kilométrage sont figés (F5). */
+
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(BigDecimal cout, Integer idPrestataire) {
         this.cout = Objects.requireNonNull(cout, "cout");
         this.idPrestataire = Objects.requireNonNull(idPrestataire, "idPrestataire");
     }
 
     /** Retourne la fin effective de l'immobilisation (date_debut si date_fin absente). */
+
+    // ── finEffective() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute finEffective().
+     */
+
     public LocalDate finEffective() {
         return dateFin == null ? dateDebut : dateFin;
     }

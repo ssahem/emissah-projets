@@ -14,6 +14,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface TypeEntretienRepository extends JpaRepository<TypeEntretien, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les types dont la catégorie est PERIODIQUE (F15). */
     List<TypeEntretien> findAllByCategorie(String categorie);
 }

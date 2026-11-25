@@ -34,10 +34,20 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-/** Codes de réponse et sérialisation des routes de restitution F17 à F19. */
+/**
+ * Codes de réponse et sérialisation des routes de restitution F17 à F19.
+ *
+ * COUCHE       : Service
+ * RÔLE         : Codes de réponse et sérialisation des routes de restitution F17 à F19.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @WebMvcTest
 @Import(GlobalExceptionHandler.class)
 class RestitutionWebTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final LocalDateTime DEBUT = LocalDateTime.of(2026, 12, 10, 9, 0);
     private static final LocalDateTime FIN = LocalDateTime.of(2026, 12, 10, 12, 0);
@@ -49,6 +59,9 @@ class RestitutionWebTest {
     @MockitoBean private CompetenceService competenceService;
     @MockitoBean private ClientService clientService;
     @MockitoBean private InterventionService interventionService;
+
+    // ── f17DisponiblesRenvoie200() ───────────────────────────────────────────
+
     @MockitoBean private RestitutionService restitutionService;
 
     @Test
@@ -69,6 +82,8 @@ class RestitutionWebTest {
                 .andExpect(jsonPath("$.raisonFiltrage").doesNotExist());
     }
 
+    // ── f17AucunResultatRenvoieRaison() ──────────────────────────────────────
+
     @Test
     @DisplayName("F17 : une liste vide porte la raison du filtrage")
     void f17AucunResultatRenvoieRaison() throws Exception {
@@ -83,6 +98,8 @@ class RestitutionWebTest {
                 .andExpect(jsonPath("$.agences").isEmpty())
                 .andExpect(jsonPath("$.raisonFiltrage").value("aucun technicien compétent"));
     }
+
+    // ── f18ChargeRenvoie200() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("F18 : GET agence/charge/{id} renvoie le détail et les totaux")
@@ -103,6 +120,8 @@ class RestitutionWebTest {
                 .andExpect(jsonPath("$.heuresOccupeesTotales").value(3.00));
     }
 
+    // ── f18AgenceInconnueRenvoie404() ────────────────────────────────────────
+
     @Test
     @DisplayName("F18 : une agence inconnue renvoie 404")
     void f18AgenceInconnueRenvoie404() throws Exception {
@@ -114,6 +133,8 @@ class RestitutionWebTest {
                 .andExpect(jsonPath("$.type").value(
                         "https://api.interventions-terrain.local/problems/ressource-introuvable"));
     }
+
+    // ── f19TauxRenvoie200() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : GET agence/taux-reussite/{id} renvoie le taux global et par type")
@@ -129,6 +150,8 @@ class RestitutionWebTest {
                 .andExpect(jsonPath("$.tauxGlobal").value(50.00))
                 .andExpect(jsonPath("$.parType[0].codeType").value("RACCORDEMENT_FIBRE"));
     }
+
+    // ── f19MoisInvalideRenvoie400() ──────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : un mois invalide renvoie 400 en Problem Details")

@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * CRUD des entretiens (F5), historique (F8), pagination (F10) et alerte de conflit (F12).
  *
  * COUCHE       : Service
+ * RÔLE         : CRUD des entretiens (F5), historique (F8), pagination (F10) et alerte de conflit (F12).
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories métier, VueRepository (compteur et coût), Clock,
  *                EntretienMapper.
@@ -76,6 +77,13 @@ public class EntretienService {
     }
 
     /** F10 : page d'entretiens, triée par date décroissante par défaut. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public PageResponse<EntretienResponse> findAll(int page, int size, String sort) {
         if (page < 0) {
             throw new DonneeInvalideException("page-invalide", "L'index de page doit être positif");
@@ -93,11 +101,25 @@ public class EntretienService {
     }
 
     /** F5 : un entretien par identifiant ; 404 si inconnu. */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public EntretienResponse findById(Integer id) {
         return mapper.toResponse(required(id), false);
     }
 
     /** F5, F14 et F12 : crée un entretien et alerte si une affectation existe déjà. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public EntretienResponse create(CreateEntretienRequest request) {
         Vehicule vehicule = vehiculeRepository.findById(request.idVehicule())
@@ -125,6 +147,13 @@ public class EntretienService {
     }
 
     /** F5 : coût et prestataire modifiables ; date et kilométrage figés. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public EntretienResponse update(Integer id, UpdateEntretienRequest request) {
         Entretien entretien = required(id);
@@ -143,6 +172,13 @@ public class EntretienService {
     }
 
     /** F5 : suppression possible tant que la période d'immobilisation n'a pas commencé. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Entretien entretien = required(id);
@@ -154,6 +190,13 @@ public class EntretienService {
     }
 
     /** F8 : historique d'un véhicule, trié du plus récent au plus ancien, avec cumul D-03. */
+
+    // ── historique() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute historique().
+     */
+
     public HistoriqueEntretienResponse historique(Integer idVehicule) {
         Vehicule vehicule = vehiculeRepository.findById(idVehicule)
                 .orElseThrow(() -> new RessourceIntrouvableException("Véhicule", idVehicule));
@@ -172,12 +215,25 @@ public class EntretienService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     private Entretien required(Integer id) {
         return entretienRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Entretien", id));
     }
 
     /** Convertit `date,desc` en tri JPA ; seuls date et cout sont autorisés. */
+
+    // ── tri() ────────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute tri().
+     */
+
     private Sort tri(String sort) {
         if (sort == null || sort.isBlank()) {
             return Sort.by(Sort.Direction.DESC, "dateDebut");
@@ -196,6 +252,13 @@ public class EntretienService {
     }
 
     /** F14 (D-01) : le compteur ne recule pas ; le refus indique la dernière valeur et sa date. */
+
+    // ── verifierKmCroissant() ────────────────────────────────────────────────
+
+    /**
+     * Exécute verifierKmCroissant().
+     */
+
     private void verifierKmCroissant(Integer idVehicule, Integer km) {
         vueRepository.dernierKm(idVehicule).ifPresent(dernier -> {
             if (km < dernier.km()) {
@@ -207,6 +270,13 @@ public class EntretienService {
     }
 
     /** F12 : un entretien saisi après une affectation ne l'invalide pas, il déclenche une alerte. */
+
+    // ── alerterSiConflit() ───────────────────────────────────────────────────
+
+    /**
+     * Exécute alerterSiConflit().
+     */
+
     private boolean alerterSiConflit(Entretien entretien) {
         List<Affectation> affectations = affectationRepository.findChevauchements(
                 entretien.getIdVehicule(), entretien.getDateDebut(), entretien.finEffective());

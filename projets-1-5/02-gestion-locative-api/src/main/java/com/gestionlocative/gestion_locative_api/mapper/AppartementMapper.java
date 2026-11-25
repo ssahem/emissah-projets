@@ -18,6 +18,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class AppartementMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit un appartement en réponse HTTP. */
@@ -37,7 +41,7 @@ public class AppartementMapper {
                 appartement.getEtage(), occupe, statutOccupation);
     }
 
-    // ── toLibreResponse() ───────────────────────────────────────────────────
+    // ── toLibreResponse() ────────────────────────────────────────────────────
 
     /** Convertit un appartement libre avec le dernier loyer fourni par le service (F17). */
     public AppartementLibreResponse toLibreResponse(Appartement appartement,

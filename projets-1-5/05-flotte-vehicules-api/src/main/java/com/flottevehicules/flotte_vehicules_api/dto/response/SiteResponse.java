@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * DTO de sortie d'un site (F1).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : SiteMapper.
- * NE FAIT PAS : d'accès base ni de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : DTO de sortie d'un site (F1).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : SiteMapper.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 @Schema(description = "Site de l'entreprise")
 public record SiteResponse(
@@ -24,4 +25,9 @@ public record SiteResponse(
 
         @Schema(description = "Adresse", example = "12 rue de la Paix")
         String adresse) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

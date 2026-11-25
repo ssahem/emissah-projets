@@ -26,9 +26,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F3 (matières). */
+/**
+ * Règles métier F3 (matières).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F3 (matières).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class MatiereServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private MatiereRepository matiereRepository;
     @Mock private EnseignementRepository enseignementRepository;
@@ -36,11 +46,19 @@ class MatiereServiceTest {
 
     private MatiereService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new MatiereService(matiereRepository, enseignementRepository,
                 trimestreRepository, new MatiereMapper());
     }
+
+    // ── findAll() ────────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("La liste des matières est triée par libellé")
@@ -51,6 +69,8 @@ class MatiereServiceTest {
         assertThat(service.findAll()).singleElement().satisfies(
                 m -> assertThat(m.libelle()).isEqualTo("Anglais"));
     }
+
+    // ── createRefuseDoublon() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("La création refuse un libellé déjà utilisé")
@@ -64,6 +84,8 @@ class MatiereServiceTest {
                 .hasMessageContaining("déjà utilisé");
         verify(matiereRepository, never()).save(any());
     }
+
+    // ── createNominal() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("La création persiste une matière avec son coefficient")
@@ -79,6 +101,8 @@ class MatiereServiceTest {
                 .coefficient()).isEqualByComparingTo("3");
     }
 
+    // ── updateRefuseApresCloture() ───────────────────────────────────────────
+
     @Test
     @DisplayName("Le coefficient est figé dès qu'un trimestre est clôturé")
     void updateRefuseApresCloture() {
@@ -93,6 +117,8 @@ class MatiereServiceTest {
                 .hasMessageContaining("clôturé");
     }
 
+    // ── updateNominal() ──────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Le coefficient est modifiable avant toute clôture")
     void updateNominal() {
@@ -106,11 +132,20 @@ class MatiereServiceTest {
     }
 
     /** Construit une matière avec son identifiant. */
+
+    // ── matiere() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour matiere().
+     */
+
     private Matiere matiere(Integer id) {
         Matiere m = new Matiere("Mathematiques", "MATH", BigDecimal.ONE);
         ReflectionTestUtils.setField(m, "idMatiere", id);
         return m;
     }
+
+    // ── deleteRefuseMatiereAffectee() ────────────────────────────────────────
 
     @Test
     @DisplayName("La suppression est refusée si la matière est enseignée")

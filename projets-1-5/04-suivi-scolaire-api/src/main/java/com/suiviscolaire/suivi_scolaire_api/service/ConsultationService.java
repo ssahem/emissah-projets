@@ -48,6 +48,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class ConsultationService {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private static final int TAILLE_MAX = 100;
     private static final int TAILLE_DEFAUT = 30;
 
@@ -80,6 +84,13 @@ public class ConsultationService {
     }
 
     /** F6 : élèves d'une classe triés par nom puis prénom, avec effectif courant et maximal. */
+
+    // ── elevesDeClasse() ─────────────────────────────────────────────────────
+
+    /**
+     * Exécute elevesDeClasse().
+     */
+
     public EffectifClasseResponse elevesDeClasse(Integer idClasse) {
         Classe classe = classeRepository.findById(idClasse)
                 .orElseThrow(() -> new com.suiviscolaire.suivi_scolaire_api.exception
@@ -97,6 +108,13 @@ public class ConsultationService {
     }
 
     /** F7 : notes d'un élève, groupées par matière ; un trimestre absent signifie « toutes ». */
+
+    // ── notesEleve() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute notesEleve().
+     */
+
     public List<NotesMatiereResponse> notesEleve(Integer idEleve, Integer trimestre) {
         eleveRepository.findById(idEleve)
                 .orElseThrow(() -> new com.suiviscolaire.suivi_scolaire_api.exception
@@ -120,6 +138,13 @@ public class ConsultationService {
     }
 
     /** F8 : notes d'une matière dans une classe avec moyenne de classe ; 400 si non enseignée. */
+
+    // ── notesMatiereClasse() ─────────────────────────────────────────────────
+
+    /**
+     * Exécute notesMatiereClasse().
+     */
+
     public NotesClasseResponse notesMatiereClasse(Integer idClasse, Integer idMatiere, Integer trimestre) {
         trimestreLookup.required(trimestre);
         Classe classe = classeRepository.findById(idClasse)
@@ -151,6 +176,13 @@ public class ConsultationService {
     }
 
     /** F9 : recherche partielle et insensible à la casse ; une recherche vide est refusée. */
+
+    // ── rechercher() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute rechercher().
+     */
+
     public List<EleveResponse> rechercher(String nom) {
         if (nom == null || nom.isBlank()) {
             throw new DonneeInvalideException("recherche-vide",
@@ -160,6 +192,13 @@ public class ConsultationService {
     }
 
     /** F10 : page de notes, triée selon le paramètre sort ; taille plafonnée à 100. */
+
+    // ── notesPaginees() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute notesPaginees().
+     */
+
     public PageResponse<NoteResponse> notesPaginees(int page, int size, String sort) {
         int pageSafe = Math.max(page, 0);
         int sizeSafe = Math.min(Math.max(size, 1), TAILLE_MAX);
@@ -172,6 +211,13 @@ public class ConsultationService {
     }
 
     /** Calcule la moyenne arithmétique arrondie au centième. */
+
+    // ── moyenne() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute moyenne().
+     */
+
     private BigDecimal moyenne(List<Note> notes) {
         if (notes.isEmpty()) {
             return null;

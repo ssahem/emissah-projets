@@ -7,6 +7,7 @@ import java.util.List;
  * Appartements libres regroupés par immeuble (F17).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Appartements libres regroupés par immeuble (F17).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ImmeubleMapper, alimenté par AppartementService.
  * NE FAIT PAS  : d'accès base ni de logique métier.

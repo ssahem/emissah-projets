@@ -61,13 +61,31 @@ public class CompetenceService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<CompetenceResponse> findAll() {
         return competenceRepository.findAllByOrderByLibelleAsc().stream().map(mapper::toResponse).toList();
     }
 
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public CompetenceResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
 
     @Transactional
     public CompetenceResponse create(CreateCompetenceRequest request) {
@@ -76,6 +94,12 @@ public class CompetenceService {
                 new Competence(request.libelle(), request.description())));
     }
 
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public CompetenceResponse update(Integer id, UpdateCompetenceRequest request) {
         Competence competence = required(id);
@@ -83,6 +107,12 @@ public class CompetenceService {
         competence.modifier(request.libelle(), request.description());
         return mapper.toResponse(competence);
     }
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
 
     @Transactional
     public void delete(Integer id) {
@@ -98,6 +128,12 @@ public class CompetenceService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── checkLibelle() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute checkLibelle().
+     */
+
     private void checkLibelle(String libelle, Integer idCourant) {
         competenceRepository.findByLibelle(libelle).filter(other -> {
             Integer id = other.getIdCompetence();
@@ -107,6 +143,12 @@ public class CompetenceService {
                     "Le libellé « " + libelle + " » est déjà utilisé");
         });
     }
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
 
     private Competence required(Integer id) {
         return competenceRepository.findById(id)

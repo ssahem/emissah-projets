@@ -20,6 +20,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ImmeubleMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit un immeuble en réponse HTTP avec son nombre d'appartements. */
@@ -30,7 +34,7 @@ public class ImmeubleMapper {
                 nbAppartements);
     }
 
-    // ── toProprietaireResponse() ────────────────────────────────────────────
+    // ── toProprietaireResponse() ─────────────────────────────────────────────
 
     /** Convertit un immeuble avec les compteurs demandés par F7. */
     public ImmeubleProprietaireResponse toProprietaireResponse(
@@ -40,7 +44,7 @@ public class ImmeubleMapper {
                 immeuble.getVille(), immeuble.getNbEtages(), nbAppartements, nbBauxEnCours);
     }
 
-    // ── toLibresResponse() ──────────────────────────────────────────────────
+    // ── toLibresResponse() ───────────────────────────────────────────────────
 
     /** Regroupe les appartements libres sous leur immeuble (F17). */
     public ImmeubleAppartementsLibresResponse toLibresResponse(

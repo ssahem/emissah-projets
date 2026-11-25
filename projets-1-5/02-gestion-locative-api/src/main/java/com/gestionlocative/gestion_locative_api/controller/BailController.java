@@ -58,7 +58,7 @@ public class BailController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /gestion-locative/bail/list ────────────────────────────
+    // ── list() — GET /gestion-locative/bail/list ─────────────────────────────
 
     /** Liste les baux par page. Réponses : 200 | 400 | 500. */
     @Operation(summary = "Lister les baux par page")
@@ -72,7 +72,7 @@ public class BailController {
         return bailService.findAll(pageable);
     }
 
-    // ── getById() — GET /gestion-locative/bail/get/{id} ─────────────────────
+    // ── getById() — GET /gestion-locative/bail/get/{id} ──────────────────────
 
     /** Consulte un bail. Réponses : 200 | 400 | 404 | 500. */
     @Operation(summary = "Consulter un bail")
@@ -85,7 +85,7 @@ public class BailController {
         return bailService.findById(id);
     }
 
-    // ── create() — POST /gestion-locative/bail/create ───────────────────────
+    // ── create() — POST /gestion-locative/bail/create ────────────────────────
 
     /** Crée un bail sur un appartement libre. Réponses : 201 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Créer un bail")
@@ -101,7 +101,7 @@ public class BailController {
                 .body(created);
     }
 
-    // ── update() — PUT /gestion-locative/bail/update/{id} ───────────────────
+    // ── update() — PUT /gestion-locative/bail/update/{id} ────────────────────
 
     /** Modifie un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Modifier un bail")
@@ -116,7 +116,7 @@ public class BailController {
         return bailService.update(id, request);
     }
 
-    // ── resilier() — POST /gestion-locative/bail/resiliation/{id} ───────────
+    // ── resilier() — POST /gestion-locative/bail/resiliation/{id} ────────────
 
     /** Résilie un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Résilier un bail par anticipation")
@@ -131,7 +131,7 @@ public class BailController {
         return bailService.resilier(id, request);
     }
 
-    // ── renouveler() — POST /gestion-locative/bail/renouvellement/{id} ──────
+    // ── renouveler() — POST /gestion-locative/bail/renouvellement/{id} ───────
 
     /** Renouvelle un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Renouveler un bail arrivant à échéance")
@@ -146,7 +146,7 @@ public class BailController {
         return bailService.renouveler(id, request);
     }
 
-    // ── reviser() — POST /gestion-locative/bail/revision/{id} ───────────────
+    // ── reviser() — POST /gestion-locative/bail/revision/{id} ────────────────
 
     /** Révise le loyer d'un bail. Réponses : 200 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Réviser le loyer en conservant l'historique")
@@ -161,7 +161,7 @@ public class BailController {
         return bailService.reviserLoyer(id, request);
     }
 
-    // ── delete() — DELETE /gestion-locative/bail/delete/{id} ────────────────
+    // ── delete() — DELETE /gestion-locative/bail/delete/{id} ─────────────────
 
     /** Supprime un bail qui n'a pas commencé. Réponses : 204 | 400 | 404 | 409 | 500. */
     @Operation(summary = "Supprimer un bail")

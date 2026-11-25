@@ -64,11 +64,23 @@ public class TechnicienController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /interventions-terrain/technicien/list ──────────────────
+
+    /**
+     * Lister les techniciens.
+     */
+
     @Operation(summary = "Lister les techniciens", description = "Triés par nom")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<TechnicienResponse> list() {
         return service.findAll();
     }
+
+    // ── get() — GET /interventions-terrain/technicien/get/{id} ───────────────
+
+    /**
+     * Lire un technicien.
+     */
 
     @Operation(summary = "Lire un technicien")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -76,12 +88,24 @@ public class TechnicienController {
         return service.findById(id);
     }
 
+    // ── competences() — GET …terventions-terrain/technicien/competences/{id} ─
+
+    /**
+     * Lister les compétences d'un technicien.
+     */
+
     @Operation(summary = "Lister les compétences d'un technicien",
             description = "Compétences expirées signalées, jamais masquées (F7)")
     @GetMapping(path = "/competences/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<CompetenceTechnicienResponse> competences(@PathVariable Integer id) {
         return service.findCompetences(id);
     }
+
+    // ── planning() — GET /interventions-terrain/technicien/planning/{id} ─────
+
+    /**
+     * Consulter le planning d'un technicien.
+     */
 
     @Operation(summary = "Consulter le planning d'un technicien",
             description = "Semaine courante par défaut, trois mois maximum (F10)")
@@ -95,6 +119,12 @@ public class TechnicienController {
         return service.findPlanning(id, du, au);
     }
 
+    // ── disponibles() — GET /interventions-terrain/technicien/disponibles ────
+
+    /**
+     * Trouver les techniciens disponibles et compétents.
+     */
+
     @Operation(summary = "Trouver les techniciens disponibles et compétents",
             description = "Créneau libre, compétences exigées non expirées, charge du jour par agence (F17)")
     @GetMapping(path = "/disponibles", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -105,6 +135,12 @@ public class TechnicienController {
         return restitutionService.findDisponibles(debut, fin, type);
     }
 
+    // ── associerCompetence() — POST …ions-terrain/technicien/competence/{id} ─
+
+    /**
+     * Associer une compétence à un technicien.
+     */
+
     @Operation(summary = "Associer une compétence à un technicien",
             description = "Dates cohérentes et aucun doublon actif (F11)")
     @PostMapping(path = "/competence/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -113,6 +149,12 @@ public class TechnicienController {
             @PathVariable Integer id, @Valid @RequestBody CreateObtentionCompetenceRequest request) {
         return ResponseEntity.status(201).body(service.associerCompetence(id, request));
     }
+
+    // ── create() — POST /interventions-terrain/technicien/create ─────────────
+
+    /**
+     * Créer un technicien.
+     */
 
     @Operation(summary = "Créer un technicien", description = "L'agence est déduite de l'équipe (A-01)")
     @PostMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -123,12 +165,24 @@ public class TechnicienController {
                 .body(created);
     }
 
+    // ── update() — PUT /interventions-terrain/technicien/update/{id} ─────────
+
+    /**
+     * Modifier un technicien.
+     */
+
     @Operation(summary = "Modifier un technicien")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public TechnicienResponse update(@PathVariable Integer id, @Valid @RequestBody UpdateTechnicienRequest request) {
         return service.update(id, request);
     }
+
+    // ── delete() — DELETE /interventions-terrain/technicien/delete/{id} ──────
+
+    /**
+     * Supprimer un technicien.
+     */
 
     @Operation(summary = "Supprimer un technicien")
     @DeleteMapping(path = "/delete/{id}")

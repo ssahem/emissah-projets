@@ -42,12 +42,12 @@ public class Spectacle {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Spectacle() ──────────────────────────────────────────────────────
+    // ── Spectacle() ──────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Spectacle() {}
 
-    // ── Spectacle(String titre, TypeSpectacle type, Boolean placementNumerote) ─
+    // ── Spectacle(String titre, TypeSpectacle type, Boolean placementNumero… ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Spectacle(String titre, TypeSpectacle type, Boolean placementNumerote) {
@@ -60,27 +60,27 @@ public class Spectacle {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdSpectacle() ─────────────────────────────────────────────────
+    // ── getIdSpectacle() ─────────────────────────────────────────────────────
 
     /** Retourne idSpectacle. */
     public Integer getIdSpectacle() { return idSpectacle; }
 
-    // ── getTitre() ───────────────────────────────────────────────────────
+    // ── getTitre() ───────────────────────────────────────────────────────────
 
     /** Retourne titre. */
     public String getTitre() { return titre; }
 
-    // ── getType() ────────────────────────────────────────────────────────
+    // ── getType() ────────────────────────────────────────────────────────────
 
     /** Retourne type. */
     public TypeSpectacle getType() { return type; }
 
-    // ── getPlacementNumerote() ───────────────────────────────────────────
+    // ── getPlacementNumerote() ───────────────────────────────────────────────
 
     /** Retourne placementNumerote. */
     public Boolean getPlacementNumerote() { return placementNumerote; }
 
-    // ── setPlacementNumerote() ─────────────────────────────────────────────
+    // ── setPlacementNumerote() ───────────────────────────────────────────────
 
     /** Modifie le mode de placement du spectacle. */
     public void setPlacementNumerote(Boolean placementNumerote) {

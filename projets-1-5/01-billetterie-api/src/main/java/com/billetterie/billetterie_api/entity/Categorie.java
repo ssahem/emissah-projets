@@ -35,12 +35,12 @@ public class Categorie {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Categorie() ──────────────────────────────────────────────────────
+    // ── Categorie() ──────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Categorie() {}
 
-    // ── Categorie(String libelle) ────────────────────────────────────────
+    // ── Categorie(String libelle) ────────────────────────────────────────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Categorie(String libelle) { this.libelle = Objects.requireNonNull(libelle, "libelle"); }
@@ -49,12 +49,12 @@ public class Categorie {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdCategorie() ─────────────────────────────────────────────────
+    // ── getIdCategorie() ─────────────────────────────────────────────────────
 
     /** Retourne idCategorie. */
     public Integer getIdCategorie() { return idCategorie; }
 
-    // ── getLibelle() ─────────────────────────────────────────────────────
+    // ── getLibelle() ─────────────────────────────────────────────────────────
 
     /** Retourne libelle. */
     public String getLibelle() { return libelle; }

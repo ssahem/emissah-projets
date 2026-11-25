@@ -6,10 +6,11 @@ import java.time.LocalDate;
 /**
  * DTO de sortie d'un véhicule, avec son site et son compteur courant (F2).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : VehiculeMapper.
- * NE FAIT PAS : d'accès base ni de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : DTO de sortie d'un véhicule, avec son site et son compteur courant (F2).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : VehiculeMapper.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 @Schema(description = "Véhicule du parc avec son site courant")
 public record VehiculeResponse(
@@ -40,4 +41,9 @@ public record VehiculeResponse(
 
         @Schema(description = "Kilométrage courant", example = "19000")
         Integer kmActuel) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

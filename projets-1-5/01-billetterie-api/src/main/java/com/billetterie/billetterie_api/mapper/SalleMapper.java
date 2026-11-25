@@ -14,6 +14,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SalleMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit une salle en réponse HTTP. */

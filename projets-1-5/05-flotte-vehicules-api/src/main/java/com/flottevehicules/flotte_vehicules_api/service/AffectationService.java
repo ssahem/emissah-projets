@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  * CRUD des affectations (F4) et règles F11 à F14, F13 inclus.
  *
  * COUCHE       : Service
+ * RÔLE         : CRUD des affectations (F4) et règles F11 à F14, F13 inclus.
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * ATTENTION    : les contrôles de chevauchement sont applicatifs ; une concurrence simultanée
  *                sur le même véhicule peut nécessiter un verrou SQL (décision S-07).
@@ -60,17 +61,38 @@ public class AffectationService {
     }
 
     /** F4 : affectations triées par date de début décroissante. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<AffectationResponse> findAll() {
         return affectationRepository.findAllByOrderByDateDebutDesc().stream()
                 .map(mapper::toResponse).toList();
     }
 
     /** F4 : une affectation par identifiant ; 404 si inconnue. */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public AffectationResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F4, F11, F12 : crée une affectation après contrôle des chevauchements. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public AffectationResponse create(CreateAffectationRequest request) {
         LocalDate aujourdHui = LocalDate.now(clock);
@@ -96,6 +118,13 @@ public class AffectationService {
     }
 
     /** F4 : modification de la date de fin ; parties figées dès le début de l'affectation. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public AffectationResponse update(Integer id, UpdateAffectationRequest request) {
         Affectation affectation = required(id);
@@ -136,6 +165,13 @@ public class AffectationService {
     }
 
     /** F4 : suppression possible uniquement avant le début de l'affectation. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Affectation affectation = required(id);
@@ -147,6 +183,13 @@ public class AffectationService {
     }
 
     /** F13 et F14 : clôture l'affectation avec date et relevé kilométrique croissant. */
+
+    // ── restituer() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute restituer().
+     */
+
     @Transactional
     public AffectationResponse restituer(Integer id, CreateRestitutionRequest request) {
         Affectation affectation = required(id);
@@ -174,12 +217,25 @@ public class AffectationService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     private Affectation required(Integer id) {
         return affectationRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Affectation", id));
     }
 
     /** F11 et F12 : refuse le chevauchement avec une affectation ou une immobilisation. */
+
+    // ── verifierDisponibilite() ──────────────────────────────────────────────
+
+    /**
+     * Exécute verifierDisponibilite().
+     */
+
     private void verifierDisponibilite(Integer idVehicule, LocalDate debut, LocalDate fin, Integer idExclu) {
         // LocalDate.MAX déborde lors de la conversion JDBC ; 9999 reste dans l'intervalle PostgreSQL.
         LocalDate finEffective = fin == null ? LocalDate.of(9999, 12, 31) : fin;
@@ -210,6 +266,13 @@ public class AffectationService {
     }
 
     /** F14 (D-01) : le compteur ne recule pas ; le refus indique la dernière valeur et sa date. */
+
+    // ── verifierKmCroissant() ────────────────────────────────────────────────
+
+    /**
+     * Exécute verifierKmCroissant().
+     */
+
     private void verifierKmCroissant(Integer idVehicule, Integer km) {
         vueRepository.dernierKm(idVehicule).ifPresent(dernier -> {
             if (km < dernier.km()) {

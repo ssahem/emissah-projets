@@ -18,6 +18,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface EntretienRepository extends JpaRepository<Entretien, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne l'historique d'un véhicule trié par date de début décroissante (F8). */
     List<Entretien> findAllByIdVehiculeOrderByDateDebutDesc(Integer idVehicule);
 

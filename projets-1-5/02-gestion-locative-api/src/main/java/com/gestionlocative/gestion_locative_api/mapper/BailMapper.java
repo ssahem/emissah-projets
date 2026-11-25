@@ -20,6 +20,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class BailMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     // ── toResponse() ─────────────────────────────────────────────────────────
 
     /** Convertit un bail en réponse HTTP avec son locataire principal. */
@@ -34,7 +38,7 @@ public class BailMapper {
                 bail.getDateResiliation(), bail.getDateCloture());
     }
 
-    // ── toHistoriqueResponse() ──────────────────────────────────────────────
+    // ── toHistoriqueResponse() ───────────────────────────────────────────────
 
     /** Convertit un bail pour l'historique d'un appartement (F8). */
     public HistoriqueBailResponse toHistoriqueResponse(

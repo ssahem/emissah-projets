@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
  * Événement renvoyé par l'API.
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Événement renvoyé par l'API.
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : EvenementMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

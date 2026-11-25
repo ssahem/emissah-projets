@@ -6,11 +6,17 @@ import java.time.LocalDate;
  * Résultat d'un changement de classe (F11).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Résultat d'un changement de classe (F11).
  * IMMUABLE     : record Java.
- * PRODUIT PAR : EleveService.
+ * PRODUIT PAR  : EleveService.
  * NE FAIT PAS  : de logique métier.
  */
 public record ChangementClasseResponse(
         Integer idEleve, Integer ancienneClasse, Integer nouvelleClasse,
         LocalDate dateFinAncienne, LocalDate dateDebutNouvelle, int nombreInscriptions) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

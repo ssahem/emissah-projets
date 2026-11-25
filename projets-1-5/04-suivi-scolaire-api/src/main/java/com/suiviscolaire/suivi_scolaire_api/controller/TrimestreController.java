@@ -47,12 +47,24 @@ public class TrimestreController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── cloturer() — POST /suivi-scolaire/trimestre/{numero}/cloture ─────────
+
+    /**
+     * Clôturer un trimestre.
+     */
+
     @Operation(summary = "Clôturer un trimestre",
             description = "Exige au moins une note pour chaque enseignement ; sinon 409 avec la liste (F14)")
     @PostMapping(path = "/{numero}/cloture", produces = MediaType.APPLICATION_JSON_VALUE)
     public ClotureResponse cloturer(@PathVariable Integer numero) {
         return service.cloturer(numero);
     }
+
+    // ── reouvrir() — POST /suivi-scolaire/trimestre/{numero}/reouverture ─────
+
+    /**
+     * Rouvrir le dernier trimestre clôturé.
+     */
 
     @Operation(summary = "Rouvrir le dernier trimestre clôturé",
             description = "Motif d'au moins 20 caractères et auteur texte fourni par l'appelant (F15, A-04)")

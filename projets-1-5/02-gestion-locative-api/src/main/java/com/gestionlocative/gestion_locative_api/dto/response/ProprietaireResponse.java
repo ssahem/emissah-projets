@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Propriétaire renvoyé par l'API (F1).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Propriétaire renvoyé par l'API (F1).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ProprietaireMapper.
  * NE FAIT PAS  : d'accès base ni de logique métier.

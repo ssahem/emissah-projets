@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Remplissage d'une catégorie de places (F18).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Remplissage d'une catégorie de places (F18).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : RemplissageParCategorieMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

@@ -93,6 +93,8 @@ public class ReglesMetierService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── modifierPoids() ──────────────────────────────────────────────────────
+
     /**
      * F13 — Modifie le poids d'un type d'évaluation. Le code est un alias lisible (DEV, INTERRO,
  * ORAL), le libellé exact ou l'identifiant numérique ; la clôture d'un trimestre fige les
@@ -100,21 +102,23 @@ public class ReglesMetierService {
      */
     @Transactional
     public PoidsResponse modifierPoids(String code, BigDecimal poids) {
-        // ── Étape 1/3 : refuser un poids nul ou négatif avant toute écriture ──
+        // ── Étape 1/3 : refuser un poids nul ou négatif avant toute écriture ─
         if (poids == null || poids.compareTo(BigDecimal.ZERO) <= 0) {
             throw new DonneeInvalideException("poids-invalide",
                     "Le poids doit être strictement positif", Map.of("poids", String.valueOf(poids)));
         }
-        // ── Étape 2/3 : aucuns poids ne bouge après la première clôture ──
+        // ── Étape 2/3 : aucuns poids ne bouge après la première clôture ──────
         if (trimestreRepository.existsByEstClotureTrue()) {
             throw new ConflitMetierException("poids-fige",
                     "Le poids n'est plus modifiable : un trimestre est déjà clôturé");
         }
-        // ── Étape 3/3 : résoudre le type puis persister le nouveau poids ──
+        // ── Étape 3/3 : résoudre le type puis persister le nouveau poids ─────
         TypeEvaluation type = resoudreType(code);
         type.modifierPoids(poids);
         return new PoidsResponse(code, type.getLibelle(), type.getPoids());
     }
+
+    // ── cloturer() ───────────────────────────────────────────────────────────
 
     /**
  * F14 — Clôture un trimestre seulement si chaque enseignement de chaque classe possède au
@@ -155,26 +159,28 @@ public class ReglesMetierService {
         return new ClotureResponse(numero, trimestre.getDateCloture(), enseignements.size());
     }
 
+    // ── reouvrir() ───────────────────────────────────────────────────────────
+
     /**
      * F15 — Rouvre le dernier trimestre clôturé : le motif fait au moins 20 caractères, le
      * trimestre visé doit être clôturé, être le plus récent et ne pas avoir déjà été rouvert.
      */
     @Transactional
     public ReouvertureResponse reouvrir(Integer numero, String motif, String auteur) {
-        // ── Étape 1/4 : le motif est obligatoire et suffisamment explicite ──
+        // ── Étape 1/4 : le motif est obligatoire et suffisamment explicite ───
         if (motif == null || motif.trim().length() < LONGUEUR_MIN_MOTIF) {
             throw new DonneeInvalideException("motif-trop-court",
                     "Le motif doit contenir au moins " + LONGUEUR_MIN_MOTIF + " caractères",
                     Map.of("longueurMinimale", LONGUEUR_MIN_MOTIF));
         }
         Trimestre trimestre = trimestreLookup.required(numero);
-        // ── Étape 2/4 : un trimestre ouvert ne peut pas être « rouvert » ──
+        // ── Étape 2/4 : un trimestre ouvert ne peut pas être « rouvert » ─────
         if (!trimestre.isEstCloture()) {
             throw new ConflitMetierException("trimestre-non-cloture",
                     "Le trimestre " + numero + " n'est pas clôturé",
                     Map.of("trimestre", numero));
         }
-        // ── Étape 3/4 : seul le dernier trimestre clôturé est corrigeable ──
+        // ── Étape 3/4 : seul le dernier trimestre clôturé est corrigeable ────
         List<Trimestre> clotures = trimestreRepository.findCloturesDuPlusRecentAuPlusAncien();
         if (clotures.isEmpty() || !clotures.get(0).getIdTrimestre().equals(trimestre.getIdTrimestre())) {
             Integer dernier = clotures.isEmpty() ? null : clotures.get(0).getNumero();
@@ -186,7 +192,7 @@ public class ReglesMetierService {
             throw new ConflitMetierException("trimestre-deja-reouvert",
                     "Ce trimestre a déjà été rouvert", Map.of("trimestre", numero));
         }
-        // ── Étape 4/4 : journaliser puis rouvrir ──
+        // ── Étape 4/4 : journaliser puis rouvrir ─────────────────────────────
         HistoriqueReouverture trace = historiqueRepository.save(new HistoriqueReouverture(
                 trimestre.getIdTrimestre(), LocalDate.now(clock), motif.trim(), auteur.trim()));
         trimestre.reouvrir();
@@ -199,6 +205,13 @@ public class ReglesMetierService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Résout un code F13 par alias, par libellé (cas indifférent) ou par identifiant numérique. */
+
+    // ── resoudreType() ───────────────────────────────────────────────────────
+
+    /**
+     * Exécute resoudreType().
+     */
+
     private TypeEvaluation resoudreType(String code) {
         if (code == null || code.isBlank()) {
             throw new DonneeInvalideException("type-evaluation-code-manquant",

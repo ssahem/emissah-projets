@@ -38,10 +38,13 @@ import tools.jackson.databind.json.JsonMapper;
 /**
  * Parcours d'intégration complet sur PostgreSQL (F1 à F19).
  *
+ * COUCHE       : Service
+ * RÔLE         : Parcours d'intégration complet sur PostgreSQL (F1 à F19).
  * TYPE         : Intégration (Testcontainers PostgreSQL 16)
- * STRATÉGIE    : migrations Flyway V1 à V3, horloge fixe au 24 novembre 2026, jeu de données minimal
+ * STRATÉGIE    : migrations Flyway V1 à V4, horloge fixe au 24 novembre 2026, jeu de données minimal
  *                recréé avant chaque test, appels HTTP réels via MockMvc.
  * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
@@ -57,6 +60,13 @@ class SuiviScolaireIntegrationTest {
             .withPassword("root");
 
     /** Fournit une base vierge à Spring. */
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
+
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
@@ -81,6 +91,13 @@ class SuiviScolaireIntegrationTest {
     @Autowired private AlertesDifficulteService alertesService;
 
     /** Recréé un jeu de données minimal et cohérent avant chaque test. */
+
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         for (String table : List.of("alerte_difficulte", "historique_reouverture_trimestre",
@@ -137,6 +154,13 @@ class SuiviScolaireIntegrationTest {
     }
 
     /** Replace les séquences IDENTITY après les insertions à identifiant explicite du jeu de test. */
+
+    // ── alignerSequences() ───────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour alignerSequences().
+     */
+
     private void alignerSequences() {
         for (Map<String, Object> colonne : jdbcTemplate.queryForList(
                 "SELECT table_name, column_name FROM information_schema.columns "
@@ -148,19 +172,23 @@ class SuiviScolaireIntegrationTest {
         }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  SOCLE
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── migrations() ─────────────────────────────────────────────────────────
 
     @Test
-    @DisplayName("Les migrations V1 à V3 sont appliquées dans l'ordre")
+    @DisplayName("Les migrations V1 à V4 sont appliquées dans l'ordre")
     void migrations() {
         List<String> versions = jdbcTemplate.queryForList(
                 "SELECT version FROM flyway_schema_history WHERE success = true ORDER BY installed_rank",
                 String.class);
 
-        assertThat(versions).containsExactly("1", "2", "3");
+        assertThat(versions).containsExactly("1", "2", "3", "4");
     }
+
+    // ── schemaFinal() ────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Le schéma final contient 21 identités, 7 vues et les colonnes des arbitrages")
@@ -180,7 +208,23 @@ class SuiviScolaireIntegrationTest {
         assertThat(vues).isEqualTo(7);
         assertThat(colonnesClasse).contains("effectif_max");
         assertThat(colonnesTrimestre).contains("est_cloture", "date_cloture");
+
+        List<String> obligatoires = jdbcTemplate.queryForList(
+                "SELECT table_name || '.' || column_name FROM information_schema.columns "
+                        + "WHERE table_schema = 'public' AND is_nullable = 'NO' AND ("
+                        + "(table_name = 'classe' AND column_name = 'effectif_max') OR "
+                        + "(table_name = 'matiere' AND column_name = 'coefficient') OR "
+                        + "(table_name = 'professeur' AND column_name = 'email'))",
+                String.class);
+        assertThat(obligatoires).containsExactlyInAnyOrder(
+                "classe.effectif_max", "matiere.coefficient", "professeur.email");
+
+        String commentaireRang = jdbcTemplate.queryForObject(
+                "SELECT obj_description('v_rang_classe'::regclass)", String.class);
+        assertThat(commentaireRang).contains("RANK()", "pas DENSE_RANK()");
     }
+
+    // ── vuesEtSoclePublic() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("Les sept vues sont interrogeables et l'API est publique (health)")
@@ -196,9 +240,11 @@ class SuiviScolaireIntegrationTest {
         mockMvc.perform(get("/suivi-scolaire/classe/list")).andExpect(status().isOk());
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  CRUD F1 À F5
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── creerClasse() ────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F1 : la création d'une classe persiste l'effectif maximal")
@@ -214,6 +260,8 @@ class SuiviScolaireIntegrationTest {
                 "SELECT effectif_max FROM classe WHERE nom = '4A'", Integer.class)).isEqualTo(28);
     }
 
+    // ── creerEtRechercherEleve() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("F2/F9 : créer un élève puis le retrouver par recherche partielle")
     void creerEtRechercherEleve() throws Exception {
@@ -228,6 +276,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$[0].nom").value("Koffi"))
                 .andExpect(jsonPath("$[0].nomClasse").value("6B"));
     }
+
+    // ── creerEtLireNote() ────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F5/F10 : créer une note puis la retrouver dans la page triée")
@@ -246,6 +296,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.totalElements").value(6));
     }
 
+    // ── noteRefuseeTrimestreCloture() ────────────────────────────────────────
+
     @Test
     @DisplayName("F5 : aucune note ne peut être saisie dans un trimestre clôturé")
     void noteRefuseeTrimestreCloture() throws Exception {
@@ -261,6 +313,8 @@ class SuiviScolaireIntegrationTest {
                         "https://api.suivi-scolaire.local/problems/trimestre-cloture"));
     }
 
+    // ── professeurEmailDoublon() ─────────────────────────────────────────────
+
     @Test
     @DisplayName("F4 : un email de professeur en doublon est refusé")
     void professeurEmailDoublon() throws Exception {
@@ -272,6 +326,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.type").value(
                         "https://api.suivi-scolaire.local/problems/professeur-email-deja-utilise"));
     }
+
+    // ── changerClasse() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F11 : le changement de classe conserve l'ancienne inscription")
@@ -287,6 +343,8 @@ class SuiviScolaireIntegrationTest {
                 .isEqualTo(LocalDate.of(2026, 11, 24));
     }
 
+    // ── suppressionEleveRefusee() ────────────────────────────────────────────
+
     @Test
     @DisplayName("F2 : un élève ayant des notes ne peut pas être supprimé")
     void suppressionEleveRefusee() throws Exception {
@@ -295,9 +353,11 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.detail").value(org.hamcrest.Matchers.containsString("notes")));
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  RÈGLES MÉTIER F13 À F15
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── modifierPoids() ──────────────────────────────────────────────────────
 
     @Test
     @DisplayName("F13 : le poids DEV est modifié en base")
@@ -313,6 +373,8 @@ class SuiviScolaireIntegrationTest {
                 .isEqualByComparingTo("2.5");
     }
 
+    // ── poidsFiges() ─────────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F13 : les poids sont figés dès qu'un trimestre est clôturé")
     void poidsFiges() throws Exception {
@@ -326,6 +388,8 @@ class SuiviScolaireIntegrationTest {
                         "https://api.suivi-scolaire.local/problems/poids-fige"));
     }
 
+    // ── clotureIncomplete() ──────────────────────────────────────────────────
+
     @Test
     @DisplayName("F14 : la clôture incomplète liste la classe et la matière manquantes")
     void clotureIncomplete() throws Exception {
@@ -336,6 +400,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.manquants[0].nomClasse").value("6B"))
                 .andExpect(jsonPath("$.manquants[0].libelleMatiere").value("Mathematiques"));
     }
+
+    // ── cloturePuisReouverture() ─────────────────────────────────────────────
 
     @Test
     @DisplayName("F14/F15 : clôture complète puis réouverture tracée")
@@ -364,6 +430,8 @@ class SuiviScolaireIntegrationTest {
                 "SELECT est_cloture FROM trimestre WHERE numero = 2", Boolean.class)).isFalse();
     }
 
+    // ── reouvertureMotifCourt() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("F15 : un motif trop court est refusé avant toute écriture")
     void reouvertureMotifCourt() throws Exception {
@@ -379,9 +447,11 @@ class SuiviScolaireIntegrationTest {
                 "SELECT COUNT(*) FROM historique_reouverture_trimestre", Integer.class)).isZero();
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  RESTITUTION F16 À F19
-    // ══════════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── moyennesParMatiere() ─────────────────────────────────────────────────
 
     @Test
     @DisplayName("F17 : les moyennes par matière distinguent matières évaluées et non évaluées")
@@ -394,6 +464,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.matieres[2].evaluee").value(false));
     }
 
+    // ── moyenneGenerale() ────────────────────────────────────────────────────
+
     @Test
     @DisplayName("F18 : la moyenne générale est pondérée et détaillée par matière")
     void moyenneGenerale() throws Exception {
@@ -402,6 +474,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.moyenneGenerale").isNumber())
                 .andExpect(jsonPath("$.detail.length()").value(2));
     }
+
+    // ── classementClasse() ───────────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : le classement d'une classe fournit des rangs et une moyenne de classe")
@@ -412,6 +486,8 @@ class SuiviScolaireIntegrationTest {
                 .andExpect(jsonPath("$.eleves[0].rang").value(1))
                 .andExpect(jsonPath("$.moyenneClasse").isNumber());
     }
+
+    // ── detectionAlertes() ───────────────────────────────────────────────────
 
     @Test
     @DisplayName("F16 : la détection crée une alerte pour une moyenne faible sans dupliquer l'existante")
@@ -430,6 +506,8 @@ class SuiviScolaireIntegrationTest {
                         + "AND numero_trimestre = 2", Integer.class)).isEqualTo(1);
     }
 
+    // ── consulterAlertes() ───────────────────────────────────────────────────
+
     @Test
     @DisplayName("F16 : les alertes produites sont consultables par trimestre")
     void consulterAlertes() throws Exception {
@@ -444,11 +522,25 @@ class SuiviScolaireIntegrationTest {
     }
 
     /** Sérialise un corps de requête. */
+
+    // ── json() ───────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour json().
+     */
+
     private String json(Map<String, Object> body) throws Exception {
         return objectMapper.writeValueAsString(body);
     }
 
     /** Retourne les colonnes d'une table. */
+
+    // ── colonnes() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour colonnes().
+     */
+
     private List<String> colonnes(String table) {
         return jdbcTemplate.queryForList(
                 "SELECT column_name FROM information_schema.columns "

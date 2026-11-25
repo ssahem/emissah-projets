@@ -47,6 +47,12 @@ public class TypeEvaluationController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── modifierPoids() — PUT /suivi-scolaire/type-evaluation/poids/{code} ───
+
+    /**
+     * Définir le poids d'un type.
+     */
+
     @Operation(summary = "Définir le poids d'un type",
             description = "Code DEV, INTERRO ou ORAL (ou libellé/identifiant) ; refusé si un trimestre est clôturé (F13)")
     @PutMapping(path = "/poids/{code}", consumes = MediaType.APPLICATION_JSON_VALUE,

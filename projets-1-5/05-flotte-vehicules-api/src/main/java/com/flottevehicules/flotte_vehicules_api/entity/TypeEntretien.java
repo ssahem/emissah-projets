@@ -20,6 +20,10 @@ import jakarta.persistence.Table;
 @Table(name = "type_entretien")
 public class TypeEntretien {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_type_entretien")

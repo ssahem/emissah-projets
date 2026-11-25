@@ -13,6 +13,10 @@ import com.interventionsterrain.interventions_terrain_api.entity.Equipe;
  */
 public interface EquipeSupport {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     Equipe findRequired(Integer idEquipe);
 
     String nomAgence(Integer idAgence);

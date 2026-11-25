@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Salle sans place — erreur métier traduite en HTTP conflict. */
+/**
+ * Salle sans place — erreur métier traduite en HTTP conflict.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Salle sans place — erreur métier traduite en HTTP conflict.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class SalleSansPlaceException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idSalle;
 
-    // ── SalleSansPlaceException() ─────────────────────────────────────────────────────────────
+    // ── SalleSansPlaceException() ────────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public SalleSansPlaceException(Integer idSalle) {
@@ -17,7 +27,7 @@ public class SalleSansPlaceException extends ApiException {
         addProperty("idSalle", idSalle);
     }
 
-    // ── getIdSalle() ───────────────────────────────────────
+    // ── getIdSalle() ─────────────────────────────────────────────────────────
 
     /** Retourne idSalle. */
     public Integer getIdSalle() { return idSalle; }

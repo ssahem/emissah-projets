@@ -4,8 +4,9 @@ package com.interventionsterrain.interventions_terrain_api.dto.response;
  * Technicien affecté à une intervention (A-02).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Technicien affecté à une intervention (A-02).
  * IMMUABLE     : record Java.
- * PRODUIT PAR   : AffectationService puis renvoyé par AffectationController.
+ * PRODUIT PAR  : AffectationService puis renvoyé par AffectationController.
  * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 public record AffectationResponse(

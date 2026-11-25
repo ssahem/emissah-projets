@@ -8,6 +8,7 @@ import java.time.LocalDate;
  * Un montant de loyer passé, issu de revision_loyer (F8).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Un montant de loyer passé, issu de revision_loyer (F8).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : BailMapper.
  * NE FAIT PAS  : d'accès base ni de logique métier.

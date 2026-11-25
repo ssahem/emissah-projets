@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  * Corps de création d'une intervention (F5).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une intervention (F5).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : InterventionController, avec @Valid, pour valider le corps reçu.
  * NE FAIT PAS  : d'accès base ni de logique métier.

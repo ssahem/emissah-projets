@@ -51,7 +51,7 @@ public class SalleController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /billetterie/salle/list ────────────────────────────────
+    // ── list() — GET /billetterie/salle/list ─────────────────────────────────
 
     /**
      * Liste les salles.
@@ -65,7 +65,7 @@ public class SalleController {
         return salleService.findAll();
     }
 
-    // ── getById() — GET /billetterie/salle/get/{id} ─────────────────────────
+    // ── getById() — GET /billetterie/salle/get/{id} ──────────────────────────
 
     /**
      * Consulte une salle.
@@ -81,7 +81,7 @@ public class SalleController {
         return salleService.findById(id);
     }
 
-    // ── create() — POST /billetterie/salle/create ───────────────────────────
+    // ── create() — POST /billetterie/salle/create ────────────────────────────
 
     /**
      * Crée une salle.
@@ -98,7 +98,7 @@ public class SalleController {
         return ResponseEntity.created(URI.create("/billetterie/salle/get/" + created.idSalle())).body(created);
     }
 
-    // ── update() — PUT /billetterie/salle/update/{id} ───────────────────────
+    // ── update() — PUT /billetterie/salle/update/{id} ────────────────────────
 
     /**
      * Modifie une salle.
@@ -115,7 +115,7 @@ public class SalleController {
         return salleService.update(id, request);
     }
 
-    // ── delete() — DELETE /billetterie/salle/delete/{id} ────────────────────
+    // ── delete() — DELETE /billetterie/salle/delete/{id} ─────────────────────
 
     /**
      * Supprime une salle vide.
@@ -133,7 +133,7 @@ public class SalleController {
         return ResponseEntity.noContent().build();
     }
 
-    // ── places() — GET /billetterie/salle/places/{id} ───────────────────────
+    // ── places() — GET /billetterie/salle/places/{id} ────────────────────────
 
     /**
      * Liste les places d'une salle, avec filtre catégorie optionnel (F5, F6).
@@ -150,7 +150,7 @@ public class SalleController {
         return salleService.findPlaces(id, categorie);
     }
 
-    // ── programmation() — GET /billetterie/salle/evenements/{id} ────────────
+    // ── programmation() — GET /billetterie/salle/evenements/{id} ─────────────
 
     /**
      * Retourne la programmation d'une salle (F7).

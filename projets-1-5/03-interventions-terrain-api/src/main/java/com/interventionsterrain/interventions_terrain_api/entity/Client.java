@@ -79,6 +79,12 @@ public class Client {
     public String getAdresse() { return adresse; }
     public String getCommune() { return commune; }
 
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String nom, String prenom, String email, String telephone,
                          String adresse, String commune) {
         this.nom = Objects.requireNonNull(nom, "nom");

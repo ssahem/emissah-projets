@@ -16,6 +16,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class AgenceMapper {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public AgenceResponse toResponse(Agence agence) {
         return new AgenceResponse(
                 agence.getIdAgence(),

@@ -12,4 +12,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * NE FAIT PAS  : de calcul de loyer.
  */
 public interface ContratRepository extends JpaRepository<Contrat, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

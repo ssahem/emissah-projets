@@ -48,11 +48,11 @@ public class EvenementController {
     public EvenementController(EvenementService evenementService) {
         this.evenementService = evenementService;
     }
-    // ════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  ENDPOINTS
-    // ════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /billetterie/evenement/list ────────────────────────────
+    // ── list() — GET /billetterie/evenement/list ─────────────────────────────
 
     /**
      * Liste les événements triés par date, avec un filtre de période optionnel (F8).
@@ -70,7 +70,7 @@ public class EvenementController {
         return evenementService.findBetween(du, au);
     }
 
-    // ── getById() — GET /billetterie/evenement/get/{id} ─────────────────────
+    // ── getById() — GET /billetterie/evenement/get/{id} ──────────────────────
 
     /**
      * Consulte un événement.
@@ -86,7 +86,7 @@ public class EvenementController {
         return evenementService.findById(id);
     }
 
-    // ── create() — POST /billetterie/evenement/create ───────────────────────
+    // ── create() — POST /billetterie/evenement/create ────────────────────────
 
     /**
      * Crée un événement.
@@ -105,7 +105,7 @@ public class EvenementController {
                 .body(created);
     }
 
-    // ── update() — PUT /billetterie/evenement/update/{id} ───────────────────
+    // ── update() — PUT /billetterie/evenement/update/{id} ────────────────────
 
     /**
      * Modifie un événement.
@@ -123,7 +123,7 @@ public class EvenementController {
         return evenementService.update(id, request);
     }
 
-    // ── delete() — DELETE /billetterie/evenement/delete/{id} ────────────────
+    // ── delete() — DELETE /billetterie/evenement/delete/{id} ─────────────────
 
     /**
      * Supprime un événement sans réservation.
@@ -141,7 +141,7 @@ public class EvenementController {
         return ResponseEntity.noContent().build();
     }
 
-    // ── placesLibres() — GET /billetterie/evenement/places-libres/{id} ──────
+    // ── placesLibres() — GET /billetterie/evenement/places-libres/{id} ───────
 
     /**
      * Retourne les places libres groupées par catégorie (F17).
@@ -175,7 +175,7 @@ public class EvenementController {
         return evenementService.findRemplissage(id);
     }
 
-    // ── exportReservations() — GET /billetterie/evenement/reservations/export/{id} ─
+    // ── exportReservations() — GET …terie/evenement/reservations/export/{id} ─
 
     /**
      * Exporte les réservations en CSV (F19).

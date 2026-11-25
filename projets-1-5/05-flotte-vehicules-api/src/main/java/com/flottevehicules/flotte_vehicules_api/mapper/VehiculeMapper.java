@@ -12,11 +12,16 @@ import org.springframework.stereotype.Component;
  * Conversion Vehicule → VehiculeResponse, avec le nom du site et le compteur courant.
  *
  * COUCHE       : Mapper (interface HTTP)
+ * RÔLE         : Conversion Vehicule → VehiculeResponse, avec le nom du site et le compteur courant.
  * DÉPEND DE    : SiteRepository, VueRepository (vue v_bilan_vehicule, lecture seule).
  * NE FAIT PAS  : de logique métier ni de calcul de coût.
  */
 @Component
 public class VehiculeMapper {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private final SiteRepository siteRepository;
     private final VueRepository vueRepository;
@@ -27,6 +32,13 @@ public class VehiculeMapper {
     }
 
     /** Convertit une entité en réponse enrichie. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     public VehiculeResponse toResponse(Vehicule vehicule) {
         String nomSite = siteRepository.findById(vehicule.getIdSite())
                 .map(Site::getNom)
@@ -41,6 +53,13 @@ public class VehiculeMapper {
     }
 
     /** Retourne le compteur courant d'un véhicule, zéro s'il est inconnu. */
+
+    // ── kmActuel() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute kmActuel().
+     */
+
     public Integer kmActuel(Integer idVehicule) {
         return Optional.ofNullable(idVehicule)
                 .flatMap(vueRepository::bilanVehicule)

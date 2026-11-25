@@ -43,13 +43,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires de l'annulation avec remboursement (F15).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : horloge fixée au 20/11/2026 10:00 UTC, événement à distance variable.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires de l'annulation avec remboursement (F15).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : horloge fixée au 20/11/2026 10:00 UTC, événement à distance variable.
  * CAS COUVERTS : > 48 h (100 %), 24–48 h (50 %), < 24 h (0 %), double annulation refusée.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class ReservationAnnulationServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     private static final Clock CLOCK = Clock.fixed(
             Instant.parse("2026-11-20T10:00:00Z"), ZoneOffset.UTC);
@@ -66,12 +73,24 @@ class ReservationAnnulationServiceTest {
 
     private ReservationService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ReservationService(reservationRepository, reservationPlaceRepository,
                 clientRepository, evenementRepository, placeRepository, statutRepository,
                 historiqueStatutRepository, tarifRepository, new ReservationMapper(), CLOCK);
     }
+
+    // ── reservation() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour reservation().
+     */
 
     private Reservation reservation(LocalDateTime dateEvenement) {
         Salle salle = new Salle("Grand Hall", "12 rue des Arts", "Abidjan", 120);
@@ -85,9 +104,21 @@ class ReservationAnnulationServiceTest {
         return reservation;
     }
 
+    // ── preparer() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparer().
+     */
+
     private void preparer(Reservation reservation, String statutCourant, boolean dejaAnnulee) {
         preparer(reservation, statutCourant, dejaAnnulee, true);
     }
+
+    // ── preparer() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour preparer().
+     */
 
     private void preparer(Reservation reservation, String statutCourant, boolean dejaAnnulee,
                           boolean annulable) {
@@ -105,6 +136,12 @@ class ReservationAnnulationServiceTest {
         }
     }
 
+    // ── ajouterPlace() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour ajouterPlace().
+     */
+
     private void ajouterPlace(Reservation reservation, String prix) {
         ReservationPlace place = new ReservationPlace(
                 reservation, "A", 1, reservation.getEvenement().getIdEvenement());
@@ -112,18 +149,20 @@ class ReservationAnnulationServiceTest {
         reservation.ajouterPlace(place);
     }
 
+    // ── annuler_auDelai48h() ─────────────────────────────────────────────────
+
     @Test
     @DisplayName("Au-delà de 48 h, le remboursement est intégral")
     void annuler_auDelai48h() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Reservation reservation = reservation(MAINTENANT.plusHours(72));
         ajouterPlace(reservation, "12.50");
         preparer(reservation, "PAYEE", false);
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         AnnulationResponse resultat = service.annuler(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.statut()).isEqualTo("ANNULEE");
         assertThat(resultat.montantRembourse()).isEqualByComparingTo("12.50");
         assertThat(reservation.getMontantRembourse()).isEqualByComparingTo("12.50");
@@ -131,44 +170,50 @@ class ReservationAnnulationServiceTest {
         assertThat(resultat.dateAnnulation()).isAfter(MAINTENANT);
     }
 
+    // ── annuler_entre24hEt48h() ──────────────────────────────────────────────
+
     @Test
     @DisplayName("Entre 24 h et 48 h, la moitié est remboursée")
     void annuler_entre24hEt48h() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Reservation reservation = reservation(MAINTENANT.plusHours(47));
         ajouterPlace(reservation, "20.00");
         preparer(reservation, "PAYEE", false);
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         AnnulationResponse resultat = service.annuler(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.montantRembourse()).isEqualByComparingTo("10.00");
     }
+
+    // ── annuler_enDeça24h() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("En deçà de 24 h, aucun remboursement n'est dû")
     void annuler_enDeça24h() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Reservation reservation = reservation(MAINTENANT.plusHours(19));
         ajouterPlace(reservation, "20.00");
         preparer(reservation, "PAYEE", false);
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         AnnulationResponse resultat = service.annuler(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.montantRembourse()).isEqualByComparingTo("0.00");
     }
+
+    // ── annuler_throwsWhenDejaAnnulee() ──────────────────────────────────────
 
     @Test
     @DisplayName("Une réservation déjà annulée ne peut pas l'être une seconde fois")
     void annuler_throwsWhenDejaAnnulee() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Reservation reservation = reservation(MAINTENANT.plusHours(72));
         preparer(reservation, "ANNULEE", true, false);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.annuler(1))
                 .isInstanceOf(ReservationAnnulationImpossibleException.class);
     }

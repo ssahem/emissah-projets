@@ -10,6 +10,7 @@ import java.math.BigDecimal;
  * Corps de création d'une matière (F3).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une matière (F3).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : MatiereController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -20,4 +21,9 @@ public record CreateMatiereRequest(
         @Schema(description = "Code", example = "MATH") @NotBlank String code,
         @Schema(description = "Coefficient strictement positif", example = "4")
         @NotNull @DecimalMin(value = "0.01") BigDecimal coefficient) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

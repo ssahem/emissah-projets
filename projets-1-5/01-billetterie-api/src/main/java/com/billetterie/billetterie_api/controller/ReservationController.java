@@ -48,11 +48,11 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
-    // ════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
     //  ENDPOINTS
-    // ════════════════════════════════════════════════════════════════════
+    // ═════════════════════════════════════════════════════════════════════════
 
-    // ── list() — GET /billetterie/reservation/list ──────────────────────────
+    // ── list() — GET /billetterie/reservation/list ───────────────────────────
 
     /**
      * Liste les réservations par page, ou filtre par email (F9, F10).
@@ -73,7 +73,7 @@ public class ReservationController {
         return reservationService.findAll(pageable);
     }
 
-    // ── getById() — GET /billetterie/reservation/get/{id} ───────────────────
+    // ── getById() — GET /billetterie/reservation/get/{id} ────────────────────
 
     /**
      * Consulte une réservation.
@@ -89,7 +89,7 @@ public class ReservationController {
         return reservationService.findById(id);
     }
 
-    // ── create() — POST /billetterie/reservation/create ─────────────────────
+    // ── create() — POST /billetterie/reservation/create ──────────────────────
 
     /**
      * Crée une réservation provisoire.
@@ -108,7 +108,7 @@ public class ReservationController {
                 .body(created);
     }
 
-    // ── update() — PUT /billetterie/reservation/update/{id} ─────────────────
+    // ── update() — PUT /billetterie/reservation/update/{id} ──────────────────
 
     /**
      * Modifie les informations client.
@@ -125,7 +125,7 @@ public class ReservationController {
         return reservationService.update(id, request);
     }
 
-    // ── delete() — DELETE /billetterie/reservation/delete/{id} ──────────────
+    // ── delete() — DELETE /billetterie/reservation/delete/{id} ───────────────
 
     /**
      * Supprime une réservation provisoire ou annulée.
@@ -143,7 +143,7 @@ public class ReservationController {
         return ResponseEntity.noContent().build();
     }
 
-    // ── payer() — POST /billetterie/reservation/paiement/{id} ───────────────
+    // ── payer() — POST /billetterie/reservation/paiement/{id} ────────────────
 
     /**
      * Confirme le paiement (F14).

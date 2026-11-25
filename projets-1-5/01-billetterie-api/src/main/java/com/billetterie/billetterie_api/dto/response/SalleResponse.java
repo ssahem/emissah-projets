@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * Salle renvoyée par l'API.
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Salle renvoyée par l'API.
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : SalleMapper.
  * NE FAIT PAS  : d’accès base ni de logique métier.

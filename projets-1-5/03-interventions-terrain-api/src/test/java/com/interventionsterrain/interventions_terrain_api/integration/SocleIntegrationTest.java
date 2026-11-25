@@ -23,16 +23,23 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 /**
  * Test de smoke du socle (P0).
  *
+ * COUCHE       : Service
+ * RÔLE         : Test de smoke du socle (P0).
  * TYPE         : Intégration (Testcontainers PostgreSQL)
  * STRATÉGIE    : schéma issu des migrations Flyway V1 à V7, sur une base vierge.
  * CAS COUVERTS : démarrage du contexte, séquence Flyway, identités, index partiel, vues SQL
  *                lisibles, référentiel de statuts, absence de triggers et health.
  * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @Testcontainers
 @SpringBootTest
 @AutoConfigureMockMvc
 class SocleIntegrationTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Container
     static PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:16-alpine")
@@ -41,6 +48,13 @@ class SocleIntegrationTest {
             .withPassword("root");
 
     /** Fournit une base PostgreSQL vierge à Spring. */
+
+    // ── datasourceProperties() ───────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour datasourceProperties().
+     */
+
     @DynamicPropertySource
     static void datasourceProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
@@ -51,31 +65,36 @@ class SocleIntegrationTest {
 
     @Autowired private JdbcTemplate jdbcTemplate;
     @Autowired private Clock clock;
+
+    // ── migrationsSequence() ─────────────────────────────────────────────────
+
     @Autowired private MockMvc mockMvc;
 
     @Test
     @DisplayName("Les migrations V1 à V7 sont appliquées dans l'ordre")
     void migrationsSequence() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<String> versions = jdbcTemplate.queryForList(
                 "SELECT version FROM flyway_schema_history WHERE success = true ORDER BY installed_rank",
                 String.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(versions).containsExactly("1", "2", "3", "4", "5", "6", "7");
     }
+
+    // ── colonnesArbitrees() ──────────────────────────────────────────────────
 
     @Test
     @DisplayName("Le schéma final porte les colonnes issues des arbitrages")
     void colonnesArbitrees() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<String> agence = colonnes("agence");
         List<String> technicien = colonnes("technicien");
         List<String> competence = colonnes("competence");
         List<String> client = colonnes("client");
         List<String> obtention = colonnes("obtention_competence");
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(agence).contains("ville", "responsable");
         assertThat(technicien).contains("matricule");
         assertThat(competence).contains("description");
@@ -83,10 +102,12 @@ class SocleIntegrationTest {
         assertThat(obtention).contains("date_alerte");
     }
 
+    // ── identitesEtIndexPartiel() ────────────────────────────────────────────
+
     @Test
     @DisplayName("Les 19 clés primaires sont des identités et l'index de responsable existe")
     void identitesEtIndexPartiel() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         Integer identites = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM pg_attribute a "
                         + "JOIN pg_class c ON c.oid = a.attrelid "
@@ -98,15 +119,17 @@ class SocleIntegrationTest {
                         + "WHERE schemaname = 'public' AND indexname = 'ux_un_responsable_par_intervention'",
                 Integer.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(identites).isEqualTo(19);
         assertThat(index).isEqualTo(1);
     }
 
+    // ── vuesLisibles() ───────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Les six vues sont interrogeables sans entité JPA")
     void vuesLisibles() {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         for (String vue : List.of(
                 "v_affectation_non_conforme", "v_agence_region", "v_delai_par_agence_mois",
                 "v_intervention_delai", "v_intervention_statut", "v_pieces_manquantes")) {
@@ -115,50 +138,65 @@ class SocleIntegrationTest {
         }
     }
 
+    // ── statutsSemes() ───────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Le référentiel de statuts contient les cinq libellés de l'énoncé")
     void statutsSemes() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<String> libelles = jdbcTemplate.queryForList(
                 "SELECT libelle FROM statut ORDER BY libelle", String.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(libelles).containsExactlyInAnyOrder(
                 "PLANIFIEE", "EN_COURS", "TERMINEE", "ECHOUEE", "ANNULEE");
     }
 
+    // ── fonctionsEtTriggersEcarter() ─────────────────────────────────────────
+
     @Test
     @DisplayName("Les fonctions et triggers du schéma source ne sont pas reproduits (E-24)")
     void fonctionsEtTriggersEcarter() {
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         Integer triggers = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM pg_trigger WHERE NOT tgisinternal", Integer.class);
         Integer fonctions = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace "
                         + "WHERE n.nspname = 'public'", Integer.class);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(triggers).isZero();
         assertThat(fonctions).isZero();
     }
 
+    // ── horlogeExposee() ─────────────────────────────────────────────────────
+
     @Test
     @DisplayName("Une horloge applicative est exposée pour les règles temporelles")
     void horlogeExposee() {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThat(clock).isNotNull();
     }
+
+    // ── health() ─────────────────────────────────────────────────────────────
 
     @Test
     @DisplayName("Le endpoint de health répond UP")
     void health() throws Exception {
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         mockMvc.perform(get("/actuator/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("UP"));
     }
 
     /** Liste les colonnes d'une table du schéma public. */
+
+    // ── colonnes() ───────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour colonnes().
+     */
+
     private List<String> colonnes(String table) {
         return jdbcTemplate.queryForList(
                 "SELECT column_name FROM information_schema.columns "

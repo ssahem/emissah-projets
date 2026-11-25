@@ -8,6 +8,7 @@ import java.util.List;
  * Revenu locatif d'un immeuble sur un mois (F19).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Revenu locatif d'un immeuble sur un mois (F19).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : ImmeubleService.
  * MOIS         : chaîne au format AAAA-MM, telle que demandée par l'énoncé.

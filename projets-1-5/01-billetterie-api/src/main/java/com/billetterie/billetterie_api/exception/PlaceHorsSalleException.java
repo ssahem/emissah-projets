@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Place hors salle — erreur métier traduite en HTTP bad. */
+/**
+ * Place hors salle — erreur métier traduite en HTTP bad.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Place hors salle — erreur métier traduite en HTTP bad.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class PlaceHorsSalleException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer numero;
 
-    // ── PlaceHorsSalleException() ─────────────────────────────────────────────────────────────
+    // ── PlaceHorsSalleException() ────────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public PlaceHorsSalleException(Integer numero) {
@@ -17,7 +27,7 @@ public class PlaceHorsSalleException extends ApiException {
         addProperty("numero", numero);
     }
 
-    // ── getNumero() ───────────────────────────────────────
+    // ── getNumero() ──────────────────────────────────────────────────────────
 
     /** Retourne numero. */
     public Integer getNumero() { return numero; }

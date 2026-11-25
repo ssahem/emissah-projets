@@ -69,6 +69,13 @@ public class Professeur {
     public String getTelephone() { return telephone; }
 
     /** Modifie les coordonnées d'un professeur (F4). */
+
+    // ── modifier() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute modifier().
+     */
+
     public void modifier(String email, String telephone) {
         this.email = Objects.requireNonNull(email, "email");
         this.telephone = telephone;

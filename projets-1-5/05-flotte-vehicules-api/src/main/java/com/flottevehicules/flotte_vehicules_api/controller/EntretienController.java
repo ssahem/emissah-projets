@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * COUCHE       : Controller (interface HTTP)
  * URL          : /flotte-vehicules/entretien/...
+ * RÔLE         : Endpoints des entretiens : CRUD (F5), historique (F8), pagination (F10) et alerte F12.
  * SÉCURITÉ     : aucune.
  * NE FAIT PAS  : de logique métier.
  */
@@ -34,6 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Entretien", description = "CRUD des entretiens, historique et pagination")
 public class EntretienController {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS ET CONSTRUCTEUR
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final EntretienService service;
 
     public EntretienController(EntretienService service) {
@@ -41,6 +46,13 @@ public class EntretienController {
     }
 
     /** F5 : crée un entretien ; une alerte F12 est créée si une affectation existe. */
+
+    // ── create() — POST /flotte-vehicules/entretien/create ───────────────────
+
+    /**
+     * Créer un entretien.
+     */
+
     @PostMapping("/create")
     @Operation(summary = "Créer un entretien", description = "F5, F14 et F12 — coût positif et compteur croissant")
     @ApiResponse(responseCode = "201", description = "Entretien créé")
@@ -52,6 +64,13 @@ public class EntretienController {
     }
 
     /** F10 : page d'entretiens. */
+
+    // ── list() — GET /flotte-vehicules/entretien/list ────────────────────────
+
+    /**
+     * Lister les entretiens.
+     */
+
     @GetMapping("/list")
     @Operation(summary = "Lister les entretiens", description = "F10 — page, taille plafonnée à 100 et tri")
     @ApiResponse(responseCode = "200", description = "Page d'entretiens")
@@ -64,6 +83,13 @@ public class EntretienController {
     }
 
     /** F5 : détail d'un entretien. */
+
+    // ── get() — GET /flotte-vehicules/entretien/{id} ─────────────────────────
+
+    /**
+     * Consulter un entretien.
+     */
+
     @GetMapping("/{id}")
     @Operation(summary = "Consulter un entretien")
     @ApiResponse(responseCode = "200", description = "Entretien trouvé")
@@ -73,6 +99,13 @@ public class EntretienController {
     }
 
     /** F5 : modifie coût et prestataire. */
+
+    // ── update() — PUT /flotte-vehicules/entretien/{id}/update ───────────────
+
+    /**
+     * Modifier un entretien.
+     */
+
     @PutMapping("/{id}/update")
     @Operation(summary = "Modifier un entretien", description = "Date et kilométrage figés")
     @ApiResponse(responseCode = "200", description = "Entretien modifié")
@@ -83,6 +116,13 @@ public class EntretienController {
     }
 
     /** F5 : suppression avant le début de l'immobilisation. */
+
+    // ── delete() — DELETE /flotte-vehicules/entretien/{id}/delete ────────────
+
+    /**
+     * Supprimer un entretien.
+     */
+
     @DeleteMapping("/{id}/delete")
     @Operation(summary = "Supprimer un entretien")
     @ApiResponse(responseCode = "204", description = "Entretien supprimé")

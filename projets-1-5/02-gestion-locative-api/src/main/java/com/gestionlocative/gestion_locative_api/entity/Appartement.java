@@ -61,13 +61,13 @@ public class Appartement {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Appartement() ────────────────────────────────────────────────────
+    // ── Appartement() ────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Appartement() {
     }
 
-    // ── Appartement(String, BigDecimal, Integer, Integer, Integer) ───────
+    // ── Appartement(String, BigDecimal, Integer, Integer, Integer) ───────────
 
     /** Crée un appartement valide, sans date de service (usage des tests unitaires). */
     public Appartement(String numero, BigDecimal surface, Integer nbPieces,
@@ -111,7 +111,7 @@ public class Appartement {
     /** Retourne la date de mise en service (V8). */
     public LocalDate getDateCreation() { return dateCreation; }
 
-    // ── modifier() ─────────────────────────────────────────────────────────
+    // ── modifier() ───────────────────────────────────────────────────────────
 
     /** Met à jour surface et nombre de pièces ; l'immeuble reste figé (F3). */
     public void modifier(BigDecimal surface, Integer nbPieces) {

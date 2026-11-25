@@ -43,12 +43,12 @@ public class Tarif {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── Tarif() ──────────────────────────────────────────────────────────
+    // ── Tarif() ──────────────────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected Tarif() {}
 
-    // ── Tarif(Evenement evenement, String categorie, BigDecimal prix) ────
+    // ── Tarif(Evenement evenement, String categorie, BigDecimal prix) ────────
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public Tarif(Evenement evenement, String categorie, BigDecimal prix) {
@@ -61,22 +61,22 @@ public class Tarif {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdTarif() ─────────────────────────────────────────────────────
+    // ── getIdTarif() ─────────────────────────────────────────────────────────
 
     /** Retourne idTarif. */
     public Integer getIdTarif() { return idTarif; }
 
-    // ── getEvenement() ───────────────────────────────────────────────────
+    // ── getEvenement() ───────────────────────────────────────────────────────
 
     /** Retourne evenement. */
     public Evenement getEvenement() { return evenement; }
 
-    // ── getCategorie() ───────────────────────────────────────────────────
+    // ── getCategorie() ───────────────────────────────────────────────────────
 
     /** Retourne categorie. */
     public String getCategorie() { return categorie; }
 
-    // ── getPrix() ────────────────────────────────────────────────────────
+    // ── getPrix() ────────────────────────────────────────────────────────────
 
     /** Retourne prix. */
     public BigDecimal getPrix() { return prix; }

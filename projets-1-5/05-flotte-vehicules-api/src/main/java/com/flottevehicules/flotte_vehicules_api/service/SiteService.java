@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  * CRUD des sites (F1), parc d'un site (F6) et kilométrage mensuel (F19).
  *
  * COUCHE       : Service
+ * RÔLE         : CRUD des sites (F1), parc d'un site (F6) et kilométrage mensuel (F19).
  * TRANSACTION  : lecture seule par défaut ; les écritures portent @Transactional.
  * DÉPEND DE    : repositories métier, VueRepository en lecture seule, Clock, SiteMapper.
  * NE FAIT PAS  : de HTTP ni de SQL direct.
@@ -59,16 +60,37 @@ public class SiteService {
     }
 
     /** F1 : tous les sites triés par ville puis par nom. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<SiteResponse> findAll() {
         return siteRepository.findAllByOrderByVilleAscNomAsc().stream().map(mapper::toResponse).toList();
     }
 
     /** F1 : un site par identifiant ; 404 si inconnu. */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public SiteResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** F1 : crée un site ; le nom doit être unique. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public SiteResponse create(CreateSiteRequest request) {
         if (siteRepository.findByNom(request.nom()).isPresent()) {
@@ -80,6 +102,13 @@ public class SiteService {
     }
 
     /** F1 : adresse et ville modifiables, nom figé. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public SiteResponse update(Integer id, UpdateSiteRequest request) {
         Site site = required(id);
@@ -88,6 +117,13 @@ public class SiteService {
     }
 
     /** F1 : suppression refusée si le site a des véhicules. */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Site site = required(id);
@@ -99,6 +135,13 @@ public class SiteService {
     }
 
     /** F6 : véhicules d'un site triés par immatriculation avec leur état courant. */
+
+    // ── vehicules() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute vehicules().
+     */
+
     public List<VehiculeSiteResponse> vehicules(Integer id) {
         required(id);
         LocalDate aujourdHui = LocalDate.now(clock);
@@ -113,6 +156,13 @@ public class SiteService {
     }
 
     /** F19 : kilométrage total du site sur un mois, détaillé par véhicule. */
+
+    // ── kilometrage() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute kilometrage().
+     */
+
     public KilometrageSiteResponse kilometrage(Integer id, String mois) {
         Site site = required(id);
         YearMonth periode = parseMois(mois);
@@ -131,10 +181,22 @@ public class SiteService {
     //  OUTILS INTERNES
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     private Site required(Integer id) {
         return siteRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Site", id));
     }
+
+    // ── etatAffectation() ────────────────────────────────────────────────────
+
+    /**
+     * Exécute etatAffectation().
+     */
 
     private String etatAffectation(Vehicule vehicule, LocalDate date) {
         Integer id = vehicule.getIdVehicule();
@@ -146,6 +208,12 @@ public class SiteService {
         }
         return "LIBRE";
     }
+
+    // ── parseMois() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute parseMois().
+     */
 
     private YearMonth parseMois(String mois) {
         if (mois == null || mois.isBlank()) {

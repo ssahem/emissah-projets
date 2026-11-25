@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Événement passé — erreur métier traduite en HTTP bad. */
+/**
+ * Événement passé — erreur métier traduite en HTTP bad.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Événement passé — erreur métier traduite en HTTP bad.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class EvenementPasseException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final Integer idEvenement;
 
-    // ── EvenementPasseException() ─────────────────────────────────────────────────────────────
+    // ── EvenementPasseException() ────────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public EvenementPasseException(Integer idEvenement) {
@@ -17,7 +27,7 @@ public class EvenementPasseException extends ApiException {
         addProperty("idEvenement", idEvenement);
     }
 
-    // ── getIdEvenement() ───────────────────────────────────────
+    // ── getIdEvenement() ─────────────────────────────────────────────────────
 
     /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }

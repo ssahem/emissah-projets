@@ -10,6 +10,7 @@ import java.util.Optional;
  * Corps de modification d'un bail (F5).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de modification d'un bail (F5).
  * IMMUABLE     : record Java.
  * Un {@link Optional} vide pour dateFin signifie « ne pas modifier » ;
  * {@code Optional.of(...)} avec une date la remplace. Pour retirer une date de

@@ -40,13 +40,20 @@ import org.springframework.test.util.ReflectionTestUtils;
 /**
  * Tests unitaires du service des immeubles (F2).
  *
- * TYPE       : Unitaire (Mockito)
- * STRATÉGIE  : repositories simulés, mapper réel.
+ * COUCHE       : Service
+ * RÔLE         : Tests unitaires du service des immeubles (F2).
+ * TYPE         : Unitaire (Mockito)
+ * STRATÉGIE    : repositories simulés, mapper réel.
  * CAS COUVERTS : propriétaire inconnu, étage maximal, suppression occupée.
- * CONVENTION : Préparation → Action → Vérification.
+ * CONVENTION   : Préparation → Action → Vérification.
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
  */
 @ExtendWith(MockitoExtension.class)
 class ImmeubleServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private ImmeubleRepository immeubleRepository;
     @Mock private ProprietaireRepository proprietaireRepository;
@@ -56,6 +63,12 @@ class ImmeubleServiceTest {
 
     private ImmeubleService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         Clock horlogeFixe = Clock.fixed(Instant.parse("2026-06-15T00:00:00Z"), ZoneOffset.UTC);
@@ -64,52 +77,60 @@ class ImmeubleServiceTest {
                 new ImmeubleMapper(), new AppartementMapper(), horlogeFixe);
     }
 
+    // ── update_throwsWhenProprietaireMissing() ───────────────────────────────
+
     @Test
     @DisplayName("La modification refuse un propriétaire inconnu")
     void update_throwsWhenProprietaireMissing() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(immeubleRepository.findById(1)).thenReturn(Optional.of(
                 new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3)));
         when(proprietaireRepository.existsById(99)).thenReturn(false);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.update(1,
                 new UpdateImmeubleRequest("12 rue des Acacias", "75001", "Paris", 99, 3)))
                 .isInstanceOf(ProprietaireNotFoundException.class);
     }
 
+    // ── update_throwsWhenNbEtagesTooLow() ────────────────────────────────────
+
     @Test
     @DisplayName("La modification refuse un nombre d'étages inférieur à l'étage occupé")
     void update_throwsWhenNbEtagesTooLow() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(immeubleRepository.findById(1)).thenReturn(Optional.of(
                 new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3)));
         when(proprietaireRepository.existsById(1)).thenReturn(true);
         when(appartementRepository.findMaxEtageByIdImmeuble(1)).thenReturn(2);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.update(1,
                 new UpdateImmeubleRequest("12 rue des Acacias", "75001", "Paris", 1, 1)))
                 .isInstanceOf(NbEtagesInsuffisantException.class);
     }
 
+    // ── delete_throwsWhenAppartementsExist() ─────────────────────────────────
+
     @Test
     @DisplayName("La suppression refuse un immeuble qui possède des appartements")
     void delete_throwsWhenAppartementsExist() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(immeubleRepository.findById(1)).thenReturn(Optional.of(
                 new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3)));
         when(appartementRepository.countByIdImmeuble(1)).thenReturn(1L);
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.delete(1))
                 .isInstanceOf(ImmeubleNonSupprimableException.class);
     }
 
+    // ── findAppartements_renvoieEtatOccupation() ─────────────────────────────
+
     @Test
     @DisplayName("F6 — un bail en cours marque l'appartement comme loué")
     void findAppartements_renvoieEtatOccupation() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Immeuble immeuble = new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3);
         ReflectionTestUtils.setField(immeuble, "idImmeuble", 1);
         Appartement appartement = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1);
@@ -122,19 +143,21 @@ class ImmeubleServiceTest {
         when(bailRepository.findAllByIdAppartementOrderByDateDebutDesc(2))
                 .thenReturn(List.of(bail));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         List<AppartementOccupationResponse> resultat = service.findAppartements(1);
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat).hasSize(1);
         assertThat(resultat.getFirst().occupe()).isTrue();
         assertThat(resultat.getFirst().statutOccupation()).isEqualTo("LOUE");
     }
 
+    // ── calculerRevenu_prorataEtRevisions() ──────────────────────────────────
+
     @Test
     @DisplayName("F19 — le revenu applique le prorata journalier et les révisions de loyer")
     void calculerRevenu_prorataEtRevisions() {
-        // ── Préparation : bail du 1er au 15 novembre, révisé le 10 ──
+        // ── Préparation : bail du 1er au 15 novembre, révisé le 10 ───────────
         Immeuble immeuble = new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3);
         ReflectionTestUtils.setField(immeuble, "idImmeuble", 1);
         Appartement appartement = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1);
@@ -152,10 +175,10 @@ class ImmeubleServiceTest {
                 new RevisionLoyer(3, LocalDate.of(2026, 1, 1), new BigDecimal("800.00")),
                 new RevisionLoyer(3, LocalDate.of(2026, 11, 10), new BigDecimal("1000.00"))));
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         RevenuImmeubleResponse resultat = service.calculerRevenu(1, "2026-11");
 
-        // ── Vérification : 9 jours à 800 + 6 jours à 1000 = 13200 / 30 = 440 ──
+        // ── Vérification : 9 jours à 800 + 6 jours à 1000 = 13200 / 30 = 440 ─
         assertThat(resultat.detail()).hasSize(1);
         assertThat(resultat.detail().getFirst().joursOccupes()).isEqualTo(15);
         assertThat(resultat.detail().getFirst().revenu()).isEqualByComparingTo("440.00");
@@ -164,10 +187,12 @@ class ImmeubleServiceTest {
         assertThat(resultat.tauxOccupation()).isEqualByComparingTo("50.00");
     }
 
+    // ── calculerRevenu_sansBailRenvoieZeros() ────────────────────────────────
+
     @Test
     @DisplayName("F19 — un immeuble sans bail renvoie un revenu et une occupation nuls")
     void calculerRevenu_sansBailRenvoieZeros() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         Immeuble immeuble = new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3);
         ReflectionTestUtils.setField(immeuble, "idImmeuble", 1);
         Appartement appartement = new Appartement("1A", new BigDecimal("45.50"), 2, 1, 1);
@@ -179,24 +204,26 @@ class ImmeubleServiceTest {
                 1, LocalDate.of(2026, 11, 1), LocalDate.of(2026, 11, 30)))
                 .thenReturn(List.of());
 
-        // ── Action ──
+        // ── Action ───────────────────────────────────────────────────────────
         RevenuImmeubleResponse resultat = service.calculerRevenu(1, "2026-11");
 
-        // ── Vérification ──
+        // ── Vérification ─────────────────────────────────────────────────────
         assertThat(resultat.revenuTotal()).isEqualByComparingTo("0.00");
         assertThat(resultat.tauxOccupation()).isEqualByComparingTo("0.00");
         assertThat(resultat.detail()).hasSize(1);
         assertThat(resultat.detail().getFirst().revenu()).isEqualByComparingTo("0.00");
     }
 
+    // ── calculerRevenu_refuseMoisInvalide() ──────────────────────────────────
+
     @Test
     @DisplayName("F19 — un mois mal formé est refusé")
     void calculerRevenu_refuseMoisInvalide() {
-        // ── Préparation ──
+        // ── Préparation ──────────────────────────────────────────────────────
         when(immeubleRepository.findById(1)).thenReturn(Optional.of(
                 new Immeuble("12 rue des Acacias", "75001", "Paris", 1, 3)));
 
-        // ── Action + Vérification ──
+        // ── Action + Vérification ────────────────────────────────────────────
         assertThatThrownBy(() -> service.calculerRevenu(1, "2026-13"))
                 .isInstanceOf(MoisInvalideException.class);
         assertThatThrownBy(() -> service.calculerRevenu(1, "11/2026"))

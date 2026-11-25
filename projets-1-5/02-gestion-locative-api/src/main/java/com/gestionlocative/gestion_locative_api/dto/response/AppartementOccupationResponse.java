@@ -7,6 +7,7 @@ import java.math.BigDecimal;
  * Appartement d'un immeuble avec son état d'occupation (F6).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Appartement d'un immeuble avec son état d'occupation (F6).
  * IMMUABLE     : record Java.
  * PRODUIT PAR  : AppartementMapper, alimenté par ImmeubleService.
  * NE FAIT PAS  : d'accès base ni de logique métier.

@@ -2,13 +2,23 @@ package com.billetterie.billetterie_api.exception;
 
 import org.springframework.http.HttpStatus;
 
-/** Place introuvable — erreur métier traduite en HTTP not. */
+/**
+ * Place introuvable — erreur métier traduite en HTTP not.
+ *
+ * COUCHE       : Exception
+ * RÔLE         : Place introuvable — erreur métier traduite en HTTP not.
+ * NE FAIT PAS  : de logique métier.
+ */
 public class PlaceNotFoundException extends ApiException {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     /** Valeur fautive, exposée dans le Problem Detail. */
     private final String rang;
 
-    // ── PlaceNotFoundException() ─────────────────────────────────────────────────────────────
+    // ── PlaceNotFoundException() ─────────────────────────────────────────────
 
     /** Construit l'erreur métier. */
     public PlaceNotFoundException(String rang) {
@@ -17,7 +27,7 @@ public class PlaceNotFoundException extends ApiException {
         addProperty("rang", rang);
     }
 
-    // ── getRang() ───────────────────────────────────────
+    // ── getRang() ────────────────────────────────────────────────────────────
 
     /** Retourne rang. */
     public String getRang() { return rang; }

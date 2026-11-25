@@ -66,29 +66,50 @@ public class EleveService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Liste les élèves triés par nom puis prénom, avec leur classe courante. */
+
+    // ── findAll() ────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findAll().
+     */
+
     public List<EleveResponse> findAll() {
         return eleveRepository.findAllByOrderByNomAscPrenomAsc().stream().map(mapper::toResponse).toList();
     }
 
     /** Consulte une fiche élève par identifiant (404 si inconnue). */
+
+    // ── findById() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute findById().
+     */
+
     public EleveResponse findById(Integer id) {
         return mapper.toResponse(required(id));
     }
 
     /** Crée un élève dans une classe non pleine, avec une date de naissance passée. */
+
+    // ── create() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute create().
+     */
+
     @Transactional
     public EleveResponse create(CreateEleveRequest request) {
-        // ── Étape 1/3 : la date de naissance doit être dans le passé ──
+        // ── Étape 1/3 : la date de naissance doit être dans le passé ─────────
         if (!request.dateNaissance().isBefore(LocalDate.now(clock))) {
             throw new DonneeInvalideException("date-naissance-future",
                     "La date de naissance doit être dans le passé",
                     Map.of("dateNaissance", request.dateNaissance().toString()));
         }
-        // ── Étape 2/3 : la classe d'accueil ne doit pas être pleine ──
+        // ── Étape 2/3 : la classe d'accueil ne doit pas être pleine ──────────
         Classe classe = classeRepository.findById(request.idClasse())
                 .orElseThrow(() -> new RessourceIntrouvableException("Classe", request.idClasse()));
         verifierPlace(classe);
-        // ── Étape 3/3 : créer la fiche et l'inscription courante ──
+        // ── Étape 3/3 : créer la fiche et l'inscription courante ─────────────
         Eleve eleve = eleveRepository.save(new Eleve(
                 request.nom(), request.prenom(), request.dateNaissance()));
         inscriptionRepository.save(new Inscription(
@@ -98,6 +119,13 @@ public class EleveService {
     }
 
     /** Modifie nom/prénom et, si besoin, la classe courante ; la date de naissance est figée. */
+
+    // ── update() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute update().
+     */
+
     @Transactional
     public EleveResponse update(Integer id, UpdateEleveRequest request) {
         Eleve eleve = required(id);
@@ -116,6 +144,13 @@ public class EleveService {
     }
 
     /** Refuse la suppression d'un élève ayant des notes (F2, A-01). */
+
+    // ── delete() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute delete().
+     */
+
     @Transactional
     public void delete(Integer id) {
         Eleve eleve = required(id);
@@ -131,6 +166,13 @@ public class EleveService {
     }
 
     /** Réaffecte un élève dans une classe du même niveau non pleine (F11). */
+
+    // ── changerClasse() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute changerClasse().
+     */
+
     @Transactional
     public ChangementClasseResponse changerClasse(Integer id, ChangeClasseRequest request) {
         Eleve eleve = required(id);
@@ -161,12 +203,26 @@ public class EleveService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Retourne l'élève ou lève une erreur métier 404. */
+
+    // ── required() ───────────────────────────────────────────────────────────
+
+    /**
+     * Exécute required().
+     */
+
     public Eleve required(Integer id) {
         return eleveRepository.findById(id)
                 .orElseThrow(() -> new RessourceIntrouvableException("Eleve", id));
     }
 
     /** Vérifie qu'une inscription courante existe encore dans la classe (capacité). */
+
+    // ── verifierPlace() ──────────────────────────────────────────────────────
+
+    /**
+     * Exécute verifierPlace().
+     */
+
     private void verifierPlace(Classe classe) {
         long effectif = inscriptionRepository.countByIdClasseAndDateFinIsNull(classe.getIdClasse());
         if (classe.getEffectifMax() == null || effectif >= classe.getEffectifMax()) {

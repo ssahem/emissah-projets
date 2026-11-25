@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
  * Corps de réaffectation d'un élève (F11).
  *
  * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de réaffectation d'un élève (F11).
  * IMMUABLE     : record Java.
  * UTILISÉ PAR  : EleveController avec @Valid.
  * NE FAIT PAS  : de logique métier.
@@ -15,4 +16,9 @@ import jakarta.validation.constraints.NotNull;
 public record ChangeClasseRequest(
         @Schema(description = "Identifiant de la classe de destination", example = "2")
         @NotNull Integer idClasseDestination) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

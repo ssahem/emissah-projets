@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ProfesseurRepository extends JpaRepository<Professeur, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les professeurs triés par nom puis prénom. */
     List<Professeur> findAllByOrderByNomAscPrenomAsc();
 

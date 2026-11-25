@@ -19,23 +19,23 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByRangAscNumeroAsc() ───────────────────────────────
+    // ── findAllByOrderByRangAscNumeroAsc() ───────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Place> findAllByOrderByRangAscNumeroAsc();
 
-    // ── findAllBySalle_IdSalleOrderByRangAscNumeroAsc() ──────────────────
+    // ── findAllBySalle_IdSalleOrderByRangAscNumeroAsc() ──────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     List<Place> findAllBySalle_IdSalleOrderByRangAscNumeroAsc(Integer idSalle);
 
-    // ── findAllBySalle_IdSalleAndCategorie_Libelle…() ───────────────────────
+    // ── findAllBySalle_IdSalleAndCategorie_Libelle…() ────────────────────────
 
     /** Liste les places d'une salle d'une catégorie, dans l'ordre du plan. */
     List<Place> findAllBySalle_IdSalleAndCategorie_LibelleIgnoreCaseOrderByRangAscNumeroAsc(
             Integer idSalle, String libelle);
 
-    // ── findBySalle_IdSalleAndRangAndNumero() ────────────────────────────
+    // ── findBySalle_IdSalleAndRangAndNumero() ────────────────────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.
@@ -43,7 +43,7 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
      */
     Optional<Place> findBySalle_IdSalleAndRangAndNumero(Integer idSalle, String rang, Integer numero);
 
-    // ── findFirstByRangAndNumero() ───────────────────────────────────────
+    // ── findFirstByRangAndNumero() ───────────────────────────────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.
@@ -51,12 +51,12 @@ public interface PlaceRepository extends JpaRepository<Place, Integer> {
      */
     Optional<Place> findFirstByRangAndNumero(String rang, Integer numero);
 
-    // ── existsBySalle_IdSalleAndRangAndNumero() ──────────────────────────
+    // ── existsBySalle_IdSalleAndRangAndNumero() ──────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     boolean existsBySalle_IdSalleAndRangAndNumero(Integer idSalle, String rang, Integer numero);
 
-    // ── countBySalle_IdSalle() ───────────────────────────────────────────
+    // ── countBySalle_IdSalle() ───────────────────────────────────────────────
 
     /** Requête Spring Data déduite du nom de la méthode. */
     long countBySalle_IdSalle(Integer idSalle);

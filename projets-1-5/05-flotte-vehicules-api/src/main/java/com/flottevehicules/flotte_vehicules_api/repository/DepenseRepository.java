@@ -12,4 +12,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * NE FAIT PAS  : de calcul de coût pour F18 (D-03).
  */
 public interface DepenseRepository extends JpaRepository<Depense, Integer> {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

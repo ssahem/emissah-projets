@@ -54,17 +54,35 @@ public class ProfesseurController {
     //  ENDPOINTS
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── list() — GET /suivi-scolaire/professeur/list ─────────────────────────
+
+    /**
+     * Lister les professeurs.
+     */
+
     @Operation(summary = "Lister les professeurs", description = "Triés par nom puis prénom (F4)")
     @GetMapping(path = "/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProfesseurResponse> list() {
         return service.findAll();
     }
 
+    // ── get() — GET /suivi-scolaire/professeur/get/{id} ──────────────────────
+
+    /**
+     * Lire un professeur.
+     */
+
     @Operation(summary = "Lire un professeur")
     @GetMapping(path = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProfesseurResponse get(@PathVariable Integer id) {
         return service.findById(id);
     }
+
+    // ── create() — POST /suivi-scolaire/professeur/create ────────────────────
+
+    /**
+     * Créer un professeur.
+     */
 
     @Operation(summary = "Créer un professeur",
             description = "Email unique ; la matière principale est retrouvée via enseignement (F4, A-02)")
@@ -76,6 +94,12 @@ public class ProfesseurController {
                 URI.create("/suivi-scolaire/professeur/get/" + created.idProfesseur())).body(created);
     }
 
+    // ── update() — PUT /suivi-scolaire/professeur/update/{id} ────────────────
+
+    /**
+     * Modifier un professeur.
+     */
+
     @Operation(summary = "Modifier un professeur", description = "Coordonnées et matière principale (F4)")
     @PutMapping(path = "/update/{id}", consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,12 +108,24 @@ public class ProfesseurController {
         return service.update(id, request);
     }
 
+    // ── delete() — DELETE /suivi-scolaire/professeur/delete/{id} ─────────────
+
+    /**
+     * Supprimer un professeur.
+     */
+
     @Operation(summary = "Supprimer un professeur", description = "Refusé s'il est affecté (F4)")
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ── affecter() — POST /suivi-scolaire/professeur/affectations/{id} ───────
+
+    /**
+     * Affecter une matière.
+     */
 
     @Operation(summary = "Affecter une matière",
             description = "Un seul professeur par matière et par classe ; 409 citant le titulaire (F12)")

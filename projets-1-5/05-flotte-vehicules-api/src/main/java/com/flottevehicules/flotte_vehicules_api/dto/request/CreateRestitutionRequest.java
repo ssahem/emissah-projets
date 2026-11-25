@@ -8,9 +8,10 @@ import java.time.LocalDate;
 /**
  * Corps d'une restitution de véhicule (F13).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de contrôle de date ni de kilométrage (rôle du service).
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps d'une restitution de véhicule (F13).
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de contrôle de date ni de kilométrage (rôle du service).
  */
 @Schema(description = "Restitution : date postérieure au début et non future, kilométrage croissant (D-01)")
 public record CreateRestitutionRequest(
@@ -23,4 +24,9 @@ public record CreateRestitutionRequest(
         @NotNull(message = "Le kilométrage est obligatoire")
         @PositiveOrZero(message = "Le kilométrage ne peut pas être négatif")
         Integer km) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

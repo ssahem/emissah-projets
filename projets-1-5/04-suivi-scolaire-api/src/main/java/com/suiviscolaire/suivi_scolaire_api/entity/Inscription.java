@@ -87,5 +87,12 @@ public class Inscription {
     public Eleve getEleve() { return eleve; }
 
     /** Clôture l'affectation courante sans effacer les notes rattachées au numéro. */
+
+    // ── clore() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute clore().
+     */
+
     public void clore(LocalDate dateFin) { this.dateFin = Objects.requireNonNull(dateFin, "dateFin"); }
 }

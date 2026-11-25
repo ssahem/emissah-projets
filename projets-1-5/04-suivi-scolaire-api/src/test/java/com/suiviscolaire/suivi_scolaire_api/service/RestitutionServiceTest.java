@@ -33,9 +33,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Restitution des moyennes et du classement (F17 à F19). */
+/**
+ * Restitution des moyennes et du classement (F17 à F19).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Restitution des moyennes et du classement (F17 à F19).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class RestitutionServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private VueRepository vueRepository;
     @Mock private EleveRepository eleveRepository;
@@ -48,12 +58,20 @@ class RestitutionServiceTest {
 
     private RestitutionService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new RestitutionService(vueRepository, eleveRepository, inscriptionRepository,
                 classeRepository, enseignementRepository, matiereRepository, noteRepository,
                 new TrimestreLookup(trimestreRepository));
     }
+
+    // ── moyennesAvecMatiereNonEvaluee() ──────────────────────────────────────
 
     @Test
     @DisplayName("F17 : une matière sans note est retournée avec moyenne null et evaluee=false")
@@ -80,6 +98,8 @@ class RestitutionServiceTest {
         assertThat(response.matieres().get(1).evaluee()).isFalse();
     }
 
+    // ── moyennesEleveInconnu() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("F17 : un élève inconnu renvoie 404")
     void moyennesEleveInconnu() {
@@ -88,6 +108,8 @@ class RestitutionServiceTest {
         assertThatThrownBy(() -> service.moyennesParMatiere(9, 2))
                 .isInstanceOf(RessourceIntrouvableException.class);
     }
+
+    // ── moyennesSansInscription() ────────────────────────────────────────────
 
     @Test
     @DisplayName("F17 : une inscription courante manquante est signalée")
@@ -100,6 +122,8 @@ class RestitutionServiceTest {
                 .isInstanceOf(DonneeInvalideException.class)
                 .hasMessageContaining("aucune inscription courante");
     }
+
+    // ── moyenneGeneraleDetaillee() ───────────────────────────────────────────
 
     @Test
     @DisplayName("F18 : la moyenne générale est pondérée et détaillée")
@@ -123,6 +147,8 @@ class RestitutionServiceTest {
         });
     }
 
+    // ── moyenneGeneraleSansNote() ────────────────────────────────────────────
+
     @Test
     @DisplayName("F18 : sans aucune note, la moyenne est absente et non égale à zéro")
     void moyenneGeneraleSansNote() {
@@ -140,6 +166,8 @@ class RestitutionServiceTest {
         assertThat(response.moyenneGenerale()).isNull();
         assertThat(response.detail()).isEmpty();
     }
+
+    // ── classementAvecExAequo() ──────────────────────────────────────────────
 
     @Test
     @DisplayName("F19 : le classement gère ex æquo et élèves sans note en fin de liste")
@@ -166,6 +194,8 @@ class RestitutionServiceTest {
         assertThat(response.moyenneClasse()).isEqualByComparingTo("14.00");
     }
 
+    // ── classementClasseInconnue() ───────────────────────────────────────────
+
     @Test
     @DisplayName("F19 : une classe inconnue renvoie 404")
     void classementClasseInconnue() {
@@ -176,6 +206,13 @@ class RestitutionServiceTest {
     }
 
     /** Prépare un élève, son inscription courante et le trimestre. */
+
+    // ── prepEleveInscriptionTrimestre() ──────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour prepEleveInscriptionTrimestre().
+     */
+
     private void prepEleveInscriptionTrimestre() {
         when(eleveRepository.findById(1)).thenReturn(Optional.of(eleve(1)));
         when(trimestreRepository.findByNumero(2)).thenReturn(Optional.of(trimestre()));
@@ -184,6 +221,13 @@ class RestitutionServiceTest {
     }
 
     /** Construit un élève avec son identifiant. */
+
+    // ── eleve() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour eleve().
+     */
+
     private Eleve eleve(Integer id) {
         Eleve e = new Eleve("Kouassi-" + id, "Aya", LocalDate.of(2011, 2, 14));
         ReflectionTestUtils.setField(e, "idEleve", id);
@@ -191,6 +235,13 @@ class RestitutionServiceTest {
     }
 
     /** Construit une inscription avec son identifiant. */
+
+    // ── inscription() ────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour inscription().
+     */
+
     private Inscription inscription(Integer id, Integer idEleve) {
         Inscription i = new Inscription(LocalDate.of(2026, 9, 2), idEleve, 1, "INS-2026-" + id);
         ReflectionTestUtils.setField(i, "idInscription", id);
@@ -198,6 +249,13 @@ class RestitutionServiceTest {
     }
 
     /** Construit une classe. */
+
+    // ── classe() ─────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour classe().
+     */
+
     private Classe classe() {
         Classe c = new Classe("6A", 2, 1, 30);
         ReflectionTestUtils.setField(c, "idClasse", 1);
@@ -205,6 +263,13 @@ class RestitutionServiceTest {
     }
 
     /** Construit un trimestre ouvert. */
+
+    // ── trimestre() ──────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour trimestre().
+     */
+
     private Trimestre trimestre() {
         Trimestre t = new Trimestre(2, LocalDate.of(2026, 11, 1),
                 LocalDate.of(2027, 2, 28), 2);
@@ -213,6 +278,13 @@ class RestitutionServiceTest {
     }
 
     /** Construit un enseignement avec son identifiant. */
+
+    // ── enseignement() ───────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour enseignement().
+     */
+
     private Enseignement enseignement(Integer id, Integer idMatiere) {
         Enseignement e = new Enseignement(1, idMatiere, 1);
         ReflectionTestUtils.setField(e, "idEnseignement", id);
@@ -220,6 +292,13 @@ class RestitutionServiceTest {
     }
 
     /** Construit une matière avec son identifiant. */
+
+    // ── matiere() ────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour matiere().
+     */
+
     private Matiere matiere(Integer id, String libelle, BigDecimal coefficient) {
         Matiere m = new Matiere(libelle, "MAT", coefficient);
         ReflectionTestUtils.setField(m, "idMatiere", id);

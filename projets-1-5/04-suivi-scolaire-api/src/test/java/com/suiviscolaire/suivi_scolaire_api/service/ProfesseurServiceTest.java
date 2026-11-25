@@ -29,9 +29,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-/** Règles métier F4 et F12 (professeurs et affectations). */
+/**
+ * Règles métier F4 et F12 (professeurs et affectations).
+ *
+ * COUCHE       : Service
+ * RÔLE         : Règles métier F4 et F12 (professeurs et affectations).
+ * NE FAIT PAS  : d’accès HTTP ni de validation de format.
+ */
 @ExtendWith(MockitoExtension.class)
 class ProfesseurServiceTest {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CONSTANTES ET CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
 
     @Mock private ProfesseurRepository professeurRepository;
     @Mock private EnseignementRepository enseignementRepository;
@@ -40,11 +50,19 @@ class ProfesseurServiceTest {
 
     private ProfesseurService service;
 
+    // ── setUp() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour setUp().
+     */
+
     @BeforeEach
     void setUp() {
         service = new ProfesseurService(professeurRepository, enseignementRepository,
                 matiereRepository, classeRepository);
     }
+
+    // ── findAllAvecMatieres() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("La liste des professeurs expose leurs matières issues de enseignement")
@@ -59,6 +77,8 @@ class ProfesseurServiceTest {
         });
     }
 
+    // ── createRefuseEmailDuplique() ──────────────────────────────────────────
+
     @Test
     @DisplayName("La création refuse un email déjà utilisé")
     void createRefuseEmailDuplique() {
@@ -72,6 +92,8 @@ class ProfesseurServiceTest {
         verify(professeurRepository, never()).save(any());
     }
 
+    // ── createVerifieMatiere() ───────────────────────────────────────────────
+
     @Test
     @DisplayName("La création vérifie que la matière principale existe")
     void createVerifieMatiere() {
@@ -84,6 +106,8 @@ class ProfesseurServiceTest {
                         .RessourceIntrouvableException.class);
     }
 
+    // ── deleteRefuseProfesseurAffecte() ──────────────────────────────────────
+
     @Test
     @DisplayName("La suppression est refusée si le professeur est affecté")
     void deleteRefuseProfesseurAffecte() {
@@ -94,6 +118,8 @@ class ProfesseurServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("affecté");
     }
+
+    // ── affectationRefuseDoublon() ───────────────────────────────────────────
 
     @Test
     @DisplayName("Une affectation citant le titulaire est refusée avec un 409")
@@ -112,6 +138,8 @@ class ProfesseurServiceTest {
                 .isInstanceOf(ConflitMetierException.class)
                 .hasMessageContaining("Claire Durand");
     }
+
+    // ── affectationNominale() ────────────────────────────────────────────────
 
     @Test
     @DisplayName("Une affectation libre est persistée")
@@ -135,6 +163,13 @@ class ProfesseurServiceTest {
     }
 
     /** Construit un professeur avec son identifiant. */
+
+    // ── professeur() ─────────────────────────────────────────────────────────
+
+    /**
+     * Prépare la donnée de test pour professeur().
+     */
+
     private Professeur professeur(Integer id) {
         Professeur p = new Professeur("Durand", "Claire", "c.d@example.test", "0102030401");
         ReflectionTestUtils.setField(p, "idProfesseur", id);

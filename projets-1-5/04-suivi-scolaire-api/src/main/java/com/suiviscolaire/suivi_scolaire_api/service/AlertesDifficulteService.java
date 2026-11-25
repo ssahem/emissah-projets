@@ -90,6 +90,8 @@ public class AlertesDifficulteService {
     //  CAS D'USAGE
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── detecter() ───────────────────────────────────────────────────────────
+
     /**
      * F16 — Tâche planifiée hebdomadaire. Détermine le trimestre en cours à partir de l'horloge
  * applicative, puis crée une alerte pour chaque élève concerné qui n'a pas encore été
@@ -140,6 +142,13 @@ public class AlertesDifficulteService {
     }
 
     /** Consultation des alertes déjà produites pour un trimestre (endpoint facultatif F16). */
+
+    // ── consulter() ──────────────────────────────────────────────────────────
+
+    /**
+     * Exécute consulter().
+     */
+
     public List<AlerteDifficulteResponse> consulter(Integer numero) {
         if (numero == null || numero < 1 || numero > 3) {
             throw new DonneeInvalideException("trimestre-numero-invalide",
@@ -157,6 +166,13 @@ public class AlertesDifficulteService {
     // ═════════════════════════════════════════════════════════════════════════
 
     /** Construit le motif lisible d'une alerte. */
+
+    // ── motif() ──────────────────────────────────────────────────────────────
+
+    /**
+     * Exécute motif().
+     */
+
     private String motif(boolean moyenneFaible, boolean chuteForte,
                          BigDecimal moyenne, BigDecimal ecart) {
         if (moyenneFaible && chuteForte) {
@@ -169,6 +185,13 @@ public class AlertesDifficulteService {
     }
 
     /** Enrichit une alerte avec son motif, son élève et sa classe. */
+
+    // ── toResponse() ─────────────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponse().
+     */
+
     private AlerteDifficulteResponse toResponse(AlerteDifficulte alerte, String motif) {
         AlerteDifficulteResponse base = toResponseSansMotif(alerte);
         return new AlerteDifficulteResponse(base.idAlerte(), base.idInscription(), base.idEleve(),
@@ -177,6 +200,13 @@ public class AlertesDifficulteService {
     }
 
     /** Enrichit une alerte avec les données de référence, sans motif calculé. */
+
+    // ── toResponseSansMotif() ────────────────────────────────────────────────
+
+    /**
+     * Exécute toResponseSansMotif().
+     */
+
     private AlerteDifficulteResponse toResponseSansMotif(AlerteDifficulte alerte) {
         Inscription inscription = inscriptionRepository.findById(alerte.getIdInscription()).orElse(null);
         Eleve eleve = inscription == null ? null

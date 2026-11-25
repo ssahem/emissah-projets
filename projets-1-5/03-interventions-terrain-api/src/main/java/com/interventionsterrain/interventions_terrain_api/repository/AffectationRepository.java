@@ -39,5 +39,11 @@ public interface AffectationRepository extends JpaRepository<Affectation, Intege
     //  REQUÊTES @QUERY
     // ═════════════════════════════════════════════════════════════════════════
 
+    // ── deleteByIdIntervention() ─────────────────────────────────────────────
+
+    /**
+     * Exécute deleteByIdIntervention().
+     */
+
     void deleteByIdIntervention(@Param("idIntervention") Integer idIntervention);
 }

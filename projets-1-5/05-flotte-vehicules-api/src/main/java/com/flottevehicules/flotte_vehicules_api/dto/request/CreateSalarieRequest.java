@@ -7,9 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * Corps de création d'une fiche salarié (F3).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'une fiche salarié (F3).
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de logique métier.
  */
 @Schema(description = "Création d'un salarié : nom, matricule et service obligatoires")
 public record CreateSalarieRequest(
@@ -34,4 +35,9 @@ public record CreateSalarieRequest(
         @Schema(description = "Service", example = "Direction")
         @NotBlank(message = "Le service est obligatoire")
         String service) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

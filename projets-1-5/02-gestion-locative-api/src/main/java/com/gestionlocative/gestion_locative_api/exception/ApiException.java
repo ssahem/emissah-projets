@@ -16,6 +16,10 @@ import org.springframework.http.HttpStatus;
  */
 public abstract class ApiException extends RuntimeException {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
     private final HttpStatus status;
     private final String title;
     private final URI type;
@@ -41,5 +45,12 @@ public abstract class ApiException extends RuntimeException {
     public Map<String, Object> getProperties() { return Map.copyOf(properties); }
 
     /** Ajoute une donnée complémentaire au problème. */
+
+    // ── addProperty() ────────────────────────────────────────────────────────
+
+    /**
+     * Exécute addProperty().
+     */
+
     protected void addProperty(String key, Object value) { properties.put(key, value); }
 }

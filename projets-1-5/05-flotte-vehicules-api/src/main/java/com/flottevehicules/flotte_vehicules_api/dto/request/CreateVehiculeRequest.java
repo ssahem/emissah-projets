@@ -9,9 +9,10 @@ import java.time.LocalDate;
 /**
  * Corps de création d'un véhicule (F2).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * NE FAIT PAS : de logique métier ; la date mise en service est contrôlée par le service.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : Corps de création d'un véhicule (F2).
+ * IMMUABLE     : record Java.
+ * NE FAIT PAS  : de logique métier ; la date mise en service est contrôlée par le service.
  */
 @Schema(description = "Création d'un véhicule ; immatriculation, marque, modèle, date et site requis")
 public record CreateVehiculeRequest(
@@ -45,4 +46,9 @@ public record CreateVehiculeRequest(
 
         @Schema(description = "Prix d'achat, autorisé seulement en PROPRIETE", example = "25000.00")
         BigDecimal prixAchat) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

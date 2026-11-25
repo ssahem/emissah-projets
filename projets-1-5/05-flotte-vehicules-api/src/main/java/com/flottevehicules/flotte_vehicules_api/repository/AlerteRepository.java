@@ -15,6 +15,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AlerteRepository extends JpaRepository<AlerteVehicule, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne toutes les alertes, les plus récentes d'abord. */
     List<AlerteVehicule> findAllByOrderByDateAlerteDescIdAlerteDesc();
 

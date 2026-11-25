@@ -18,6 +18,10 @@ import org.springframework.data.repository.query.Param;
  */
 public interface AffectationRepository extends JpaRepository<Affectation, Integer> {
 
+    // ═════════════════════════════════════════════════════════════════════════
+    //  REQUÊTES DÉDUITES
+    // ═════════════════════════════════════════════════════════════════════════
+
     /** Retourne les affectations triées par date de début décroissante (F4, F7). */
     List<Affectation> findAllByOrderByDateDebutDesc();
 

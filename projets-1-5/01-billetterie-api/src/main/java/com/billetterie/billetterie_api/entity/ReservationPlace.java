@@ -53,12 +53,12 @@ public class ReservationPlace {
     //  CONSTRUCTEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── ReservationPlace() ───────────────────────────────────────────────
+    // ── ReservationPlace() ───────────────────────────────────────────────────
 
     /** Constructeur vide exigé par JPA. */
     protected ReservationPlace() {}
 
-    // ── ReservationPlace(Reservation reservation, String rang, Integer numero, Integer idEvenement) ─
+    // ── ReservationPlace(Reservation reservation, String rang, Integer nume… ─
 
     /** Crée une instance valide ; les champs obligatoires ne peuvent pas être null. */
     public ReservationPlace(Reservation reservation, String rang, Integer numero, Integer idEvenement) {
@@ -72,37 +72,37 @@ public class ReservationPlace {
     //  ACCESSEURS
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── getIdReservationPlace() ──────────────────────────────────────────
+    // ── getIdReservationPlace() ──────────────────────────────────────────────
 
     /** Retourne idReservationPlace. */
     public Integer getIdReservationPlace() { return idReservationPlace; }
 
-    // ── getReservation() ─────────────────────────────────────────────────
+    // ── getReservation() ─────────────────────────────────────────────────────
 
     /** Retourne reservation. */
     public Reservation getReservation() { return reservation; }
 
-    // ── getRang() ────────────────────────────────────────────────────────
+    // ── getRang() ────────────────────────────────────────────────────────────
 
     /** Retourne rang. */
     public String getRang() { return rang; }
 
-    // ── getNumero() ──────────────────────────────────────────────────────
+    // ── getNumero() ──────────────────────────────────────────────────────────
 
     /** Retourne numero. */
     public Integer getNumero() { return numero; }
 
-    // ── getIdEvenement() ─────────────────────────────────────────────────
+    // ── getIdEvenement() ─────────────────────────────────────────────────────
 
     /** Retourne idEvenement. */
     public Integer getIdEvenement() { return idEvenement; }
 
-    // ── getPrixApplique() ────────────────────────────────────────────────
+    // ── getPrixApplique() ────────────────────────────────────────────────────
 
     /** Retourne prixApplique. */
     public BigDecimal getPrixApplique() { return prixApplique; }
 
-    // ── setPrixApplique() ──────────────────────────────────────────────────
+    // ── setPrixApplique() ────────────────────────────────────────────────────
 
     /** Enregistre le prix appliqué à la place. */
     public void setPrixApplique(BigDecimal prixApplique) {

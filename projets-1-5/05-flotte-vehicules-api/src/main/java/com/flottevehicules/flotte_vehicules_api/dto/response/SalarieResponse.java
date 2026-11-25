@@ -5,10 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * DTO de sortie d'une fiche salarié (F3).
  *
- * COUCHE      : DTO (contrat public)
- * IMMUABLE    : record Java.
- * PRODUIT PAR : SalarieMapper.
- * NE FAIT PAS : d'accès base ni de logique métier.
+ * COUCHE       : DTO (contrat public)
+ * RÔLE         : DTO de sortie d'une fiche salarié (F3).
+ * IMMUABLE     : record Java.
+ * PRODUIT PAR  : SalarieMapper.
+ * NE FAIT PAS  : d'accès base ni de logique métier.
  */
 @Schema(description = "Salarié et son service")
 public record SalarieResponse(
@@ -30,4 +31,9 @@ public record SalarieResponse(
 
         @Schema(description = "Service", example = "Direction")
         String service) {
+
+    // ═════════════════════════════════════════════════════════════════════════
+    //  CHAMPS
+    // ═════════════════════════════════════════════════════════════════════════
+
 }

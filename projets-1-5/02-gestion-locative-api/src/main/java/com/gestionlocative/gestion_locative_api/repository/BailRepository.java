@@ -25,36 +25,36 @@ public interface BailRepository extends JpaRepository<Bail, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findAllByOrderByDateDebutDesc() ────────────────────────────────────
+    // ── findAllByOrderByDateDebutDesc() ──────────────────────────────────────
 
     /** Retourne les baux triés par date de début décroissante. */
     List<Bail> findAllByOrderByDateDebutDesc();
 
-    // ── findAllByIdAppartementOrderByDateDebutDesc() ───────────────────────
+    // ── findAllByIdAppartementOrderByDateDebutDesc() ─────────────────────────
 
     /** Retourne l'historique des baux d'un appartement (F6, F8). */
     List<Bail> findAllByIdAppartementOrderByDateDebutDesc(Integer idAppartement);
 
-    // ── findAllByIdAppartementOrderByDateDebutAsc() ────────────────────────
+    // ── findAllByIdAppartementOrderByDateDebutAsc() ──────────────────────────
 
     /** Retourne les baux d'un appartement du plus ancien au plus récent (F18). */
     List<Bail> findAllByIdAppartementOrderByDateDebutAsc(Integer idAppartement);
 
-    // ── countByIdAppartement() ─────────────────────────────────────────────
+    // ── countByIdAppartement() ───────────────────────────────────────────────
 
     /** Compte les baux d'un appartement, pour refuser sa suppression (F3). */
     long countByIdAppartement(Integer idAppartement);
 
-    // ── findByStatutAndDateFinBefore() ──────────────────────────────────────
+    // ── findByStatutAndDateFinBefore() ───────────────────────────────────────
 
     /** Retourne les baux en cours arrivés à échéance avant une date (F16). */
     List<Bail> findByStatutAndDateFinBefore(StatutBail statut, LocalDate date);
 
     // ═════════════════════════════════════════════════════════════════════════
-    //  REQUÊTES @Query
+    //  REQUÊTES @QUERY
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findChevauchements() ───────────────────────────────────────────────
+    // ── findChevauchements() ─────────────────────────────────────────────────
 
     /**
      * Recherche les baux non résiliés qui recouvrent la période demandée (F11).
@@ -72,7 +72,7 @@ public interface BailRepository extends JpaRepository<Bail, Integer> {
                                   @Param("debut") LocalDate debut,
                                   @Param("fin") LocalDate fin);
 
-    // ── countEnCoursByLocataire() ──────────────────────────────────────────
+    // ── countEnCoursByLocataire() ────────────────────────────────────────────
 
     /** Compte les baux en cours d'un locataire, pour refuser sa suppression (F4). */
     @Query("SELECT COUNT(b) FROM Bail b, BailLocataire bl "
@@ -81,7 +81,7 @@ public interface BailRepository extends JpaRepository<Bail, Integer> {
     long countEnCoursByLocataire(@Param("idLocataire") Integer idLocataire,
                                  @Param("statut") StatutBail statut);
 
-    // ── countEnCoursByIdImmeuble() ──────────────────────────────────────────
+    // ── countEnCoursByIdImmeuble() ───────────────────────────────────────────
 
     /**
      * Compte les baux en cours des appartements d'un immeuble (F7).
@@ -94,7 +94,7 @@ public interface BailRepository extends JpaRepository<Bail, Integer> {
     long countEnCoursByIdImmeuble(@Param("idImmeuble") Integer idImmeuble,
                                  @Param("statut") StatutBail statut);
 
-    // ── findIdAppartementsOccupesLe() ──────────────────────────────────────
+    // ── findIdAppartementsOccupesLe() ────────────────────────────────────────
 
     /**
      * Identifiants des appartements couverts par un bail en cours à une date (F17).
@@ -106,7 +106,7 @@ public interface BailRepository extends JpaRepository<Bail, Integer> {
             + "AND (b.dateFin IS NULL OR b.dateFin >= :date)")
     List<Integer> findIdAppartementsOccupesLe(@Param("date") LocalDate date);
 
-    // ── findActifsByIdImmeubleEntre() ──────────────────────────────────────
+    // ── findActifsByIdImmeubleEntre() ────────────────────────────────────────
 
     /**
      * Baux en cours dont la période recoupe un mois, pour un immeuble (F19).

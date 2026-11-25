@@ -18,7 +18,7 @@ public interface TarifRepository extends Repository<Tarif, Integer> {
     //  REQUÊTES DÉDUITES
     // ═════════════════════════════════════════════════════════════════════════
 
-    // ── findByEvenement_IdEvenementAndCategorieIgnoreCase() ──────────────
+    // ── findByEvenement_IdEvenementAndCategorieIgnoreCase() ──────────────────
 
     /**
      * Requête Spring Data déduite du nom de la méthode.
